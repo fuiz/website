@@ -28,7 +28,6 @@ declare global {
 				BUCKET: R2Bucket;
 				DATABASE: D1Database;
 				MAP: KVNamespace;
-				FUIZ_POLL: KVNamespace;
 				AI: Ai;
 				COUNTER: CounterWorker;
 			};
