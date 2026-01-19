@@ -15,7 +15,7 @@
 		backgroundDeepColor = undefined,
 		href,
 		download,
-		children,
+		children
 	} = $props();
 </script>
 

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 	import warning from '$lib/assets/error.svg';
 
@@ -20,34 +20,31 @@
 	const title = m.main_title();
 	const description = m.main_desc();
 
-	let answered = $state(false);
+	const fields = ['open', 'design', 'lightweight', 'privacy'] as const;
+
+	let answered = $state<(typeof fields)[number] | undefined>(undefined);
 
 	onMount(() => {
-		answered = (localStorage.getItem('answered') ?? '').length > 0;
+		let answeredStored = localStorage.getItem('answered');
+		for (const field of fields) {
+			if (answeredStored === field) {
+				answered = field;
+				return;
+			}
+		}
+		answered = undefined;
 	});
 
 	/**
 	 * Handle when a user chooses their favorite feature.
 	 * @param {number} e
 	 */
-	async function onChooseFavoriteFeature(e) {
-		const field = Object.keys(data.stats)[e];
+	async function onChooseFavoriteFeature(e: number) {
+		const field = fields[e];
 
-		let resp = await fetch('/increment', {
-			method: 'POST',
-			headers: {
-				'content-type': 'application/json'
-			},
-			body: JSON.stringify(field)
-		});
+		localStorage.setItem('answered', field);
 
-		localStorage.setItem('answered', 'true');
-
-		let res = await resp.json();
-
-		data.stats = res;
-
-		answered = true;
+		answered = field;
 	}
 </script>
 
@@ -66,28 +63,28 @@
 			<h2>{m.greeting()}<br />{m.create_with()}</h2>
 			<div class="slide-container">
 				<div class="slide">
-					{#if answered}
+					{#if answered !== undefined}
 						<QuestionStatistics
 							questionText={m.which_feature()}
 							answers={[
 								{
 									text: m.open_source(),
-									count: data.stats.openSource,
+									count: Number(answered === 'open'),
 									correct: true
 								},
 								{
 									text: m.beautiful_design(),
-									count: data.stats.design,
+									count: Number(answered === 'design'),
 									correct: true
 								},
 								{
 									text: m.lightweight(),
-									count: data.stats.lightweight,
+									count: Number(answered === 'lightweight'),
 									correct: true
 								},
 								{
 									text: m.privacy_friendly(),
-									count: data.stats.privacy,
+									count: Number(answered === 'privacy'),
 									correct: true
 								}
 							]}
@@ -113,10 +110,7 @@
 								m.lightweight(),
 								m.privacy_friendly()
 							]}
-							answeredCount={data.stats.openSource +
-								data.stats.design +
-								data.stats.lightweight +
-								data.stats.privacy}
+							answeredCount={0}
 							bindableGameInfo={{
 								volumeOn: false,
 								locked: false
