@@ -271,10 +271,26 @@ export async function loadDatabase(remote: boolean): Promise<Database> {
 	});
 
 	return await new Promise((resolve, reject) => {
-		request.addEventListener('success', () => {
+		request.addEventListener('success', async () => {
+			let remoteSync: RemoteSync | undefined = undefined;
+
+			if (remote) {
+				try {
+					const response = await fetch('/api/gdrive/status');
+					if (response.ok) {
+						const status = await response.json();
+						remoteSync = retrieveRemoteSync(status.authenticated ? 'gdrive' : 'database');
+					} else {
+						remoteSync = retrieveRemoteSync('database');
+					}
+				} catch {
+					remoteSync = retrieveRemoteSync('database');
+				}
+			}
+
 			resolve({
 				local: request.result,
-				remote: remote ? retrieveRemoteSync() : undefined
+				remote: remoteSync
 			});
 		});
 		request.addEventListener('error', reject);

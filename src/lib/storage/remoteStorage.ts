@@ -30,8 +30,8 @@ export interface RemoteSync {
 	getImage(hash: string): Promise<Media | string | undefined>;
 }
 
-export function retrieveRemoteSync(): RemoteSync {
-	return new OauthSync();
+export function retrieveRemoteSync(provider: 'database' | 'gdrive' = 'database'): RemoteSync {
+	return provider === 'gdrive' ? new GoogleDriveSync() : new DatabaseSync();
 }
 
 export async function reconcile(
@@ -235,7 +235,7 @@ export async function reconcile(
 	]);
 }
 
-class OauthSync implements RemoteSync {
+class DatabaseSync implements RemoteSync {
 	async sync(
 		localDatabase: LocalDatabase,
 		existing: [CreationId, StrictInternalFuizMetadata][]
@@ -292,6 +292,73 @@ class OauthSync implements RemoteSync {
 
 	async getImage(hash: string): Promise<string | undefined> {
 		const res = await bring(`/api/getImage/${hash}`);
+		if (!res?.ok) return undefined;
+		const media = await res.text();
+		try {
+			return JSON.parse(media);
+		} catch {
+			return media;
+		}
+	}
+}
+
+class GoogleDriveSync implements RemoteSync {
+	async sync(
+		localDatabase: LocalDatabase,
+		existing: [CreationId, StrictInternalFuizMetadata][]
+	): Promise<void> {
+		const res = await bring(`/api/gdrive/list`);
+		if (!res?.ok) return;
+
+		await reconcile(
+			this,
+			localDatabase,
+			await res.json(),
+			async (hash) => {
+				const reqExists = await bring(`/api/gdrive/existImage/${hash}`);
+				if (!reqExists?.ok) return false;
+				return await reqExists.json();
+			},
+			existing
+		);
+	}
+
+	async get(uuid: string): Promise<MediaReferencedFuizConfig | undefined> {
+		const res = await bring(`/api/gdrive/get/${uuid}`);
+
+		return res?.ok ? await res.json() : undefined;
+	}
+
+	async create(uuid: string, internalFuiz: InternalFuiz): Promise<void> {
+		await fetch(`/api/gdrive/create/${uuid}`, {
+			method: 'POST',
+			body: JSON.stringify(internalFuiz)
+		});
+	}
+
+	async update(uuid: string, internalFuiz: InternalFuiz): Promise<void> {
+		await fetch(`/api/gdrive/update/${uuid}`, {
+			method: 'POST',
+			body: JSON.stringify(internalFuiz)
+		});
+	}
+
+	async delete(uuid: string): Promise<void> {
+		await fetch(`/api/gdrive/delete/${uuid}`);
+	}
+
+	async createImage(hash: string, value: string | Media): Promise<void> {
+		const reqExists = await bring(`/api/gdrive/existImage/${hash}`);
+		if (!reqExists?.ok || (await reqExists.json())) return undefined;
+		const serialized = typeof value === 'string' ? value : JSON.stringify(value);
+		await fetch(`/api/gdrive/createImage`, {
+			method: 'POST',
+			body: serialized
+		});
+	}
+
+	async getImage(hash: string): Promise<string | undefined> {
+		const res = await bring(`/api/gdrive/getImage/${hash}`);
 		if (!res?.ok) return undefined;
 		const media = await res.text();
 		try {
