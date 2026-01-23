@@ -11,9 +11,9 @@ import {
 	type CreationId,
 	type StrictInternalFuizMetadata,
 	type MediaReferencedFuizConfig
-} from './storage';
-import { getMedia, type Media } from './types';
-import { bring, isNotUndefined } from './util';
+} from '.';
+import { getMedia, type Media } from '../types';
+import { bring, isNotUndefined } from '../util';
 
 export interface RemoteSync {
 	sync(

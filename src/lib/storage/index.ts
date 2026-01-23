@@ -7,7 +7,7 @@ import {
 	type Image,
 	type Media,
 	type Modify
-} from './types';
+} from '../types';
 import { retrieveRemoteSync, type RemoteSync } from './remoteStorage';
 
 export function generateUuid(): string {
