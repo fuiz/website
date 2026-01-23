@@ -106,7 +106,7 @@
 
 	/** @param {import('tippy.js').Instance} e */
 	async function onShare(e) {
-		await share(removeIds(config), page.data.user ? exportedFuiz.uniqueId : undefined);
+		await share(removeIds(config), undefined);
 		e.show();
 	}
 </script>

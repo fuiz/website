@@ -26,7 +26,7 @@ export const POST: RequestHandler = async ({ params: { uuid }, cookies, request 
 		);
 
 		return new Response(null, { status: 201 });
-	} catch (e) {
+	} catch {
 		error(500, 'Failed to create file');
 	}
 };

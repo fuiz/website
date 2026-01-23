@@ -17,10 +17,11 @@
 	import { share } from './lib';
 	import JSZip from 'jszip';
 	import { page } from '$app/state';
-	import { signIn, signOut } from '@auth/sveltekit/client';
 
 	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, data: import('./$types').PageData}}*/
 	let { creations = $bindable(), db, data } = $props();
+
+	let isGDriveAuthenticated = $derived(!!db.remote);
 
 	let sortedCreations = $derived(toSorted(creations, (a, b) => b.lastEdited - a.lastEdited));
 
@@ -238,7 +239,7 @@
 	async function onShare(id, e) {
 		const creation = await getCreation(id, db);
 		if (creation) {
-			await share(creation.config, page.data.user ? creation.uniqueId : undefined);
+			await share(creation.config, undefined);
 		}
 		e.show();
 	}
@@ -292,9 +293,9 @@
 				</div>
 			</FancyButton>
 		</div>
-		{#if data.session}
+		{#if isGDriveAuthenticated}
 			<div>
-				<FancyButton onclick={signOut}>
+				<FancyButton onclick={() => (window.location.href = '/api/gdrive/logout')}>
 					<div
 						style:display="flex"
 						style:align-items="center"
@@ -303,14 +304,17 @@
 						style:padding="0.15em 0.25em"
 						style:justify-content="center"
 					>
-						<Icon size="1.25em" src="$lib/assets/logout.svg" alt="Log out from OpenCollective" />
+						<Icon size="1.25em" src="$lib/assets/logout.svg" alt="Log out from Google Drive" />
 						<div>Log Out</div>
 					</div>
 				</FancyButton>
 			</div>
 		{:else}
 			<div>
-				<FancyButton onclick={signIn}>
+				<FancyButton
+					onclick={() =>
+						(window.location.href = `/api/gdrive/login?return=${encodeURIComponent(window.location.pathname + window.location.search)}`)}
+				>
 					<div
 						style:display="flex"
 						style:align-items="center"
@@ -322,7 +326,7 @@
 						<Icon
 							size="1.25em"
 							src="$lib/assets/login.svg"
-							alt="Synchronize your data with OpenCollective"
+							alt="Synchronize your data with Google Drive"
 						/>
 						<div>Backup</div>
 					</div>

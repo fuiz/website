@@ -19,7 +19,7 @@
 	/** @type {{creation: import('$lib/storage').ExportedFuiz;id: number;db: import('$lib/storage').Database;}} */
 	let { creation = $bindable(), id, db } = $props();
 
-	let author = $state(page.data.session?.user?.name || '');
+	let author = $state('');
 	/** @type {string[]} */
 	let subjects = $state([]);
 	/** @type {string[]} */

@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { options, scope } from '../driveUtil';
+import { getOAuth2Client, scope, options } from '../driveUtil';
 import { error } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url }) => {
@@ -9,22 +9,22 @@ export const GET: RequestHandler = async ({ url }) => {
 		error(500, 'Google Drive OAuth not configured');
 	}
 
+	const oauth2Client = getOAuth2Client();
+
 	// Get the return URL from query params to pass through OAuth flow
 	const returnUrl = url.searchParams.get('return') || '/';
 
-	const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-	authUrl.searchParams.set('client_id', clientId);
-	authUrl.searchParams.set('redirect_uri', redirectUri);
-	authUrl.searchParams.set('response_type', 'code');
-	authUrl.searchParams.set('scope', scope);
-	authUrl.searchParams.set('access_type', 'offline');
-	authUrl.searchParams.set('prompt', 'consent');
-	authUrl.searchParams.set('state', returnUrl);
+	const authUrl = oauth2Client.generateAuthUrl({
+		access_type: 'offline',
+		scope: [scope],
+		prompt: 'consent',
+		state: returnUrl
+	});
 
 	return new Response(null, {
 		status: 302,
 		headers: {
-			Location: authUrl.toString()
+			Location: authUrl
 		}
 	});
 };

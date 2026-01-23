@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ params: { uuid }, cookies }) => {
 	try {
 		await drive.deleteFile(file);
 		return new Response(null, { status: 204 });
-	} catch (e) {
+	} catch {
 		error(500, 'Failed to delete file');
 	}
 };

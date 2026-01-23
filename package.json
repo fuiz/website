@@ -43,14 +43,13 @@
 		"wrangler": "^4.59.2"
 	},
 	"dependencies": {
-		"@auth/d1-adapter": "^1.11.1",
-		"@auth/sveltekit": "^1.11.1",
 		"@fontsource/atkinson-hyperlegible": "^5.2.8",
 		"@fontsource/poppins": "^5.2.7",
 		"@ltd/j-toml": "^1.38.0",
 		"@oddbird/popover-polyfill": "^0.6.1",
 		"@svelte-put/inline-svg": "^4.0.2",
 		"@sveltejs/enhanced-img": "^0.9.3",
+		"googleapis": "^170.1.0",
 		"jszip": "^3.10.1",
 		"object-hash": "^3.0.0",
 		"qrcode": "^1.5.4",

@@ -1,9 +1,7 @@
-import { sequence } from '@sveltejs/kit/hooks';
-import { handle as authHandle } from './auth';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import type { Handle } from '@sveltejs/kit';
 
-const paraglideHandle: Handle = ({ event, resolve }) =>
+export const handle: Handle = ({ event, resolve }) =>
 	paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
 		event.request = localizedRequest;
 		return resolve(event, {
@@ -28,5 +26,3 @@ const paraglideHandle: Handle = ({ event, resolve }) =>
 			}
 		});
 	});
-
-export const handle = sequence(paraglideHandle, authHandle);

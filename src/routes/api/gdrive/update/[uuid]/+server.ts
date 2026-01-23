@@ -7,7 +7,9 @@ export const POST: RequestHandler = async ({ params: { uuid }, cookies, request 
 	const drive = getDrive(cookies);
 	const internalFuiz: InternalFuiz = await request.json();
 
-	const file = await getFileIdFromName(drive, uuid);
+	const fileName = `${uuid}.json`;
+
+	const file = await getFileIdFromName(drive, fileName);
 
 	if (!file) {
 		error(404, 'File not found');
