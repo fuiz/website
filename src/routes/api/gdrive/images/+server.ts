@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { getDrive, getFileIdFromName } from '../driveUtil';
 
+// POST - Create a new image
 export const POST: RequestHandler = async ({ cookies, request }) => {
 	const drive = getDrive(cookies);
 	const data = await request.text();

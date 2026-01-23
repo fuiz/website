@@ -1,6 +1,7 @@
 import type { RequestHandler } from './$types';
 import { getDrive, getCreations } from '../driveUtil';
 
+// GET - List all fuiz files
 export const GET: RequestHandler = async ({ cookies }) => {
 	const drive = getDrive(cookies);
 
