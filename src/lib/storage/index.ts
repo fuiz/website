@@ -258,7 +258,7 @@ async function collectFuiz(fuiz: InternalFuiz, database: LocalDatabase): Promise
 	};
 }
 
-export async function loadDatabase(remote: boolean): Promise<Database> {
+export async function loadDatabase(): Promise<Database> {
 	const request = indexedDB.open('FuizDB', 2);
 
 	request.addEventListener('upgradeneeded', (event) => {
@@ -274,18 +274,16 @@ export async function loadDatabase(remote: boolean): Promise<Database> {
 		request.addEventListener('success', async () => {
 			let remoteSync: RemoteSync | undefined = undefined;
 
-			if (remote) {
-				try {
-					const response = await fetch('/api/gdrive/status');
-					if (response.ok) {
-						const status = await response.json();
-						if (status.authenticated) {
-							remoteSync = retrieveRemoteSync();
-						}
+			try {
+				const response = await fetch('/api/gdrive/status');
+				if (response.ok) {
+					const status = await response.json();
+					if (status.authenticated) {
+						remoteSync = retrieveRemoteSync();
 					}
-				} catch {
-					// No remote sync if gdrive status check fails
 				}
+			} catch {
+				// No remote sync if gdrive status check fails
 			}
 
 			resolve({

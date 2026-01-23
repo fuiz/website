@@ -37,7 +37,7 @@
 	}
 </script>
 
-{#await loadDatabase(data.session !== null).then((db) => getAllCreations(db))}
+{#await loadDatabase().then((db) => getAllCreations(db))}
 	<Loading />
 {:then creations}
 	{@const sortedCreations = toSorted(creations, (a, b) => -b.lastEdited - a.lastEdited)}

@@ -9,7 +9,7 @@
 	let { data } = $props();
 
 	onMount(async () => {
-		const db = await loadDatabase(data.session !== null);
+		const db = await loadDatabase();
 		/** @type {import('$lib/storage').MediaReferencedFuizConfig} */
 		const config = JSON.parse(data.content);
 
@@ -17,7 +17,7 @@
 		 * @param {string} hash
 		 */
 		const dereferenceImage = async (hash) => {
-			const resp = await fetch('/oauth/getImage/' + hash);
+			const resp = await fetch('/api/gdrive/images/' + hash);
 			return await resp.text();
 		};
 

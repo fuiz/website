@@ -25,7 +25,7 @@
 	 * @param {string | null} idParam
 	 */
 	async function getStatus(idParam) {
-		const db = await loadDatabase(data.session !== null);
+		const db = await loadDatabase();
 		if (idParam) {
 			const id = parseInt(idParam);
 			const exportedFuiz = await getCreation(id, db);

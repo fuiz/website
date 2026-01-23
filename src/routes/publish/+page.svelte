@@ -54,7 +54,7 @@
 
 {#if id}
 	{@const filteredId = id}
-	{#await loadDatabase(data.session !== null).then((db) => joinCreation(db, filteredId))}
+	{#await loadDatabase().then((db) => joinCreation(db, filteredId))}
 		<Loading />
 	{:then { db, creation }}
 		{#if creation}
@@ -64,7 +64,7 @@
 		{/if}
 	{/await}
 {:else}
-	{#await loadDatabase(data.session !== null).then((db) => getAllCreations(db))}
+	{#await loadDatabase().then((db) => getAllCreations(db))}
 		<Loading />
 	{:then creations}
 		{@const sortedCreations = toSorted(creations, (a, b) => -b.lastEdited - a.lastEdited)}
