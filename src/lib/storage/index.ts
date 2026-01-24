@@ -275,15 +275,9 @@ export async function loadDatabase(): Promise<Database> {
 			let remoteSync: RemoteSync | undefined = undefined;
 
 			try {
-				const response = await fetch('/api/gdrive/status');
-				if (response.ok) {
-					const status = await response.json();
-					if (status.authenticated) {
-						remoteSync = retrieveRemoteSync();
-					}
-				}
+				remoteSync = await retrieveRemoteSync();
 			} catch {
-				// No remote sync if gdrive status check fails
+				// No remote sync if auth check fails
 			}
 
 			resolve({

@@ -4,6 +4,7 @@ import { error } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	const code = url.searchParams.get('code');
+	const state = url.searchParams.get('state');
 	const errorParam = url.searchParams.get('error');
 
 	if (errorParam) {
@@ -14,6 +15,28 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		error(400, 'Missing authorization code');
 	}
 
+	// Validate state parameter for CSRF protection
+	const storedState = cookies.get('oauth_state');
+
+	if (!state) {
+		error(403, 'Missing state parameter');
+	}
+
+	if (!storedState) {
+		error(403, 'Missing stored state - session may have expired');
+	}
+
+	if (state !== storedState) {
+		error(403, 'State mismatch - possible CSRF attack');
+	}
+
+	// Get the return URL from cookie
+	const returnUrl = cookies.get('oauth_return') || '/';
+
+	// Clear the one-time use cookies
+	cookies.delete('oauth_state', { path: '/' });
+	cookies.delete('oauth_return', { path: '/' });
+
 	const oauth2Client = getOAuth2Client();
 
 	try {
@@ -23,12 +46,9 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 			path: '/',
 			httpOnly: true,
 			secure: true,
-			sameSite: 'lax',
+			sameSite: 'strict',
 			maxAge: 60 * 60 * 24 * 365
 		});
-
-		// Redirect back to where the user came from, or home if not set
-		const returnUrl = url.searchParams.get('state') || '/';
 
 		return new Response(null, {
 			status: 302,
@@ -36,7 +56,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 				Location: returnUrl
 			}
 		});
-	} catch (err) {
+	} catch {
 		error(500, 'Failed to exchange authorization code for tokens');
 	}
 };

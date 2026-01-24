@@ -14,6 +14,7 @@
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import TypicalPage from '$lib/TypicalPage.svelte';
 	import { getCreation, deleteCreation, addCreation, generateUuid } from '$lib/storage';
+	import { remoteSyncProviders } from '$lib/storage/remoteStorage';
 	import { share } from './lib';
 	import JSZip from 'jszip';
 	import { page } from '$app/state';
@@ -295,7 +296,7 @@
 		</div>
 		{#if isGDriveAuthenticated}
 			<div>
-				<FancyButton onclick={() => (window.location.href = '/api/gdrive/logout')}>
+				<FancyButton onclick={() => db.remote?.logout()}>
 					<div
 						style:display="flex"
 						style:align-items="center"
@@ -310,28 +311,29 @@
 				</FancyButton>
 			</div>
 		{:else}
-			<div>
-				<FancyButton
-					onclick={() =>
-						(window.location.href = `/api/gdrive/login?return=${encodeURIComponent(window.location.pathname + window.location.search)}`)}
-				>
-					<div
-						style:display="flex"
-						style:align-items="center"
-						style:font-family="Poppins"
-						style:gap="0.2em"
-						style:padding="0.15em 0.25em"
-						style:justify-content="center"
+			{#each remoteSyncProviders as provider}
+				<div>
+					<FancyButton
+						onclick={() => provider.login(window.location.pathname + window.location.search)}
 					>
-						<Icon
-							size="1.25em"
-							src="$lib/assets/login.svg"
-							alt="Synchronize your data with Google Drive"
-						/>
-						<div>Backup</div>
-					</div>
-				</FancyButton>
-			</div>
+						<div
+							style:display="flex"
+							style:align-items="center"
+							style:font-family="Poppins"
+							style:gap="0.2em"
+							style:padding="0.15em 0.25em"
+							style:justify-content="center"
+						>
+							<Icon
+								size="1.25em"
+								src="$lib/assets/login.svg"
+								alt="Synchronize your data with {provider.displayName}"
+							/>
+							<div>Backup to {provider.displayName}</div>
+						</div>
+					</FancyButton>
+				</div>
+			{/each}
 		{/if}
 	</div>
 	<div style:margin="0 0.4em">
