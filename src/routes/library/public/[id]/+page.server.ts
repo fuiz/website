@@ -5,9 +5,7 @@ import type { FullOnlineFuiz, PublishedFuizDB } from '$lib/types';
 
 export const load = (async ({ params, platform }) => {
 	const published: PublishedFuizDB | undefined =
-		(await platform?.env.DATABASE.prepare(
-			'SELECT * FROM approved_submissions WHERE storage_id = ?1'
-		)
+		(await platform?.env.DATABASE.prepare('SELECT * FROM fuizzes WHERE id = ?1')
 			.bind(params.id)
 			.first()) || undefined;
 

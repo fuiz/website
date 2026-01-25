@@ -36,19 +36,19 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	const languagesQueries = languages
 		.map<Locale | null>((lang) => restrict(lang, locales))
 		.filter(isNotNull)
-		.map((lang) => `language_code = '${lang}'`)
+		.map((lang) => `language = '${lang}'`)
 		.join(' OR ');
 
 	const subjectsQueries = subjects
 		.map((subject) => restrict(subject, allSubjects))
 		.filter(isNotNull)
-		.map((subject) => `subjects = '${subject}'`)
+		.map((subject) => `subjects LIKE '%"${subject}"%'`)
 		.join(' OR ');
 
 	const gradesQueries = grades
 		.map((grade) => restrict(grade, allGrades))
 		.filter(isNotNull)
-		.map((grade) => `grades = '${grade}'`)
+		.map((grade) => `grades LIKE '%"${grade}"%'`)
 		.join(' OR ');
 
 	const allQueries = [languagesQueries, subjectsQueries, gradesQueries]
@@ -60,7 +60,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		const matches = (
 			(
 				await platform?.env.DATABASE.prepare(
-					`SELECT * FROM approved_submissions WHERE (title LIKE ? OR author LIKE ? OR subjects LIKE ? OR keywords LIKE ? OR thumbnail_alt LIKE ?) ${
+					`SELECT * FROM fuizzes WHERE (title LIKE ? OR author LIKE ? OR subjects LIKE ? OR keywords LIKE ? OR thumbnail_alt LIKE ?) ${
 						allQueries ? ' AND ' + allQueries : ''
 					} LIMIT 24`
 				)
@@ -74,7 +74,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		const matches = (
 			(
 				await platform?.env.DATABASE.prepare(
-					`SELECT * FROM approved_submissions WHERE ${allQueries} LIMIT 24`
+					`SELECT * FROM fuizzes WHERE ${allQueries} LIMIT 24`
 				).all<PublishedFuizDB>()
 			)?.results || []
 		).map(fixPublish);
