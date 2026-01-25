@@ -19,8 +19,11 @@ export async function downloadImageFromGit(
 	client: BaseGitClient,
 	path: string,
 	ref?: string
-): Promise<ArrayBuffer> {
+): Promise<ArrayBuffer | null> {
 	const content = await client.getFileContent(path, ref);
+	if (content === null) {
+		return null;
+	}
 	// Content is base64 encoded
 	const buffer = Buffer.from(content, 'base64');
 	return buffer.buffer;
@@ -47,6 +50,9 @@ export async function resolveMediaFromGit(
 	// We need to construct the full path: fuizId/filename
 	const fullPath = `${fuizId}/${media.Image.Url.url}`;
 	const imageData = await downloadImageFromGit(client, fullPath, ref);
+	if (imageData === null) {
+		return undefined;
+	}
 	const base64String = Buffer.from(imageData).toString('base64');
 	const extension = media.Image.Url.url.split('.').pop();
 	if (!extension) {

@@ -89,7 +89,6 @@ To create `GIT_BOT_TOKEN`:
 The new schema uses a simplified `fuizzes` table. Run the SQL from `src/schema.sql` to create:
 
 - `fuizzes` - Published fuizzes with metadata
-- `webhook_sync` - Idempotent webhook processing log
 
 See `DATABASE_SCHEMA.md` for the complete schema documentation.
 
@@ -297,7 +296,6 @@ The new system uses a simplified database schema:
 **New tables:**
 
 - `fuizzes` - Unified table for all published content
-- `webhook_sync` - Webhook processing log
 
 **Key changes:**
 

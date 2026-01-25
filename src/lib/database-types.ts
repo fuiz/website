@@ -18,6 +18,7 @@ export interface Fuiz {
 	language: string;
 	subjects: string | null; // JSON array
 	grades: string | null; // JSON array
+	keywords: string | null; // JSON array
 	slides_count: number;
 	thumbnail: Buffer | null;
 	thumbnail_alt: string | null;
@@ -43,6 +44,7 @@ export interface FuizInsert {
 	language: string;
 	subjects?: string;
 	grades?: string;
+	keywords?: string;
 	slides_count: number;
 	thumbnail?: Buffer;
 	thumbnail_alt?: string;
@@ -57,31 +59,13 @@ export interface FuizUpdate {
 	language?: string;
 	subjects?: string;
 	grades?: string;
+	keywords?: string;
 	slides_count?: number;
 	thumbnail?: Buffer;
 	thumbnail_alt?: string;
 	git_commit_sha?: string;
 	git_pr_number?: number;
 	updated_at?: string;
-}
-
-// ============================================================================
-// WEBHOOK SYNC - Idempotent webhook processing
-// ============================================================================
-
-export interface WebhookSync {
-	id: string;
-	event_type: string;
-	pr_number: number;
-	commit_sha: string;
-	processed_at: string; // ISO timestamp
-}
-
-export interface WebhookSyncInsert {
-	id: string;
-	event_type: string;
-	pr_number: number;
-	commit_sha: string;
 }
 
 // ============================================================================

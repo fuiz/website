@@ -44,7 +44,9 @@ async function processFuizConfig(
 	database: D1Database,
 	commitSha?: string,
 	playedCount: number = 0,
-	viewCount: number = 0
+	viewCount: number = 0,
+	publishedAt?: Date,
+	updatedAt?: Date
 ): Promise<void> {
 	// Parse TOML
 	const fuizConfig = parse(configContent, { bigint: false }) as ReferencingOnlineFuiz;
@@ -66,7 +68,8 @@ async function processFuizConfig(
 		author: fuizConfig.author,
 		language: fuizConfig.language,
 		subjects: fuizConfig.subjects,
-		grades: fuizConfig.grades
+		grades: fuizConfig.grades,
+		keywords: fuizConfig.keywords
 	};
 
 	await bucket.put(fuizId, JSON.stringify(fullConfig), {
@@ -75,13 +78,17 @@ async function processFuizConfig(
 		}
 	});
 
-	// Prepare subjects and grades as JSON arrays
+	// Prepare subjects, grades, and keywords as JSON arrays
 	const subjectsJson =
 		fuizConfig.subjects && fuizConfig.subjects.length > 0
 			? JSON.stringify(fuizConfig.subjects)
 			: null;
 	const gradesJson =
 		fuizConfig.grades && fuizConfig.grades.length > 0 ? JSON.stringify(fuizConfig.grades) : null;
+	const keywordsJson =
+		fuizConfig.keywords && fuizConfig.keywords.length > 0
+			? JSON.stringify(fuizConfig.keywords)
+			: null;
 
 	// Insert into fuizzes table
 	await database
@@ -94,6 +101,7 @@ async function processFuizConfig(
 				language,
 				subjects,
 				grades,
+				keywords,
 				slides_count,
 				thumbnail,
 				thumbnail_alt,
@@ -102,7 +110,7 @@ async function processFuizConfig(
 				view_count,
 				published_at,
 				updated_at
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 		)
 		.bind(
 			fuizId,
@@ -112,12 +120,15 @@ async function processFuizConfig(
 			fuizConfig.language,
 			subjectsJson,
 			gradesJson,
+			keywordsJson,
 			processedConfig.slides.length,
 			thumbnailData?.thumbnail || null,
 			thumbnailData?.thumbnailAlt || null,
 			commitSha || null,
 			playedCount,
-			viewCount
+			viewCount,
+			publishedAt?.toISOString() || new Date().toISOString(),
+			updatedAt?.toISOString() || new Date().toISOString()
 		)
 		.run();
 }
@@ -129,7 +140,9 @@ export async function syncSingleFuiz(
 	storageId: string,
 	bucket?: R2Bucket,
 	database?: D1Database,
-	commitSha?: string
+	lastCommitSha?: string,
+	firstCommitDate?: Date,
+	lastCommitDate?: Date
 ): Promise<void> {
 	if (!bucket || !database) {
 		throw new Error('Bucket and database are required');
@@ -156,7 +169,7 @@ export async function syncSingleFuiz(
 
 	// Get config.toml from Git repository
 	const configPath = `${fuizId}/config.toml`;
-	const configContent = await client.getFileContent(configPath, commitSha);
+	const configContent = await client.getFileContent(configPath, lastCommitSha);
 
 	// If config not found, delete the fuiz
 	if (!configContent) {
@@ -166,21 +179,29 @@ export async function syncSingleFuiz(
 
 	// Check if this is an update to an existing fuiz
 	const existing = await database
-		.prepare('SELECT id, played_count, view_count FROM fuizzes WHERE id = ?')
+		.prepare('SELECT id, played_count, view_count, published_at FROM fuizzes WHERE id = ?')
 		.bind(fuizId)
-		.first<{ id: string; played_count: number; view_count: number }>();
+		.first<{ id: string; played_count: number; view_count: number; published_at: string }>();
 
 	let playedCount = 0;
 	let viewCount = 0;
+	let publishedAt: Date;
 
 	if (existing) {
-		// This is an update - preserve statistics
+		// This is an update - preserve statistics and original published date
 		playedCount = existing.played_count;
 		viewCount = existing.view_count;
+		publishedAt = new Date(existing.published_at);
 
 		// Delete old entry (we'll insert the new one)
 		await database.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
+	} else {
+		// New fuiz - use firstCommitDate from GitLab event, or current date as fallback
+		publishedAt = firstCommitDate || new Date();
 	}
+
+	// updated_at is the lastCommitDate from GitLab event, or current date as fallback
+	const updatedAt = lastCommitDate || new Date();
 
 	// Process and store the fuiz
 	await processFuizConfig(
@@ -189,9 +210,11 @@ export async function syncSingleFuiz(
 		client,
 		bucket,
 		database,
-		commitSha,
+		lastCommitSha,
 		playedCount,
-		viewCount
+		viewCount,
+		publishedAt,
+		updatedAt
 	);
 
 	console.log(`Successfully synced fuiz ${fuizId}`);
@@ -234,28 +257,59 @@ export async function syncAll(
 				continue;
 			}
 
-			// Get the last commit SHA where this config.toml was modified
-			const lastCommitSha = await client.getFileLastCommit(configPath);
+			// Get commit info (SHA, first commit date, last commit date)
+			const commitInfo = await client.getFileCommitInfo(configPath);
 
 			// Check if already exists in fuizzes table with same commit
 			const existing = await database
-				?.prepare('SELECT git_commit_sha FROM fuizzes WHERE id = ?')
+				?.prepare(
+					'SELECT git_commit_sha, played_count, view_count, published_at FROM fuizzes WHERE id = ?'
+				)
 				.bind(fuizId)
-				.first<{ git_commit_sha: string | null }>();
+				.first<{
+					git_commit_sha: string | null;
+					played_count: number;
+					view_count: number;
+					published_at: string;
+				}>();
 
-			if (existing && existing.git_commit_sha === lastCommitSha) {
-				console.log(`Fuiz ${fuizId} already up to date (${lastCommitSha}), skipping`);
+			if (existing && existing.git_commit_sha === commitInfo.sha) {
+				console.log(`Fuiz ${fuizId} already up to date (${commitInfo.sha}), skipping`);
 				continue;
 			}
 
+			let playedCount = 0;
+			let viewCount = 0;
+			let publishedAt: Date;
+
 			if (existing) {
-				console.log(`Updating fuiz ${fuizId} (${existing.git_commit_sha} -> ${lastCommitSha})`);
+				console.log(`Updating fuiz ${fuizId} (${existing.git_commit_sha} -> ${commitInfo.sha})`);
+				// Preserve statistics and original published date
+				playedCount = existing.played_count;
+				viewCount = existing.view_count;
+				publishedAt = new Date(existing.published_at);
+
+				// Delete old entry (we'll insert the new one)
+				await database?.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
 			} else {
 				console.log(`Processing new fuiz: ${fuizId}`);
+				// New fuiz - use first commit date as published date
+				publishedAt = commitInfo.firstCommitDate;
 			}
 
 			// Process and store the fuiz
-			await processFuizConfig(fuizId, configContent, client, bucket!, database!, lastCommitSha);
+			await processFuizConfig(
+				fuizId,
+				configContent,
+				client,
+				bucket!,
+				database!,
+				commitInfo.sha,
+				playedCount,
+				viewCount,
+				publishedAt,
+				commitInfo.lastCommitDate
+			);
 
 			console.log(`Successfully synced fuiz: ${fuizId}`);
 		} catch (err) {

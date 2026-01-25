@@ -5,12 +5,18 @@
 
 import { getAuthenticatedProvider, getTokens } from '../git/gitUtil';
 import { createGitClient } from '$lib/git/factory';
-import { mapIdlessMedia, type FullOnlineFuiz, type ReferencingOnlineFuiz } from '$lib/types';
-import { tomlifyConfig, stringifyToml } from '$lib';
+import {
+	mapIdlessMedia,
+	type FullOnlineFuiz,
+	type ReferencingOnlineFuiz,
+	type IdlessFullFuizConfig
+} from '$lib/types';
+import { tomlifyConfig, stringifyToml, assertUnreachable } from '$lib';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
 import { processMedia } from './imageProcessor';
 import { json } from '@sveltejs/kit';
+import type { Ai } from '@cloudflare/workers-types';
 
 interface ImageFile {
 	path: string;
@@ -18,6 +24,37 @@ interface ImageFile {
 	encoding: 'base64';
 	hash: string;
 	extension: string;
+}
+
+async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
+	const messages: { role: 'system' | 'user'; content: string }[] = [
+		{
+			role: 'system',
+			content:
+				'Give sixteen keywords of the following user content to aid users find it while searching, separated with commas and no other system text ever'
+		},
+		{
+			role: 'user',
+			content: config.slides
+				.map((slide) => {
+					switch (true) {
+						case 'TypeAnswer' in slide:
+							return slide.TypeAnswer.title;
+						case 'Order' in slide:
+							return slide.Order.title;
+						case 'MultipleChoice' in slide:
+							return slide.MultipleChoice.title;
+						default:
+							return assertUnreachable(slide);
+					}
+				})
+				.join('\n')
+		}
+	];
+
+	const response = await ai.run('@cf/openai/gpt-oss-20b', { messages, stream: false });
+
+	return response.output_text?.split(',')?.slice(0, 16) ?? [];
 }
 
 export const GET: RequestHandler = async ({ url, platform, cookies }) => {
@@ -77,8 +114,15 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 					)
 				);
 
+				// Generate keywords using Cloudflare AI
+				send('progress', { state: 'generating-keywords', message: 'Generating keywords...' });
+				const keywords = platform?.env.AI
+					? await extractKeywords(platform.env.AI, fuizConfig.config)
+					: [];
+
 				const processedConfig: ReferencingOnlineFuiz = {
 					...fuizConfig,
+					keywords,
 					config: {
 						...fuizConfig.config,
 						slides: processedSlides
@@ -92,6 +136,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 						processedConfig.subjects.length > 0 && { subjects: processedConfig.subjects }),
 					...(processedConfig.grades &&
 						processedConfig.grades.length > 0 && { grades: processedConfig.grades }),
+					...(keywords && keywords.length > 0 && { keywords }),
 					config: tomlifyConfig(processedConfig.config)
 				};
 

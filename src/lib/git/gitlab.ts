@@ -82,41 +82,6 @@ export class GitLabClient extends BaseGitClient {
 		};
 	}
 
-	async createOrUpdateFile(
-		path: string,
-		content: string,
-		branch: string,
-		message: string,
-		encoding: 'text' | 'base64' = 'text'
-	): Promise<void> {
-		const encodedPath = encodeURIComponent(path);
-
-		// Check if file exists
-		let fileExists = false;
-		try {
-			await this.request(
-				`/projects/${this.projectPath}/repository/files/${encodedPath}?ref=${branch}`
-			);
-			fileExists = true;
-		} catch {
-			// File doesn't exist, will create it
-		}
-
-		const body = {
-			branch,
-			commit_message: message,
-			content: encoding === 'base64' ? content : content,
-			encoding: encoding
-		};
-
-		const method = fileExists ? 'PUT' : 'POST';
-
-		await this.request(`/projects/${this.projectPath}/repository/files/${encodedPath}`, {
-			method,
-			body: JSON.stringify(body)
-		});
-	}
-
 	async createPullRequest(options: PROptions): Promise<PRResponse> {
 		// If we have a fork, create MR from fork to upstream
 		// Otherwise, create MR within the same project
@@ -192,13 +157,34 @@ export class GitLabClient extends BaseGitClient {
 		return response.text();
 	}
 
-	async getFileLastCommit(path: string, ref: string = 'main'): Promise<string> {
-		const encodedPath = encodeURIComponent(path);
-		const response = await this.request<{
-			last_commit_id: string;
-		}>(`/projects/${this.projectPath}/repository/files/${encodedPath}?ref=${ref}`);
+	async getFileCommitInfo(
+		path: string,
+		ref: string = 'main'
+	): Promise<{ sha: string; firstCommitDate: Date; lastCommitDate: Date }> {
+		// Get all commits for this file
+		const commits = await this.request<
+			Array<{
+				id: string;
+				committed_date: string;
+			}>
+		>(
+			`/projects/${this.projectPath}/repository/commits?path=${encodeURIComponent(path)}&ref_name=${ref}`
+		);
 
-		return response.last_commit_id;
+		if (commits.length === 0) {
+			throw new Error(`No commits found for file: ${path}`);
+		}
+
+		// First commit in response is the most recent (last commit)
+		const lastCommit = commits[0];
+		// Last commit in response is the oldest (first commit)
+		const firstCommit = commits[commits.length - 1];
+
+		return {
+			sha: lastCommit.id,
+			firstCommitDate: new Date(firstCommit.committed_date),
+			lastCommitDate: new Date(lastCommit.committed_date)
+		};
 	}
 
 	async listFiles(path: string, ref: string = 'main'): Promise<string[]> {
@@ -213,83 +199,6 @@ export class GitLabClient extends BaseGitClient {
 		const files = response.filter((item) => item.type === 'blob');
 
 		return files.map((file) => file.path);
-	}
-
-	async listMergedPRs(since?: Date): Promise<PRResponse[]> {
-		let endpoint = `/projects/${this.projectPath}/merge_requests?state=merged&order_by=updated_at&sort=desc`;
-
-		if (since) {
-			endpoint += `&updated_after=${since.toISOString()}`;
-		}
-
-		const response = await this.request<
-			Array<{
-				id: number;
-				iid: number;
-				web_url: string;
-				state: string;
-				source_branch: string;
-				target_branch: string;
-				title: string;
-				merged_at?: string;
-				merge_commit_sha?: string;
-			}>
-		>(endpoint);
-
-		return response.map((mr) => ({
-			id: mr.id,
-			iid: mr.iid,
-			url: mr.web_url,
-			state: mr.state as 'opened' | 'merged' | 'closed',
-			source_branch: mr.source_branch,
-			target_branch: mr.target_branch,
-			title: mr.title,
-			merged_at: mr.merged_at,
-			merge_commit_sha: mr.merge_commit_sha
-		}));
-	}
-
-	async getPullRequest(prNumber: number): Promise<PRResponse> {
-		const response = await this.request<{
-			id: number;
-			iid: number;
-			web_url: string;
-			state: string;
-			source_branch: string;
-			target_branch: string;
-			title: string;
-			merged_at?: string;
-			merge_commit_sha?: string;
-		}>(`/projects/${this.projectPath}/merge_requests/${prNumber}`);
-
-		return {
-			id: response.id,
-			iid: response.iid,
-			url: response.web_url,
-			state: response.state as 'opened' | 'merged' | 'closed',
-			source_branch: response.source_branch,
-			target_branch: response.target_branch,
-			title: response.title,
-			merged_at: response.merged_at,
-			merge_commit_sha: response.merge_commit_sha
-		};
-	}
-
-	async deleteBranch(name: string): Promise<void> {
-		const encodedBranch = encodeURIComponent(name);
-		await this.request(`/projects/${this.projectPath}/repository/branches/${encodedBranch}`, {
-			method: 'DELETE'
-		});
-	}
-
-	async branchExists(name: string): Promise<boolean> {
-		try {
-			const encodedBranch = encodeURIComponent(name);
-			await this.request(`/projects/${this.projectPath}/repository/branches/${encodedBranch}`);
-			return true;
-		} catch {
-			return false;
-		}
 	}
 
 	/**

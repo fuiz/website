@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS "fuizzes" (
     "language" text NOT NULL,
     "subjects" text DEFAULT NULL,                -- JSON array: ["math", "science"]
     "grades" text DEFAULT NULL,                  -- JSON array: ["K-2", "3-5"]
+    "keywords" text DEFAULT NULL,                -- JSON array: ["educational", "interactive"]
     "slides_count" integer NOT NULL,
     "thumbnail" BLOB DEFAULT NULL,
     "thumbnail_alt" text DEFAULT NULL,
@@ -90,33 +91,3 @@ CREATE INDEX IF NOT EXISTS "fuizzes_language" ON "fuizzes" ("language");
 CREATE INDEX IF NOT EXISTS "fuizzes_published" ON "fuizzes" ("published_at" DESC);
 CREATE INDEX IF NOT EXISTS "fuizzes_played" ON "fuizzes" ("played_count" DESC);
 CREATE INDEX IF NOT EXISTS "fuizzes_updated" ON "fuizzes" ("updated_at" DESC);
-
--- ============================================================================
--- WEBHOOK SYNC LOG
--- ============================================================================
--- Idempotent webhook processing log
---
--- Purpose:
---   - Prevent duplicate processing of the same PR merge
---   - Audit trail of sync events
---
--- Usage:
---   INSERT INTO webhook_sync (id, event_type, pr_number, commit_sha)
---   VALUES (?1, ?2, ?3, ?4)
---   ON CONFLICT DO NOTHING
---
---   -- If no rows affected, already processed
--- ============================================================================
-CREATE TABLE IF NOT EXISTS "webhook_sync" (
-    "id" text NOT NULL,
-    "event_type" text NOT NULL,                  -- 'merge_request.merge', 'pull_request.closed'
-    "pr_number" integer NOT NULL,
-    "commit_sha" text NOT NULL,
-    "processed_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    PRIMARY KEY (id),
-    UNIQUE(pr_number, commit_sha)                -- Prevent duplicate processing
-);
-
-CREATE INDEX IF NOT EXISTS "webhook_sync_pr" ON "webhook_sync" ("pr_number");
-CREATE INDEX IF NOT EXISTS "webhook_sync_processed" ON "webhook_sync" ("processed_at" DESC);

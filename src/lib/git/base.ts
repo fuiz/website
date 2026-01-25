@@ -29,22 +29,6 @@ export abstract class BaseGitClient {
 	abstract createBranch(name: string, from?: string): Promise<BranchInfo>;
 
 	/**
-	 * Create or update a file in the repository
-	 * @param path File path relative to repo root
-	 * @param content File content
-	 * @param branch Branch name
-	 * @param message Commit message
-	 * @param encoding Content encoding ('text' or 'base64')
-	 */
-	abstract createOrUpdateFile(
-		path: string,
-		content: string,
-		branch: string,
-		message: string,
-		encoding?: 'text' | 'base64'
-	): Promise<void>;
-
-	/**
 	 * Create a pull/merge request
 	 * @param options PR options
 	 */
@@ -59,12 +43,15 @@ export abstract class BaseGitClient {
 	abstract getFileContent(path: string, ref?: string): Promise<string | null>;
 
 	/**
-	 * Get the last commit SHA where a file was modified
+	 * Get commit information for a file (SHA, first commit date, last commit date)
 	 * @param path File path relative to repo root
 	 * @param ref Branch, tag, or commit SHA (defaults to default branch)
-	 * @returns Commit SHA
+	 * @returns Object with commit SHA, first commit date (published_at), and last commit date (updated_at)
 	 */
-	abstract getFileLastCommit(path: string, ref?: string): Promise<string>;
+	abstract getFileCommitInfo(
+		path: string,
+		ref?: string
+	): Promise<{ sha: string; firstCommitDate: Date; lastCommitDate: Date }>;
 
 	/**
 	 * List files in a directory
@@ -73,30 +60,6 @@ export abstract class BaseGitClient {
 	 * @returns Array of file paths
 	 */
 	abstract listFiles(path: string, ref?: string): Promise<string[]>;
-
-	/**
-	 * List merged pull/merge requests
-	 * @param since Optional date to filter PRs merged after this date
-	 */
-	abstract listMergedPRs(since?: Date): Promise<PRResponse[]>;
-
-	/**
-	 * Get pull/merge request details
-	 * @param prNumber PR/MR number
-	 */
-	abstract getPullRequest(prNumber: number): Promise<PRResponse>;
-
-	/**
-	 * Delete a branch
-	 * @param name Branch name
-	 */
-	abstract deleteBranch(name: string): Promise<void>;
-
-	/**
-	 * Check if a branch exists
-	 * @param name Branch name
-	 */
-	abstract branchExists(name: string): Promise<boolean>;
 
 	/**
 	 * Create multiple files in a single commit

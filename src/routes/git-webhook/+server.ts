@@ -50,23 +50,45 @@ function extractFuizDirectories(filePaths: string[]): Set<string> {
 }
 
 /**
- * Get the last commit SHA that modified files in a specific directory
+ * Get commit info (SHA and timestamps) for a specific directory
  * from a list of commits (ordered chronologically)
  */
-function getLastCommitForDirectory(
+function getCommitInfoForDirectory(
 	directory: string,
-	commits: Array<{ id: string; added: string[]; modified: string[]; removed: string[] }>
-): string | null {
+	commits: Array<{
+		id: string;
+		timestamp: string;
+		added: string[];
+		modified: string[];
+		removed: string[];
+	}>
+): { lastCommitSha: string; firstCommitDate: Date; lastCommitDate: Date } | null {
 	const prefix = `${directory}/`;
+	let firstCommitDate: Date | null = null;
+	let lastCommitDate: Date | null = null;
+	let lastCommitSha: string | null = null;
 
-	// Iterate backwards to find the most recent commit
-	for (let i = commits.length - 1; i >= 0; i--) {
+	// Iterate through commits to find first and last that touched this directory
+	for (let i = 0; i < commits.length; i++) {
 		const commit = commits[i];
 		const allFiles = [...commit.added, ...commit.modified, ...commit.removed];
 
 		if (allFiles.some((file) => file.startsWith(prefix))) {
-			return commit.id;
+			const commitDate = new Date(commit.timestamp);
+
+			// First time we see this directory, record as first commit
+			if (firstCommitDate === null) {
+				firstCommitDate = commitDate;
+			}
+
+			// Always update last commit (since we're iterating chronologically)
+			lastCommitDate = commitDate;
+			lastCommitSha = commit.id;
 		}
+	}
+
+	if (lastCommitSha && firstCommitDate && lastCommitDate) {
+		return { lastCommitSha, firstCommitDate, lastCommitDate };
 	}
 	return null;
 }
@@ -80,6 +102,7 @@ interface GitLabPushEvent {
 	after: string; // commit SHA
 	commits: Array<{
 		id: string;
+		timestamp: string; // ISO 8601 timestamp
 		added: string[];
 		modified: string[];
 		removed: string[];
@@ -150,14 +173,20 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		const results = [];
 		for (const fuizId of fuizDirectories) {
 			try {
-				// Get the specific commit SHA where this fuiz directory was last changed
-				const lastCommitSha = getLastCommitForDirectory(fuizId, payload.commits);
+				// Get commit info (SHA and timestamps) for this fuiz directory
+				const commitInfo = getCommitInfoForDirectory(fuizId, payload.commits);
+
+				if (!commitInfo) {
+					throw new Error(`No commit info found for directory: ${fuizId}`);
+				}
 
 				await syncSingleFuiz(
 					fuizId,
 					platform?.env.BUCKET,
 					platform?.env.DATABASE,
-					lastCommitSha || payload.after
+					commitInfo.lastCommitSha,
+					commitInfo.firstCommitDate,
+					commitInfo.lastCommitDate
 				);
 
 				console.log('Successfully synced fuiz:', fuizId);

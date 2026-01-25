@@ -372,6 +372,7 @@ export type OnlineFuizMetadata = {
 	author: string;
 	subjects?: string[];
 	grades?: string[];
+	keywords?: string[];
 	language: string;
 };
 
