@@ -1,22 +1,26 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { assertUnreachable, fixTimes, removeIds } from '$lib';
-	import { updateCreation } from '$lib/storage';
+	import { updateCreation, type Database, type ExportedFuiz } from '$lib/storage';
 	import { debounce } from '$lib/util';
 	import Main from './Main.svelte';
 	import Topbar from './Topbar.svelte';
 	import { share } from './lib';
-	import { page } from '$app/state';
 	import { untrack } from 'svelte';
+	import type { Base64Media, GenericFuizConfig } from '$lib/types';
 
-	/** @type {{
-	 * id: number;
-	 * exportedFuiz: import('$lib/storage').ExportedFuiz;
-	 * config: import('$lib/types').FuizConfig;
-	 * db: import('$lib/storage').Database;
-	 * }} */
-	let { id = $bindable(), exportedFuiz = $bindable(), config = $bindable(), db } = $props();
+	let {
+		id = $bindable(),
+		exportedFuiz = $bindable(),
+		config = $bindable(),
+		db
+	}: {
+		id: number;
+		exportedFuiz: ExportedFuiz;
+		config: GenericFuizConfig<Base64Media | undefined>;
+		db: Database;
+	} = $props();
 
 	const updateStorage = debounce(() => {
 		exportedFuiz = {
@@ -104,8 +108,7 @@
 		}).length > 0
 	);
 
-	/** @param {import('tippy.js').Instance} e */
-	async function onShare(e) {
+	async function onShare(e: import('tippy.js').Instance) {
 		await share(removeIds(config), undefined);
 		e.show();
 	}

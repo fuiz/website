@@ -26,6 +26,7 @@ declare global {
 		interface Platform {
 			env: {
 				BUCKET: R2Bucket;
+				PUBLISH_JOBS: KVNamespace;
 				DATABASE: D1Database;
 				MAP: KVNamespace;
 				AI: Ai;

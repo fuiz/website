@@ -17,10 +17,9 @@
 	import { remoteSyncProviders } from '$lib/storage/remoteStorage';
 	import { share } from './lib';
 	import JSZip from 'jszip';
-	import { page } from '$app/state';
 
-	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, data: import('./$types').PageData}}*/
-	let { creations = $bindable(), db, data } = $props();
+	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database}}*/
+	let { creations = $bindable(), db } = $props();
 
 	let isGDriveAuthenticated = $derived(!!db.remote);
 

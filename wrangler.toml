@@ -24,3 +24,7 @@ bucket_name = "fuiz"
 [[kv_namespaces]]
 binding = "MAP"
 id = "c8aca143fe384d89aa82e431cf579069"
+
+[[kv_namespaces]]
+binding = "PUBLISH_JOBS"
+id = "6f60c7ca01bb45ba84f5ccb5c16eb4b6"

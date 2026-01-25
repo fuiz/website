@@ -1,17 +1,17 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import type { IdlessFullFuizConfig } from '$lib/types';
 
 export const load = (async ({ params, platform }) => {
 	const id = params.id;
 
-	const content =
-		(await (await platform?.env.BUCKET.get(id))?.text()) ?? (await platform?.env.MAP.get(id));
+	const fuiz = await platform?.env.MAP.get<IdlessFullFuizConfig>(id, 'json');
 
-	if (!content) {
+	if (!fuiz) {
 		error(404, 'fuiz not found');
 	}
 
 	return {
-		content
+		fuiz
 	};
 }) satisfies PageServerLoad;

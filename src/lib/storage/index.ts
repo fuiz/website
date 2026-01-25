@@ -2,9 +2,10 @@ import objectHash from 'object-hash';
 import {
 	getMedia,
 	mapIdlessMedia,
+	type Base64Media,
+	type Creation,
 	type GenericIdlessFuizConfig,
-	type IdlessFuizConfig,
-	type Image,
+	type IdlessFullFuizConfig,
 	type Media,
 	type Modify
 } from '../types';
@@ -53,35 +54,19 @@ export type Database = {
 	remote?: RemoteSync;
 };
 
-export type Creation = {
-	id: CreationId;
-	title: string;
-	lastEdited: number;
-	slidesCount: number;
-	media?: Media | undefined;
-};
-
 export type ExportedFuiz = {
-	config: IdlessFuizConfig;
-	uniqueId: string;
-	versionId: number;
-	lastEdited: number;
-	publish?: {
-		released_r2_key?: string;
-		pending_r2_key?: string;
-	};
-};
+	config: IdlessFullFuizConfig;
+} & StrictInternalFuizMetadata;
 
 type MediaReference =
+	| Base64Media
 	| {
-			Image:
-				| Image
-				| {
-						HashReference: {
-							hash: string;
-							alt: string;
-						};
-				  };
+			Image: {
+				HashReference: {
+					hash: string;
+					alt: string;
+				};
+			};
 	  }
 	| string;
 
@@ -197,13 +182,13 @@ export async function retrieveMediaFromLocal(
 	hash: string,
 	database: LocalDatabase,
 	alt?: string
-): Promise<Media | undefined> {
+): Promise<Base64Media | undefined> {
 	const imagesStore = database.transaction(['images'], 'readonly').objectStore('images');
 	const transaction = imagesStore.get(hash);
 
 	return await new Promise((resolve) => {
 		transaction.addEventListener('success', () => {
-			const value: Media | string | undefined = transaction.result ?? undefined;
+			const value: Base64Media | string | undefined = transaction.result ?? undefined;
 			if (!value) resolve(undefined);
 			else if (typeof value === 'string') {
 				resolve({
@@ -224,7 +209,7 @@ export async function retrieveMediaFromLocal(
 async function collectMedia(
 	media: MediaReference | undefined,
 	database: LocalDatabase
-): Promise<Media | undefined> {
+): Promise<Base64Media | undefined> {
 	if (media == undefined) return undefined;
 	if (typeof media === 'string') {
 		return await retrieveMediaFromLocal(media, database);

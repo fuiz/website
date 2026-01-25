@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { page } from '$app/state';
@@ -7,24 +7,33 @@
 	import ErrorPage from '$lib/ErrorPage.svelte';
 	import Gallery from './Gallery.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
-	import { getAllCreations, getCreation, loadDatabase } from '$lib/storage';
+	import {
+		getAllCreations,
+		getCreation,
+		loadDatabase,
+		type Database,
+		type ExportedFuiz
+	} from '$lib/storage';
 	import { addIds } from '$lib';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import type { Base64Media, Creation, GenericFuizConfig } from '$lib/types';
 
-	/** @type {
-	 * | 'loading'
-	 * | {
-	 * 		creation: 'failure' | { id: number; exportedFuiz: import('$lib/storage').ExportedFuiz; config: import('$lib/types').FuizConfig };
-	 * 		db: import('$lib/storage').Database;
-	 *   }
-	 * | { creations: import('$lib/types').Creation[]; db: import('$lib/storage').Database }
-	 * } */
-	let status = $state('loading');
+	let status = $state<
+		| 'loading'
+		| {
+				creation:
+					| 'failure'
+					| {
+							id: number;
+							exportedFuiz: ExportedFuiz;
+							config: GenericFuizConfig<Base64Media | undefined>;
+					  };
+				db: Database;
+		  }
+		| { creations: Creation[]; db: Database }
+	>('loading');
 
-	/**
-	 * @param {string | null} idParam
-	 */
-	async function getStatus(idParam) {
+	async function getStatus(idParam: string | null) {
 		const db = await loadDatabase();
 		if (idParam) {
 			const id = parseInt(idParam);
@@ -49,8 +58,6 @@
 		getStatus(creationId);
 	});
 
-	let { data } = $props();
-
 	const title = m.create_title();
 	const description = m.create_desc();
 </script>
@@ -66,7 +73,7 @@
 {#if status === 'loading'}
 	<Loading />
 {:else if 'creations' in status}
-	<Gallery creations={status.creations} db={status.db} {data} />
+	<Gallery creations={status.creations} db={status.db} />
 {:else if status.creation === 'failure'}
 	<ErrorPage errorMessage={m.missing_fuiz()} />
 {:else}

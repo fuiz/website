@@ -1,29 +1,34 @@
 import type { Locale } from '$lib/paraglide/runtime.js';
 
-export type Image =
-	| {
-			Base64: {
-				data: string;
-				hash?: string;
-				alt: string;
-			};
-	  }
-	| {
-			Corkboard: {
-				id: string;
-				alt: string;
-			};
-	  }
-	| {
-			Url: {
-				url: string;
-				alt: string;
-			};
-	  };
-
-export type Media = {
-	Image: Image;
+export type Base64Media = {
+	Image: {
+		Base64: {
+			data: string;
+			hash?: string;
+			alt: string;
+		};
+	};
 };
+
+export type CorkboardMedia = {
+	Image: {
+		Corkboard: {
+			id: string;
+			alt: string;
+		};
+	};
+};
+
+export type UrlMedia = {
+	Image: {
+		Url: {
+			url: string;
+			alt: string;
+		};
+	};
+};
+
+export type Media = Base64Media | CorkboardMedia | UrlMedia;
 
 export type TextOrMedia = {
 	Text: string;
@@ -270,7 +275,11 @@ export type GenericIdlessFuizConfig<T> = {
 	slides: GenericIdlessSlide<T>[];
 };
 
+export type IdlessFullFuizConfig = GenericIdlessFuizConfig<Base64Media | undefined>;
+
 export type IdlessFuizConfig = GenericIdlessFuizConfig<Media | undefined>;
+
+export type IdlessLocalReferenceFuizConfig = GenericIdlessFuizConfig<UrlMedia | undefined>;
 
 export type Creation = {
 	id: number;
@@ -359,10 +368,17 @@ export type PublishedFuiz = Modify<
 	}
 >;
 
-export type OnlineFuiz = {
+export type OnlineFuizMetadata = {
 	author: string;
 	subjects?: string[];
 	grades?: string[];
 	language: string;
-	config: IdlessFuizConfig;
 };
+
+export type FullOnlineFuiz = {
+	config: IdlessFullFuizConfig;
+} & OnlineFuizMetadata;
+
+export type ReferencingOnlineFuiz = {
+	config: IdlessLocalReferenceFuizConfig;
+} & OnlineFuizMetadata;

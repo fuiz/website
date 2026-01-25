@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { fixPublish } from '$lib/serverOnlyUtils';
-import type { OnlineFuiz, PublishedFuizDB } from '$lib/types';
-import { parse } from '@ltd/j-toml';
+import type { FullOnlineFuiz, PublishedFuizDB } from '$lib/types';
 
 export const load = (async ({ params, platform }) => {
 	const published: PublishedFuizDB | undefined =
@@ -18,18 +17,14 @@ export const load = (async ({ params, platform }) => {
 
 	const fuiz = fixPublish(published);
 
-	const fuizText = await (await platform?.env.BUCKET.get(params.id))?.text();
+	const onlineFuiz = await (await platform?.env.BUCKET.get(params.id))?.json<FullOnlineFuiz>();
 
-	if (!fuizText) {
+	if (!onlineFuiz) {
 		error(500, 'fuiz file not found');
 	}
 
-	const { config } = parse(fuizText, {
-		bigint: false
-	}) as OnlineFuiz;
-
 	return {
 		fuiz,
-		config: structuredClone(config)
+		config: onlineFuiz.config
 	};
 }) satisfies PageServerLoad;

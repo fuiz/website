@@ -1,9 +1,9 @@
 import { PUBLIC_PLAY_URL } from '$env/static/public';
 import { removeIds } from '$lib';
 import { localizeHref } from '$lib/paraglide/runtime';
-import type { IdlessFuizConfig } from '$lib/types';
+import type { IdlessFullFuizConfig } from '$lib/types';
 
-export const share = async (config: IdlessFuizConfig, id?: string) => {
+export const share = async (config: IdlessFullFuizConfig, id?: string) => {
 	id ??= await (
 		await fetch('/share', {
 			method: 'PUT',

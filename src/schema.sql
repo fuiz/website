@@ -1,85 +1,122 @@
-CREATE TABLE IF NOT EXISTS "accounts" (
-    "id" text NOT NULL,
-    "userId" text NOT NULL DEFAULT NULL,
-    "type" text NOT NULL DEFAULT NULL,
-    "provider" text NOT NULL DEFAULT NULL,
-    "providerAccountId" text NOT NULL DEFAULT NULL,
-    "refresh_token" text DEFAULT NULL,
-    "access_token" text DEFAULT NULL,
-    "expires_at" number DEFAULT NULL,
-    "token_type" text DEFAULT NULL,
-    "scope" text DEFAULT NULL,
-    "id_token" text DEFAULT NULL,
-    "session_state" text DEFAULT NULL,
-    "oauth_token_secret" text DEFAULT NULL,
-    "oauth_token" text DEFAULT NULL,
-    PRIMARY KEY (id)
-);
+-- ============================================================================
+-- Fuiz Library Database Schema
+-- ============================================================================
+--
+-- DESIGN PHILOSOPHY
+-- -----------------
+-- Git is the Source of Truth:
+--   - Submissions = Pull Requests (tracked in GitLab/GitHub)
+--   - Reviews/Comments = PR comments
+--   - Approvals = PR merges
+--   - Version History = Git history
+--
+-- Database is a Read-Optimized Cache:
+--   - Stores only published fuizzes for fast library queries
+--   - Metadata extracted from TOML files
+--   - Statistics tracked for sorting/ranking
+--   - Webhooks keep it in sync with Git
+--
+-- PUBLISHING FLOW
+-- ---------------
+-- 1. User creates fuiz in app
+-- 2. User clicks "Publish" and authenticates with GitLab/GitHub
+-- 3. App creates PR with TOML + images to upstream repo
+-- 4. Maintainer reviews and merges PR
+-- 5. Webhook triggers sync script:
+--    - Fetches processed config from R2
+--    - Downloads images from Git, uploads to Corkboard
+--    - Generates thumbnail
+--    - Inserts into fuizzes table
+-- 6. Fuiz appears in public library
+--
+-- UPDATE FLOW
+-- -----------
+-- Same as publish, but preserves play_count and view_count
+--
+-- REPOSITORY STRUCTURE
+-- --------------------
+-- Each fuiz is stored in its own directory:
+--   {uuid1}/
+--     config.toml
+--     abc123def456.png
+--     789fedcba321.jpg
+--   {uuid2}/
+--     config.toml
+--     image1hash.webp
+--
+-- ============================================================================
 
-CREATE TABLE IF NOT EXISTS "sessions" (
-    "id" text NOT NULL,
-    "sessionToken" text NOT NULL,
-    "userId" text NOT NULL DEFAULT NULL,
-    "expires" datetime NOT NULL DEFAULT NULL,
-    PRIMARY KEY (sessionToken)
-);
+-- ============================================================================
+-- PUBLISHED FUIZZES
+-- ============================================================================
+-- The public library of approved fuizzes
+--
+-- Indexes:
+--   - language: Filter by language
+--   - published_at DESC: Recent additions
+--   - played_count DESC: Popular fuizzes
+--   - updated_at DESC: Recently updated
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS "fuizzes" (
+    "id" text NOT NULL,                          -- Fuiz ID (same as directory name in Git)
+    "storage_id" text NOT NULL,                  -- R2 bucket key for raw TOML content
 
-CREATE TABLE IF NOT EXISTS "users" (
-    "id" text NOT NULL DEFAULT '',
-    "name" text DEFAULT NULL,
-    "email" text DEFAULT NULL,
-    "emailVerified" datetime DEFAULT NULL,
-    "image" text DEFAULT NULL,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE IF NOT EXISTS "verification_tokens" (
-    "identifier" text NOT NULL,
-    "token" text NOT NULL DEFAULT NULL,
-    "expires" datetime NOT NULL DEFAULT NULL,
-    PRIMARY KEY (token)
-);
-
-CREATE TABLE IF NOT EXISTS "user_creations" (
-    "id" text NOT NULL,
-    "lastEdited" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "versionId" number NOT NULL DEFAULT 0,
-    "creator" text NOT NULL DEFAULT '',
-    FOREIGN KEY (creator) REFERENCES users(id),
-    PRIMARY KEY (id)
-);
-
-CREATE INDEX IF NOT EXISTS "user_creations_creator" ON "user_creations" ("creator");
-
-CREATE TABLE IF NOT EXISTS "pending_submissions" (
-    "storage_id" text NOT NULL,
-    "desired_id" text NOT NULL,
-    "creator" text NOT NULL,
-    FOREIGN KEY (creator) REFERENCES users(id),
-    PRIMARY KEY (storage_id)
-);
-
-CREATE INDEX IF NOT EXISTS "pending_submissions_desired_id" ON "pending_submissions" ("desired_id");
-
-CREATE TABLE IF NOT EXISTS "approved_submissions" (
-    "storage_id" text NOT NULL,
+    -- Metadata
     "title" text NOT NULL,
     "author" text NOT NULL,
-    "published_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "public_url" text NOT NULL,
-    "subjects" text NOT NULL,
-    "grades" text NOT NULL,
-    "keywords" text NOT NULL,
-    "slides_count" number NOT NULL,
-    "played_count" number NOT NULL,
+    "language" text NOT NULL,
+    "subjects" text DEFAULT NULL,                -- JSON array: ["math", "science"]
+    "grades" text DEFAULT NULL,                  -- JSON array: ["K-2", "3-5"]
+    "slides_count" integer NOT NULL,
+    "thumbnail" BLOB DEFAULT NULL,
     "thumbnail_alt" text DEFAULT NULL,
-    "language_code" text NOT NULL,
-    "thumbnail" BLOB DEFAULT NULL
+
+    -- Git reference (for updates/rollbacks)
+    "git_commit_sha" text DEFAULT NULL,
+
+    -- Statistics
+    "played_count" integer NOT NULL DEFAULT 0,
+    "view_count" integer NOT NULL DEFAULT 0,
+
+    -- Timestamps
+    "published_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+    UNIQUE(storage_id)
 );
 
-CREATE TABLE IF NOT EXISTS "denied_submissions" (
-    "storage_id" text NOT NULL,
-    "desired_id" text NOT NULL,
-    "deniedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "reason" text DEFAULT NULL
+CREATE INDEX IF NOT EXISTS "fuizzes_language" ON "fuizzes" ("language");
+CREATE INDEX IF NOT EXISTS "fuizzes_published" ON "fuizzes" ("published_at" DESC);
+CREATE INDEX IF NOT EXISTS "fuizzes_played" ON "fuizzes" ("played_count" DESC);
+CREATE INDEX IF NOT EXISTS "fuizzes_updated" ON "fuizzes" ("updated_at" DESC);
+
+-- ============================================================================
+-- WEBHOOK SYNC LOG
+-- ============================================================================
+-- Idempotent webhook processing log
+--
+-- Purpose:
+--   - Prevent duplicate processing of the same PR merge
+--   - Audit trail of sync events
+--
+-- Usage:
+--   INSERT INTO webhook_sync (id, event_type, pr_number, commit_sha)
+--   VALUES (?1, ?2, ?3, ?4)
+--   ON CONFLICT DO NOTHING
+--
+--   -- If no rows affected, already processed
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS "webhook_sync" (
+    "id" text NOT NULL,
+    "event_type" text NOT NULL,                  -- 'merge_request.merge', 'pull_request.closed'
+    "pr_number" integer NOT NULL,
+    "commit_sha" text NOT NULL,
+    "processed_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+    UNIQUE(pr_number, commit_sha)                -- Prevent duplicate processing
 );
+
+CREATE INDEX IF NOT EXISTS "webhook_sync_pr" ON "webhook_sync" ("pr_number");
+CREATE INDEX IF NOT EXISTS "webhook_sync_processed" ON "webhook_sync" ("processed_at" DESC);
