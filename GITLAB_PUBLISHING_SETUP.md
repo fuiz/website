@@ -241,7 +241,7 @@ README.md               # Repository documentation
   - Server-Sent Events endpoint
   - Events: `progress`, `complete`, `error`
   - Progress states: `generating-keywords`, `forking`, `creating-branch`, `uploading`, `creating-pr`
-  - Complete event returns: `{ r2_key: string, pr_url: string }`
+  - Complete event returns: `{ pr_url: string }`
 
 ### Webhook Endpoint
 

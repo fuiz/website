@@ -14,6 +14,7 @@
 	import Subject from './Subject.svelte';
 	import Grade from './Grade.svelte';
 	import type { PublishingState } from '../api/publish-stream/types';
+	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
 
 	let {
 		creation = $bindable(),
@@ -38,6 +39,8 @@
 	let publishError = $state<string | undefined>(undefined);
 
 	let publishingState = $state<PublishingState | null>(null);
+
+	let warningDialog: HTMLDialogElement;
 
 	const steps = [
 		{ state: 'generating-keywords' as const, label: 'Generating keywords' },
@@ -148,7 +151,37 @@
 
 <TypicalPage>
 	<section style:max-width="40ch" style:margin="auto">
-		{#if publishingState}
+		{#if prUrl}
+			<div
+				style:display="flex"
+				style:flex-direction="column"
+				style:gap="1em"
+				style:padding="2em 1em"
+				style:text-align="center"
+			>
+				<div
+					style:border="0.15em solid currentcolor"
+					style:border-radius="0.7em"
+					style:padding="1.5em"
+					style:background="var(--background-color)"
+				>
+					<h2 style:font-family="Poppins" style:margin="0 0 0.5em" style:font-size="1.75em">
+						Fuiz Submitted!
+					</h2>
+					<p style:margin="0 0 1em 0" style:line-height="1.4">
+						Your fuiz has been submitted for review. It will be published once the pull request is
+						reviewed and merged by maintainers.
+					</p>
+					{#if prUrl}
+						<div>
+							<FancyAnchorButton href={prUrl}>
+								<div style:padding="0.5em 1em" style:font-family="Poppins">View on GitLab</div>
+							</FancyAnchorButton>
+						</div>
+					{/if}
+				</div>
+			</div>
+		{:else if publishingState}
 			<div
 				style:display="flex"
 				style:flex-direction="column"
@@ -197,7 +230,7 @@
 				style:gap="0.5em"
 				onsubmit={(e) => {
 					e.preventDefault();
-					publish();
+					warningDialog?.showModal();
 				}}
 			>
 				{#if publishError}
@@ -298,6 +331,42 @@
 	</section>
 </TypicalPage>
 
+<dialog
+	bind:this={warningDialog}
+	style:border="0.15em solid currentcolor"
+	style:border-radius="0.7em"
+	style:padding="1.5em"
+	style:max-width="35ch"
+	style:background="var(--background-color)"
+>
+	<h2 style:font-family="Poppins" style:margin="0 0 0.5em 0" style:font-size="1.25em">Warning</h2>
+	<p style:margin="0 0 1em 0">
+		Requesting to publish this fuiz will make it <strong>public to everyone</strong> after it is reviewed
+		and approved. Your fuiz will be visible in the public library and accessible to all users.
+	</p>
+	<div style:display="flex" style:gap="0.5em" style:justify-content="flex-end">
+		<FancyButton
+			type="button"
+			backgroundColor="#666666"
+			backgroundDeepColor="#444444"
+			onclick={() => {
+				warningDialog.close();
+			}}
+		>
+			<div style:font-family="Poppins">Cancel</div>
+		</FancyButton>
+		<FancyButton
+			type="button"
+			onclick={() => {
+				warningDialog.close();
+				publish();
+			}}
+		>
+			<div style:font-family="Poppins">Continue</div>
+		</FancyButton>
+	</div>
+</dialog>
+
 <style>
 	p {
 		margin: 0;
@@ -315,5 +384,9 @@
 
 	.step-active {
 		font-weight: bold;
+	}
+
+	dialog::backdrop {
+		background-color: rgba(0, 0, 0, 0.5);
 	}
 </style>

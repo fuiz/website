@@ -117,7 +117,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 			const encoder = new TextEncoder();
 
 			function send(event: 'progress', data: { state: PublishingState; message: string }): void;
-			function send(event: 'complete', data: { r2_key: string; pr_url: string }): void;
+			function send(event: 'complete', data: { pr_url: string }): void;
 			function send(event: 'error', data: { message: string }): void;
 			function send(event: string, data: Record<string, unknown>): void {
 				controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
@@ -226,7 +226,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				});
 
 				// Send success
-				send('complete', { r2_key: fuizId, pr_url: pr.url });
+				send('complete', { pr_url: pr.url });
 			} catch (err) {
 				console.error('Failed to publish:', err);
 				send('error', { message: String(err) });
