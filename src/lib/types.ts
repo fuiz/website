@@ -234,6 +234,57 @@ export async function mapIdlessMedia<T, O>(
 	return slide;
 }
 
+export function mapIdlessMediaSync<T, O>(
+	slide: GenericIdlessSlide<T>,
+	map: (media: T) => O
+): GenericIdlessSlide<O> {
+	if ('MultipleChoice' in slide)
+		return slide.MultipleChoice.media
+			? {
+					MultipleChoice: { ...slide.MultipleChoice, media: map(slide.MultipleChoice.media) }
+				}
+			: {
+					MultipleChoice: {
+						title: slide.MultipleChoice.title,
+						introduce_question: slide.MultipleChoice.introduce_question,
+						time_limit: slide.MultipleChoice.time_limit,
+						points_awarded: slide.MultipleChoice.points_awarded,
+						answers: slide.MultipleChoice.answers
+					}
+				};
+	if ('TypeAnswer' in slide)
+		return slide.TypeAnswer.media
+			? {
+					TypeAnswer: { ...slide.TypeAnswer, media: map(slide.TypeAnswer.media) }
+				}
+			: {
+					TypeAnswer: {
+						title: slide.TypeAnswer.title,
+						introduce_question: slide.TypeAnswer.introduce_question,
+						time_limit: slide.TypeAnswer.time_limit,
+						points_awarded: slide.TypeAnswer.points_awarded,
+						answers: slide.TypeAnswer.answers,
+						case_sensitive: slide.TypeAnswer.case_sensitive
+					}
+				};
+	if ('Order' in slide)
+		return slide.Order.media
+			? {
+					Order: { ...slide.Order, media: map(slide.Order.media) }
+				}
+			: {
+					Order: {
+						title: slide.Order.title,
+						introduce_question: slide.Order.introduce_question,
+						time_limit: slide.Order.time_limit,
+						points_awarded: slide.Order.points_awarded,
+						axis_labels: slide.Order.axis_labels,
+						answers: slide.Order.answers
+					}
+				};
+	return slide;
+}
+
 export type GenericIdlessSlide<T> =
 	| {
 			MultipleChoice: GenericIdlessMultipleChoiceSlide<T>;

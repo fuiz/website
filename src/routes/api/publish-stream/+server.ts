@@ -6,10 +6,10 @@
 import { getAuthenticatedProvider, getTokens } from '../git/gitUtil';
 import { createGitClient } from '$lib/git/factory';
 import {
-	mapIdlessMedia,
 	type FullOnlineFuiz,
 	type ReferencingOnlineFuiz,
-	type IdlessFullFuizConfig
+	type IdlessFullFuizConfig,
+	mapIdlessMediaSync
 } from '$lib/types';
 import { tomlifyConfig, stringifyToml, assertUnreachable } from '$lib';
 import type { RequestHandler } from './$types';
@@ -17,6 +17,7 @@ import { env } from '$env/dynamic/private';
 import { processMedia } from './imageProcessor';
 import { json } from '@sveltejs/kit';
 import type { Ai } from '@cloudflare/workers-types';
+import type { PublishingState } from './types';
 
 interface ImageFile {
 	path: string;
@@ -31,7 +32,7 @@ async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<st
 		{
 			role: 'system',
 			content:
-				'Give sixteen keywords of the following user content to aid users find it while searching, separated with commas and no other system text ever'
+				'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever'
 		},
 		{
 			role: 'user',
@@ -52,9 +53,33 @@ async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<st
 		}
 	];
 
-	const response = await ai.run('@cf/openai/gpt-oss-20b', { messages, stream: false });
+	const response = await ai.run('@cf/openai/gpt-oss-20b', {
+		messages,
+		stream: false,
+		text: {
+			format: {
+				type: 'json_schema',
+				name: 'output',
+				schema: {
+					type: 'array',
+					items: {
+						type: 'string'
+					}
+				}
+			}
+		}
+	});
 
-	return response.output_text?.split(',')?.slice(0, 16) ?? [];
+	/** @ts-expect-error Cloudflare AI response is kinda terrible */
+	const choices = response.choices;
+	const content = choices[0].message.content;
+
+	try {
+		return JSON.parse(content);
+	} catch {
+		console.error('Failed to parse keywords AI response:', content);
+		return [];
+	}
 }
 
 export const GET: RequestHandler = async ({ url, platform, cookies }) => {
@@ -91,34 +116,30 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 		async start(controller) {
 			const encoder = new TextEncoder();
 
-			const send = (event: string, data: Record<string, unknown>) => {
+			function send(event: 'progress', data: { state: PublishingState; message: string }): void;
+			function send(event: 'complete', data: { r2_key: string; pr_url: string }): void;
+			function send(event: 'error', data: { message: string }): void;
+			function send(event: string, data: Record<string, unknown>): void {
 				controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
-			};
+			}
 
 			try {
-				// Fork repository
-				send('progress', { state: 'forking', message: 'Forking repository...' });
-				const client = createGitClient(provider, tokens);
-				await client.forkRepository();
-
-				// Create branch and upload
-				send('progress', { state: 'creating-branch', message: 'Creating branch...' });
-
-				// Extract images and process config
-				const imageFiles = new Map<string, ImageFile>();
-
-				// Process slides to extract images
-				const processedSlides = await Promise.all(
-					fuizConfig.config.slides.map((slide) =>
-						mapIdlessMedia(slide, (media) => processMedia(media, imageFiles, fuizId))
-					)
-				);
-
 				// Generate keywords using Cloudflare AI
 				send('progress', { state: 'generating-keywords', message: 'Generating keywords...' });
 				const keywords = platform?.env.AI
 					? await extractKeywords(platform.env.AI, fuizConfig.config)
 					: [];
+
+				// Fork repository
+				send('progress', { state: 'forking', message: 'Forking repository...' });
+				const client = createGitClient(provider, tokens);
+				await client.forkRepository();
+
+				// Extract images and convert them to local references
+				const imageFiles = new Map<string, ImageFile>();
+				const processedSlides = fuizConfig.config.slides.map((slide) =>
+					mapIdlessMediaSync(slide, (media) => processMedia(media, imageFiles, fuizId))
+				);
 
 				const processedConfig: ReferencingOnlineFuiz = {
 					...fuizConfig,
@@ -144,6 +165,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				const tomlContent = stringifyToml(tomlConfig);
 
 				// Create branch
+				send('progress', { state: 'creating-branch', message: 'Creating branch...' });
 				const branchName = `submission/${fuizId}`;
 				const defaultBranch = env.GIT_DEFAULT_BRANCH || 'main';
 

@@ -44,11 +44,11 @@ function extractBase64Image(dataUri: string): {
  * Process media and extract image files
  * Returns the modified media object with relative path and the image file data
  */
-export async function processMedia(
+export function processMedia(
 	media: Base64Media | undefined,
 	imageFiles: Map<string, ImageFile>,
 	fuizId: string
-): Promise<UrlMedia | undefined> {
+): UrlMedia | undefined {
 	if (!media) return undefined;
 
 	const base64Data = extractBase64Image(media.Image.Base64.data);

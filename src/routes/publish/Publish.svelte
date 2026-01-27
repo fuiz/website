@@ -14,6 +14,7 @@
 	import { updateCreation, type Database, type ExportedFuiz } from '$lib/storage';
 	import Subject from './Subject.svelte';
 	import Grade from './Grade.svelte';
+	import type { PublishingState } from '../api/publish-stream/types';
 
 	let {
 		creation = $bindable(),
@@ -39,9 +40,15 @@
 
 	let publishError = $state<string | undefined>(undefined);
 
-	let publishingState = $state<'forking' | 'creating-branch' | 'uploading' | 'creating-pr' | null>(
-		null
-	);
+	let publishingState = $state<PublishingState | null>(null);
+
+	const steps = [
+		{ state: 'generating-keywords' as const, label: 'Generating keywords' },
+		{ state: 'forking' as const, label: 'Forking repository' },
+		{ state: 'creating-branch' as const, label: 'Creating branch' },
+		{ state: 'uploading' as const, label: 'Uploading files' },
+		{ state: 'creating-pr' as const, label: 'Creating pull request' }
+	];
 
 	// Check Git authentication status on mount
 	$effect(() => {
@@ -102,7 +109,7 @@
 			const { jobId } = await initResponse.json();
 
 			// Step 2: Connect to stream
-			publishingState = 'forking';
+			publishingState = steps[0].state; // Start with the first step
 
 			const eventSource = new EventSource(`/api/publish-stream?job=${jobId}`);
 
@@ -176,52 +183,24 @@
 						style:background="var(--background-color)"
 					>
 						<div style:display="flex" style:flex-direction="column" style:gap="0.5em">
-							<div
-								class="step"
-								class:step-done={['creating-branch', 'uploading', 'creating-pr'].includes(
-									publishingState
-								)}
-								class:step-active={publishingState === 'forking'}
-							>
-								{#if publishingState === 'forking'}
-									<div style:width="1em" style:height="1em" style:display="inline-block">
-										<LoadingCircle borderWidth={5} />
-									</div>
-								{/if}
-								Forking repository
-							</div>
-							<div
-								class="step"
-								class:step-done={['uploading', 'creating-pr'].includes(publishingState)}
-								class:step-active={publishingState === 'creating-branch'}
-							>
-								{#if publishingState === 'creating-branch'}
-									<div style:width="1em" style:height="1em" style:display="inline-block">
-										<LoadingCircle borderWidth={5} />
-									</div>
-								{/if}
-								Creating branch
-							</div>
-							<div
-								class="step"
-								class:step-done={publishingState === 'creating-pr'}
-								class:step-active={publishingState === 'uploading'}
-							>
-								{#if publishingState === 'uploading'}
-									<div style:width="1em" style:height="1em" style:display="inline-block">
-										<LoadingCircle borderWidth={5} />
-									</div>
-								{/if}
-								Uploading files
-							</div>
-							<div class="step" class:step-active={publishingState === 'creating-pr'}>
-								{#if publishingState === 'creating-pr'}
-									<div style:width="1em" style:height="1em" style:display="inline-block">
-										<LoadingCircle borderWidth={5} />
-									</div>
-								{/if}
-								Creating pull request
-							</div>
+							{#each steps as step, i}
+								<div
+									class="step"
+									class:step-done={publishingState &&
+										steps
+											.slice(i + 1)
+											.map((s) => s.state)
+											.includes(publishingState)}
+									class:step-active={publishingState === step.state}
+								>
+									{#if publishingState === step.state}
+										<div style:width="1em" style:height="1em" style:display="inline-block">
+											<LoadingCircle borderWidth={5} />
+										</div>
+									{/if}
+									{step.label}
+								</div>
+							{/each}
 						</div>
 					</div>
 				</div>
