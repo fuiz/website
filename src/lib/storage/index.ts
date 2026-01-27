@@ -80,10 +80,6 @@ export type InternalFuizMetadata = {
 	lastEdited: number;
 	uniqueId?: string;
 	versionId?: number;
-	publish?: {
-		released_r2_key?: string;
-		pending_r2_key?: string;
-	};
 };
 
 export type StrictInternalFuiz = {
@@ -299,8 +295,7 @@ export async function getAllCreationsLocal(
 					config: value.config,
 					lastEdited: value.lastEdited,
 					uniqueId: value.uniqueId ?? generateUuid(),
-					versionId: value.versionId ?? 0,
-					publish: value.publish
+					versionId: value.versionId ?? 0
 				};
 				cursor.update(strictValue);
 				internals.push([cursor.key, strictValue]);

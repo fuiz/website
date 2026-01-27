@@ -1,6 +1,6 @@
 # GitLab Publishing System - Setup Guide
 
-This document explains the new GitLab-based publishing system that replaces the Wallo moderation webhook.
+This document explains the GitLab-based publishing system.
 
 ## Overview
 
@@ -18,7 +18,7 @@ The new system uses GitLab OAuth + Pull Requests for fuiz moderation. When users
 1. Go to https://gitlab.com/-/profile/applications
 2. Create a new application with:
    - **Name**: Fuiz Publishing
-   - **Redirect URI**: `https://fuiz.org/api/git/callback?provider=gitlab` (or your domain)
+   - **Redirect URI**: `https://fuiz.org/api/git/callback` (or your domain)
    - **Scopes**: `api`, `write_repository`
 3. Copy the Application ID and Secret
 
@@ -46,7 +46,7 @@ Update your production environment with these variables:
 # GitLab OAuth
 GITLAB_CLIENT_ID=your_gitlab_application_id
 GITLAB_CLIENT_SECRET=your_gitlab_application_secret
-GITLAB_REDIRECT_URI=https://fuiz.app/api/git/callback?provider=gitlab
+GITLAB_REDIRECT_URI=https://fuiz.app/api/git/callback
 
 # Git Repository Configuration
 GIT_PROVIDER=gitlab
@@ -57,8 +57,14 @@ GIT_DEFAULT_BRANCH=main
 # Webhook Secret (generate a strong random string)
 GIT_WEBHOOK_SECRET=<generate_random_secret>
 
-# Bot Token (for sync operations)
+# Bot Token (for sync operations - needs read_repository scope)
 GIT_BOT_TOKEN=<personal_access_token_with_api_scope>
+
+# Note: Cloudflare Workers will need these Bindings configured:
+# - BUCKET (R2 bucket for storing fuiz JSON with Base64 images)
+# - DATABASE (D1 database for fuizzes metadata table)
+# - PUBLISH_JOBS (KV namespace for temporary job storage)
+# - AI (Cloudflare AI binding for keyword generation)
 ```
 
 To generate `GIT_WEBHOOK_SECRET`:
@@ -77,7 +83,7 @@ To create `GIT_BOT_TOKEN`:
 
 1. Go to your repository: Settings > Webhooks
 2. Add a new webhook:
-   - **URL**: `https://fuiz.app/git-webhook`
+   - **URL**: `https://fuiz.org/git-webhook`
    - **Secret Token**: Use the same value as `GIT_WEBHOOK_SECRET`
    - **Trigger**: Select "Push events"
    - **Branch filter**: Leave empty or specify your default branch (e.g., `main`)
@@ -86,71 +92,109 @@ To create `GIT_BOT_TOKEN`:
 
 ### 5. Database Setup
 
-The new schema uses a simplified `fuizzes` table. Run the SQL from `src/schema.sql` to create:
+The schema uses one table. Run the SQL from `src/schema.sql` to create:
 
 - `fuizzes` - Published fuizzes with metadata
-
-See `DATABASE_SCHEMA.md` for the complete schema documentation.
-
-### 6. Remove Wallo Configuration
-
-Remove these environment variables from production:
-
-- `WALLO_CLIENT_ID`
-- `WALLO_CLIENT_SECRET`
-- `WALLO_ORIGIN`
 
 ## How It Works
 
 ### Publishing Flow
 
 1. **User Authentication**
-   - User navigates to `/publish`
-   - If not authenticated with GitLab, they see a login button
-   - Click "Login with GitLab" → OAuth flow → redirect back to publish page
+   - User navigates to `/publish?id={creation_id}`
+   - If not authenticated with GitLab, they see a login prompt with a styled button
+   - Click "Connect GitLab Account" → OAuth flow → redirect back to publish page
 
-2. **Submission**
+2. **Submission** (Two-Step Process)
+
+   **Step 1: Initialize Job** (`POST /api/publish-init`)
    - User fills in metadata (author, subjects, grades, language)
-   - Click "Request Publish"
-   - System extracts all images from the fuiz config:
-     - Base64 images → decoded to binary
-     - Corkboard images → downloaded
-     - URL images → downloaded
-   - All images are hashed and stored as `{fuiz_id}/{hash}.{ext}`
-   - TOML config is stored as `{fuiz_id}/config.toml` with relative image filenames
-   - A new branch is created: `submission/{storage_id}`
-   - Files are committed to the branch (all in the same directory)
-   - A PR is created with metadata in the description
-   - PR URL is stored in database and shown to user
+   - Clicks "Request Publish" button
+   - System validates GitLab authentication
+   - Generates a unique job ID (UUID)
+   - Stores fuiz data in KV store (PUBLISH_JOBS) with 10-minute expiration
+   - Returns job ID to client
+
+   **Step 2: Stream Publishing** (`GET /api/publish-stream?job={jobId}`)
+   - Client connects to SSE endpoint with job ID
+   - Server retrieves fuiz data from KV and deletes job entry
+   - Publishing process streams progress updates:
+
+     a. **Generating Keywords** - Uses Cloudflare AI to generate 16 search keywords from slide titles
+
+     b. **Forking Repository** - Forks the target GitLab repository to user's account (if not already forked)
+
+     c. **Creating Branch** - Creates new branch `submission/{fuiz_id}` where fuiz_id is a generated UUID
+
+     d. **Uploading Files** - Processes and uploads all files:
+     - Extracts images from slides (Base64, Corkboard, URLs)
+     - Hashes each image and names as `{fuiz_id}/{hash}.{ext}`
+     - Converts fuiz config to TOML with relative image paths
+     - Creates `{fuiz_id}/config.toml`
+     - Commits all files in single commit: "Add fuiz: {title} ({count} files)"
+
+     e. **Creating Pull Request** - Creates PR with:
+     - Title: `[Submission] {fuiz.title}`
+     - Target: default branch (main)
+     - Body: Formatted markdown with title, author, language, subjects, grades, slide count, fuiz ID, image count
+     - Returns PR URL to user
 
 3. **Review & Approval**
    - Maintainer reviews the PR on GitLab
-   - Checks fuiz content, images, metadata
-   - Merges PR if approved, or closes if rejected
+   - Checks fuiz content quality, images, metadata accuracy
+   - Reviews generated keywords
+   - Merges PR if approved (triggers webhook), or closes if rejected
 
-4. **Webhook Processing**
-   - GitLab sends push webhook when changes are pushed to default branch
-   - Webhook handler validates secret
-   - Extracts modified fuiz directories from commit file changes
-   - Calls sync script for each modified fuiz
+4. **Webhook Processing** (`POST /git-webhook`)
+   - GitLab sends push webhook when PR is merged to default branch
+   - Webhook handler performs security validation:
+     - Verifies `X-Gitlab-Token` header matches `GIT_WEBHOOK_SECRET` using timing-safe comparison
+     - Only processes `push` events
+     - Only processes pushes to default branch (`refs/heads/main`)
+   - Extracts all modified files from all commits in the push
+   - Identifies unique fuiz directories (e.g., files like `abc-123/config.toml` → directory `abc-123`)
+   - For each modified fuiz directory:
+     - Determines first and last commit dates that touched the directory
+     - Gets the last commit SHA
+     - Calls `syncSingleFuiz()` with fuiz ID, commit info, and timestamps
+   - Returns JSON response with sync results for each fuiz
 
-5. **Sync Script**
-   - Fetches config.toml from Git repository
+5. **Sync Script** (`syncSingleFuiz()`)
+   - Uses bot token (GIT_BOT_TOKEN) to authenticate with GitLab API
+   - Fetches `{fuiz_id}/config.toml` from Git repository at specific commit SHA
+   - If config not found, deletes fuiz from database and R2 (handles deletions)
+   - Checks if fuiz already exists in database:
+     - **New fuiz**: Uses firstCommitDate from webhook as published_at
+     - **Update**: Preserves played_count, view_count, and original published_at
    - Parses TOML configuration
-   - Downloads images from Git and converts to Base64
-   - Stores processed config (with Base64 images) in R2 bucket
-   - Generates thumbnail from Base64 images
-   - Inserts into `fuizzes` table
-   - Fuiz appears in public library
+   - Downloads all referenced images from Git repository
+   - Converts images to Base64 format
+   - Generates thumbnail from first available image
+   - Creates FullOnlineFuiz object with processed config and metadata
+   - Stores complete fuiz JSON (with Base64 images) in R2 bucket at key `{fuiz_id}`
+   - Inserts/updates row in `fuizzes` table with:
+     - Metadata (id, storage_id, title, author, language)
+     - JSON arrays (subjects, grades, keywords)
+     - Statistics (slides_count, played_count, view_count)
+     - Thumbnail data (thumbnail, thumbnail_alt)
+     - Git info (git_commit_sha)
+     - Timestamps (published_at, updated_at)
+   - Fuiz appears in public library immediately
 
 ### Update Flow
 
-Similar to publishing, but:
+Updates to existing fuizzes are done **manually** on the Git repository:
 
-- Branch name: `update/{desired_id}/{storage_id}`
-- PR title: `[Update] {fuiz.title}`
-- Preserves existing play count and view count
-- Replaces old fuiz in database
+- Maintainers directly edit files in the `{fuiz_id}/` directory on the repository
+- Can update `config.toml` or replace image files
+- Changes are committed directly to the default branch (or via manual PR)
+- Webhook triggers sync automatically when changes are pushed to default branch
+- On sync, system detects existing fuiz in database by ID
+- Preserves statistics: played_count, view_count, and original published_at timestamp
+- Updates updated_at to last commit timestamp
+- Replaces config in R2 bucket and updates database row
+
+**Note:** There is no automated update flow through the publishing UI. Users cannot update their own fuizzes after initial submission.
 
 ## Git Repository Structure
 
@@ -170,70 +214,43 @@ Each fuiz is stored in its own directory with all related files together:
 README.md               # Repository documentation
 ```
 
-### Benefits of This Structure
-
-1. **Easy to Browse**: Each fuiz is self-contained in one directory
-2. **Clear Ownership**: All files for a fuiz are together
-3. **Simple Cleanup**: Delete a directory to remove a fuiz
-4. **Version Control**: Changes to a fuiz affect only its directory
-5. **Relative Paths**: TOML just references filenames (e.g., `abc123def456.png`) not full paths
-
-## File Structure
-
-### New Files Created
-
-```
-src/lib/git/
-├── types.ts          # Git provider type definitions
-├── base.ts           # Abstract base class for Git clients
-├── gitlab.ts         # GitLab API implementation
-├── github.ts         # GitHub stub (future support)
-└── factory.ts        # Provider factory
-
-src/routes/api/git/
-├── gitUtil.ts        # OAuth utilities
-├── login/+server.ts  # OAuth initiation
-├── callback/+server.ts # OAuth callback
-├── status/+server.ts # Auth status check
-└── logout/+server.ts # Clear tokens
-
-src/routes/git-webhook/
-└── +server.ts        # PR merge webhook handler
-
-src/lib/scripts/
-├── syncLibrary.ts    # Sync from Git to database
-└── imageHandler.ts   # Image processing utilities
-```
-
-### Modified Files
-
-```
-src/routes/publish/+page.server.ts  # Publishing logic
-src/routes/publish/Publish.svelte   # Publishing UI
-src/schema.sql                       # Database schema
-.env.local                           # Environment variables
-```
-
-### Deleted Files
-
-```
-src/routes/wallo/+server.ts         # Old Wallo webhook (removed)
-```
-
 ## API Endpoints
 
 ### OAuth Endpoints
 
-- `GET /api/git/login?provider=gitlab&return=/publish` - Initiate OAuth flow
-- `GET /api/git/callback?provider=gitlab` - OAuth callback handler
+- `GET /api/git/login?provider=gitlab&return=/publish?id={id}` - Initiate OAuth flow
+  - Redirects to GitLab OAuth authorization
+  - Return URL specified for redirect after auth
+- `GET /api/git/callback` - OAuth callback handler
+  - Receives OAuth code and exchanges for tokens
+  - Stores tokens in httpOnly cookies
+  - Redirects to return URL
 - `GET /api/git/status` - Check authentication status
-- `POST /api/git/logout` - Clear OAuth tokens
+  - Returns: `{ authenticated: boolean, provider: string | null, user?: { username, name } }`
+- `POST /api/git/logout` - Clear OAuth tokens from cookies
+
+### Publishing Endpoints
+
+- `POST /api/publish-init` - Initialize publish job (Step 1)
+  - Body: `{ fuiz: FullOnlineFuiz }`
+  - Validates GitLab authentication
+  - Creates job ID and stores in KV (10-minute expiration)
+  - Returns: `{ jobId: string }`
+
+- `GET /api/publish-stream?job={jobId}` - Stream publishing progress (Step 2)
+  - Server-Sent Events endpoint
+  - Events: `progress`, `complete`, `error`
+  - Progress states: `generating-keywords`, `forking`, `creating-branch`, `uploading`, `creating-pr`
+  - Complete event returns: `{ r2_key: string, pr_url: string }`
 
 ### Webhook Endpoint
 
 - `POST /git-webhook` - GitLab push webhook handler (requires secret)
-  - Listens for pushes to the default branch
-  - Syncs any fuiz directories that were modified in the push
+  - Header: `X-Gitlab-Token: {GIT_WEBHOOK_SECRET}`
+  - Only processes push events to default branch
+  - Extracts modified fuiz directories from commit file changes
+  - Syncs each modified fuiz with commit info (SHA, timestamps)
+  - Returns: `{ success: boolean, message: string, results: Array<{fuizId, success, error?}> }`
 
 ## Manual Sync
 
@@ -245,65 +262,3 @@ import { syncAll } from '$lib/scripts/syncLibrary';
 // In a server context with platform access
 await syncAll(platform.env.BUCKET, platform.env.DATABASE, process.env.GIT_BOT_TOKEN);
 ```
-
-## Security Considerations
-
-1. **OAuth Tokens** - Stored in httpOnly cookies, never exposed to client
-2. **Webhook Secret** - Validated using timing-safe comparison
-3. **Bot Token** - Only used server-side, never sent to client
-4. **Git Repo** - Can be private, authentication handled by bot token
-
-## Troubleshooting
-
-### PR not syncing after merge
-
-1. Check webhook logs in GitLab (Settings > Webhooks > Edit > Recent Deliveries)
-2. Check application logs for webhook processing errors
-3. Verify `GIT_WEBHOOK_SECRET` matches in both places
-4. Manually trigger sync via sync script
-
-### Images not loading after sync
-
-1. Verify `GIT_BOT_TOKEN` has correct permissions to read repository files
-2. Review sync script logs for image download/conversion errors
-3. Check that image files exist in the Git repository in the fuiz directory
-
-### User can't login with GitLab
-
-1. Verify `GITLAB_CLIENT_ID` and `GITLAB_CLIENT_SECRET` are correct
-2. Check redirect URI matches exactly (including query params)
-3. Ensure OAuth application has correct scopes
-4. Check browser console for errors
-
-## Future Enhancements
-
-- GitHub support (stub already created in `src/lib/git/github.ts`)
-- Admin dashboard for managing pending submissions
-- Automated testing of fuiz submissions
-- PR templates with checklists
-- Automated image optimization
-- Branch cleanup after merge
-
-## Migration Notes
-
-The new system uses a simplified database schema:
-
-**Old tables (removed):**
-
-- `approved_submissions`
-- `pending_submissions`
-
-**New tables:**
-
-- `fuizzes` - Unified table for all published content
-
-**Key changes:**
-
-- Subjects/grades stored as JSON arrays instead of tilde-separated strings
-- Keywords/tags should be generated during publish, not during sync
-- Statistics: added `view_count`, kept `played_count`
-- Git metadata: `git_commit_sha` and `git_pr_number` for traceability
-
-## Support
-
-For issues or questions, please file an issue on GitHub or contact the development team.

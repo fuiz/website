@@ -29,8 +29,6 @@
 		}
 	}
 
-	let { data } = $props();
-
 	let id = $derived(parseInt(page.url.searchParams.get('id')));
 	const title = m.publish_title();
 	const description = m.publish_desc();
@@ -58,7 +56,7 @@
 		<Loading />
 	{:then { db, creation }}
 		{#if creation}
-			<Publish {creation} {id} {db} />
+			<Publish {creation} {id} />
 		{:else}
 			<ErrorMessage errorMessage={m.missing_fuiz()} />
 		{/if}

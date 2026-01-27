@@ -7,23 +7,20 @@
 	import { locales, getLocale, type Locale } from '$lib/paraglide/runtime.js';
 	import Icon from '$lib/Icon.svelte';
 	import FancyButton from '$lib/FancyButton.svelte';
-	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
 	import MediaContainer from '$lib/MediaContainer.svelte';
 	import LoadingCircle from '$lib/LoadingCircle.svelte';
 	import { getMedia, type FullOnlineFuiz, type GenericIdlessSlide, type Media } from '$lib/types';
-	import { updateCreation, type Database, type ExportedFuiz } from '$lib/storage';
+	import { type ExportedFuiz } from '$lib/storage';
 	import Subject from './Subject.svelte';
 	import Grade from './Grade.svelte';
 	import type { PublishingState } from '../api/publish-stream/types';
 
 	let {
 		creation = $bindable(),
-		id,
-		db
+		id
 	}: {
 		creation: ExportedFuiz;
 		id: number;
-		db: Database;
 	} = $props();
 
 	let author = $state('');
@@ -122,16 +119,6 @@
 				const data = JSON.parse(e.data);
 				publishingState = null;
 				prUrl = data.pr_url;
-
-				creation = {
-					...creation,
-					publish: {
-						...creation.publish,
-						pending_r2_key: data.r2_key
-					}
-				};
-
-				await updateCreation(id, creation, db);
 				eventSource.close();
 			});
 
@@ -161,154 +148,152 @@
 
 <TypicalPage>
 	<section style:max-width="40ch" style:margin="auto">
-		{#if !creation?.publish?.pending_r2_key}
-			{#if publishingState}
-				<div
-					style:display="flex"
-					style:flex-direction="column"
-					style:justify-content="center"
-					style:align-items="center"
-					style:gap="1em"
-					style:padding="2em 1em"
-				>
-					<h2 style:font-family="Poppins" style:margin="0" style:font-size="1.5em">
-						Publishing...
-					</h2>
-					<div
-						style:border="0.15em solid currentcolor"
-						style:border-radius="0.7em"
-						style:padding="1em"
-						style:width="100%"
-						style:box-sizing="border-box"
-						style:background="var(--background-color)"
-					>
-						<div style:display="flex" style:flex-direction="column" style:gap="0.5em">
-							{#each steps as step, i}
-								<div
-									class="step"
-									class:step-done={publishingState &&
-										steps
-											.slice(i + 1)
-											.map((s) => s.state)
-											.includes(publishingState)}
-									class:step-active={publishingState === step.state}
-								>
-									{#if publishingState === step.state}
-										<div style:width="1em" style:height="1em" style:display="inline-block">
-											<LoadingCircle borderWidth={5} />
-										</div>
-									{/if}
-									{step.label}
-								</div>
-							{/each}
-						</div>
-					</div>
-				</div>
-			{:else}
-				<form
-					style:height="100%"
-					style:display="flex"
-					style:justify-content="center"
-					style:flex-direction="column"
-					style:gap="0.5em"
-					onsubmit={(e) => {
-						e.preventDefault();
-						publish();
-					}}
-				>
-					{#if publishError}
-						<p style:color="red">{publishError}</p>
-					{/if}
-
-					{#if gitAuthStatus && !gitAuthStatus.authenticated}
-						<div style:padding="1em" style:background="#fff3cd" style:border-radius="0.5em">
-							<p style:margin-bottom="0.5em">You need to login with GitLab to publish fuizzes.</p>
-							<a
-								href="/api/git/login?provider=gitlab&return=/publish?id={id}"
-								style:color="#0066cc"
-							>
-								Login with GitLab
-							</a>
-						</div>
-					{/if}
-					<div
-						style:border="0.15em solid"
-						style:border-radius="0.5em"
-						style:overflow="hidden"
-						style:width="fit-content"
-						style:margin="auto"
-					>
-						<div
-							style:aspect-ratio="3 / 2"
-							style:height="10em"
-							style:width="auto"
-							style:margin="auto"
-							style:position="relative"
-						>
-							<MediaContainer {media} fit="cover" />
-						</div>
-						<div
-							style:padding="0.15em 0.3em"
-							style:word-break="break-word"
-							style:border-top="0.15em solid"
-						>
-							{creation.config.title}
-						</div>
-					</div>
-					<Textfield
-						id="author"
-						placeholder={m.author()}
-						required
-						disabled={false}
-						showInvalid={false}
-						bind:value={author}
-					/>
-					<Subject bind:tags={subjects} />
-					<Grade bind:tags={grades} />
-					<div>
-						<SelectTime options={[...locales]} bind:selected={lang} {map}>
-							<Icon src="$lib/assets/language.svg" alt={m.language()} size="1em" />
-						</SelectTime>
-					</div>
-					<div>
-						<FancyButton disabled={gitAuthStatus && !gitAuthStatus.authenticated}
-							><div style:font-family="Poppins">
-								{m.request_publish()}
-							</div>
-						</FancyButton>
-					</div>
-				</form>
-			{/if}
-		{:else}
+		{#if publishingState}
 			<div
 				style:display="flex"
 				style:flex-direction="column"
+				style:justify-content="center"
+				style:align-items="center"
 				style:gap="1em"
 				style:padding="2em 1em"
-				style:text-align="center"
 			>
+				<h2 style:font-family="Poppins" style:margin="0" style:font-size="1.5em">Publishing...</h2>
 				<div
 					style:border="0.15em solid currentcolor"
 					style:border-radius="0.7em"
-					style:padding="1.5em"
+					style:padding="1em"
+					style:width="100%"
+					style:box-sizing="border-box"
 					style:background="var(--background-color)"
 				>
-					<h2 style:font-family="Poppins" style:margin="0 0 0.5em" style:font-size="1.75em">
-						Fuiz Submitted!
-					</h2>
-					<p style:margin="0 0 1em 0" style:line-height="1.4">
-						Your fuiz has been submitted for review. It will be published once the pull request is
-						reviewed and merged by maintainers.
-					</p>
-					{#if prUrl}
-						<div>
-							<FancyAnchorButton href={prUrl}>
-								<div style:padding="0.5em 1em" style:font-family="Poppins">View on GitLab</div>
-							</FancyAnchorButton>
-						</div>
-					{/if}
+					<div style:display="flex" style:flex-direction="column" style:gap="0.5em">
+						{#each steps as step, i}
+							<div
+								class="step"
+								class:step-done={publishingState &&
+									steps
+										.slice(i + 1)
+										.map((s) => s.state)
+										.includes(publishingState)}
+								class:step-active={publishingState === step.state}
+							>
+								{#if publishingState === step.state}
+									<div style:width="1em" style:height="1em" style:display="inline-block">
+										<LoadingCircle borderWidth={5} />
+									</div>
+								{/if}
+								{step.label}
+							</div>
+						{/each}
+					</div>
 				</div>
 			</div>
+		{:else}
+			<form
+				style:height="100%"
+				style:display="flex"
+				style:justify-content="center"
+				style:flex-direction="column"
+				style:gap="0.5em"
+				onsubmit={(e) => {
+					e.preventDefault();
+					publish();
+				}}
+			>
+				{#if publishError}
+					<p style:color="red">{publishError}</p>
+				{/if}
+
+				{#if gitAuthStatus && !gitAuthStatus.authenticated}
+					<div
+						style:padding="1em"
+						style:border="0.15em solid currentcolor"
+						style:border-radius="0.7em"
+						style:text-align="center"
+						style:background="var(--background-color)"
+						style:display="flex"
+						style:flex-direction="column"
+						style:gap="0.75em"
+						style:align-items="center"
+					>
+						<div style:display="flex" style:flex-direction="column" style:gap="0.3em">
+							<p style:margin="0" style:font-family="Poppins" style:font-weight="500">
+								Login Required
+							</p>
+							<p style:margin="0" style:font-size="0.9em" style:opacity="0.8">
+								You need to authenticate with GitLab to publish fuizzes
+							</p>
+						</div>
+						<a
+							href="/api/git/login?provider=gitlab&return=/publish?id={id}"
+							style:display="inline-block"
+							style:text-decoration="none"
+						>
+							<FancyButton
+								type="button"
+								backgroundColor="#FC6D26"
+								backgroundDeepColor="#E24329"
+								foregroundColor="#FFFFFF"
+							>
+								<div
+									style:font-family="Poppins"
+									style:display="flex"
+									style:align-items="center"
+									style:padding="0 0.5em"
+								>
+									Connect GitLab Account
+								</div>
+							</FancyButton>
+						</a>
+					</div>
+				{/if}
+				<div
+					style:border="0.15em solid"
+					style:border-radius="0.5em"
+					style:overflow="hidden"
+					style:width="fit-content"
+					style:margin="auto"
+				>
+					<div
+						style:aspect-ratio="3 / 2"
+						style:height="10em"
+						style:width="auto"
+						style:margin="auto"
+						style:position="relative"
+					>
+						<MediaContainer {media} fit="cover" />
+					</div>
+					<div
+						style:padding="0.15em 0.3em"
+						style:word-break="break-word"
+						style:border-top="0.15em solid"
+					>
+						{creation.config.title}
+					</div>
+				</div>
+				<Textfield
+					id="author"
+					placeholder={m.author()}
+					required
+					disabled={false}
+					showInvalid={false}
+					bind:value={author}
+				/>
+				<Subject bind:tags={subjects} />
+				<Grade bind:tags={grades} />
+				<div>
+					<SelectTime options={[...locales]} bind:selected={lang} {map}>
+						<Icon src="$lib/assets/language.svg" alt={m.language()} size="1em" />
+					</SelectTime>
+				</div>
+				<div>
+					<FancyButton disabled={!gitAuthStatus || !gitAuthStatus.authenticated}
+						><div style:font-family="Poppins">
+							{m.request_publish()}
+						</div>
+					</FancyButton>
+				</div>
+			</form>
 		{/if}
 	</section>
 </TypicalPage>
