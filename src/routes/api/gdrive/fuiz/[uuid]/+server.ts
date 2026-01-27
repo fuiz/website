@@ -81,7 +81,7 @@ export const PUT: RequestHandler = async ({ params: { uuid }, cookies, request }
 		);
 
 		return new Response(null, { status: 200 });
-	} catch (e) {
+	} catch {
 		error(500, 'Failed to update file');
 	}
 };

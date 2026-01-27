@@ -13,7 +13,7 @@ export function dataURIToBlob(dataURI: string): Blob {
 
 	const mimeString = info.split(';')[0].split(':')[1];
 
-	return new Blob([Uint8Array.from(atob(data), (c) => c.charCodeAt(0))], {
+	return new Blob([Uint8Array.fromBase64(data)], {
 		type: mimeString
 	});
 }
@@ -56,9 +56,9 @@ export function fixPublish(p: PublishedFuizDB): PublishedFuiz {
 	return {
 		...p,
 		thumbnail: p.thumbnail ? encodeAsDataURL(p.thumbnail) : null,
-		subjects: p.subjects.split(' ~ '),
-		grades: p.grades.split(' ~ '),
+		subjects: p.subjects ? JSON.parse(p.subjects) : [],
+		grades: p.grades ? JSON.parse(p.grades) : [],
 		published_at: new Date(p.published_at),
-		language: p.language_code as Locale
+		language: p.language as Locale
 	};
 }

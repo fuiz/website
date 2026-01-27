@@ -54,7 +54,7 @@
 	{@const filteredId = id}
 	{#await loadDatabase().then((db) => joinCreation(db, filteredId))}
 		<Loading />
-	{:then { db, creation }}
+	{:then { creation }}
 		{#if creation}
 			<Publish {creation} {id} />
 		{:else}

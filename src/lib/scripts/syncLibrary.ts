@@ -169,10 +169,10 @@ export async function syncSingleFuiz(
 
 	// Get config.toml from Git repository
 	const configPath = `${fuizId}/config.toml`;
-	const configContent = await client.getFileContent(configPath, lastCommitSha);
+	const configContentBytes = await client.getFileContent(configPath, lastCommitSha);
 
 	// If config not found, delete the fuiz
-	if (!configContent) {
+	if (!configContentBytes) {
 		await deleteFuiz(fuizId, bucket, database);
 		return;
 	}
@@ -206,7 +206,7 @@ export async function syncSingleFuiz(
 	// Process and store the fuiz
 	await processFuizConfig(
 		fuizId,
-		configContent,
+		new TextDecoder().decode(configContentBytes),
 		client,
 		bucket,
 		database,
@@ -243,7 +243,7 @@ export async function syncAll(
 	console.log('Fetching all fuizzes from Git repository...');
 
 	// Get all top-level items
-	const rootItems = await client.listFiles('');
+	const rootItems = await client.listDirectories('');
 
 	for (const itemPath of rootItems) {
 		const fuizId = itemPath;
@@ -251,8 +251,8 @@ export async function syncAll(
 
 		try {
 			// Check if config.toml exists
-			const configContent = await client.getFileContent(configPath);
-			if (!configContent) {
+			const configContentBytes = await client.getFileContent(configPath);
+			if (!configContentBytes) {
 				// Not a fuiz directory, skip
 				continue;
 			}
@@ -300,7 +300,7 @@ export async function syncAll(
 			// Process and store the fuiz
 			await processFuizConfig(
 				fuizId,
-				configContent,
+				new TextDecoder().decode(configContentBytes),
 				client,
 				bucket!,
 				database!,

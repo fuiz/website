@@ -6,7 +6,6 @@
 import { env } from '$env/dynamic/private';
 import type { GitProvider, OAuthTokens, OAuthConfig } from './types';
 import { GitLabClient } from './gitlab';
-import { GitHubClient } from './github';
 import type { BaseGitClient } from './base';
 
 /**
@@ -22,15 +21,6 @@ export function getOAuthConfig(provider: GitProvider): OAuthConfig {
 				authUrl: 'https://gitlab.com/oauth/authorize',
 				tokenUrl: 'https://gitlab.com/oauth/token',
 				scopes: ['api', 'write_repository']
-			};
-		case 'github':
-			return {
-				clientId: env.GITHUB_CLIENT_ID || '',
-				clientSecret: env.GITHUB_CLIENT_SECRET || '',
-				redirectUri: env.GITHUB_REDIRECT_URI || '',
-				authUrl: 'https://github.com/login/oauth/authorize',
-				tokenUrl: 'https://github.com/login/oauth/access_token',
-				scopes: ['repo', 'user']
 			};
 		default:
 			throw new Error(`Unsupported Git provider: ${provider}`);
@@ -56,8 +46,6 @@ export function createGitClient(
 	switch (provider) {
 		case 'gitlab':
 			return new GitLabClient(tokens, owner, name);
-		case 'github':
-			return new GitHubClient(tokens, owner, name);
 		default:
 			throw new Error(`Unsupported Git provider: ${provider}`);
 	}
@@ -68,7 +56,7 @@ export function createGitClient(
  */
 export function getDefaultProvider(): GitProvider {
 	const provider = env.GIT_PROVIDER as GitProvider;
-	if (!provider || !['gitlab', 'github'].includes(provider)) {
+	if (!provider || !['gitlab'].includes(provider)) {
 		return 'gitlab'; // Default to GitLab
 	}
 	return provider;

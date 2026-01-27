@@ -40,7 +40,7 @@ export abstract class BaseGitClient {
 	 * @param ref Branch, tag, or commit SHA (defaults to default branch)
 	 * @returns File content or null if file not found (404)
 	 */
-	abstract getFileContent(path: string, ref?: string): Promise<string | null>;
+	abstract getFileContent(path: string, ref?: string): Promise<Uint8Array<ArrayBuffer> | null>;
 
 	/**
 	 * Get commit information for a file (SHA, first commit date, last commit date)
@@ -59,7 +59,7 @@ export abstract class BaseGitClient {
 	 * @param ref Branch, tag, or commit SHA (defaults to default branch)
 	 * @returns Array of file paths
 	 */
-	abstract listFiles(path: string, ref?: string): Promise<string[]>;
+	abstract listDirectories(path: string, ref?: string): Promise<string[]>;
 
 	/**
 	 * Create multiple files in a single commit

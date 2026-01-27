@@ -369,12 +369,12 @@ export type PublishedFuizDB = {
 	title: string;
 	author: string;
 	published_at: string;
-	subjects: string;
-	grades: string;
+	subjects: string | null;
+	grades: string | null;
 	slides_count: number;
 	played_count: number;
 	thumbnail_alt: string | null;
-	language_code: string;
+	language: string;
 	thumbnail: ArrayBuffer | null;
 };
 

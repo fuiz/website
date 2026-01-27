@@ -186,8 +186,8 @@ export function mimeTypeToExtension(mimeType: string): string | null {
 }
 
 export function extensionToMimeType(extension: string): string | null {
-	const lowerExt = extension.toLowerCase();
-	const entry = Object.entries(mimeTypeToExtensionMapping).find(([, ext]) => ext === lowerExt);
+	const lowerExt = extension.toLowerCase().trim();
+	const entry = mimeTypeToExtensionMapping.entries().find(([, ext]) => ext === lowerExt);
 	return entry ? entry[0] : null;
 }
 

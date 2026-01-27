@@ -135,7 +135,10 @@ export class GitLabClient extends BaseGitClient {
 		};
 	}
 
-	async getFileContent(path: string, ref: string = 'main'): Promise<string | null> {
+	async getFileContent(
+		path: string,
+		ref: string = 'main'
+	): Promise<Uint8Array<ArrayBuffer> | null> {
 		const encodedPath = encodeURIComponent(path);
 		const response = await fetch(
 			`${this.apiBase}/projects/${this.projectPath}/repository/files/${encodedPath}/raw?ref=${ref}`,
@@ -154,7 +157,7 @@ export class GitLabClient extends BaseGitClient {
 			throw new Error(`Failed to get file content: ${response.status} ${response.statusText}`);
 		}
 
-		return response.text();
+		return await response.bytes();
 	}
 
 	async getFileCommitInfo(
@@ -187,7 +190,7 @@ export class GitLabClient extends BaseGitClient {
 		};
 	}
 
-	async listFiles(path: string, ref: string = 'main'): Promise<string[]> {
+	async listDirectories(path: string, ref: string = 'main'): Promise<string[]> {
 		const response = await this.request<
 			Array<{
 				name: string;
@@ -196,9 +199,9 @@ export class GitLabClient extends BaseGitClient {
 			}>
 		>(`/projects/${this.projectPath}/repository/tree?path=${encodeURIComponent(path)}&ref=${ref}`);
 
-		const files = response.filter((item) => item.type === 'blob');
+		const directories = response.filter((item) => item.type === 'tree');
 
-		return files.map((file) => file.path);
+		return directories.map((directory) => directory.path);
 	}
 
 	/**

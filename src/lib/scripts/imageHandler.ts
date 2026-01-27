@@ -12,23 +12,6 @@ import {
 } from '$lib/types';
 import { extensionToMimeType } from '$lib';
 
-/**
- * Download an image from Git repository
- */
-export async function downloadImageFromGit(
-	client: BaseGitClient,
-	path: string,
-	ref?: string
-): Promise<ArrayBuffer | null> {
-	const content = await client.getFileContent(path, ref);
-	if (content === null) {
-		return null;
-	}
-	// Content is base64 encoded
-	const buffer = Buffer.from(content, 'base64');
-	return buffer.buffer;
-}
-
 /** Resolve media from Git repository
  */
 export async function resolveMediaFromGit(
@@ -49,11 +32,12 @@ export async function resolveMediaFromGit(
 	// Images are now stored as just the filename (e.g., "abc123.png")
 	// We need to construct the full path: fuizId/filename
 	const fullPath = `${fuizId}/${media.Image.Url.url}`;
-	const imageData = await downloadImageFromGit(client, fullPath, ref);
+	const imageData = await client.getFileContent(fullPath, ref);
 	if (imageData === null) {
+		console.error('Failed to download image from Git:', fullPath);
 		return undefined;
 	}
-	const base64String = Buffer.from(imageData).toString('base64');
+	const base64String = imageData.toBase64();
 	const extension = media.Image.Url.url.split('.').pop();
 	if (!extension) {
 		console.error('Could not determine file extension for image:', media.Image.Url.url);
