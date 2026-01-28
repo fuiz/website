@@ -28,14 +28,14 @@ function timingSafeEqualString(a: string, b: string): boolean {
 }
 
 /**
- * POST /api/manual-sync
+ * POST /api/library/manual-sync
  *
  * Manually trigger a full sync of all fuizzes from Git repository.
  *
  * Authentication: Pass GIT_WEBHOOK_SECRET in Authorization header as Bearer token
  *
  * Example:
- * curl -X POST https://fuiz.org/api/manual-sync \
+ * curl -X POST https://fuiz.org/api/library/manual-sync \
  *   -H "Authorization: Bearer YOUR_GIT_WEBHOOK_SECRET"
  */
 export const POST: RequestHandler = async ({ request, platform }) => {

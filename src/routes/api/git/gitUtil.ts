@@ -152,8 +152,5 @@ export function getAuthenticatedProvider(cookies: Cookies): GitProvider | null {
 	if (isAuthenticated(cookies, 'gitlab')) {
 		return 'gitlab';
 	}
-	if (isAuthenticated(cookies, 'github')) {
-		return 'github';
-	}
 	return null;
 }

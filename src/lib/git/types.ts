@@ -2,7 +2,7 @@
  * Git provider types and interfaces
  */
 
-export type GitProvider = 'gitlab' | 'github';
+export type GitProvider = 'gitlab';
 
 export interface OAuthTokens {
 	access_token: string;

@@ -83,7 +83,7 @@ To create `GIT_BOT_TOKEN`:
 
 1. Go to your repository: Settings > Webhooks
 2. Add a new webhook:
-   - **URL**: `https://fuiz.org/git-webhook`
+   - **URL**: `https://fuiz.org/api/library/git-webhook`
    - **Secret Token**: Use the same value as `GIT_WEBHOOK_SECRET`
    - **Trigger**: Select "Push events"
    - **Branch filter**: Leave empty or specify your default branch (e.g., `main`)
@@ -107,7 +107,7 @@ The schema uses one table. Run the SQL from `src/schema.sql` to create:
 
 2. **Submission** (Two-Step Process)
 
-   **Step 1: Initialize Job** (`POST /api/publish-init`)
+   **Step 1: Initialize Job** (`POST /api/library/publish-init`)
    - User fills in metadata (author, subjects, grades, language)
    - Clicks "Request Publish" button
    - System validates GitLab authentication
@@ -115,7 +115,7 @@ The schema uses one table. Run the SQL from `src/schema.sql` to create:
    - Stores fuiz data in KV store (PUBLISH_JOBS) with 10-minute expiration
    - Returns job ID to client
 
-   **Step 2: Stream Publishing** (`GET /api/publish-stream?job={jobId}`)
+   **Step 2: Stream Publishing** (`GET /api/library/publish-stream?job={jobId}`)
    - Client connects to SSE endpoint with job ID
    - Server retrieves fuiz data from KV and deletes job entry
    - Publishing process streams progress updates:
@@ -145,7 +145,7 @@ The schema uses one table. Run the SQL from `src/schema.sql` to create:
    - Reviews generated keywords
    - Merges PR if approved (triggers webhook), or closes if rejected
 
-4. **Webhook Processing** (`POST /git-webhook`)
+4. **Webhook Processing** (`POST /api/library/git-webhook`)
    - GitLab sends push webhook when PR is merged to default branch
    - Webhook handler performs security validation:
      - Verifies `X-Gitlab-Token` header matches `GIT_WEBHOOK_SECRET` using timing-safe comparison
@@ -231,13 +231,13 @@ README.md               # Repository documentation
 
 ### Publishing Endpoints
 
-- `POST /api/publish-init` - Initialize publish job (Step 1)
+- `POST /api/library/publish-init` - Initialize publish job (Step 1)
   - Body: `{ fuiz: FullOnlineFuiz }`
   - Validates GitLab authentication
   - Creates job ID and stores in KV (10-minute expiration)
   - Returns: `{ jobId: string }`
 
-- `GET /api/publish-stream?job={jobId}` - Stream publishing progress (Step 2)
+- `GET /api/library/publish-stream?job={jobId}` - Stream publishing progress (Step 2)
   - Server-Sent Events endpoint
   - Events: `progress`, `complete`, `error`
   - Progress states: `generating-keywords`, `forking`, `creating-branch`, `uploading`, `creating-pr`
@@ -245,7 +245,7 @@ README.md               # Repository documentation
 
 ### Webhook Endpoint
 
-- `POST /git-webhook` - GitLab push webhook handler (requires secret)
+- `POST /api/library/git-webhook` - GitLab push webhook handler (requires secret)
   - Header: `X-Gitlab-Token: {GIT_WEBHOOK_SECRET}`
   - Only processes push events to default branch
   - Extracts modified fuiz directories from commit file changes
@@ -254,11 +254,38 @@ README.md               # Repository documentation
 
 ## Manual Sync
 
-For initial bulk import or recovery, you can manually sync all fuizzes:
+For initial bulk import, recovery, or forcing a full resync of all fuizzes, you can trigger a manual sync using the API endpoint:
 
-```typescript
-import { syncAll } from '$lib/scripts/syncLibrary';
+### Trigger Manual Sync
 
-// In a server context with platform access
-await syncAll(platform.env.BUCKET, platform.env.DATABASE, process.env.GIT_BOT_TOKEN);
+**Endpoint**: `POST /api/library/manual-sync`
+
+**Authentication**: Pass `GIT_WEBHOOK_SECRET` in the Authorization header as a Bearer token
+
+**Example**:
+
+```bash
+curl -X POST https://fuiz.org/api/library/manual-sync \
+  -H "Authorization: Bearer YOUR_GIT_WEBHOOK_SECRET"
+```
+
+**How it works**:
+
+- Fetches all directories in the Git repository
+- For each directory with a `config.toml` file:
+  - Checks if the fuiz exists in the database and compares commit SHAs
+  - Skips if already up to date
+  - For updates: preserves `played_count`, `view_count`, and `published_at`
+  - For new fuizzes: uses the first commit date as `published_at`
+  - Downloads all images, generates thumbnail, and stores in R2 bucket
+  - Inserts/updates the database record
+- Returns JSON response with success status
+
+**Response**:
+
+```json
+{
+	"success": true,
+	"message": "Successfully synced all fuizzes"
+}
 ```

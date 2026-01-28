@@ -13,7 +13,7 @@
 	import { type ExportedFuiz } from '$lib/storage';
 	import Subject from './Subject.svelte';
 	import Grade from './Grade.svelte';
-	import type { PublishingState } from '../api/publish-stream/types';
+	import type { PublishingState } from '../api/library/publish-stream/types';
 	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
 
 	let {
@@ -94,7 +94,7 @@
 
 		try {
 			// Step 1: Initialize publish job
-			const initResponse = await fetch('/api/publish-init', {
+			const initResponse = await fetch('/api/library/publish-init', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ fuiz })
@@ -111,7 +111,7 @@
 			// Step 2: Connect to stream
 			publishingState = steps[0].state; // Start with the first step
 
-			const eventSource = new EventSource(`/api/publish-stream?job=${jobId}`);
+			const eventSource = new EventSource(`/api/library/publish-stream?job=${jobId}`);
 
 			eventSource.addEventListener('progress', (e) => {
 				const data = JSON.parse(e.data);

@@ -13,8 +13,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const providerParam = url.searchParams.get('provider') || 'gitlab';
 	const provider = providerParam as GitProvider;
 
-	if (!['gitlab', 'github'].includes(provider)) {
-		error(400, 'Invalid provider. Must be "gitlab" or "github"');
+	if (!['gitlab'].includes(provider)) {
+		error(400, 'Invalid provider. Must be "gitlab"');
 	}
 
 	// Get the return URL from query params
