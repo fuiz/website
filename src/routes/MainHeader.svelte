@@ -7,6 +7,8 @@
 	import LanguageSwitcher from '$lib/LanguageSwitcher.svelte';
 	import DarkModeSwitcher from '$lib/DarkModeSwitcher.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
+
+	let { showLibrary = false } = $props();
 </script>
 
 <header>
@@ -28,14 +30,16 @@
 				</div>
 			</FancyAnchorButton>
 		</div>
-		<div>
-			<FancyAnchorButton href={localizeHref('/library')}>
-				<div class="a">
-					<Icon size="1.2em" src="$lib/assets/library.svg" alt={m.library()} />
-					<div>{m.library()}</div>
-				</div>
-			</FancyAnchorButton>
-		</div>
+		{#if showLibrary}
+			<div>
+				<FancyAnchorButton href={localizeHref('/library')}>
+					<div class="a">
+						<Icon size="1.2em" src="$lib/assets/library.svg" alt={m.library()} />
+						<div>{m.library()}</div>
+					</div>
+				</FancyAnchorButton>
+			</div>
+		{/if}
 		<div>
 			<FancyAnchorButton href="https://opencollective.com/fuiz">
 				<div class="a">
