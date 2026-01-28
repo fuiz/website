@@ -14,15 +14,21 @@ export class GoogleDriveSync {
 	static readonly name = 'google-drive';
 	static readonly displayName = 'Google Drive';
 
-	// Static method - check authentication status
-	static async isAuthenticated(): Promise<boolean> {
+	name = GoogleDriveSync.name;
+	displayName = GoogleDriveSync.displayName;
+
+	// Static method - check authentication and availability status
+	static async status(): Promise<{ authenticated: boolean; available: boolean }> {
 		try {
 			const response = await fetch('/api/gdrive/status');
-			if (!response.ok) return false;
+			if (!response.ok) return { authenticated: false, available: false };
 			const status = await response.json();
-			return status.authenticated;
+			return {
+				authenticated: status.authenticated,
+				available: status.available
+			};
 		} catch {
-			return false;
+			return { authenticated: false, available: false };
 		}
 	}
 

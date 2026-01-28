@@ -9,7 +9,7 @@ import {
 	type Media,
 	type Modify
 } from '../types';
-import { retrieveRemoteSync, type RemoteSync } from './remoteStorage';
+import { retrieveRemoteSync, type RemoteSync, type RemoteSyncProvider } from './remoteStorage';
 
 export function generateUuid(): string {
 	function generateRandomHex(length: number): string {
@@ -52,6 +52,7 @@ export type CreationId = number;
 export type Database = {
 	local: LocalDatabase;
 	remote?: RemoteSync;
+	providers: Array<{ provider: RemoteSyncProvider; authenticated: boolean }>;
 };
 
 export type ExportedFuiz = {
@@ -256,16 +257,22 @@ export async function loadDatabase(): Promise<Database> {
 	return await new Promise((resolve, reject) => {
 		request.addEventListener('success', async () => {
 			let remoteSync: RemoteSync | undefined = undefined;
+			let providers: Array<{ provider: RemoteSyncProvider; authenticated: boolean }> = [];
 
 			try {
-				remoteSync = await retrieveRemoteSync();
+				providers = await retrieveRemoteSync();
+				const authenticatedProvider = providers.find((p) => p.authenticated);
+				if (authenticatedProvider) {
+					remoteSync = new authenticatedProvider.provider();
+				}
 			} catch {
 				// No remote sync if auth check fails
 			}
 
 			resolve({
 				local: request.result,
-				remote: remoteSync
+				remote: remoteSync,
+				providers
 			});
 		});
 		request.addEventListener('error', reject);

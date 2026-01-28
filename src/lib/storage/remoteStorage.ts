@@ -3,14 +3,20 @@ import { GoogleDriveSync } from './providers/googleDrive';
 
 export type { RemoteSync, RemoteSyncProvider };
 
-// List all available remote storage providers (classes, not instances)
-export const remoteSyncProviders: RemoteSyncProvider[] = [GoogleDriveSync];
+const staticRemoteSyncProviders: RemoteSyncProvider[] = [GoogleDriveSync] as const;
 
-export async function retrieveRemoteSync(): Promise<RemoteSync | undefined> {
-	for (const provider of remoteSyncProviders) {
-		if (await provider.isAuthenticated()) {
-			return new provider();
-		}
-	}
-	return undefined;
+export async function retrieveRemoteSync(): Promise<
+	Array<{ provider: RemoteSyncProvider; authenticated: boolean }>
+> {
+	const results = await Promise.all(
+		staticRemoteSyncProviders.map(async (provider) => {
+			const status = await provider.status();
+			return { provider, status };
+		})
+	);
+
+	// Only return providers that are available (credentials configured)
+	return results
+		.filter(({ status }) => status.available)
+		.map(({ provider, status }) => ({ provider, authenticated: status.authenticated }));
 }

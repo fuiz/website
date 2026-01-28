@@ -6,17 +6,26 @@ import type {
 } from '.';
 import type { Base64Media } from '../types';
 
+export interface RemoteSyncProviderStatus {
+	authenticated: boolean;
+	available: boolean;
+}
+
 export interface RemoteSyncProvider {
 	// Static metadata
 	readonly name: string;
 	readonly displayName: string;
 
 	// Static authentication methods
-	isAuthenticated(): Promise<boolean>;
+	status(): Promise<RemoteSyncProviderStatus>;
 	login(returnUrl?: string): void;
 
 	// Constructor creates instances with these instance methods
 	new (): {
+		readonly name: string;
+		readonly displayName: string;
+
+		// Instance methods
 		logout(): void;
 		sync(
 			localDatabase: IDBDatabase,

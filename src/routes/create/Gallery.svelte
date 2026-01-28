@@ -14,14 +14,11 @@
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import TypicalPage from '$lib/TypicalPage.svelte';
 	import { getCreation, deleteCreation, addCreation, generateUuid } from '$lib/storage';
-	import { remoteSyncProviders } from '$lib/storage/remoteStorage';
 	import { share } from './lib';
 	import JSZip from 'jszip';
 
 	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database}}*/
 	let { creations = $bindable(), db } = $props();
-
-	let isGDriveAuthenticated = $derived(!!db.remote);
 
 	let sortedCreations = $derived(toSorted(creations, (a, b) => b.lastEdited - a.lastEdited));
 
@@ -293,24 +290,28 @@
 				</div>
 			</FancyButton>
 		</div>
-		{#if isGDriveAuthenticated}
-			<div>
-				<FancyButton onclick={() => db.remote?.logout()}>
-					<div
-						style:display="flex"
-						style:align-items="center"
-						style:font-family="Poppins"
-						style:gap="0.2em"
-						style:padding="0.15em 0.25em"
-						style:justify-content="center"
-					>
-						<Icon size="1.25em" src="$lib/assets/logout.svg" alt="Log out from Google Drive" />
-						<div>Log Out</div>
-					</div>
-				</FancyButton>
-			</div>
-		{:else}
-			{#each remoteSyncProviders as provider}
+		{#each db.providers as { provider }}
+			{#if db.remote?.name === provider.name}
+				<div>
+					<FancyButton onclick={() => db.remote?.logout()}>
+						<div
+							style:display="flex"
+							style:align-items="center"
+							style:font-family="Poppins"
+							style:gap="0.2em"
+							style:padding="0.15em 0.25em"
+							style:justify-content="center"
+						>
+							<Icon
+								size="1.25em"
+								src="$lib/assets/logout.svg"
+								alt="Log out from {provider.displayName}"
+							/>
+							<div>Log Out</div>
+						</div>
+					</FancyButton>
+				</div>
+			{:else}
 				<div>
 					<FancyButton
 						onclick={() => provider.login(window.location.pathname + window.location.search)}
@@ -332,8 +333,8 @@
 						</div>
 					</FancyButton>
 				</div>
-			{/each}
-		{/if}
+			{/if}
+		{/each}
 	</div>
 	<div style:margin="0 0.4em">
 		<div
