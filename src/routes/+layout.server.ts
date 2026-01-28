@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ platform }) => {
@@ -15,7 +16,30 @@ export const load = (async ({ platform }) => {
 		}
 	}
 
+	// Check if publish functionality is fully configured
+	const showPublish =
+		// Platform bindings
+		platform?.env.DATABASE &&
+		platform?.env.BUCKET &&
+		platform?.env.PUBLISH_JOBS &&
+		// Git OAuth credentials
+		env.GITLAB_CLIENT_ID &&
+		env.GITLAB_CLIENT_SECRET &&
+		env.GITLAB_REDIRECT_URI &&
+		// Git repository configuration
+		env.GIT_PROVIDER &&
+		env.GIT_REPO_OWNER &&
+		env.GIT_REPO_NAME &&
+		env.GIT_DEFAULT_BRANCH
+			? true
+			: false;
+
+	// Check if share functionality is configured (requires MAP KV namespace)
+	const showShare = platform?.env.MAP ? true : false;
+
 	return {
-		showLibrary
+		showLibrary,
+		showPublish,
+		showShare
 	};
 }) satisfies LayoutServerLoad;

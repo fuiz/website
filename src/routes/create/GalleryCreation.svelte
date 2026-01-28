@@ -18,9 +18,20 @@
 	 * ondelete: () => void;onplay: () => void;
 	 * ondownload: () => void;
 	 * onshare: (tippyInstance: import('tippy.js').Instance) => void;
+	 * showShare?: boolean;
 	 * }} */
-	let { id, title, lastEdited, slidesCount, media, ondelete, onplay, ondownload, onshare } =
-		$props();
+	let {
+		id,
+		title,
+		lastEdited,
+		slidesCount,
+		media,
+		ondelete,
+		onplay,
+		ondownload,
+		onshare,
+		showShare
+	} = $props();
 
 	/** @type {{month: 'short', day: 'numeric'}} */
 	const same_year = { month: 'short', day: 'numeric' };
@@ -74,16 +85,18 @@
 		<IconButton size="1em" src={present} alt={m.host()} onclick={onplay} />
 		<IconButton size="1em" src={delete_fuiz} alt={m.delete_confirm()} onclick={ondelete} />
 		<IconButton size="1em" src="$lib/assets/download.svg" alt={m.download()} onclick={ondownload} />
-		<div bind:this={shareElement}>
-			<IconButton
-				size="1em"
-				src="$lib/assets/share.svg"
-				alt={m.share()}
-				onclick={() => {
-					if (tippyInstance) onshare(tippyInstance);
-				}}
-			/>
-		</div>
+		{#if showShare}
+			<div bind:this={shareElement}>
+				<IconButton
+					size="1em"
+					src="$lib/assets/share.svg"
+					alt={m.share()}
+					onclick={() => {
+						if (tippyInstance) onshare(tippyInstance);
+					}}
+				/>
+			</div>
+		{/if}
 	</div>
 </div>
 

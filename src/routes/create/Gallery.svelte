@@ -17,8 +17,8 @@
 	import { share } from './lib';
 	import JSZip from 'jszip';
 
-	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database}}*/
-	let { creations = $bindable(), db } = $props();
+	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, showShare?: boolean}}*/
+	let { creations = $bindable(), db, showShare } = $props();
 
 	let sortedCreations = $derived(toSorted(creations, (a, b) => b.lastEdited - a.lastEdited));
 
@@ -368,6 +368,7 @@
 							{lastEdited}
 							{slidesCount}
 							{media}
+							{showShare}
 							ondelete={() => {
 								selectedToDeletion = id;
 								dialog.open();

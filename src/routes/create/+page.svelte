@@ -18,6 +18,8 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import type { Base64Media, Creation, GenericFuizConfig } from '$lib/types';
 
+	let { data } = $props();
+
 	let status = $state<
 		| 'loading'
 		| {
@@ -73,7 +75,7 @@
 {#if status === 'loading'}
 	<Loading />
 {:else if 'creations' in status}
-	<Gallery creations={status.creations} db={status.db} />
+	<Gallery creations={status.creations} db={status.db} showShare={data.showShare} />
 {:else if status.creation === 'failure'}
 	<ErrorPage errorMessage={m.missing_fuiz()} />
 {:else}
@@ -82,5 +84,7 @@
 		bind:exportedFuiz={status.creation.exportedFuiz}
 		bind:config={status.creation.config}
 		db={status.db}
+		showPublish={data.showPublish}
+		showShare={data.showShare}
 	/>
 {/if}

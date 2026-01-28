@@ -14,12 +14,16 @@
 		id = $bindable(),
 		exportedFuiz = $bindable(),
 		config = $bindable(),
-		db
+		db,
+		showPublish,
+		showShare
 	}: {
 		id: number;
 		exportedFuiz: ExportedFuiz;
 		config: GenericFuizConfig<Base64Media | undefined>;
 		db: Database;
+		showPublish?: boolean;
+		showShare?: boolean;
 	} = $props();
 
 	const updateStorage = debounce(() => {
@@ -124,6 +128,8 @@
 		bind:title={config.title}
 		{id}
 		{db}
+		{showPublish}
+		{showShare}
 		onshare={onShare}
 		errorMessage={no_answer
 			? m.missing_answers()
