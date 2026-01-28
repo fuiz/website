@@ -6,7 +6,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import type { FullOnlineFuiz } from '$lib/types';
-import { getAuthenticatedProvider, getTokens } from '../git/gitUtil';
+import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 
 export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 	// Check Git authentication

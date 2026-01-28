@@ -4,7 +4,7 @@ import type {
 	StrictInternalFuizMetadata,
 	MediaReferencedFuizConfig
 } from '.';
-import type { Media } from '../types';
+import type { Base64Media } from '../types';
 
 export interface RemoteSyncProvider {
 	// Static metadata
@@ -26,8 +26,8 @@ export interface RemoteSyncProvider {
 		get(uuid: string): Promise<MediaReferencedFuizConfig | undefined>;
 		update(uuid: string, internalFuiz: InternalFuiz): Promise<void>;
 		delete(uuid: string): Promise<void>;
-		createImage(hash: string, value: string | Media): Promise<void>;
-		getImage(hash: string): Promise<Media | string | undefined>;
+		createImage(hash: string, value: Base64Media): Promise<void>;
+		getImage(hash: string): Promise<Base64Media | undefined>;
 	};
 }
 

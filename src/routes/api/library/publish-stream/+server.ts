@@ -3,7 +3,7 @@
  * Sends progress updates as Server-Sent Events
  */
 
-import { getAuthenticatedProvider, getTokens } from '../git/gitUtil';
+import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 import { createGitClient } from '$lib/git/factory';
 import {
 	type FullOnlineFuiz,

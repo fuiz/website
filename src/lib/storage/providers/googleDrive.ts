@@ -5,7 +5,7 @@ import type {
 	LocalDatabase,
 	MediaReferencedFuizConfig
 } from '..';
-import type { Media } from '../../types';
+import type { Base64Media } from '../../types';
 import { bring } from '../../util';
 import { reconcile } from '../utils';
 
@@ -82,24 +82,18 @@ export class GoogleDriveSync {
 		});
 	}
 
-	async createImage(hash: string, value: string | Media): Promise<void> {
+	async createImage(hash: string, value: Base64Media): Promise<void> {
 		const reqExists = await bring(`/api/gdrive/images/${hash}`, { method: 'HEAD' });
 		if (reqExists?.ok) return undefined;
-		const serialized = typeof value === 'string' ? value : JSON.stringify(value);
-		await fetch(`/api/gdrive/images`, {
+		await fetch(`/api/gdrive/images/${hash}`, {
 			method: 'POST',
-			body: serialized
+			body: JSON.stringify(value)
 		});
 	}
 
-	async getImage(hash: string): Promise<string | undefined> {
+	async getImage(hash: string): Promise<Base64Media | undefined> {
 		const res = await bring(`/api/gdrive/images/${hash}`);
 		if (!res?.ok) return undefined;
-		const media = await res.text();
-		try {
-			return JSON.parse(media);
-		} catch {
-			return media;
-		}
+		return await res.json();
 	}
 }

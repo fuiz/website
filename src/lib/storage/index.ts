@@ -102,19 +102,21 @@ export type StrictInternalFuizMetadataStrings = Modify<
 	}
 >;
 
-export function hashMedia(media: Media): [string, string, Media | string] {
-	if ('Base64' in media.Image) {
-		const hash = media.Image.Base64.hash ?? objectHash(media.Image.Base64.data);
-		return [hash, media.Image.Base64.alt, media.Image.Base64.data];
-	} else if ('Corkboard' in media.Image) {
-		return [media.Image.Corkboard.id, media.Image.Corkboard.alt, media];
-	} else {
-		return [media.Image.Url.url, media.Image.Url.alt, media];
-	}
+export function hashMedia(media: Base64Media): {
+	hash: string;
+	alt: string;
+	dataUri: string;
+} {
+	const hash = media.Image.Base64.hash ?? objectHash(media.Image.Base64.data);
+	return {
+		hash,
+		alt: media.Image.Base64.alt,
+		dataUri: media.Image.Base64.data
+	};
 }
 
 async function hashExists(hash: string, database: LocalDatabase): Promise<boolean> {
-	const imagesStore = database.transaction(['images'], 'readwrite').objectStore('images');
+	const imagesStore = database.transaction(['images'], 'readonly').objectStore('images');
 	const request = imagesStore.count(hash);
 	return await new Promise((resolve) => {
 		request.addEventListener('success', () => {
@@ -124,7 +126,7 @@ async function hashExists(hash: string, database: LocalDatabase): Promise<boolea
 }
 
 export async function updateLocalImagesDatabse(
-	media: Media | string,
+	media: Base64Media,
 	hash: string,
 	database: LocalDatabase
 ): Promise<boolean> {
@@ -136,19 +138,19 @@ export async function updateLocalImagesDatabse(
 	return false;
 }
 
-async function updateImagesDatabse(media: Media | string, hash: string, database: Database) {
+async function updateImagesDatabse(media: Base64Media, hash: string, database: Database) {
 	if (await updateLocalImagesDatabse(media, hash, database.local)) {
 		await database?.remote?.createImage(hash, media);
 	}
 }
 
 export async function internalizeMedia(
-	media: Media | undefined,
+	media: Base64Media | undefined,
 	database: Database
 ): Promise<MediaReference | undefined> {
 	if (media == undefined) return undefined;
-	const [hash, alt, newMedia] = hashMedia(media);
-	await updateImagesDatabse(newMedia, hash, database);
+	const { hash, alt } = hashMedia(media);
+	await updateImagesDatabse(media, hash, database);
 	return {
 		Image: {
 			HashReference: {

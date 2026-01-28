@@ -1,18 +1,18 @@
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getDrive, getFileIdFromName } from '../../driveUtil';
+import { getDrive, getFilesIdFromName } from '../../driveUtil';
 import type { InternalFuiz } from '$lib/storage';
 
 // GET - Read a fuiz file
 export const GET: RequestHandler = async ({ params: { uuid }, cookies }) => {
 	const drive = getDrive(cookies);
-	const file = await getFileIdFromName(drive, uuid);
+	const files = await getFilesIdFromName(drive, uuid);
 
-	if (!file) {
+	if (!files || files.length === 0) {
 		error(404, 'File not found');
 	}
 
-	const content = await drive.content(file);
+	const content = await drive.content(files[0]);
 
 	return new Response(content, {
 		headers: {
@@ -24,6 +24,12 @@ export const GET: RequestHandler = async ({ params: { uuid }, cookies }) => {
 // POST - Create a new fuiz file
 export const POST: RequestHandler = async ({ params: { uuid }, cookies, request }) => {
 	const drive = getDrive(cookies);
+
+	const existingFiles = await getFilesIdFromName(drive, uuid);
+	if (existingFiles && existingFiles.length > 0) {
+		error(409, 'File already exists');
+	}
+
 	const internalFuiz: InternalFuiz = await request.json();
 
 	const properties = {
@@ -55,11 +61,8 @@ export const PUT: RequestHandler = async ({ params: { uuid }, cookies, request }
 	const drive = getDrive(cookies);
 	const internalFuiz: InternalFuiz = await request.json();
 
-	const fileName = `${uuid}.json`;
-
-	const file = await getFileIdFromName(drive, fileName);
-
-	if (!file) {
+	const existingFiles = await getFilesIdFromName(drive, uuid);
+	if (!existingFiles || existingFiles.length === 0) {
 		error(404, 'File not found');
 	}
 
@@ -71,7 +74,7 @@ export const PUT: RequestHandler = async ({ params: { uuid }, cookies, request }
 	try {
 		await drive.update(
 			{
-				...file,
+				...existingFiles[0],
 				properties
 			},
 			{
@@ -89,14 +92,16 @@ export const PUT: RequestHandler = async ({ params: { uuid }, cookies, request }
 // DELETE - Delete a fuiz file
 export const DELETE: RequestHandler = async ({ params: { uuid }, cookies }) => {
 	const drive = getDrive(cookies);
-	const file = await getFileIdFromName(drive, uuid);
+	const files = await getFilesIdFromName(drive, uuid);
 
-	if (!file) {
+	if (!files || files.length === 0) {
 		error(404, 'File not found');
 	}
 
 	try {
-		await drive.deleteFile(file);
+		for (const file of files) {
+			await drive.deleteFile(file);
+		}
 		return new Response(null, { status: 204 });
 	} catch {
 		error(500, 'Failed to delete file');
