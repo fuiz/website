@@ -126,7 +126,7 @@ async function hashExists(hash: string, database: LocalDatabase): Promise<boolea
 	});
 }
 
-export async function updateLocalImagesDatabse(
+export async function updateLocalImagesDatabase(
 	media: Base64Media,
 	hash: string,
 	database: LocalDatabase
@@ -140,7 +140,7 @@ export async function updateLocalImagesDatabse(
 }
 
 async function updateImagesDatabse(media: Base64Media, hash: string, database: Database) {
-	if (await updateLocalImagesDatabse(media, hash, database.local)) {
+	if (await updateLocalImagesDatabase(media, hash, database.local)) {
 		await database?.remote?.createImage(hash, media);
 	}
 }

@@ -48,7 +48,10 @@ export class GoogleDriveSync {
 		existing: [CreationId, StrictInternalFuizMetadata][]
 	): Promise<void> {
 		const res = await bring(`/api/gdrive/fuiz`);
-		if (!res?.ok) return;
+		if (!res?.ok) {
+			console.error('Failed to fetch fuiz configurations from Google Drive');
+			return;
+		}
 
 		await reconcile(
 			this,

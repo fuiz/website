@@ -6,7 +6,7 @@ import {
 	type InternalFuiz,
 	type LocalDatabase,
 	retrieveMediaFromLocal,
-	updateLocalImagesDatabse,
+	updateLocalImagesDatabase,
 	type CreationId,
 	type StrictInternalFuizMetadata
 } from '.';
@@ -91,7 +91,7 @@ export async function reconcile(
 		).filter(isNotUndefined);
 		await Promise.all(
 			references.map(async ([hash, media]) => {
-				await updateLocalImagesDatabse(media, hash, localDatabase);
+				await updateLocalImagesDatabase(media, hash, localDatabase);
 			})
 		);
 	}

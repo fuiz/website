@@ -31,7 +31,9 @@ export class GitLabClient extends BaseGitClient {
 
 		if (!response.ok) {
 			const error = await response.text();
-			throw new Error(`GitLab API error: ${response.status} ${response.statusText} - ${error}`);
+			throw new Error(`GitLab API error: ${response.status} ${response.statusText} - ${error}`, {
+				cause: { status: response.status, statusText: response.statusText, response: error }
+			});
 		}
 
 		return response.json() as Promise<T>;
