@@ -1,23 +1,37 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import GalleryCreation from './GalleryCreation.svelte';
-	import { addIds, downloadFuiz, removeIds } from '$lib';
+	import { addIds, removeIds } from '$lib';
 	import FancyButton from '$lib/FancyButton.svelte';
 	import { goto } from '$app/navigation';
 	import Icon from '$lib/Icon.svelte';
 	import ghost from '$lib/assets/ghost.svg';
 	import { parse } from '@ltd/j-toml';
-	import { getMedia, mapIdlessMedia } from '$lib/types';
+	import { getMedia, mapIdlessMedia, type Creation, type Media } from '$lib/types';
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import TypicalPage from '$lib/TypicalPage.svelte';
-	import { getCreation, deleteCreation, addCreation, generateUuid } from '$lib/storage';
+	import {
+		getCreation,
+		deleteCreation,
+		addCreation,
+		generateUuid,
+		type Database,
+		type CreationId
+	} from '$lib/storage';
 	import { share } from './lib';
-	import JSZip from 'jszip';
 	import ConfirmationDialog from '$lib/ConfirmationDialog.svelte';
+	import { downloadFuiz, loadSingleToml, loadZip } from '$lib/clientOnly';
 
-	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, showShare?: boolean}}*/
-	let { creations = $bindable(), db, showShare } = $props();
+	let {
+		creations = $bindable(),
+		db,
+		showShare
+	}: {
+		creations: Creation[];
+		db: Database;
+		showShare?: boolean;
+	} = $props();
 
 	let sortedCreations = $derived(toSorted(creations, (a, b) => b.lastEdited - a.lastEdited));
 
@@ -47,29 +61,23 @@
 		await goto(`?id=${id}`);
 	}
 
-	/**
-	 * @param {number} id
-	 */
-	async function deleteSlide(id) {
+	async function deleteSlide(id: number) {
 		await deleteCreation(id, db);
 		creations = creations.filter((c) => c.id != id);
 	}
 
-	/** @type {ConfirmationDialog | undefined} */
-	let deleteDialog = $state();
+	let deleteDialog = $state<ConfirmationDialog>();
 	let selectedToDeletion = $state(0);
 
-	/** @type {HTMLInputElement | undefined} */
-	let fileInput = $state();
+	let fileInput = $state<HTMLInputElement>();
 
 	function loadFromInput() {
 		const target = document.querySelector('input[type=file]');
 		if (!target) {
 			return;
 		}
-		/** @type {HTMLInputElement} */
 		// @ts-ignore
-		const inputImage = target;
+		const inputImage = target as HTMLInputElement;
 		const filesList = inputImage.files;
 		if (!filesList) {
 			return;
@@ -84,102 +92,13 @@
 		loadFile(files);
 	}
 
-	/**
-	 * @param {File[]} files
-	 */
-	async function loadFile(files) {
+	async function loadFile(files: File[]) {
 		const exportedFuizzesWithFailures = await Promise.all(
 			files.map(async (file) => {
 				if (file.name.endsWith('.zip')) {
-					const mimetypes = new Map([
-						['apng', 'image/apng'],
-						['avif', 'image/avif'],
-						['gif', 'image/gif'],
-						['jpg', 'image/jpeg'],
-						['png', 'image/png'],
-						['svg', 'image/svg+xml'],
-						['webp', 'image/webp']
-					]);
-
-					const archive = new JSZip();
-					await archive.loadAsync(file);
-					const images = Object.keys(archive.files)
-						.filter((name) => !name.endsWith('.toml'))
-						.map((name) => ({
-							name,
-							file: archive.files[name]
-						}));
-
-					const fuiz = Object.keys(archive.files)
-						.filter((name) => name.endsWith('.toml'))
-						.map((name) => archive.files[name])
-						.at(0);
-
-					/** @type {{name: string, base64: string}[]} */
-					const betterImages = [];
-
-					for (const { name, file } of images) {
-						const base64 =
-							'data:' +
-							mimetypes.get(file.name.split('.').at(-1) ?? 'png') +
-							';base64,' +
-							(await file.async('base64'));
-						betterImages.push({ name, base64 });
-					}
-
-					if (!fuiz) return undefined;
-
-					const str = await fuiz.async('string');
-					/** @type {import('$lib/types').IdlessFuizConfig}*/
-					// @ts-ignore
-					const detomlified = parse(str, { bigint: false });
-
-					/**
-					 * @param {string} imageUrl
-					 * @returns {string}
-					 */
-					const unurlify = (imageUrl) => {
-						return betterImages.find(({ name }) => name === imageUrl)?.base64 ?? '';
-					};
-
-					return {
-						...detomlified,
-						slides: await Promise.all(
-							detomlified.slides.map(
-								async (s) =>
-									await mapIdlessMedia(s, async (media) => {
-										if (media?.Image && 'Url' in media.Image) {
-											return {
-												Image: {
-													Base64: {
-														alt: media.Image.Url.alt,
-														data: unurlify(media.Image.Url.url),
-														hash: media.Image.Url.url.split('.')[0]
-													}
-												}
-											};
-										}
-										return undefined;
-									})
-							)
-						)
-					};
+					return await loadZip(file);
 				} else {
-					return new Promise((resolve) => {
-						const reader = new FileReader();
-						reader.readAsText(file);
-						reader.addEventListener('load', () => {
-							const str = reader.result?.toString();
-							if (str) {
-								/** @type {import('$lib/types').IdlessFuizConfig} */
-								// @ts-ignore
-								const detomlified = parse(str, { bigint: false });
-								resolve(detomlified);
-							} else {
-								resolve(undefined);
-							}
-						});
-					});
+					return await loadSingleToml(file);
 				}
 			})
 		);
@@ -212,28 +131,24 @@
 						lastEdited: fuiz.lastEdited,
 						title: idedConfig.title,
 						slidesCount: idedConfig.slides.length,
-						media: idedConfig.slides.reduce((p, c) => p || getMedia(c), undefined)
+						media: idedConfig.slides.reduce<Media | undefined>(
+							(p, c) => p || getMedia(c),
+							undefined
+						)
 					}
 				];
 			})
 		);
 	}
 
-	/**
-	 * @param {import('$lib/storage').CreationId} id
-	 */
-	async function onDownload(id) {
+	async function onDownload(id: CreationId) {
 		const creation = await getCreation(id, db);
 		if (!creation) return;
 		const configJson = creation.config;
 		await downloadFuiz(configJson);
 	}
 
-	/**
-	 * @param {import('$lib/storage').CreationId} id
-	 * @param {import('tippy.js').Instance} e
-	 */
-	async function onShare(id, e) {
+	async function onShare(id: CreationId, e: import('tippy.js').Instance) {
 		const creation = await getCreation(id, db);
 		if (creation) {
 			await share(creation.config, undefined);
