@@ -19,7 +19,7 @@ The new system uses GitLab OAuth + Pull Requests for fuiz moderation. When users
 2. Create a new application with:
    - **Name**: Fuiz Publishing
    - **Redirect URI**: `https://fuiz.org/api/git/callback` (or your domain)
-   - **Scopes**: `api`, `write_repository`
+   - **Scopes**: `api`
 3. Copy the Application ID and Secret
 
 ### 2. Create GitLab Repository

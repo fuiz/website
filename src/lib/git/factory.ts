@@ -20,7 +20,7 @@ export function getOAuthConfig(provider: GitProvider): OAuthConfig {
 				redirectUri: env.GITLAB_REDIRECT_URI || '',
 				authUrl: 'https://gitlab.com/oauth/authorize',
 				tokenUrl: 'https://gitlab.com/oauth/token',
-				scopes: ['api', 'write_repository']
+				scopes: ['api']
 			};
 		default:
 			throw new Error(`Unsupported Git provider: ${provider}`);
