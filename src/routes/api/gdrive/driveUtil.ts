@@ -1,8 +1,8 @@
 import { env } from '$env/dynamic/private';
 import type { StrictInternalFuizMetadataStrings } from '$lib/storage';
 import { error, type Cookies } from '@sveltejs/kit';
-import { google } from 'googleapis';
-import type { OAuth2Client } from 'google-auth-library';
+import { drive_v3 } from '@googleapis/drive';
+import { OAuth2Client } from 'google-auth-library';
 
 export interface OAuthTokens {
 	access_token: string;
@@ -22,7 +22,7 @@ export const scope = 'https://www.googleapis.com/auth/drive.appdata' as const;
 
 export function getOAuth2Client(): OAuth2Client {
 	const { clientId, clientSecret, redirectUri } = options();
-	return new google.auth.OAuth2({ clientId, clientSecret, redirectUri });
+	return new OAuth2Client({ clientId, clientSecret, redirectUri });
 }
 
 export function getToken(cookies: Cookies): OAuthTokens {
@@ -67,7 +67,7 @@ interface MediaData {
 }
 
 class Drive {
-	private drive: ReturnType<typeof google.drive>;
+	private drive: drive_v3.Drive;
 	private oauth2Client: OAuth2Client;
 
 	constructor(
@@ -80,7 +80,7 @@ class Drive {
 			refresh_token: tokens.refresh_token
 		});
 
-		this.drive = google.drive({ version: 'v3', auth: this.oauth2Client });
+		this.drive = new drive_v3.Drive({ auth: this.oauth2Client });
 
 		this.oauth2Client.on('tokens', (tokens) => {
 			if (this.cookies && tokens.access_token) {

@@ -45,11 +45,12 @@
 	"dependencies": {
 		"@fontsource/atkinson-hyperlegible": "^5.2.8",
 		"@fontsource/poppins": "^5.2.7",
+		"@googleapis/drive": "^20.0.1",
 		"@ltd/j-toml": "^1.38.0",
 		"@oddbird/popover-polyfill": "^0.6.1",
 		"@svelte-put/inline-svg": "^4.0.2",
 		"@sveltejs/enhanced-img": "^0.9.3",
-		"googleapis": "^171.0.0",
+		"google-auth-library": "^10.5.0",
 		"jszip": "^3.10.1",
 		"object-hash": "^3.0.0",
 		"qrcode": "^1.5.4",
