@@ -14,6 +14,7 @@ import { Section, stringify } from '@ltd/j-toml';
 import { bring } from './util';
 import {
 	mapIdlessMedia,
+	mapIdlessMediaSync,
 	type FuizConfig,
 	type FuizOptions,
 	type GenericFuizConfig,
@@ -24,7 +25,6 @@ import {
 	type Media,
 	type ReferencingOnlineFuiz
 } from './types';
-import JSZip from 'jszip';
 import objectHash from 'object-hash';
 
 export const buttonColors = [
@@ -158,19 +158,6 @@ export function stringifyToml(obj: IdlessLocalReferenceFuizConfig | ReferencingO
 	return stringify(obj, { newline: '\n', newlineAround: 'section', integer: 1000000 });
 }
 
-export async function downloadFuiz(configJson: IdlessFullFuizConfig) {
-	const [urlified, images] = await urlifyBase64(configJson);
-
-	if (images.length > 0) {
-		downloadBlob(
-			[await createZip(stringifyToml(tomlifyConfig(urlified)), images)],
-			configJson.title + '.zip'
-		);
-	} else {
-		await downloadTomlString(stringifyToml(tomlifyConfig(urlified)), urlified.title);
-	}
-}
-
 const mimeTypeToExtensionMapping: Map<string, string> = new Map([
 	['image/apng', 'apng'],
 	['image/avif', 'avif'],
@@ -191,79 +178,50 @@ export function extensionToMimeType(extension: string): string | null {
 	return entry ? entry[0] : null;
 }
 
-export async function urlifyBase64(
+function getMimetype(base64string: string): string {
+	return base64string.split(';')[0].split(':')[1];
+}
+
+function urlifyImage({ data, hash }: { data: string; hash?: string }): {
+	name: string;
+	base64: string;
+} {
+	const mimetype = getMimetype(data);
+	const ext = mimeTypeToExtension(mimetype);
+	if (!ext) throw new Error(`Unsupported image mimetype: ${mimetype}`);
+	const name = (hash ?? objectHash(data)) + '.' + ext;
+	return {
+		name,
+		base64: data.split(',')[1]
+	};
+}
+
+export function urlifyBase64(
 	config: IdlessFullFuizConfig
-): Promise<[IdlessLocalReferenceFuizConfig, { name: string; base64: string }[]]> {
-	function getMimetype(base64string: string): string {
-		return base64string.split(';')[0].split(':')[1];
-	}
-
+): [IdlessLocalReferenceFuizConfig, { name: string; base64: string }[]] {
 	const images: { name: string; base64: string }[] = [];
-
-	function urlifyImage({ data, hash }: { data: string; hash?: string }): string {
-		const mimetype = getMimetype(data);
-		const ext = mimeTypeToExtension(mimetype);
-		if (!ext) throw new Error(`Unsupported image mimetype: ${mimetype}`);
-		const name = (hash ?? objectHash(data)) + '.' + ext;
-		images.push({
-			name,
-			base64: data.split(',')[1]
-		});
-		return name;
-	}
 
 	const urlifiedConfig = {
 		...config,
-		slides: await Promise.all(
-			config.slides.map(
-				async (s) =>
-					await mapIdlessMedia(s, async (media) => {
-						if (media) {
-							return {
-								Image: {
-									Url: {
-										alt: media.Image.Base64.alt,
-										url: urlifyImage(media.Image.Base64)
-									}
-								}
-							};
+		slides: config.slides.map((s) =>
+			mapIdlessMediaSync(s, (media) => {
+				if (media) {
+					const urlified = urlifyImage(media.Image.Base64);
+					images.push(urlified);
+					return {
+						Image: {
+							Url: {
+								alt: media.Image.Base64.alt,
+								url: urlified.name
+							}
 						}
-						return undefined;
-					})
-			)
+					};
+				}
+				return undefined;
+			})
 		)
 	};
 	return [urlifiedConfig, images];
-}
-
-export async function createZip(fuizString: string, images: { name: string; base64: string }[]) {
-	const archive = JSZip();
-	archive.file('config.toml', fuizString);
-
-	images.forEach(({ name, base64 }) => {
-		archive.file(name, base64, { base64: true });
-	});
-
-	return await archive.generateAsync({ type: 'blob', compression: 'STORE' });
-}
-
-export function downloadTomlString(str: string, title: string) {
-	downloadBlob([str], title + '.toml', { type: 'application/toml', endings: 'native' });
-}
-
-export function downloadBlob(blobs: BlobPart[], name: string, options?: FilePropertyBag) {
-	const file = new File(blobs, name, options);
-	const url = URL.createObjectURL(file);
-
-	const link = document.createElement('a');
-	link.style.display = 'none';
-	link.href = url;
-	link.download = file.name;
-	document.body.appendChild(link);
-	link.click();
-
-	document.body.removeChild(link);
-	window.URL.revokeObjectURL(url);
 }
 
 export function removeIds<T>(

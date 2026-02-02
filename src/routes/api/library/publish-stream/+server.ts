@@ -5,27 +5,13 @@
 
 import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 import { createGitClient } from '$lib/git/factory';
-import {
-	type FullOnlineFuiz,
-	type ReferencingOnlineFuiz,
-	type IdlessFullFuizConfig,
-	mapIdlessMediaSync
-} from '$lib/types';
-import { tomlifyConfig, stringifyToml, assertUnreachable } from '$lib';
+import type { FullOnlineFuiz, ReferencingOnlineFuiz, IdlessFullFuizConfig } from '$lib/types';
+import { tomlifyConfig, stringifyToml, assertUnreachable, urlifyBase64 } from '$lib';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
-import { processMedia } from './imageProcessor';
 import { json } from '@sveltejs/kit';
 import type { Ai } from '@cloudflare/workers-types';
 import type { PublishingState } from './types';
-
-interface ImageFile {
-	path: string;
-	content: string;
-	encoding: 'base64';
-	hash: string;
-	extension: string;
-}
 
 async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
 	const messages: { role: 'system' | 'user'; content: string }[] = [
@@ -136,18 +122,12 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				const { forkId, upstreamId } = await client.forkRepository();
 
 				// Extract images and convert them to local references
-				const imageFiles = new Map<string, ImageFile>();
-				const processedSlides = fuizConfig.config.slides.map((slide) =>
-					mapIdlessMediaSync(slide, (media) => processMedia(media, imageFiles, fuizId))
-				);
+				const [urlifiedConfig, images] = urlifyBase64(fuizConfig.config);
 
 				const processedConfig: ReferencingOnlineFuiz = {
 					...fuizConfig,
 					keywords,
-					config: {
-						...fuizConfig.config,
-						slides: processedSlides
-					}
+					config: urlifiedConfig
 				};
 
 				const tomlConfig: ReferencingOnlineFuiz = {
@@ -181,9 +161,9 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 						content: tomlContent,
 						encoding: 'text' as const
 					},
-					...Array.from(imageFiles.values()).map((imageFile) => ({
-						path: imageFile.path,
-						content: imageFile.content,
+					...Array.from(images.values()).map((image) => ({
+						path: image.name,
+						content: image.base64,
 						encoding: 'base64' as const
 					}))
 				];
@@ -213,7 +193,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 ### Details
 - **Slides:** ${fuizConfig.config.slides.length}
 - **Fuiz ID:** ${fuizId}
-- **Images:** ${imageFiles.size} file(s)
+- **Images:** ${images.length} file(s)
 
 ---
 *This PR was automatically created by the Fuiz publishing system.*

@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { goto } from '$app/navigation';
-	import { downloadFuiz, limits } from '$lib';
+	import { limits } from '$lib';
 	import IconButton from '$lib/IconButton.svelte';
 	import Logo from '$lib/Logo.svelte';
 	import Textfield from '$lib/Textfield.svelte';
@@ -10,6 +10,7 @@
 	import { onMount } from 'svelte';
 	import tippy from 'tippy.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import { downloadFuiz } from '$lib/clientOnly';
 
 	/** @type {{
 	 * title: string;
