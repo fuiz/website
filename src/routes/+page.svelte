@@ -57,7 +57,7 @@
 </svelte:head>
 
 <main>
-	<MainHeader />
+	<MainHeader showLibrary={data.showLibrary} />
 	<section>
 		<div>
 			<h2>{m.greeting()}<br />{m.create_with()}</h2>

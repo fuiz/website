@@ -13,8 +13,8 @@
 	import LoadingCircle from '$lib/LoadingCircle.svelte';
 	import Radio from '$lib/Radio.svelte';
 
-	/** @type {{ id: import('$lib/storage').CreationId, data: import('./$types').PageData}}*/
-	let { id, data } = $props();
+	/** @type {{ id: import('$lib/storage').CreationId}}*/
+	let { id } = $props();
 
 	let loading = $state(false);
 
@@ -94,7 +94,7 @@
 	}
 </script>
 
-{#await loadDatabase(data.session !== null).then((db) => getCreation(id, db))}
+{#await loadDatabase().then((db) => getCreation(id, db))}
 	<Loading />
 {:then fuiz}
 	{#if !fuiz}

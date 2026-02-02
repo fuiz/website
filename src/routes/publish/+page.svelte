@@ -29,8 +29,6 @@
 		}
 	}
 
-	let { data } = $props();
-
 	let id = $derived(parseInt(page.url.searchParams.get('id')));
 	const title = m.publish_title();
 	const description = m.publish_desc();
@@ -54,17 +52,17 @@
 
 {#if id}
 	{@const filteredId = id}
-	{#await loadDatabase(data.session !== null).then((db) => joinCreation(db, filteredId))}
+	{#await loadDatabase().then((db) => joinCreation(db, filteredId))}
 		<Loading />
-	{:then { db, creation }}
+	{:then { creation }}
 		{#if creation}
-			<Publish {creation} {id} {db} />
+			<Publish {creation} {id} />
 		{:else}
 			<ErrorMessage errorMessage={m.missing_fuiz()} />
 		{/if}
 	{/await}
 {:else}
-	{#await loadDatabase(data.session !== null).then((db) => getAllCreations(db))}
+	{#await loadDatabase().then((db) => getAllCreations(db))}
 		<Loading />
 	{:then creations}
 		{@const sortedCreations = toSorted(creations, (a, b) => -b.lastEdited - a.lastEdited)}

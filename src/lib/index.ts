@@ -19,8 +19,10 @@ import {
 	type GenericFuizConfig,
 	type GenericIdlessFuizConfig,
 	type IdlessFuizConfig,
+	type IdlessFullFuizConfig,
+	type IdlessLocalReferenceFuizConfig,
 	type Media,
-	type OnlineFuiz
+	type ReferencingOnlineFuiz
 } from './types';
 import JSZip from 'jszip';
 import objectHash from 'object-hash';
@@ -126,7 +128,9 @@ export function assertUnreachable(_: never): never {
 	throw new Error("it's impossible to reach here");
 }
 
-export function tomlifyConfig(config: IdlessFuizConfig): IdlessFuizConfig {
+export function tomlifyConfig(
+	config: IdlessLocalReferenceFuizConfig
+): IdlessLocalReferenceFuizConfig {
 	return {
 		title: config.title,
 		slides: config.slides.map((slide) => {
@@ -150,11 +154,11 @@ export function tomlifyConfig(config: IdlessFuizConfig): IdlessFuizConfig {
 	};
 }
 
-export function stringifyToml(obj: IdlessFuizConfig | OnlineFuiz): string {
+export function stringifyToml(obj: IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz): string {
 	return stringify(obj, { newline: '\n', newlineAround: 'section', integer: 1000000 });
 }
 
-export async function downloadFuiz(configJson: IdlessFuizConfig) {
+export async function downloadFuiz(configJson: IdlessFullFuizConfig) {
 	const [urlified, images] = await urlifyBase64(configJson);
 
 	if (images.length > 0) {
@@ -167,19 +171,29 @@ export async function downloadFuiz(configJson: IdlessFuizConfig) {
 	}
 }
 
-export async function urlifyBase64(
-	config: IdlessFuizConfig
-): Promise<[IdlessFuizConfig, { name: string; base64: string }[]]> {
-	const mimetypes = new Map([
-		['image/apng', 'apng'],
-		['image/avif', 'avif'],
-		['image/gif', 'gif'],
-		['image/jpeg', 'jpg'],
-		['image/png', 'png'],
-		['image/svg+xml', 'svg'],
-		['image/webp', 'webp']
-	]);
+const mimeTypeToExtensionMapping: Map<string, string> = new Map([
+	['image/apng', 'apng'],
+	['image/avif', 'avif'],
+	['image/gif', 'gif'],
+	['image/jpeg', 'jpg'],
+	['image/png', 'png'],
+	['image/svg+xml', 'svg'],
+	['image/webp', 'webp']
+]);
 
+export function mimeTypeToExtension(mimeType: string): string | null {
+	return mimeTypeToExtensionMapping.get(mimeType) || null;
+}
+
+export function extensionToMimeType(extension: string): string | null {
+	const lowerExt = extension.toLowerCase().trim();
+	const entry = mimeTypeToExtensionMapping.entries().find(([, ext]) => ext === lowerExt);
+	return entry ? entry[0] : null;
+}
+
+export async function urlifyBase64(
+	config: IdlessFullFuizConfig
+): Promise<[IdlessLocalReferenceFuizConfig, { name: string; base64: string }[]]> {
 	function getMimetype(base64string: string): string {
 		return base64string.split(';')[0].split(':')[1];
 	}
@@ -187,7 +201,10 @@ export async function urlifyBase64(
 	const images: { name: string; base64: string }[] = [];
 
 	function urlifyImage({ data, hash }: { data: string; hash?: string }): string {
-		const name = (hash ?? objectHash(data)) + '.' + mimetypes.get(getMimetype(data));
+		const mimetype = getMimetype(data);
+		const ext = mimeTypeToExtension(mimetype);
+		if (!ext) throw new Error(`Unsupported image mimetype: ${mimetype}`);
+		const name = (hash ?? objectHash(data)) + '.' + ext;
 		images.push({
 			name,
 			base64: data.split(',')[1]
@@ -201,7 +218,7 @@ export async function urlifyBase64(
 			config.slides.map(
 				async (s) =>
 					await mapIdlessMedia(s, async (media) => {
-						if (media && 'Base64' in media.Image) {
+						if (media) {
 							return {
 								Image: {
 									Url: {
@@ -372,7 +389,7 @@ function fixTime(time: number): number {
 	return time <= 1000 ? time * 1000 : time;
 }
 
-export function fixTimes(config: IdlessFuizConfig): IdlessFuizConfig {
+export function fixTimes<T>(config: GenericIdlessFuizConfig<T>): GenericIdlessFuizConfig<T> {
 	return {
 		title: config.title,
 		slides: config.slides.map((slide) => {

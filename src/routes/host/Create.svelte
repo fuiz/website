@@ -12,8 +12,6 @@
 	import { toSorted } from '$lib/util';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
-	let { data } = $props();
-
 	let loading = $state(false);
 	let fuizConfig = $state('');
 	let errorMessage = $state('');
@@ -37,7 +35,7 @@
 	}
 </script>
 
-{#await loadDatabase(data.session !== null).then((db) => getAllCreations(db))}
+{#await loadDatabase().then((db) => getAllCreations(db))}
 	<Loading />
 {:then creations}
 	{@const sortedCreations = toSorted(creations, (a, b) => -b.lastEdited - a.lastEdited)}

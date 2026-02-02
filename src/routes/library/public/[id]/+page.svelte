@@ -20,7 +20,7 @@
 	 * @returns {Promise<number>}
 	 */
 	async function addToCollection() {
-		const db = await loadDatabase(data.session !== null);
+		const db = await loadDatabase();
 		const id = await addCreation(
 			{
 				lastEdited: Date.now(),

@@ -1,13 +1,13 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "fuiz"
-compatibility_date = "2024-11-28"
+compatibility_date = "2026-01-27"
 main = ".svelte-kit/cloudflare/_worker.js"
 assets = { directory = ".svelte-kit/cloudflare", binding = "ASSETS" }
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 
 services = [{ binding = "COUNTER", service = "counter" }]
 
-vars = { "BUN_VERSION" = "1.2.2", "WALLO_ORIGIN" = "https://wallo.dev" }
+vars = { "BUN_VERSION" = "1.3.5" }
 
 [ai]
 binding = "AI"
@@ -24,3 +24,7 @@ bucket_name = "fuiz"
 [[kv_namespaces]]
 binding = "MAP"
 id = "c8aca143fe384d89aa82e431cf579069"
+
+[[kv_namespaces]]
+binding = "PUBLISH_JOBS"
+id = "6f60c7ca01bb45ba84f5ccb5c16eb4b6"

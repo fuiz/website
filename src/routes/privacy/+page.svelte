@@ -2,10 +2,12 @@
 	import Anchor from '$lib/Anchor.svelte';
 	import Footer from '$lib/Footer.svelte';
 	import MainHeader from '../MainHeader.svelte';
+
+	let { data } = $props();
 </script>
 
 <main>
-	<MainHeader />
+	<MainHeader showLibrary={data.showLibrary} />
 	<section>
 		<h1>Privacy Policy</h1>
 		<p>

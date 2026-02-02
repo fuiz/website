@@ -28,7 +28,7 @@
 {#if code !== null}
 	<Host {code} />
 {:else if id !== null}
-	<Options {id} {data} />
+	<Options {id} />
 {:else}
-	<Create {data} />
+	<Create />
 {/if}

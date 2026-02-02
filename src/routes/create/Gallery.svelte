@@ -16,11 +16,9 @@
 	import { getCreation, deleteCreation, addCreation, generateUuid } from '$lib/storage';
 	import { share } from './lib';
 	import JSZip from 'jszip';
-	import { page } from '$app/state';
-	import { signIn, signOut } from '@auth/sveltekit/client';
 
-	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, data: import('./$types').PageData}}*/
-	let { creations = $bindable(), db, data } = $props();
+	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, showShare?: boolean}}*/
+	let { creations = $bindable(), db, showShare } = $props();
 
 	let sortedCreations = $derived(toSorted(creations, (a, b) => b.lastEdited - a.lastEdited));
 
@@ -238,7 +236,7 @@
 	async function onShare(id, e) {
 		const creation = await getCreation(id, db);
 		if (creation) {
-			await share(creation.config, page.data.user ? creation.uniqueId : undefined);
+			await share(creation.config, undefined);
 		}
 		e.show();
 	}
@@ -292,43 +290,51 @@
 				</div>
 			</FancyButton>
 		</div>
-		{#if data.session}
-			<div>
-				<FancyButton onclick={signOut}>
-					<div
-						style:display="flex"
-						style:align-items="center"
-						style:font-family="Poppins"
-						style:gap="0.2em"
-						style:padding="0.15em 0.25em"
-						style:justify-content="center"
+		{#each db.providers as { provider }}
+			{#if db.remote?.name === provider.name}
+				<div>
+					<FancyButton onclick={() => db.remote?.logout()}>
+						<div
+							style:display="flex"
+							style:align-items="center"
+							style:font-family="Poppins"
+							style:gap="0.2em"
+							style:padding="0.15em 0.25em"
+							style:justify-content="center"
+						>
+							<Icon
+								size="1.25em"
+								src="$lib/assets/logout.svg"
+								alt="Log out from {provider.displayName}"
+							/>
+							<div>Log Out</div>
+						</div>
+					</FancyButton>
+				</div>
+			{:else}
+				<div>
+					<FancyButton
+						onclick={() => provider.login(window.location.pathname + window.location.search)}
 					>
-						<Icon size="1.25em" src="$lib/assets/logout.svg" alt="Log out from OpenCollective" />
-						<div>Log Out</div>
-					</div>
-				</FancyButton>
-			</div>
-		{:else}
-			<div>
-				<FancyButton onclick={signIn}>
-					<div
-						style:display="flex"
-						style:align-items="center"
-						style:font-family="Poppins"
-						style:gap="0.2em"
-						style:padding="0.15em 0.25em"
-						style:justify-content="center"
-					>
-						<Icon
-							size="1.25em"
-							src="$lib/assets/login.svg"
-							alt="Synchronize your data with OpenCollective"
-						/>
-						<div>Backup</div>
-					</div>
-				</FancyButton>
-			</div>
-		{/if}
+						<div
+							style:display="flex"
+							style:align-items="center"
+							style:font-family="Poppins"
+							style:gap="0.2em"
+							style:padding="0.15em 0.25em"
+							style:justify-content="center"
+						>
+							<Icon
+								size="1.25em"
+								src="$lib/assets/login.svg"
+								alt="Synchronize your data with {provider.displayName}"
+							/>
+							<div>Backup to {provider.displayName}</div>
+						</div>
+					</FancyButton>
+				</div>
+			{/if}
+		{/each}
 	</div>
 	<div style:margin="0 0.4em">
 		<div
@@ -362,6 +368,7 @@
 							{lastEdited}
 							{slidesCount}
 							{media}
+							{showShare}
 							ondelete={() => {
 								selectedToDeletion = id;
 								dialog.open();

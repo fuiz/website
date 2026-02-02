@@ -17,8 +17,10 @@
 	 * db: import('$lib/storage').Database;
 	 * errorMessage: string | undefined;
 	 * onshare: (instance: import('tippy.js').Instance) => void;
+	 * showPublish?: boolean;
+	 * showShare?: boolean;
 	 * }} */
-	let { title = $bindable(), id, db, errorMessage, onshare } = $props();
+	let { title = $bindable(), id, db, errorMessage, onshare, showPublish, showShare } = $props();
 
 	/** @type {HTMLElement | undefined} */
 	let shareButton = $state();
@@ -117,22 +119,26 @@
 			/>
 		</div>
 		<div style:display="flex" style:align-items="center" style:gap="0.2em" style:padding="0.2em">
-			<IconButton
-				size="1em"
-				src="$lib/assets/publish.svg"
-				alt={m.publish_title()}
-				onclick={() => goto('publish?id=' + id)}
-			/>
-			<div bind:this={shareButton}>
+			{#if showPublish}
 				<IconButton
 					size="1em"
-					src="$lib/assets/share.svg"
-					alt={m.share()}
-					onclick={() => {
-						if (shareTippyInstance) onshare(shareTippyInstance);
-					}}
+					src="$lib/assets/publish.svg"
+					alt={m.publish_title()}
+					onclick={() => goto('publish?id=' + id)}
 				/>
-			</div>
+			{/if}
+			{#if showShare}
+				<div bind:this={shareButton}>
+					<IconButton
+						size="1em"
+						src="$lib/assets/share.svg"
+						alt={m.share()}
+						onclick={() => {
+							if (shareTippyInstance) onshare(shareTippyInstance);
+						}}
+					/>
+				</div>
+			{/if}
 			<IconButton
 				size="1em"
 				src="$lib/assets/download.svg"
