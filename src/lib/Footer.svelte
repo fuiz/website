@@ -37,6 +37,6 @@
 			<div>GNU AGPLv3</div>
 		</div>
 	</Anchor>
-	<LanguageSwitcher up={true} />
+	<LanguageSwitcher id="footer" up={true} />
 	<DarkModeSwitcher />
 </div>

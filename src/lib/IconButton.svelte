@@ -11,6 +11,7 @@
 	 * onmouseover?: (() => void) | undefined,
 	 * onmouseenter?: (() => void) | undefined,
 	 * onfocus?: (() => void) | undefined,
+	 * popovertarget?: string | undefined
 	}}*/
 	let {
 		src,
@@ -21,7 +22,8 @@
 		onclick,
 		onmouseover,
 		onmouseenter,
-		onfocus
+		onfocus,
+		popovertarget
 	} = $props();
 </script>
 
@@ -36,6 +38,7 @@
 	style:cursor={disabled ? 'normal' : 'pointer'}
 	style:opacity={disabled ? '0.7' : '1'}
 	style:color="inherit"
+	{popovertarget}
 	{disabled}
 	{onclick}
 	{onmouseover}

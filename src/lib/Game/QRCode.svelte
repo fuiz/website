@@ -3,14 +3,14 @@
 
 	import { toDataURL } from 'qrcode';
 	import LoadingCircle from '../LoadingCircle.svelte';
-	import { createDialog } from 'svelte-headlessui';
 
 	/** @type {{url: string;smallSize: string;}} */
 	let { url, smallSize } = $props();
 
 	let image = $derived(toDataURL(url, { scale: 1 }));
 
-	const dialog = createDialog({});
+	/** @type {HTMLDialogElement | undefined} */
+	let dialogElement = $state();
 </script>
 
 {#await image}
@@ -28,7 +28,7 @@
 	</div>
 {:then url}
 	<button
-		onclick={dialog.open}
+		onclick={() => dialogElement?.showModal()}
 		style:font="inherit"
 		style:appearance="none"
 		style:border="none"
@@ -46,39 +46,43 @@
 			style:border-radius="0.2em"
 		/>
 	</button>
-	{#if $dialog.expanded}
-		<div
-			style:position="fixed"
-			style:z-index="1"
-			style:inset="0"
-			style:background="#000000A0"
-			style:display="flex"
-			style:height="100%"
-			style:width="100%"
+
+	<dialog
+		bind:this={dialogElement}
+		closedby="any"
+		style:border="none"
+		style:background="transparent"
+		style:padding="0"
+		style:max-width="none"
+		style:max-height="none"
+	>
+		<button
+			onclick={() => dialogElement?.close()}
+			style:appearance="none"
+			style:border="none"
+			style:font="inherit"
+			style:box-sizing="border-box"
+			style:background="none"
+			style:padding="0"
+			style:cursor="pointer"
 		>
-			<div style:margin="auto" use:dialog.modal>
-				<button
-					onclick={dialog.close}
-					style:appearance="none"
-					style:border="none"
-					style:font="inherit"
-					style:box-sizing="border-box"
-					style:background="none"
-					style:padding="0"
-				>
-					<img
-						src={url}
-						style:margin="auto"
-						style:height="80vmin"
-						style:width="auto"
-						style:aspect-ratio="1"
-						style:max-height="700px"
-						alt={m.qr_code()}
-						style:image-rendering="pixelated"
-						style:border-radius="5px"
-					/>
-				</button>
-			</div>
-		</div>
-	{/if}
+			<img
+				src={url}
+				style:margin="auto"
+				style:height="80vmin"
+				style:width="auto"
+				style:aspect-ratio="1"
+				style:max-height="700px"
+				alt={m.qr_code()}
+				style:image-rendering="pixelated"
+				style:border-radius="5px"
+			/>
+		</button>
+	</dialog>
 {/await}
+
+<style>
+	dialog::backdrop {
+		background-color: rgba(0, 0, 0, 0.63);
+	}
+</style>

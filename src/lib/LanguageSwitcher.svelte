@@ -1,32 +1,28 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { locales, setLocale } from '$lib/paraglide/runtime.js';
+	import { locales, setLocale, type Locale } from '$lib/paraglide/runtime.js';
 	import IconButton from './IconButton.svelte';
-	import { createDialog } from 'svelte-headlessui';
 
-	const dialog = createDialog();
+	let popoverElement = $state<HTMLElement>();
 
-	/** @type {{ up?: boolean }}*/
-	let { up = false } = $props();
+	let { up = false, id }: { up?: boolean; id: string } = $props();
+
+	function handleLanguageSelect(lang: Locale) {
+		setLocale(lang);
+		popoverElement?.hidePopover();
+	}
 </script>
 
 <div>
-	<IconButton
-		onclick={() => {
-			dialog.open();
-		}}
-		src="$lib/assets/language.svg"
-		alt={m.language()}
-		size="1em"
-	/>
+	<IconButton src="$lib/assets/language.svg" alt={m.language()} size="1em" popovertarget={id} />
 
-	{#if $dialog.expanded}
-		<ul use:dialog.modal style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>
+	<div {id} bind:this={popoverElement} popover="auto" style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>
+		<ul>
 			{#each locales as lang}
 				<li>
 					<!-- the hreflang attribute decides which language the link points to -->
-					<button onclick={() => setLocale(lang)}>
+					<button onclick={() => handleLanguageSelect(lang)}>
 						{new Intl.DisplayNames([lang], {
 							type: 'language'
 						}).of(lang)}
@@ -34,7 +30,7 @@
 				</li>
 			{/each}
 		</ul>
-	{/if}
+	</div>
 </div>
 
 <style>
@@ -42,21 +38,31 @@
 		position: relative;
 	}
 
-	ul {
+	[popover] {
 		position: absolute;
 		background: var(--background-color);
 		border: 0.1em solid;
 		border-radius: 0.7em;
 		transform-origin: top;
-		padding: 0.3em;
+		padding: 0;
 		transform: translateX(calc(-100% + 1.25em)) translateY(var(--y));
-
-		z-index: 100;
 		margin: 0.15em 0;
+		color: inherit;
+		inset: unset;
 	}
 
-	ul:dir(rtl) {
+	[popover]:dir(rtl) {
 		transform: translateX(calc(100% - 1.25em)) translateY(var(--y));
+	}
+
+	[popover]::backdrop {
+		background-color: transparent;
+	}
+
+	ul {
+		list-style: none;
+		padding: 0.3em;
+		margin: 0;
 	}
 
 	li {

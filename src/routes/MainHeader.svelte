@@ -48,7 +48,7 @@
 				</div>
 			</FancyAnchorButton>
 		</div>
-		<LanguageSwitcher />
+		<LanguageSwitcher id="mainheader" />
 		<DarkModeSwitcher />
 	</nav>
 </header>

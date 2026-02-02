@@ -92,7 +92,7 @@
 			bind:state={bindableGameInfo.locked}
 			onchange={onlock}
 		/>
-		<LanguageSwitcher />
+		<LanguageSwitcher id="topbar" />
 		<DarkModeSwitcher />
 		<StatedIconButton
 			icons={[
