@@ -15,6 +15,7 @@
 	import Grade from './Grade.svelte';
 	import type { PublishingState } from '../api/library/publish-stream/types';
 	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
+	import ConfirmationDialog from '$lib/ConfirmationDialog.svelte';
 
 	let {
 		creation = $bindable(),
@@ -40,7 +41,7 @@
 
 	let publishingState = $state<PublishingState | null>(null);
 
-	let warningDialog: HTMLDialogElement;
+	let warningDialog: ConfirmationDialog | undefined = $state();
 
 	const steps = [
 		{ state: 'generating-keywords' as const, label: 'Generating keywords' },
@@ -230,7 +231,7 @@
 				style:gap="0.5em"
 				onsubmit={(e) => {
 					e.preventDefault();
-					warningDialog?.showModal();
+					warningDialog?.open();
 				}}
 			>
 				{#if publishError}
@@ -331,42 +332,14 @@
 	</section>
 </TypicalPage>
 
-<dialog
+<ConfirmationDialog
 	bind:this={warningDialog}
-	style:border="0.15em solid currentcolor"
-	style:border-radius="0.7em"
-	style:padding="1.5em"
-	style:max-width="35ch"
-	style:background="var(--background-color)"
-	style:color="inherit"
->
-	<h2 style:font-family="Poppins" style:margin="0 0 0.5em 0" style:font-size="1.25em">Warning</h2>
-	<p style:margin="0 0 1em 0">
-		Requesting to publish this fuiz will make it <strong>public to everyone</strong> after it is reviewed
-		and approved. Your fuiz will be visible in the public library and accessible to all users.
-	</p>
-	<div style:display="flex" style:gap="0.5em" style:justify-content="flex-end">
-		<FancyButton
-			type="button"
-			backgroundColor="#666666"
-			backgroundDeepColor="#444444"
-			onclick={() => {
-				warningDialog.close();
-			}}
-		>
-			<div style:font-family="Poppins">Cancel</div>
-		</FancyButton>
-		<FancyButton
-			type="button"
-			onclick={() => {
-				warningDialog.close();
-				publish();
-			}}
-		>
-			<div style:font-family="Poppins">Continue</div>
-		</FancyButton>
-	</div>
-</dialog>
+	title="Warning"
+	message="Requesting to publish this fuiz will make it public to everyone after it is reviewed and approved. Your fuiz will be visible in the public library and accessible to all users."
+	cancelText="Cancel"
+	confirmText="Continue"
+	onConfirm={publish}
+/>
 
 <style>
 	p {
@@ -385,9 +358,5 @@
 
 	.step-active {
 		font-weight: bold;
-	}
-
-	dialog::backdrop {
-		background-color: rgba(0, 0, 0, 0.5);
 	}
 </style>

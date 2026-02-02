@@ -2,8 +2,6 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import GalleryCreation from './GalleryCreation.svelte';
-	import { createDialog } from 'svelte-headlessui';
-
 	import { addIds, downloadFuiz, removeIds } from '$lib';
 	import FancyButton from '$lib/FancyButton.svelte';
 	import { goto } from '$app/navigation';
@@ -16,6 +14,7 @@
 	import { getCreation, deleteCreation, addCreation, generateUuid } from '$lib/storage';
 	import { share } from './lib';
 	import JSZip from 'jszip';
+	import ConfirmationDialog from '$lib/ConfirmationDialog.svelte';
 
 	/** @type {{creations: import('$lib/types').Creation[], db: import('$lib/storage').Database, showShare?: boolean}}*/
 	let { creations = $bindable(), db, showShare } = $props();
@@ -56,7 +55,8 @@
 		creations = creations.filter((c) => c.id != id);
 	}
 
-	const dialog = createDialog();
+	/** @type {ConfirmationDialog | undefined} */
+	let deleteDialog = $state();
 	let selectedToDeletion = $state(0);
 
 	/** @type {HTMLInputElement | undefined} */
@@ -371,56 +371,13 @@
 							{showShare}
 							ondelete={() => {
 								selectedToDeletion = id;
-								dialog.open();
+								deleteDialog?.open();
 							}}
 							onplay={() => goto('host?id=' + id)}
 							ondownload={() => onDownload(id)}
 							onshare={(e) => onShare(id, e)}
 						/>
 					{/each}
-					{#if $dialog.expanded}
-						<div
-							style:position="fixed"
-							style:background="color-mix(in srgb, var(--background-color) 80%, transparent)"
-							style:display="flex"
-							style:padding="0.5em"
-							style:inset="0"
-							style:z-index="1"
-						>
-							<div
-								style:margin="auto"
-								style:background="var(--background-color)"
-								style:padding="0.5em"
-								style:border="0.2em solid"
-								style:border-radius="0.7em"
-								use:dialog.modal
-							>
-								<h3 style:margin="0 0 0.4em">{m.delete_forever()}</h3>
-								<div style:display="flex" style:gap="0.5em" style:flex-wrap="wrap">
-									<div style:flex="1">
-										<FancyButton
-											backgroundColor="var(--background-color)"
-											backgroundDeepColor="currentcolor"
-											foregroundColor="currentColor"
-											onclick={dialog.close}
-										>
-											<div style:padding="0.2em 0.4em">{m.cancel()}</div>
-										</FancyButton>
-									</div>
-									<div style:flex="1">
-										<FancyButton
-											onclick={() => {
-												deleteSlide(selectedToDeletion);
-												dialog.close();
-											}}
-										>
-											<div style:padding="0.2em 0.4em">{m.delete_confirm()}</div>
-										</FancyButton>
-									</div>
-								</div>
-							</div>
-						</div>
-					{/if}
 				</div>
 			{:else}
 				<div
@@ -436,3 +393,11 @@
 		</div>
 	</div>
 </TypicalPage>
+
+<ConfirmationDialog
+	bind:this={deleteDialog}
+	title={m.delete_forever()}
+	message=""
+	confirmText={m.delete_confirm()}
+	onConfirm={() => deleteSlide(selectedToDeletion)}
+/>
