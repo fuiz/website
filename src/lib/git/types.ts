@@ -30,7 +30,9 @@ export interface GitUser {
 }
 
 export interface PROptions {
+	sourceProjectId: number;
 	sourceBranch: string;
+	targetProjectId: number;
 	targetBranch: string;
 	title: string;
 	description: string;

@@ -23,10 +23,11 @@ export abstract class BaseGitClient {
 
 	/**
 	 * Create a new branch
+	 * @param projectId Project identifier
 	 * @param name Branch name
 	 * @param from Source branch or commit (defaults to default branch)
 	 */
-	abstract createBranch(name: string, from?: string): Promise<BranchInfo>;
+	abstract createBranch(projectId: number, name: string, from?: string): Promise<BranchInfo>;
 
 	/**
 	 * Create a pull/merge request
@@ -64,11 +65,13 @@ export abstract class BaseGitClient {
 	/**
 	 * Create multiple files in a single commit
 	 * More efficient than creating files one by one
+	 * @param projectId Project identifier
 	 * @param files Array of files to create
 	 * @param branch Branch name
 	 * @param message Commit message
 	 */
 	abstract createMultipleFiles(
+		projectId: number,
 		files: Array<{ path: string; content: string; encoding?: 'text' | 'base64' }>,
 		branch: string,
 		message: string
@@ -76,7 +79,10 @@ export abstract class BaseGitClient {
 
 	/**
 	 * Fork the repository to the authenticated user's account
-	 * Returns the forked project path/identifier
+	 * Returns the forked project identifier
 	 */
-	abstract forkRepository(): Promise<string>;
+	abstract forkRepository(): Promise<{
+		forkId: number;
+		upstreamId: number;
+	}>;
 }

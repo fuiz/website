@@ -133,7 +133,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				// Fork repository
 				send('progress', { state: 'forking', message: 'Forking repository...' });
 				const client = createGitClient(provider, tokens);
-				await client.forkRepository();
+				const { forkId, upstreamId } = await client.forkRepository();
 
 				// Extract images and convert them to local references
 				const imageFiles = new Map<string, ImageFile>();
@@ -169,7 +169,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				const branchName = `submission/${fuizId}`;
 				const defaultBranch = env.GIT_DEFAULT_BRANCH || 'main';
 
-				await client.createBranch(branchName, defaultBranch);
+				await client.createBranch(forkId, branchName, defaultBranch);
 
 				// Upload files
 				send('progress', { state: 'uploading', message: 'Uploading files...' });
@@ -189,6 +189,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				];
 
 				await client.createMultipleFiles(
+					forkId,
 					filesToUpload,
 					branchName,
 					`Add fuiz: ${fuizConfig.config.title} (${filesToUpload.length} files)`
@@ -221,6 +222,8 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				const pr = await client.createPullRequest({
 					sourceBranch: branchName,
 					targetBranch: defaultBranch,
+					sourceProjectId: forkId,
+					targetProjectId: upstreamId,
 					title: `[Submission] ${fuizConfig.config.title}`,
 					description: prBody
 				});

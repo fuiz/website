@@ -10,8 +10,6 @@ import type { OAuthTokens, PROptions, PRResponse, BranchInfo, GitUser } from './
 export class GitLabClient extends BaseGitClient {
 	private apiBase = 'https://gitlab.com/api/v4';
 	private projectPath: string;
-	private forkedProjectPath?: string;
-	private upstreamProjectId?: number;
 
 	constructor(tokens: OAuthTokens, repoOwner: string, repoName: string) {
 		super(tokens, repoOwner, repoName);
@@ -57,17 +55,14 @@ export class GitLabClient extends BaseGitClient {
 		};
 	}
 
-	async createBranch(name: string, from: string = 'main'): Promise<BranchInfo> {
-		// Use forked project if available, otherwise use main project
-		const targetProject = this.forkedProjectPath || this.projectPath;
-
+	async createBranch(projectId: number, name: string, from: string = 'main'): Promise<BranchInfo> {
 		const response = await this.request<{
 			name: string;
 			commit: {
 				id: string;
 				message: string;
 			};
-		}>(`/projects/${targetProject}/repository/branches`, {
+		}>(`/projects/${projectId}/repository/branches`, {
 			method: 'POST',
 			body: JSON.stringify({
 				branch: name,
@@ -85,28 +80,15 @@ export class GitLabClient extends BaseGitClient {
 	}
 
 	async createPullRequest(options: PROptions): Promise<PRResponse> {
-		// If we have a fork, create MR from fork to upstream
-		// Otherwise, create MR within the same project
-		const body =
-			this.forkedProjectPath && this.upstreamProjectId
-				? {
-						source_branch: options.sourceBranch,
-						target_branch: options.targetBranch,
-						target_project_id: this.upstreamProjectId,
-						title: options.title,
-						description: options.description
-					}
-				: {
-						source_branch: options.sourceBranch,
-						target_branch: options.targetBranch,
-						title: options.title,
-						description: options.description
-					};
+		const body = {
+			source_branch: options.sourceBranch,
+			target_branch: options.targetBranch,
+			target_project_id: options.targetProjectId,
+			title: options.title,
+			description: options.description
+		};
 
-		// Create MR from forked project if it exists
-		const targetProject = this.forkedProjectPath || this.projectPath;
-
-		console.log('[GitLab] Creating merge request from:', targetProject);
+		console.log('[GitLab] Creating merge request from:', options.sourceProjectId);
 		const response = await this.request<{
 			id: number;
 			iid: number;
@@ -117,7 +99,7 @@ export class GitLabClient extends BaseGitClient {
 			title: string;
 			merged_at?: string;
 			merge_commit_sha?: string;
-		}>(`/projects/${targetProject}/merge_requests`, {
+		}>(`/projects/${options.sourceProjectId}/merge_requests`, {
 			method: 'POST',
 			body: JSON.stringify(body)
 		});
@@ -211,6 +193,7 @@ export class GitLabClient extends BaseGitClient {
 	 * More efficient than creating files one by one
 	 */
 	async createMultipleFiles(
+		projectId: number,
 		files: Array<{ path: string; content: string; encoding?: 'text' | 'base64' }>,
 		branch: string,
 		message: string
@@ -222,10 +205,7 @@ export class GitLabClient extends BaseGitClient {
 			encoding: file.encoding || 'text'
 		}));
 
-		// Use forked project if available, otherwise use main project
-		const targetProject = this.forkedProjectPath || this.projectPath;
-
-		await this.request(`/projects/${targetProject}/repository/commits`, {
+		await this.request(`/projects/${projectId}/repository/commits`, {
 			method: 'POST',
 			body: JSON.stringify({
 				branch,
@@ -237,46 +217,71 @@ export class GitLabClient extends BaseGitClient {
 
 	/**
 	 * Fork the repository to the authenticated user's account
-	 * Returns the forked project path
+	 * Returns the forked project identifier
 	 */
-	async forkRepository(): Promise<string> {
+	async forkRepository(): Promise<{
+		forkId: number;
+		upstreamId: number;
+	}> {
 		try {
-			// Get upstream project ID
-			const upstreamProject = await this.request<{ id: number }>(`/projects/${this.projectPath}`);
-			this.upstreamProjectId = upstreamProject.id;
+			const upstreamProject = await this.request<{
+				id: number;
+			}>(`/projects/${this.projectPath}`);
 
-			// Check if fork already exists
-			const user = await this.getCurrentUser();
-			const potentialForkPath = encodeURIComponent(`${user.username}/${this.repoName}`);
+			const upstreamId = upstreamProject.id;
 
-			try {
-				await this.request(`/projects/${potentialForkPath}`);
-				// Fork exists, use it
-				this.forkedProjectPath = potentialForkPath;
-				console.log('[GitLab] Using existing fork:', potentialForkPath);
-				return potentialForkPath;
-			} catch {
-				// Fork doesn't exist, create it
+			// Check if fork already exists with Owner access
+			// List all forks where user has Owner access (min_access_level=50)
+			// https://docs.gitlab.com/api/project_forks/
+			console.log('[GitLab] Checking for existing forks with owner access...');
+			const forks = await this.request<
+				Array<{
+					id: number;
+					import_status?: string;
+				}>
+			>(`/projects/${upstreamId}/forks?min_access_level=50`);
+
+			// If any fork with owner access exists, use the first one
+			if (forks.length > 0) {
+				const fork = forks[0];
+				console.log('[GitLab] Using existing fork with owner access:', fork.id);
+
+				// Ensure fork is ready
+				if (
+					fork.import_status &&
+					fork.import_status !== 'finished' &&
+					fork.import_status !== 'none'
+				) {
+					console.log('[GitLab] Waiting for fork to complete...');
+					await this.waitForFork(fork.id);
+				}
+
+				return {
+					forkId: fork.id,
+					upstreamId
+				};
 			}
 
-			// Create fork
-			console.log('[GitLab] Creating fork...');
+			// No fork with owner access exists, try to create one
+			console.log('[GitLab] No fork with owner access found, creating new fork...');
 			const response = await this.request<{
 				id: number;
-				path_with_namespace: string;
-			}>(`/projects/${this.projectPath}/fork`, {
+			}>(`/projects/${upstreamId}/fork`, {
 				method: 'POST',
 				body: JSON.stringify({})
 			});
 
-			this.forkedProjectPath = encodeURIComponent(response.path_with_namespace);
+			const forkId = response.id;
 
 			// Wait for fork to complete (GitLab forks asynchronously)
 			console.log('[GitLab] Waiting for fork to complete...');
-			await this.waitForFork(this.forkedProjectPath);
-			console.log('[GitLab] Fork ready:', this.forkedProjectPath);
+			await this.waitForFork(forkId);
+			console.log('[GitLab] Fork ready:', forkId);
 
-			return this.forkedProjectPath;
+			return {
+				forkId,
+				upstreamId
+			};
 		} catch (error) {
 			console.error('Fork creation failed:', error);
 			throw new Error('Failed to fork repository');
@@ -286,10 +291,10 @@ export class GitLabClient extends BaseGitClient {
 	/**
 	 * Wait for fork to complete (GitLab forks are created asynchronously)
 	 */
-	private async waitForFork(forkPath: string, maxAttempts: number = 30): Promise<void> {
+	private async waitForFork(forkId: number, maxAttempts: number = 30): Promise<void> {
 		for (let i = 0; i < maxAttempts; i++) {
 			try {
-				const project = await this.request<{ import_status: string }>(`/projects/${forkPath}`);
+				const project = await this.request<{ import_status: string }>(`/projects/${forkId}`);
 
 				if (project.import_status === 'finished' || project.import_status === 'none') {
 					return;

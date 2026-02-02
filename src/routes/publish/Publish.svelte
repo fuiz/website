@@ -338,6 +338,7 @@
 	style:padding="1.5em"
 	style:max-width="35ch"
 	style:background="var(--background-color)"
+	style:color="inherit"
 >
 	<h2 style:font-family="Poppins" style:margin="0 0 0.5em 0" style:font-size="1.25em">Warning</h2>
 	<p style:margin="0 0 1em 0">
