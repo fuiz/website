@@ -3,14 +3,14 @@
 
 	import GalleryCreation from './GalleryCreation.svelte';
 	import { addIds, removeIds } from '$lib';
-	import FancyButton from '$lib/FancyButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import ghost from '$lib/assets/ghost.svg';
 	import { parse } from '@ltd/j-toml';
 	import { getMedia, mapIdlessMedia, type Creation, type Media } from '$lib/types';
 	import { isNotUndefined, toSorted } from '$lib/util';
-	import TypicalPage from '$lib/TypicalPage.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import {
 		getCreation,
 		deleteCreation,
@@ -20,7 +20,7 @@
 		type CreationId
 	} from '$lib/storage';
 	import { share } from './lib';
-	import ConfirmationDialog from '$lib/ConfirmationDialog.svelte';
+	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 	import { downloadFuiz, loadSingleToml, loadZip } from '$lib/clientOnly';
 
 	let {

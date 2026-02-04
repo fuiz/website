@@ -1,11 +1,11 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 	import factual from '$lib/assets/correct.svg';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import TimeLeft from '$lib/Game/TimeLeft.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
-	import Icon from '$lib/Icon.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import { buttonColors } from '$lib';
 	import { toSorted } from '$lib/util';
 

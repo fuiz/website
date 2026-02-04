@@ -1,16 +1,16 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Fullscreen from '$lib/Fullscreen.svelte';
+	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import volume_up from '$lib/assets/volume_up.svg';
 	import volume_off from '$lib/assets/volume_off.svg';
 	import unlocked from '$lib/assets/unlocked.svg';
 	import locked from '$lib/assets/locked.svg';
-	import IconButton from '$lib/IconButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import skip from '$lib/assets/skip.svg';
-	import StatedIconButton from '$lib/StatedIconButton.svelte';
-	import LanguageSwitcher from '$lib/LanguageSwitcher.svelte';
-	import DarkModeSwitcher from '$lib/DarkModeSwitcher.svelte';
+	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
+	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
+	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import ExitFuiz from './ExitFuiz.svelte';
 
 	/** @type {{

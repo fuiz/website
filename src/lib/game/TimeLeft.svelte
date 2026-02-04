@@ -3,7 +3,7 @@
 
 	import hourglassFilled from '$lib/assets/hourglass_filled.svg';
 	import hourglassEmpty from '$lib/assets/hourglass_empty.svg';
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{ timeLeft: number, timeStarted: number }} */
 	let { timeLeft, timeStarted } = $props();

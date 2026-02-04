@@ -3,9 +3,9 @@
 
 	import { goto } from '$app/navigation';
 	import { limits } from '$lib';
-	import IconButton from '$lib/IconButton.svelte';
-	import Logo from '$lib/Logo.svelte';
-	import Textfield from '$lib/Textfield.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
+	import Logo from '$lib/media/Logo.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
 	import { getCreation } from '$lib/storage';
 	import { onMount } from 'svelte';
 	import tippy from 'tippy.js';

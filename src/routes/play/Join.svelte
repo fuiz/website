@@ -3,13 +3,13 @@
 
 	import { goto } from '$app/navigation';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
-	import ErrorMessage from '$lib/ErrorMessage.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Footer from '$lib/Footer.svelte';
-	import Header from '$lib/Header.svelte';
-	import LoadingCircle from '$lib/LoadingCircle.svelte';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import Textfield from '$lib/Textfield.svelte';
+	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
+	import Header from '$lib/layout/Header.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
 	import { bring } from '$lib/util';
 
 	let sending = $state(false);

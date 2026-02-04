@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors, limits } from '$lib';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Icon from '$lib/Icon.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import variables from '$lib/assets/variables.svg';
 	import { scale } from 'svelte/transition';
 	import Answer from './Answer.svelte';

@@ -2,16 +2,16 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { playIdlessConfig } from '$lib';
-	import ErrorMessage from '$lib/ErrorMessage.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Loading from '$lib/Loading.svelte';
-	import Switch from '$lib/Switch.svelte';
-	import TypicalPage from '$lib/TypicalPage.svelte';
-	import Slider from '$lib/Slider.svelte';
+	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import Switch from '$lib/ui/Switch.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import Slider from '$lib/ui/Slider.svelte';
 	import { getCreation, loadDatabase } from '$lib/storage';
-	import ErrorPage from '$lib/ErrorPage.svelte';
-	import LoadingCircle from '$lib/LoadingCircle.svelte';
-	import Radio from '$lib/Radio.svelte';
+	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
+	import Radio from '$lib/ui/Radio.svelte';
 
 	/** @type {{ id: import('$lib/storage').CreationId}}*/
 	let { id } = $props();

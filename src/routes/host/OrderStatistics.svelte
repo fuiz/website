@@ -1,13 +1,13 @@
 <script>
 	import * as m from '$lib/paraglide/messages';
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import factual from '$lib/assets/correct.svg';
-	import TextAnswerButton from '$lib/Game/TextAnswerButton.svelte';
-	import Icon from '$lib/Icon.svelte';
+	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import wrong from '$lib/assets/wrong.svg';
-	import VerticalSplit from '$lib/Game/VerticalSplit.svelte';
+	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 
 	/** @type {{
 	 * bindableGameInfo: import('./+page').BindableGameInfo;

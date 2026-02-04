@@ -1,6 +1,6 @@
 <script>
 	import image from '$lib/assets/image.svg';
-	import Icon from './Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 </script>
 
 <div

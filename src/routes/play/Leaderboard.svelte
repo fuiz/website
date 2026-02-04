@@ -2,10 +2,10 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { medalColors } from '$lib';
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 	import medal from '$lib/assets/medal.svg';
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{name: string;score: number;position: number | undefined;final: boolean;}} */
 	let { name, score, position, final } = $props();

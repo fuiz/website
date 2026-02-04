@@ -1,9 +1,9 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 
 	/** @type {{bindableGameInfo: import('./+page').BindableGameInfo;gameInfo: import('./+page').SharedGameInfo;winners: string[];lock: () => void;next: () => void;}} */
 	let { bindableGameInfo = $bindable(), gameInfo, winners, lock, next } = $props();

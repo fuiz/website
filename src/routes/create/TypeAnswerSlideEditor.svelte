@@ -2,12 +2,12 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { limits } from '$lib';
-	import Textarea from '$lib/Textarea.svelte';
+	import Textarea from '$lib/ui/Textarea.svelte';
 	import MediaChooser from './MediaChooser.svelte';
 	import deleteAnswer from '$lib/assets/delete.svg';
-	import Textfield from '$lib/Textfield.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import IconButton from '$lib/IconButton.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 
 	/** @type {{slide: import('$lib/types').TypeAnswer;}} */
 	let { slide = $bindable() } = $props();

@@ -1,7 +1,7 @@
 <script>
 	import { buttonColors, buttonSymbols } from '$lib';
-	import Icon from '$lib/Icon.svelte';
-	import FancyButton from '../FancyButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 
 	/** @type {{index: number, onclick?: () => void}} */
 	let { index, onclick } = $props();

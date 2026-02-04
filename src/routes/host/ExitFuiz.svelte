@@ -1,10 +1,10 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import icon from '$lib/assets/icon.svg';
 	import { goto } from '$app/navigation';
-	import ConfirmationDialog from '$lib/ConfirmationDialog.svelte';
+	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 
 	let exitDialog: ConfirmationDialog | undefined = $state();
 </script>

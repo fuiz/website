@@ -3,8 +3,8 @@
 
 	import { page } from '$app/state';
 	import Editor from './Editor.svelte';
-	import Loading from '$lib/Loading.svelte';
-	import ErrorPage from '$lib/ErrorPage.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Gallery from './Gallery.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
 	import {

@@ -1,14 +1,14 @@
 <script>
-	import AnsweredCount from '$lib/Game/AnsweredCount.svelte';
+	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
 	import think from '$lib/assets/kevin_macleod_thinking_music.mp3';
-	import Answers from '$lib/Game/Answers.svelte';
-	import MediaContainer from '$lib/MediaContainer.svelte';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import TimeLeft from '$lib/Game/TimeLeft.svelte';
-	import VerticalTripleSplit from '$lib/Game/VerticalTripleSplit.svelte';
+	import Answers from '$lib/game/Answers.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import TimeLeft from '$lib/game/TimeLeft.svelte';
+	import VerticalTripleSplit from '$lib/game/VerticalTripleSplit.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
-	import Audio from '$lib/Audio.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
+	import Audio from '$lib/media/Audio.svelte';
 
 	/** @type {{bindableGameInfo: import('./+page').BindableGameInfo, gameInfo: import('./+page').SharedGameInfo, questionText: string, answers: (string | undefined)[], timeLeft: number | undefined, timeStarted: number | undefined, answeredCount: number, media: import('$lib/types').Media | undefined, onlock?: (locked: boolean) => void, onnext?: () => void, onanswer?: (answer: number) => void}}*/
 	let {

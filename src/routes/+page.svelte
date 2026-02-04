@@ -2,17 +2,17 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import warning from '$lib/assets/error.svg';
 
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import logo from '$lib/assets/same_color_logo.svg';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
-	import Anchor from '$lib/Anchor.svelte';
+	import Anchor from '$lib/navigation/Anchor.svelte';
 	import QuestionAnswers from './host/QuestionAnswers.svelte';
-	import AnchorMessage from '$lib/AnchorMessage.svelte';
+	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import MainHeader from './MainHeader.svelte';
-	import Footer from '$lib/Footer.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
 	import QuestionStatistics from './host/QuestionStatistics.svelte';
 	import { onMount } from 'svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let { data = $bindable() } = $props();

@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from './Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{
 	* id: string;

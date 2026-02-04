@@ -2,15 +2,15 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors, limits } from '$lib';
-	import Textarea from '$lib/Textarea.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
+	import Textarea from '$lib/ui/Textarea.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import MediaChooser from './MediaChooser.svelte';
 	import arrowDown from '$lib/assets/arrow-down.svg';
 	import addAnswer from '$lib/assets/add.svg';
-	import Textfield from '$lib/Textfield.svelte';
-	import IconButton from '$lib/IconButton.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import deleteAnswer from '$lib/assets/delete.svg';
-	import Textbox from '$lib/Textbox.svelte';
+	import Textbox from '$lib/ui/Textbox.svelte';
 
 	/** @type {{slide: import('$lib/types').OrderSlide;}} */
 	let { slide = $bindable() } = $props();

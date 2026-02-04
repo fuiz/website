@@ -2,11 +2,11 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors, limits } from '$lib';
-	import Checkbox from '$lib/Checkbox.svelte';
+	import Checkbox from '$lib/ui/Checkbox.svelte';
 	import deleteAnswer from '$lib/assets/delete.svg';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Textbox from '$lib/Textbox.svelte';
-	import IconButton from '$lib/IconButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Textbox from '$lib/ui/Textbox.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 
 	/** @type {{correct: boolean;content: import('$lib/types').TextOrMedia;index: number;attention?: boolean;onclick?: () => void;}} */
 	let {

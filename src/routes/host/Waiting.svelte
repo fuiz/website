@@ -1,20 +1,20 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 	import { PUBLIC_DISPLAY_PLAY_URL, PUBLIC_PLAY_URL } from '$env/static/public';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Fullscreen from '$lib/Fullscreen.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import bee3 from '$lib/assets/bee3.mp3';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import Audio from '$lib/Audio.svelte';
-	import PlayersList from '$lib/Game/PlayersList.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import Audio from '$lib/media/Audio.svelte';
+	import PlayersList from '$lib/game/PlayersList.svelte';
 	import volume_up from '$lib/assets/volume_up.svg';
 	import volume_off from '$lib/assets/volume_off.svg';
 	import unlocked from '$lib/assets/unlocked.svg';
 	import locked from '$lib/assets/locked.svg';
-	import QrCode from '$lib/Game/QRCode.svelte';
+	import QrCode from '$lib/game/QRCode.svelte';
 	import { onMount } from 'svelte';
-	import StatedIconButton from '$lib/StatedIconButton.svelte';
-	import Icon from '$lib/Icon.svelte';
+	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import ExitFuiz from './ExitFuiz.svelte';
 	import tippy from 'tippy.js';
 	import { localizeHref } from '$lib/paraglide/runtime';

@@ -1,21 +1,21 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Textfield from '$lib/Textfield.svelte';
-	import TypicalPage from '$lib/TypicalPage.svelte';
-	import SelectTime from '$lib/SelectTime.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import SelectTime from '$lib/ui/SelectTime.svelte';
 	import { locales, getLocale, type Locale } from '$lib/paraglide/runtime.js';
-	import Icon from '$lib/Icon.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import MediaContainer from '$lib/MediaContainer.svelte';
-	import LoadingCircle from '$lib/LoadingCircle.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import { getMedia, type FullOnlineFuiz, type GenericIdlessSlide, type Media } from '$lib/types';
 	import { type ExportedFuiz } from '$lib/storage';
 	import Subject from './Subject.svelte';
 	import Grade from './Grade.svelte';
 	import type { PublishingState } from '../api/library/publish-stream/types';
-	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
-	import ConfirmationDialog from '$lib/ConfirmationDialog.svelte';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 
 	let {
 		creation = $bindable(),

@@ -4,10 +4,10 @@
 	import { buttonColors } from '$lib';
 	import delete_image from '$lib/assets/delete.svg';
 	import add_photo from '$lib/assets/add_photo.svg';
-	import MediaDisplay from '$lib/MediaDisplay.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import Textarea from '$lib/Textarea.svelte';
-	import IconButton from '$lib/IconButton.svelte';
+	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import Textarea from '$lib/ui/Textarea.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import tippy from 'tippy.js';
 
 	/** @type {{media: import('$lib/types').Media | null | undefined;}} */

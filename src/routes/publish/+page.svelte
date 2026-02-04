@@ -2,15 +2,15 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { page } from '$app/state';
-	import Loading from '$lib/Loading.svelte';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import Header from '$lib/Header.svelte';
-	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
-	import Footer from '$lib/Footer.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import Header from '$lib/layout/Header.svelte';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
 	import Publish from './Publish.svelte';
 	import { getAllCreations, getCreation, loadDatabase } from '$lib/storage';
-	import ErrorMessage from '$lib/ErrorMessage.svelte';
+	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import { toSorted } from '$lib/util';
 	import { localizeHref } from '$lib/paraglide/runtime';
 

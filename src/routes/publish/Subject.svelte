@@ -1,5 +1,5 @@
 <script>
-	import RegularCheckbox from '$lib/regular-checkbox.svelte';
+	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 	import { subjects } from '$lib/types';
 
 	/** @type {{tags: string[];}} */

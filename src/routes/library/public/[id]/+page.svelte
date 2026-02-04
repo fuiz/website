@@ -1,10 +1,10 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import TypicalPage from '$lib/TypicalPage.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import MediaContainer from '$lib/MediaContainer.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
 	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime';

@@ -1,13 +1,13 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import { grades, subjects } from '$lib/types';
 	import OnlinePublised from './OnlinePublised.svelte';
-	import LoadingCircle from '$lib/LoadingCircle.svelte';
-	import Textfield from '$lib/Textfield.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
 	import { debounce } from '$lib/util';
-	import RegularCheckbox from '$lib/regular-checkbox.svelte';
+	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 	import { locales } from '$lib/paraglide/runtime';
 	import { untrack } from 'svelte';
 

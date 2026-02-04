@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { limits } from '$lib';
-	import Icon from '$lib/Icon.svelte';
-	import SelectTime from '$lib/SelectTime.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import SelectTime from '$lib/ui/SelectTime.svelte';
 
 	/** @type {{activeSlide: import('$lib/types').MultipleChoiceSlide;}} */
 	let { activeSlide = $bindable() } = $props();

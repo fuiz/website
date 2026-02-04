@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { limits } from '$lib';
-	import FancyButton from '$lib/FancyButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { flip } from 'svelte/animate';
 	import left from '$lib/assets/left.svg';
 	import right from '$lib/assets/right.svg';
@@ -11,8 +11,8 @@
 	import Thumbnail from './Thumbnail.svelte';
 	import { dndzone } from 'svelte-dnd-action';
 	import add_slide from '$lib/assets/add_slide.svg';
-	import Icon from '$lib/Icon.svelte';
-	import IconButton from '$lib/IconButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import { tick } from 'svelte';
 
 	/** @type {{slides: import('$lib/types').Slide[];selectedSlideIndex: number;}} */
