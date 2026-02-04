@@ -1,9 +1,9 @@
 <script>
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
-	import MediaContainer from '$lib/MediaContainer.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
 
 	/** @type {{name: string;score: number;questionText: string;media: import('$lib/types').Media | undefined;}} */
 	let { name, score, questionText, media } = $props();

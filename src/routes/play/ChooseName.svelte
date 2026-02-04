@@ -1,13 +1,13 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import ErrorMessage from '$lib/ErrorMessage.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Footer from '$lib/Footer.svelte';
-	import Header from '$lib/Header.svelte';
-	import LoadingCircle from '$lib/LoadingCircle.svelte';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import Textfield from '$lib/Textfield.svelte';
+	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
+	import Header from '$lib/layout/Header.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
 
 	let placeholder = m.nickname();
 	/** @type {{sending: boolean;errorMessage?: string;setName: (name: string) => void;}} */

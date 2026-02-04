@@ -1,13 +1,13 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
-	import TextBar from '$lib/Game/TextBar.svelte';
-	import MediaDisplay from '$lib/MediaDisplay.svelte';
-	import NiceBackground from '$lib/NiceBackground.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
+	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import downArrow from '$lib/assets/arrow-down.svg';
 	import Topbar from './Topbar.svelte';
-	import TextAnswerButton from '$lib/Game/TextAnswerButton.svelte';
-	import IconButton from '$lib/IconButton.svelte';
+	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import { dndzone } from 'svelte-dnd-action';
 	import { flip } from 'svelte/animate';
 

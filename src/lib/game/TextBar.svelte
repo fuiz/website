@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import FancyButton from '../FancyButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 
 	/** @type {{
 	 * text: string;

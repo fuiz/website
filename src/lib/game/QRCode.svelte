@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { toDataURL } from 'qrcode';
-	import LoadingCircle from '../LoadingCircle.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 
 	/** @type {{url: string;smallSize: string;}} */
 	let { url, smallSize } = $props();

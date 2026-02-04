@@ -1,5 +1,5 @@
 <script>
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import score_image from '$lib/assets/score.svg';
 
 	/** @type {{name: string;score?: number | undefined;}} */

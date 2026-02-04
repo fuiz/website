@@ -1,6 +1,6 @@
 <script>
 	import { buttonColors, buttonSymbols } from '$lib';
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{ statistics?: { count: number; correct: boolean }[] }}*/
 	let { statistics = [] } = $props();

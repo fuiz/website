@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors } from '$lib';
-	import MediaContainer from '$lib/MediaContainer.svelte';
-	import VerticalSplit from '$lib/Game/VerticalSplit.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 
 	/** @type {{slide: import('$lib/types').MultipleChoiceSlide;}} */
 	let { slide } = $props();

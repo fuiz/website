@@ -3,7 +3,7 @@
 	import { inlineSvg } from '@svelte-put/inline-svg';
 	import MediaFallback from './MediaFallback.svelte';
 
-	/** @type {{ media: import('./types').Media, fit: string }} */
+	/** @type {{ media: import('$lib/types').Media, fit: string }} */
 	let { media, fit } = $props();
 </script>
 

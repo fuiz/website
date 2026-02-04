@@ -1,6 +1,6 @@
 <script>
-	import Anchor from '$lib/Anchor.svelte';
-	import Footer from '$lib/Footer.svelte';
+	import Anchor from '$lib/navigation/Anchor.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
 	import MainHeader from '../MainHeader.svelte';
 
 	let { data } = $props();

@@ -3,8 +3,8 @@
 
 	import delete_fuiz from '$lib/assets/delete.svg';
 	import present from '$lib/assets/slideshow.svg';
-	import IconButton from '$lib/IconButton.svelte';
-	import MediaContainer from '$lib/MediaContainer.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import { onMount } from 'svelte';
 	import { getLocale } from '$lib/paraglide/runtime.js';
 	import tippy from 'tippy.js';

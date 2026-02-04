@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import correct_penguin from '$lib/assets/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/wrong_penguin.svg';
 	import Topbar from './Topbar.svelte';

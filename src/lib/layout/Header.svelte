@@ -1,6 +1,6 @@
 <script>
-	import Logo from './Logo.svelte';
-	import { localizeHref } from './paraglide/runtime';
+	import Logo from '$lib/media/Logo.svelte';
+	import { localizeHref } from '$lib/paraglide/runtime';
 </script>
 
 <div style:display="flex" style:justify-content="center">

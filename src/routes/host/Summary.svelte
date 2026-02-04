@@ -2,10 +2,10 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { assertUnreachable, playIdlessConfig } from '$lib';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import TypicalPage from '$lib/TypicalPage.svelte';
-	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 
 	/** @type {{
 	 * stats: [number, number][];

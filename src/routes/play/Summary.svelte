@@ -1,8 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/Icon.svelte';
-	import TypicalPage from '$lib/TypicalPage.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 
 	/** @typedef {{points: number, position: number} | undefined} Score */
 

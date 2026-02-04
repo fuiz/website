@@ -9,9 +9,9 @@
 	import Result from './Result.svelte';
 	import WaitingOthers from './WaitingOthers.svelte';
 	import Leaderboard from './Leaderboard.svelte';
-	import Loading from '$lib/Loading.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
 	import { PUBLIC_BACKEND_URL, PUBLIC_WS_URL } from '$env/static/public';
-	import ErrorPage from '$lib/ErrorPage.svelte';
+	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import { browser } from '$app/environment';
 	import Summary from './Summary.svelte';
 	import { bring, zip } from '$lib/util';

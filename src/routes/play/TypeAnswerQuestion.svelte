@@ -1,11 +1,11 @@
 <script>
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
-	import Textfield from '$lib/Textfield.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import MediaContainer from '$lib/MediaContainer.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
 
 	let value = $state('');
 

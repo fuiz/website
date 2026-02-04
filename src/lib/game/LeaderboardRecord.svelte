@@ -1,7 +1,7 @@
 <script>
 	import { medalColors } from '$lib';
-	import Counter from '$lib/Counter.svelte';
-	import Icon from '$lib/Icon.svelte';
+	import Counter from '$lib/ui/Counter.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import medal from '$lib/assets/medal.svg';
 	import { scale } from 'svelte/transition';
 

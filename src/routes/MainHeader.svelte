@@ -1,11 +1,11 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
-	import Header from '$lib/Header.svelte';
-	import Icon from '$lib/Icon.svelte';
-	import LanguageSwitcher from '$lib/LanguageSwitcher.svelte';
-	import DarkModeSwitcher from '$lib/DarkModeSwitcher.svelte';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import Header from '$lib/layout/Header.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
+	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let { showLibrary = false } = $props();

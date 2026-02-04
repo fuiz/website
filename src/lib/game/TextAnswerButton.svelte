@@ -4,8 +4,8 @@
 	import { buttonColors, buttonSymbols } from '$lib';
 	import wrong from '$lib/assets/wrong.svg';
 	import factual from '$lib/assets/correct.svg';
-	import FancyButton from '../FancyButton.svelte';
-	import Icon from '$lib/Icon.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{index: number, answerText: string, correct: (boolean|undefined), onclick?: () => void}} */
 	let { index, answerText, correct, onclick } = $props();

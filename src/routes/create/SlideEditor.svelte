@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 	import ghost from '$lib/assets/ghost.svg';
 	import MultipleChoiceSlideEditor from './MultipleChoiceSlideEditor.svelte';
 	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';

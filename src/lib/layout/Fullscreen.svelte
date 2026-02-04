@@ -4,7 +4,7 @@
 	import fullscreenEnter from '$lib/assets/fullscreen_enter.svg';
 	import fullscreenExit from '$lib/assets/fullscreen_exit.svg';
 	import { onMount } from 'svelte';
-	import IconButton from './IconButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 
 	let fullscreen = $state(false);
 

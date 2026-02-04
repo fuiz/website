@@ -1,13 +1,13 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import DarkModeSwitcher from '$lib/DarkModeSwitcher.svelte';
+	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 
 	import diversity from '$lib/assets/diversity.svg';
 	import balance from '$lib/assets/balance.svg';
-	import Icon from './Icon.svelte';
-	import Anchor from './Anchor.svelte';
-	import LanguageSwitcher from './LanguageSwitcher.svelte';
+	import Icon from '$lib/media/Icon.svelte';
+	import Anchor from '$lib/navigation/Anchor.svelte';
+	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
 </script>
 

@@ -1,5 +1,5 @@
 <script>
-	import TypicalPage from '$lib/TypicalPage.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import Listing from './Listing.svelte';
 
 	/** @type {{data: import('./$types').PageServerData;}} */

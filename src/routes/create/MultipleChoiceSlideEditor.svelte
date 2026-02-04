@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { limits } from '$lib';
-	import Textarea from '$lib/Textarea.svelte';
+	import Textarea from '$lib/ui/Textarea.svelte';
 	import Answers from './Answers.svelte';
 	import MediaChooser from './MediaChooser.svelte';
 

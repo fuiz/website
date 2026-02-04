@@ -5,7 +5,7 @@
 	import 'tippy.js/dist/tippy.css';
 
 	import { navigating } from '$app/state';
-	import Loading from '$lib/Loading.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
 	import { onMount, untrack } from 'svelte';
 
 	let { children } = $props();

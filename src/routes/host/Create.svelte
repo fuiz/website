@@ -2,12 +2,12 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { playJsonString } from '$lib';
-	import ErrorMessage from '$lib/ErrorMessage.svelte';
-	import FancyAnchorButton from '$lib/FancyAnchorButton.svelte';
-	import FancyButton from '$lib/FancyButton.svelte';
-	import Loading from '$lib/Loading.svelte';
-	import Textarea from '$lib/Textarea.svelte';
-	import TypicalPage from '$lib/TypicalPage.svelte';
+	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import Textarea from '$lib/ui/Textarea.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import { getAllCreations, loadDatabase } from '$lib/storage';
 	import { toSorted } from '$lib/util';
 	import { localizeHref } from '$lib/paraglide/runtime';

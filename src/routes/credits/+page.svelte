@@ -11,9 +11,9 @@
 	import translator from '$lib/assets/language.svg';
 	import brush from '$lib/assets/brush.svg';
 	import music from '$lib/assets/album.svg';
-	import AnchorMessage from '$lib/AnchorMessage.svelte';
+	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
-	import TypicalPage from '$lib/TypicalPage.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
 	const title = m.credits_title();

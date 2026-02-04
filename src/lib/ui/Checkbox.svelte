@@ -5,7 +5,7 @@
 	import wrong from '$lib/assets/wrong.svg';
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
-	import Icon from './Icon.svelte';
+	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{
 	 *  value: boolean;

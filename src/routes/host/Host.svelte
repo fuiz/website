@@ -7,9 +7,9 @@
 	import QuestionStatistics from './QuestionStatistics.svelte';
 
 	import Leaderboard from './Leaderboard.svelte';
-	import Loading from '$lib/Loading.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
 	import { PUBLIC_BACKEND_URL, PUBLIC_WS_URL } from '$env/static/public';
-	import ErrorPage from '$lib/ErrorPage.svelte';
+	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Summary from './Summary.svelte';
 	import { bring, zip } from '$lib/util';
 	import TypeAnswerStatistics from './TypeAnswerStatistics.svelte';

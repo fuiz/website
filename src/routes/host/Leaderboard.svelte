@@ -1,10 +1,10 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import LeaderboardRecord from '$lib/Game/LeaderboardRecord.svelte';
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import LeaderboardRecord from '$lib/game/LeaderboardRecord.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/Game/TextBar.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import { flip } from 'svelte/animate';
 	import { onMount } from 'svelte';
 	import { fly } from 'svelte/transition';

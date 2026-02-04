@@ -3,7 +3,7 @@
 
 	import correct_penguin from '$lib/assets/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/wrong_penguin.svg';
-	import NiceBackground from '$lib/NiceBackground.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 	import { getLocale } from '$lib/paraglide/runtime.js';
 

@@ -48,6 +48,8 @@ If you would like to setup backing up to gDrive then you need to create a Google
 # Google Auth Client Id and Secret Key
 AUTH_GOOGLE_ID=
 AUTH_GOOGLE_SECRET=
+# usually is your domain + /api/gdrive/callback
+AUTH_GOOGLE_REDIRECT_URI=
 ```
 
 ## Library Publishing System

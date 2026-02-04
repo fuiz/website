@@ -4,7 +4,7 @@
 	import MultipleChoiceThumbnail from './MultipleChoiceThumbnail.svelte';
 	import delete_slide from '$lib/assets/delete.svg';
 	import content_copy from '$lib/assets/content_copy.svg';
-	import IconButton from '$lib/IconButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
 	import OrderThumbnail from './OrderThumbnail.svelte';
 
