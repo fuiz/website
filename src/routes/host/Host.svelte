@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import Waiting from './Waiting.svelte';
@@ -16,14 +16,17 @@
 	import OrderAnswers from './OrderAnswers.svelte';
 	import OrderStatistics from './OrderStatistics.svelte';
 	import { onMount, untrack } from 'svelte';
+	import {
+		handleGameMessage,
+		handleMultipleChoiceMessage,
+		handleTypeAnswerMessage,
+		handleOrderMessage,
+		type QuestionMessageResult
+	} from './messageHandler';
+	import type { IncomingMessage, State } from '.';
+	import type { BindableGameInfo } from './+page';
 
-	/** @typedef {import('./index').State} State */
-
-	/** @type {State | undefined} */
-	let currentState = $state(undefined);
-
-	/** @type {WebSocket} */
-	let socket;
+	let currentState = $state<State>();
 
 	let timer = $state(0);
 	let initialTimer = $state(0);
@@ -34,287 +37,74 @@
 		timer = Math.max(0, timer - UPDATE_DURATION);
 	}, UPDATE_DURATION);
 
-	/** @type {{code: string;}} */
-	let { code } = $props();
+	let { code }: { code: string } = $props();
 
-	/** @type {string | undefined} */
-	let watcherId = undefined;
-
-	/** @type {import('./+page').BindableGameInfo} */
-	let bindableGameInfo = $state({
+	let bindableGameInfo = $state<BindableGameInfo>({
 		volumeOn: true,
 		locked: false
 	});
 
-	let finished = false;
+	function applyQuestionResult(result: QuestionMessageResult) {
+		if (result.newState !== undefined) {
+			currentState = result.newState;
+		}
+		if (result.timer !== undefined) {
+			timer = result.timer;
+		}
+		if (result.initialTimer !== undefined) {
+			initialTimer = result.initialTimer;
+		}
+	}
 
-	/** @param {string} code */
-	function connectServer(code) {
-		watcherId = localStorage.getItem(code + '_host') || undefined;
-		socket = new WebSocket(PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? ''));
+	let sendEvent = $state<(data: string) => void>(() => {});
+	let closeEvent = $state<() => void>(() => {});
+
+	function connectServer(code: string) {
+		let watcherId = localStorage.getItem(code + '_host') || undefined;
+		let socket = new WebSocket(PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? ''));
 
 		currentState = undefined;
 		bindableGameInfo = {
 			volumeOn: bindableGameInfo.volumeOn,
 			locked: false
 		};
-		finished = false;
+		let finished = false;
 
 		// Listen for messages
 		socket.addEventListener('message', (event) => {
-			/** @type {import('./index').IncomingMessage} */
-			let new_msg = JSON.parse(event.data);
+			let newMessage: IncomingMessage = JSON.parse(event.data);
 
-			if ('Game' in new_msg) {
-				if ('WaitingScreen' in new_msg.Game) {
-					currentState = {
-						Game: {
-							WaitingScreen: new_msg.Game.WaitingScreen
-						}
-					};
-				} else if ('TeamDisplay' in new_msg.Game) {
-					currentState = {
-						Game: {
-							WaitingScreen: new_msg.Game.TeamDisplay
-						}
-					};
-				} else if ('Leaderboard' in new_msg.Game) {
-					let { index: previous_index = 0, count: previous_count = 1 } =
-						currentState && 'Slide' in currentState ? currentState : {};
-
-					currentState = {
-						index: new_msg.Game.Leaderboard.index || previous_index,
-						count: new_msg.Game.Leaderboard.count || previous_count,
-						Slide: {
-							Leaderboard: new_msg.Game.Leaderboard.leaderboard
-						}
-					};
-				} else if ('IdAssign' in new_msg.Game) {
-					watcherId = new_msg.Game.IdAssign;
+			if ('Game' in newMessage) {
+				const result = handleGameMessage(newMessage.Game, {
+					code,
+					currentState,
+					watcherId,
+					bindableGameInfo
+				});
+				if (result.newState !== undefined) {
+					currentState = result.newState;
+				}
+				if (result.newWatcherId !== undefined) {
+					watcherId = result.newWatcherId;
 					localStorage.setItem(code + '_host', watcherId);
-				} else if ('Metainfo' in new_msg.Game) {
-					bindableGameInfo.locked = new_msg.Game.Metainfo.Host.locked;
-				} else if ('Summary' in new_msg.Game) {
-					currentState = {
-						Game: {
-							Summary: {
-								...new_msg.Game.Summary.Host,
-								team_mapping: Object.fromEntries(new_msg.Game.Summary.Host.team_mapping),
-								results: Object.fromEntries(new_msg.Game.Summary.Host.results)
-							}
-						}
-					};
+				}
+				if (result.newLockStatus !== undefined) {
+					bindableGameInfo.locked = result.newLockStatus;
+				}
+				if (result.shouldMarkFinished) {
 					finished = true;
+				}
+				if (result.shouldCloseSocket) {
 					socket.close();
 				}
-			} else if ('MultipleChoice' in new_msg) {
-				let mc = new_msg.MultipleChoice;
-
-				let previous_state =
-					currentState && 'Slide' in currentState && 'MultipleChoice' in currentState.Slide
-						? currentState.Slide
-						: undefined;
-
-				let { index: previous_index = 0, count: previous_count = 1 } =
-					currentState && 'Slide' in currentState ? currentState : {};
-
-				if ('QuestionAnnouncement' in mc) {
-					let { index, count, question, media, duration } = mc.QuestionAnnouncement;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							MultipleChoice: 'QuestionAnnouncement',
-							question,
-							media
-						}
-					};
-					timer = duration;
-					initialTimer = duration;
-				} else if ('AnswersAnnouncement' in mc) {
-					let {
-						index = previous_index,
-						count = previous_count,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						duration,
-						answers,
-						answered_count
-					} = mc.AnswersAnnouncement;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							MultipleChoice: 'AnswersAnnouncement',
-							question,
-							media,
-							answers: answers.map((a) => {
-								if (a == 'Hidden') return undefined;
-								return a.Visible;
-							}),
-							answered_count
-						}
-					};
-					timer = duration;
-					initialTimer = duration;
-				} else if ('AnswersCount' in mc) {
-					currentState = {
-						...(currentState || { index: previous_index, count: previous_count }),
-						Slide: {
-							...previous_state,
-							MultipleChoice: previous_state?.MultipleChoice ?? 'AnswersAnnouncement',
-							answered_count: mc.AnswersCount
-						}
-					};
-				} else if ('AnswersResults' in mc) {
-					let {
-						index = previous_index,
-						count = previous_count,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answers,
-						results
-					} = mc.AnswersResults;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							MultipleChoice: 'AnswersResults',
-							question,
-							media,
-							answers,
-							results
-						}
-					};
-				}
-			} else if ('TypeAnswer' in new_msg) {
-				let ta = new_msg.TypeAnswer;
-
-				let previous_state =
-					currentState && 'Slide' in currentState && 'TypeAnswer' in currentState.Slide
-						? currentState.Slide
-						: undefined;
-
-				let { index: previous_index = 0, count: previous_count = 1 } =
-					currentState && 'Slide' in currentState ? currentState : {};
-
-				if ('QuestionAnnouncement' in ta) {
-					let { index, count, question, media, duration, accept_answers } = ta.QuestionAnnouncement;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							TypeAnswer: 'QuestionAnnouncement',
-							question,
-							media,
-							accept_answers
-						}
-					};
-					timer = duration;
-					initialTimer = duration;
-				} else if ('AnswersCount' in ta) {
-					currentState = {
-						...(currentState || { index: previous_index, count: previous_count }),
-						Slide: {
-							...previous_state,
-							TypeAnswer: previous_state?.TypeAnswer ?? 'QuestionAnnouncement'
-						}
-					};
-				} else if ('AnswersResults' in ta) {
-					let {
-						index = previous_index,
-						count = previous_count,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answers,
-						results,
-						case_sensitive
-					} = ta.AnswersResults;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							TypeAnswer: 'AnswersResults',
-							question,
-							media,
-							answers,
-							results,
-							case_sensitive
-						}
-					};
-				}
-			} else if ('Order' in new_msg) {
-				let order = new_msg.Order;
-
-				let previous_state =
-					currentState && 'Slide' in currentState && 'Order' in currentState.Slide
-						? currentState.Slide
-						: undefined;
-
-				let { index: previous_index = 0, count: previous_count = 1 } =
-					currentState && 'Slide' in currentState ? currentState : {};
-
-				if ('QuestionAnnouncement' in order) {
-					let { index, count, question, media, duration } = order.QuestionAnnouncement;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							Order: 'QuestionAnnouncement',
-							question,
-							media
-						}
-					};
-					timer = duration;
-					initialTimer = duration;
-				} else if ('AnswersAnnouncement' in order) {
-					let {
-						index = previous_index,
-						count = previous_count,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answered_count = previous_state?.answered_count,
-						duration,
-						answers,
-						axis_labels
-					} = order.AnswersAnnouncement;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							Order: 'AnswersAnnouncement',
-							question,
-							media,
-							answers,
-							answered_count,
-							axis_labels
-						}
-					};
-					timer = duration;
-					initialTimer = duration;
-				} else if ('AnswersResults' in order) {
-					let {
-						index = previous_index,
-						count = previous_count,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						axis_labels = previous_state?.axis_labels,
-						answers,
-						results
-					} = order.AnswersResults;
-					currentState = {
-						index,
-						count,
-						Slide: {
-							Order: 'AnswersResults',
-							question,
-							media,
-							answers,
-							results,
-							axis_labels
-						}
-					};
-				}
+			} else if ('MultipleChoice' in newMessage) {
+				applyQuestionResult(
+					handleMultipleChoiceMessage(newMessage.MultipleChoice, { currentState })
+				);
+			} else if ('TypeAnswer' in newMessage) {
+				applyQuestionResult(handleTypeAnswerMessage(newMessage.TypeAnswer, { currentState }));
+			} else if ('Order' in newMessage) {
+				applyQuestionResult(handleOrderMessage(newMessage.Order, { currentState }));
 			}
 		});
 
@@ -361,10 +151,16 @@
 			};
 		});
 
-		return () => {
+		sendEvent = (data: string) => {
+			socket.send(data);
+		};
+
+		closeEvent = () => {
 			intentionallyClosed = true;
 			socket.close();
 		};
+
+		return closeEvent;
 	}
 
 	$effect(() => {
@@ -373,19 +169,17 @@
 	});
 
 	function onnext() {
-		socket.send(HOST_NEXT);
+		sendEvent(HOST_NEXT);
 	}
 
-	/** @param {boolean} e */
-	function onlock(e) {
-		socket.send(JSON.stringify({ Host: { Lock: e } }));
+	function onlock(e: boolean) {
+		sendEvent(JSON.stringify({ Host: { Lock: e } }));
 	}
 
 	const HOST_NEXT = JSON.stringify({ Host: 'Next' });
 
 	onMount(() => {
-		/** @param {KeyboardEvent} e */
-		const handleKeydown = (e) => {
+		const handleKeydown = (e: KeyboardEvent) => {
 			if (e.key === 'PageDown') {
 				onnext();
 			}
@@ -395,7 +189,7 @@
 
 		return () => {
 			window.removeEventListener('keydown', handleKeydown);
-			socket.close();
+			closeEvent();
 		};
 	});
 </script>

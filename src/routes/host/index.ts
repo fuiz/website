@@ -77,7 +77,7 @@ export type State =
 			Error: string;
 	  };
 
-type GameIncomingMessage =
+export type GameIncomingMessage =
 	| {
 			IdAssign: string;
 	  }
@@ -117,7 +117,7 @@ type GameIncomingMessage =
 			};
 	  };
 
-type MultipleChoiceIncomingMessage =
+export type MultipleChoiceIncomingMessage =
 	| {
 			QuestionAnnouncement: {
 				index: number;
@@ -152,7 +152,7 @@ type MultipleChoiceIncomingMessage =
 			};
 	  };
 
-type TypeAnswerIncomingMessage =
+export type TypeAnswerIncomingMessage =
 	| {
 			QuestionAnnouncement: {
 				index: number;
@@ -178,7 +178,7 @@ type TypeAnswerIncomingMessage =
 			};
 	  };
 
-type OrderSlideIncomingMessage =
+export type OrderSlideIncomingMessage =
 	| {
 			QuestionAnnouncement: {
 				index: number;

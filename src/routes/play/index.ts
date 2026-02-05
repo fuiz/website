@@ -93,9 +93,9 @@ export type State =
 			Error: string;
 	  };
 
-type NamesError = 'Used' | 'Assigned' | 'Empty' | 'Sinful' | 'TooLong';
+export type NameError = 'Used' | 'Assigned' | 'Empty' | 'Sinful' | 'TooLong';
 
-type GameIncomingMessage =
+export type GameIncomingMessage =
 	| { IdAssign: string }
 	| {
 			WaitingScreen: {
@@ -126,7 +126,7 @@ type GameIncomingMessage =
 			NameAssign: string;
 	  }
 	| {
-			NameError: NamesError;
+			NameError: NameError;
 	  }
 	| {
 			Metainfo: {
@@ -149,7 +149,7 @@ type GameIncomingMessage =
 			};
 	  };
 
-type MultipleChoiceIncomingMessage =
+export type MultipleChoiceIncomingMessage =
 	| {
 			QuestionAnnouncement: {
 				index: number;
@@ -181,7 +181,7 @@ type MultipleChoiceIncomingMessage =
 			};
 	  };
 
-type TypeAnswerIncomingMessage =
+export type TypeAnswerIncomingMessage =
 	| {
 			QuestionAnnouncement: {
 				index: number;
@@ -204,7 +204,7 @@ type TypeAnswerIncomingMessage =
 			};
 	  };
 
-type OrderSlideIncomingMessage =
+export type OrderSlideIncomingMessage =
 	| {
 			QuestionAnnouncement: {
 				index: number;

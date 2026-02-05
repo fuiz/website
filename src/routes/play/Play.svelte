@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { untrack } from 'svelte';
@@ -19,39 +19,39 @@
 	import ChooseTeammates from './ChooseTeammates.svelte';
 	import TypeAnswerQuestion from './TypeAnswerQuestion.svelte';
 	import OrderAnswers from './OrderAnswers.svelte';
+	import {
+		handleGameMessage,
+		handleMultipleChoiceMessage,
+		handleTypeAnswerMessage,
+		handleOrderMessage
+	} from './messageHandler';
+	import type { IncomingMessage, State } from '.';
 
-	/** @type {import('./index').State | undefined} */
-	let currentState = $state(undefined);
+	let currentState = $state<State>();
 
-	/** @type {WebSocket} */
-	let socket;
+	let setName = $state<string>();
 
-	/** @type {string | undefined} */
-	let setName = $state(undefined);
+	let points = $state<number>();
 
-	/** @type {number | undefined} */
-	let points = $state(undefined);
-
-	/** @type {{code: string;}} */
-	let { code } = $props();
-
-	let finished = false;
+	let { code }: { code: string } = $props();
 
 	let leaderboardName = $state('');
 
 	let showAnswers = $state(false);
 
-	let watcherId = (browser && localStorage.getItem(code + '_play')) || undefined;
+	let name = $derived((leaderboardName ? leaderboardName + ' - ' : '') + setName || m.you());
 
-	/** @param {string} code */
-	function connectServer(code) {
-		socket = new WebSocket(PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? 'none'));
+	let sendEvent = $state<(data: string) => void>(() => {});
+
+	function connectServer(code: string) {
+		let watcherId = (browser && localStorage.getItem(code + '_play')) || undefined;
+		const socket = new WebSocket(PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? 'none'));
+		let finished = false;
 		setName = undefined;
 
-		// // Listen for messages
+		// Listen for messages
 		socket.addEventListener('message', (event) => {
-			/** @type {import('./index').IncomingMessage} */
-			let newMsg = JSON.parse(event.data);
+			let newMessage: IncomingMessage = JSON.parse(event.data);
 
 			let {
 				index: previousIndex = 0,
@@ -59,276 +59,70 @@
 				score: previousScore = points || 0
 			} = currentState && 'Slide' in currentState ? currentState : {};
 
-			if ('Game' in newMsg) {
-				if (newMsg.Game === 'NameChoose') {
-					currentState = {
-						Game: {
-							NameChoose: {
-								sending: false,
-								error: ''
-							}
-						}
-					};
-				} else if ('NameAssign' in newMsg.Game) {
-					currentState = undefined;
-					setName = newMsg.Game.NameAssign;
-				} else if ('NameError' in newMsg.Game) {
-					let errorMessage = '';
-					if (newMsg.Game.NameError === 'Used') {
-						errorMessage = m.in_use();
-					} else if (newMsg.Game.NameError === 'Assigned') {
-						errorMessage = m.have_name();
-					} else if (newMsg.Game.NameError === 'Empty') {
-						errorMessage = m.cannot_empty();
-					} else if (newMsg.Game.NameError === 'Sinful') {
-						errorMessage = m.inappropriate();
-					} else if (newMsg.Game.NameError === 'TooLong') {
-						errorMessage = m.too_long();
-					}
-					currentState = {
-						Game: {
-							NameChoose: {
-								sending: false,
-								error: errorMessage
-							}
-						}
-					};
-				} else if ('Score' in newMsg.Game) {
-					let {
-						index = previousIndex,
-						count = previousCount,
-						score: { points, position } = {
-							points: previousScore,
-							position: undefined
-						}
-					} = newMsg.Game.Score;
+			if ('Game' in newMessage) {
+				const result = handleGameMessage(newMessage.Game, {
+					code,
+					currentState,
+					watcherId,
+					previousIndex,
+					previousCount,
+					previousScore
+				});
 
-					currentState = {
-						index,
-						count,
-						score: points,
-						Slide: {
-							Score: {
-								points,
-								position
-							}
-						}
-					};
-				} else if ('WaitingScreen' in newMsg.Game) {
-					let { exact_count } = newMsg.Game.WaitingScreen;
-					currentState = {
-						Game: {
-							WaitingScreen: {
-								exact_count
-							}
-						}
-					};
-				} else if ('IdAssign' in newMsg.Game) {
-					watcherId = newMsg.Game.IdAssign;
+				if (result.newState !== undefined) {
+					currentState = result.newState;
+				}
+				if (result.newWatcherId !== undefined) {
+					watcherId = result.newWatcherId;
 					localStorage.setItem(code + '_play', watcherId);
-				} else if ('Metainfo' in newMsg.Game) {
-					let { score, show_answers } = newMsg.Game.Metainfo.Player;
-					points = score;
-					showAnswers = show_answers;
-				} else if ('Summary' in newMsg.Game) {
+				}
+				if (result.newSetName !== undefined) {
+					setName = result.newSetName;
+				}
+				if (result.newLeaderboardName !== undefined) {
+					leaderboardName = result.newLeaderboardName;
+				}
+				if (result.newPoints !== undefined) {
+					points = result.newPoints;
+				}
+				if (result.newShowAnswers !== undefined) {
+					showAnswers = result.newShowAnswers;
+				}
+				if (result.shouldMarkFinished) {
 					finished = true;
-					currentState = {
-						Game: {
-							Summary: newMsg.Game.Summary.Player
-						}
-					};
+				}
+				if (result.shouldCloseSocket) {
 					socket.close();
-				} else if ('FindTeam' in newMsg.Game) {
-					currentState = {
-						Game: {
-							FindTeam: newMsg.Game.FindTeam
-						}
-					};
-					leaderboardName = newMsg.Game.FindTeam;
-				} else if ('ChooseTeammates' in newMsg.Game) {
-					currentState = {
-						Game: {
-							ChooseTeammates: newMsg.Game.ChooseTeammates
-						}
-					};
 				}
-			} else if ('MultipleChoice' in newMsg) {
-				let mc = newMsg.MultipleChoice;
-
-				let previous_state =
-					currentState && 'Slide' in currentState && 'MultipleChoice' in currentState.Slide
-						? currentState.Slide
-						: undefined;
-
-				if ('QuestionAnnouncement' in mc) {
-					let { index, count, question, media } = mc.QuestionAnnouncement;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							MultipleChoice: 'QuestionAnnouncement',
-							question,
-							media
-						}
-					};
-				} else if ('AnswersAnnouncement' in mc) {
-					let {
-						index = previousIndex,
-						count = previousCount,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answers
-					} = mc.AnswersAnnouncement;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							MultipleChoice: 'AnswersAnnouncement',
-							question,
-							media,
-							answers: answers.map((a) => {
-								if (a === 'Hidden') return undefined;
-								return a.Visible;
-							})
-						}
-					};
-				} else if ('AnswersResults' in mc) {
-					let {
-						index = previousIndex,
-						count = previousCount,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answers,
-						results
-					} = mc.AnswersResults;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							MultipleChoice: 'AnswersResults',
-							question,
-							media,
-							answers,
-							results,
-							answered: previous_state?.answered
-						}
-					};
+			} else if ('MultipleChoice' in newMessage) {
+				const result = handleMultipleChoiceMessage(newMessage.MultipleChoice, {
+					currentState,
+					previousIndex,
+					previousCount,
+					previousScore
+				});
+				if (result.newState !== undefined) {
+					currentState = result.newState;
 				}
-			} else if ('TypeAnswer' in newMsg) {
-				let ta = newMsg.TypeAnswer;
-
-				let previous_state =
-					currentState && 'Slide' in currentState && 'TypeAnswer' in currentState.Slide
-						? currentState.Slide
-						: undefined;
-
-				if ('QuestionAnnouncement' in ta) {
-					let { index, count, question, media, accept_answers } = ta.QuestionAnnouncement;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							TypeAnswer: 'QuestionAnnouncement',
-							question,
-							media,
-							accept_answers
-						}
-					};
-				} else if ('AnswersResults' in ta) {
-					let {
-						index = previousIndex,
-						count = previousCount,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answers,
-						results,
-						case_sensitive
-					} = ta.AnswersResults;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							TypeAnswer: 'AnswersResults',
-							question,
-							media,
-							answers,
-							results,
-							case_sensitive,
-							answered: previous_state?.answered
-						}
-					};
+			} else if ('TypeAnswer' in newMessage) {
+				const result = handleTypeAnswerMessage(newMessage.TypeAnswer, {
+					currentState,
+					previousIndex,
+					previousCount,
+					previousScore
+				});
+				if (result.newState !== undefined) {
+					currentState = result.newState;
 				}
-			} else if ('Order' in newMsg) {
-				let ta = newMsg.Order;
-
-				let previous_state =
-					currentState && 'Slide' in currentState && 'Order' in currentState.Slide
-						? currentState.Slide
-						: undefined;
-
-				if ('QuestionAnnouncement' in ta) {
-					let { index, count, question, media } = ta.QuestionAnnouncement;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							Order: 'QuestionAnnouncement',
-							question,
-							media
-						}
-					};
-				} else if ('AnswersAnnouncement' in ta) {
-					let {
-						index = previousIndex,
-						count = previousCount,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						answers,
-						axis_labels
-					} = ta.AnswersAnnouncement;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							Order: 'AnswersAnnouncement',
-							question,
-							media,
-							answers,
-							axis_labels,
-							answered: previous_state?.answered
-						}
-					};
-				} else if ('AnswersResults' in ta) {
-					let {
-						index = previousIndex,
-						count = previousCount,
-						question = previous_state?.question,
-						media = previous_state?.media,
-						axis_labels = previous_state?.axis_labels,
-						answers,
-						results
-					} = ta.AnswersResults;
-					currentState = {
-						index,
-						count,
-						score: previousScore,
-						Slide: {
-							Order: 'AnswersResults',
-							question,
-							media,
-							answers,
-							results,
-							answered: previous_state?.answered,
-							axis_labels
-						}
-					};
+			} else if ('Order' in newMessage) {
+				const result = handleOrderMessage(newMessage.Order, {
+					currentState,
+					previousIndex,
+					previousCount,
+					previousScore
+				});
+				if (result.newState !== undefined) {
+					currentState = result.newState;
 				}
 			}
 		});
@@ -377,6 +171,10 @@
 			};
 		});
 
+		sendEvent = (data: string) => {
+			socket.send(data);
+		};
+
 		return () => {
 			intentionallyClosed = true;
 			socket.close();
@@ -389,10 +187,7 @@
 		return untrack(() => connectServer(gameCode));
 	});
 
-	let name = $derived((leaderboardName ? leaderboardName + ' - ' : '') + setName || m.you());
-
-	/** @param {string} name */
-	function requestName(name) {
+	function requestName(name: string) {
 		currentState = {
 			Game: {
 				NameChoose: {
@@ -401,11 +196,10 @@
 				}
 			}
 		};
-		socket.send(JSON.stringify({ Unassigned: { NameRequest: name } }));
+		sendEvent(JSON.stringify({ Unassigned: { NameRequest: name } }));
 	}
 
-	/** @param {number} index */
-	function sendAnswer(index) {
+	function sendAnswer(index: number) {
 		if (currentState && 'Slide' in currentState && 'MultipleChoice' in currentState.Slide) {
 			currentState = {
 				...currentState,
@@ -416,11 +210,10 @@
 			};
 		}
 
-		socket.send(JSON.stringify({ Player: { IndexAnswer: index } }));
+		sendEvent(JSON.stringify({ Player: { IndexAnswer: index } }));
 	}
 
-	/** @param {string} text */
-	function sendStringAnswer(text) {
+	function sendStringAnswer(text: string) {
 		if (currentState && 'Slide' in currentState && 'TypeAnswer' in currentState.Slide) {
 			currentState = {
 				...currentState,
@@ -431,11 +224,10 @@
 			};
 		}
 
-		socket.send(JSON.stringify({ Player: { StringAnswer: text } }));
+		sendEvent(JSON.stringify({ Player: { StringAnswer: text } }));
 	}
 
-	/** @param {string[]} texts */
-	function sendStringArrayAnswer(texts) {
+	function sendStringArrayAnswer(texts: string[]) {
 		if (currentState && 'Slide' in currentState && 'Order' in currentState.Slide) {
 			currentState = {
 				...currentState,
@@ -446,12 +238,11 @@
 			};
 		}
 
-		socket.send(JSON.stringify({ Player: { StringArrayAnswer: texts } }));
+		sendEvent(JSON.stringify({ Player: { StringArrayAnswer: texts } }));
 	}
 
-	/** @param {string[]} names */
-	function sendChooseTeammate(names) {
-		socket.send(JSON.stringify({ Player: { ChooseTeammates: names } }));
+	function sendChooseTeammate(names: string[]) {
+		sendEvent(JSON.stringify({ Player: { ChooseTeammates: names } }));
 	}
 </script>
 
