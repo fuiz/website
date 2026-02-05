@@ -55,6 +55,7 @@
 		"object-hash": "^3.0.0",
 		"qrcode": "^1.5.4",
 		"svelte-confetti": "^2.3.2",
-		"tippy.js": "^6.3.7"
+		"tippy.js": "^6.3.7",
+		"uuid": "^13.0.0"
 	}
 }

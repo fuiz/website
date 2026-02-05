@@ -12,6 +12,7 @@ import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
 import type { Ai } from '@cloudflare/workers-types';
 import type { PublishingState } from './types';
+import { v5 as uuidv5 } from 'uuid';
 
 async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
 	const messages: { role: 'system' | 'user'; content: string }[] = [
@@ -95,8 +96,6 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 	// Clean up job data
 	await platform?.env.PUBLISH_JOBS.delete(jobId);
 
-	const fuizId = crypto.randomUUID();
-
 	// Create a readable stream for SSE
 	const stream = new ReadableStream({
 		async start(controller) {
@@ -130,7 +129,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 					config: urlifiedConfig
 				};
 
-				const tomlConfig: ReferencingOnlineFuiz = {
+				const tomlReadyConfig: ReferencingOnlineFuiz = {
 					author: processedConfig.author,
 					language: processedConfig.language,
 					...(processedConfig.subjects &&
@@ -142,7 +141,9 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				};
 
 				// Convert to TOML
-				const tomlContent = stringifyToml(tomlConfig);
+				const tomlContent = stringifyToml(tomlReadyConfig);
+
+				const fuizId = uuidv5(tomlContent, uuidv5.DNS);
 
 				// Create branch
 				send('progress', { state: 'creating-branch', message: 'Creating branch...' });
