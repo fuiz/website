@@ -74,6 +74,7 @@
 				}
 				if (result.newWatcherId !== undefined) {
 					watcherId = result.newWatcherId;
+					localStorage.setItem(code + '_play', watcherId);
 				}
 				if (result.newSetName !== undefined) {
 					setName = result.newSetName;

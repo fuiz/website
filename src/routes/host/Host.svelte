@@ -60,8 +60,6 @@
 	let closeEvent = $state<() => void>(() => {});
 
 	function connectServer(code: string) {
-		console.log('Connecting to server for code', code);
-
 		let watcherId = localStorage.getItem(code + '_host') || undefined;
 		let socket = new WebSocket(PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? ''));
 
@@ -88,6 +86,7 @@
 				}
 				if (result.newWatcherId !== undefined) {
 					watcherId = result.newWatcherId;
+					localStorage.setItem(code + '_host', watcherId);
 				}
 				if (result.newLockStatus !== undefined) {
 					bindableGameInfo.locked = result.newLockStatus;

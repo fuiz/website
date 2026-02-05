@@ -1,5 +1,6 @@
 import type { State } from './index';
 import type {
+	NameError,
 	GameIncomingMessage,
 	MultipleChoiceIncomingMessage,
 	TypeAnswerIncomingMessage,
@@ -40,6 +41,23 @@ export interface QuestionMessageResult {
 	newState?: State;
 }
 
+function nameErrorToMessage(nameError: NameError): string {
+	switch (nameError) {
+		case 'Used':
+			return m.in_use();
+		case 'Assigned':
+			return m.have_name();
+		case 'Empty':
+			return m.cannot_empty();
+		case 'Sinful':
+			return m.inappropriate();
+		case 'TooLong':
+			return m.too_long();
+		default:
+			return '';
+	}
+}
+
 /**
  * Handles incoming Game messages
  */
@@ -68,24 +86,12 @@ export function handleGameMessage(
 	}
 
 	if ('NameError' in game) {
-		let errorMessage = '';
-		if (game.NameError === 'Used') {
-			errorMessage = m.in_use();
-		} else if (game.NameError === 'Assigned') {
-			errorMessage = m.have_name();
-		} else if (game.NameError === 'Empty') {
-			errorMessage = m.cannot_empty();
-		} else if (game.NameError === 'Sinful') {
-			errorMessage = m.inappropriate();
-		} else if (game.NameError === 'TooLong') {
-			errorMessage = m.too_long();
-		}
 		return {
 			newState: {
 				Game: {
 					NameChoose: {
 						sending: false,
-						error: errorMessage
+						error: nameErrorToMessage(game.NameError)
 					}
 				}
 			}
@@ -131,10 +137,8 @@ export function handleGameMessage(
 	}
 
 	if ('IdAssign' in game) {
-		const watcherId = game.IdAssign;
-		localStorage.setItem(context.code + '_play', watcherId);
 		return {
-			newWatcherId: watcherId
+			newWatcherId: game.IdAssign
 		};
 	}
 

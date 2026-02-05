@@ -93,7 +93,7 @@ export type State =
 			Error: string;
 	  };
 
-type NamesError = 'Used' | 'Assigned' | 'Empty' | 'Sinful' | 'TooLong';
+export type NameError = 'Used' | 'Assigned' | 'Empty' | 'Sinful' | 'TooLong';
 
 export type GameIncomingMessage =
 	| { IdAssign: string }
@@ -126,7 +126,7 @@ export type GameIncomingMessage =
 			NameAssign: string;
 	  }
 	| {
-			NameError: NamesError;
+			NameError: NameError;
 	  }
 	| {
 			Metainfo: {

@@ -79,10 +79,8 @@ export function handleGameMessage(
 	}
 
 	if ('IdAssign' in game) {
-		const watcherId = game.IdAssign;
-		localStorage.setItem(context.code + '_host', watcherId);
 		return {
-			newWatcherId: watcherId
+			newWatcherId: game.IdAssign
 		};
 	}
 
