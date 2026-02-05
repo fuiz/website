@@ -1,6 +1,6 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { getAuthenticatedProvider, getTokens } from '../api/git/gitUtil';
+import { getAuthenticatedProvider, getTokens } from '../../api/git/gitUtil';
 import { createGitClient } from '$lib/git/factory';
 
 export const prerender = false;

@@ -1,8 +1,22 @@
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import type { Handle } from '@sveltejs/kit';
+import { deLocalizeUrl } from '$lib/paraglide/runtime';
 
-export const handle: Handle = ({ event, resolve }) =>
-	paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
+export const handle: Handle = ({ event, resolve }) => {
+	if (!event.route.id?.startsWith('/[[lang]]')) {
+		// If the route is not localized
+		const delocalizedUrl = deLocalizeUrl(event.request.url).pathname;
+		const originalUrl = new URL(event.request.url).pathname;
+		// and the delocalized URL differs from the original URL,
+		// return a 404 response
+		if (delocalizedUrl !== originalUrl) {
+			return new Response(null, {
+				status: 404
+			});
+		}
+	}
+
+	return paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
 		event.request = localizedRequest;
 		return resolve(event, {
 			transformPageChunk: ({ html }) => {
@@ -26,3 +40,4 @@ export const handle: Handle = ({ event, resolve }) =>
 			}
 		});
 	});
+};

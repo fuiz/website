@@ -13,7 +13,7 @@
 	import { type ExportedFuiz } from '$lib/storage';
 	import Subject from './Subject.svelte';
 	import Grade from './Grade.svelte';
-	import type { PublishingState } from '../api/library/publish-stream/types';
+	import type { PublishingState } from '../../api/library/publish-stream/types';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 
