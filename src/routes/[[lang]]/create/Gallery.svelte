@@ -19,9 +19,8 @@
 		type Database,
 		type CreationId
 	} from '$lib/storage';
-	import { share } from './lib';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
-	import { downloadFuiz, loadSingleToml, loadZip } from '$lib/clientOnly';
+	import { downloadFuiz, loadSingleToml, loadZip, shareAndCopyURL } from '$lib/clientOnly';
 
 	let {
 		creations = $bindable(),
@@ -151,7 +150,7 @@
 	async function onShare(id: CreationId, e: import('tippy.js').Instance) {
 		const creation = await getCreation(id, db);
 		if (creation) {
-			await share(creation.config, undefined);
+			await shareAndCopyURL(creation.config);
 		}
 		e.show();
 	}

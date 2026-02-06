@@ -1,11 +1,25 @@
 import type { PageServerLoad } from './$types';
-import { getGamesPlayed, getPlayersJoined } from './lib';
+
+async function getStatistics(platform: Readonly<App.Platform> | undefined): Promise<{
+	gamesPlayed: number | undefined;
+	playersJoined: number | undefined;
+}> {
+	try {
+		const allCounts = (await platform?.env.COUNTER.getAllCounts()) ?? {};
+		return {
+			gamesPlayed: allCounts['game_count'],
+			playersJoined: allCounts['player_count']
+		};
+	} catch {
+		return {
+			gamesPlayed: undefined,
+			playersJoined: undefined
+		};
+	}
+}
 
 export const load = (async ({ platform }) => {
-	const [gamesPlayed, playersJoined] = await Promise.all([
-		getGamesPlayed(platform),
-		getPlayersJoined(platform)
-	]);
+	const { gamesPlayed, playersJoined } = await getStatistics(platform);
 
 	return {
 		gamesPlayed,

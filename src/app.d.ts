@@ -7,8 +7,12 @@ import type {
 	Rpc
 } from '@cloudflare/workers-types';
 
+type CountersObject = {
+	[key: string]: number;
+};
+
 type CounterService = {
-	getCount(name: string): Promise<number>;
+	getAllCounts(): Promise<CountersObject>;
 };
 
 export type CloudflareWorkerEntrypoint<T> = {

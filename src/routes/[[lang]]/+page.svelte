@@ -8,7 +8,7 @@
 	import Anchor from '$lib/navigation/Anchor.svelte';
 	import QuestionAnswers from './host/QuestionAnswers.svelte';
 	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
-	import MainHeader from './MainHeader.svelte';
+	import MainHeader from '$lib/layout/MainHeader.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import QuestionStatistics from './host/QuestionStatistics.svelte';
 	import { onMount } from 'svelte';

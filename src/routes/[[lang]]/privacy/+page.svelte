@@ -1,7 +1,7 @@
 <script>
 	import Anchor from '$lib/navigation/Anchor.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
-	import MainHeader from '../MainHeader.svelte';
+	import MainHeader from '$lib/layout/MainHeader.svelte';
 
 	let { data } = $props();
 </script>
