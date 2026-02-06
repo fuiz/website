@@ -2,6 +2,8 @@ import JSZip from 'jszip';
 import { mapIdlessMedia, type IdlessFuizConfig, type IdlessFullFuizConfig } from './types';
 import { parse } from '@ltd/j-toml';
 import { stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
+import { PUBLIC_PLAY_URL } from '$env/static/public';
+import { localizeHref } from '$lib/paraglide/runtime';
 
 export function downloadBlob(blobs: BlobPart[], name: string, options?: FilePropertyBag) {
 	const file = new File(blobs, name, options);
@@ -42,7 +44,7 @@ export async function downloadFuiz(configJson: IdlessFullFuizConfig) {
 			configJson.title + '.zip'
 		);
 	} else {
-		await downloadTomlString(stringifyToml(tomlifyConfig(urlified)), urlified.title);
+		downloadTomlString(stringifyToml(tomlifyConfig(urlified)), urlified.title);
 	}
 }
 
@@ -120,4 +122,15 @@ export async function loadSingleToml(file: Blob) {
 	const detomlified = parse(str, { bigint: false }) as IdlessFullFuizConfig;
 
 	return detomlified;
+}
+
+export async function shareAndCopyURL(config: IdlessFullFuizConfig) {
+	const id = await (
+		await fetch('/share', {
+			method: 'PUT',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify(config)
+		})
+	).json();
+	navigator.clipboard.writeText(PUBLIC_PLAY_URL + localizeHref('/share') + '/' + id);
 }

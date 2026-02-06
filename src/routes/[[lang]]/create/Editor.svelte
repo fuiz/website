@@ -4,9 +4,9 @@
 	import { assertUnreachable, fixTimes, removeIds } from '$lib';
 	import { updateCreation, type Database, type ExportedFuiz } from '$lib/storage';
 	import { debounce } from '$lib/util';
+	import { shareAndCopyURL } from '$lib/clientOnly';
 	import Main from './Main.svelte';
 	import Topbar from './Topbar.svelte';
-	import { share } from './lib';
 	import { untrack } from 'svelte';
 	import type { Base64Media, GenericFuizConfig } from '$lib/types';
 
@@ -113,7 +113,7 @@
 	);
 
 	async function onShare(e: import('tippy.js').Instance) {
-		await share(removeIds(config), undefined);
+		await shareAndCopyURL(removeIds(config));
 		e.show();
 	}
 </script>
