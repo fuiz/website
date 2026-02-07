@@ -56,8 +56,6 @@
 	"uncrossed": "Tidak Disilang",
 	"crossed": "Disilang",
 	"choose_local": "Pilih dari Kuis Lokal:",
-	"or_paste_config": "Atau Tempel Konfigurasi JSON:",
-	"fuiz_config_json": "Konfigurasi Fuiz JSON",
 	"connection_closed": "Koneksi terputus. Segarkan untuk menyambung kembali.",
 	"game_ended": "Kuis berakhir",
 	"code_not_exist": "Kode permainan tidak valid",

@@ -56,8 +56,6 @@
 	"uncrossed": "Ez Da Bistaratuta",
 	"crossed": "Bistaratuta",
 	"choose_local": "Aukeratu Tokiko Fuiz-ak:",
-	"or_paste_config": "Edo Itsatsi JSON Konfigurazioa:",
-	"fuiz_config_json": "Fuiz Konfigurazio JSONa",
 	"connection_closed": "Konexioa galdu da. Eguneratu berriro konexioa egiteko.",
 	"game_ended": "Quiz-a amaitu da",
 	"code_not_exist": "Joko kodea baliogabea da",

@@ -56,8 +56,6 @@
 	"uncrossed": "未交叉",
 	"crossed": "交叉",
 	"choose_local": "从本地协习问答中选择：",
-	"or_paste_config": "或者粘贴 JSON Config:",
-	"fuiz_config_json": "协习 Config JSON",
 	"connection_closed": "连接已关闭",
 	"game_ended": "问答结束",
 	"code_not_exist": "问答不存在",

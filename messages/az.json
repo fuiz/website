@@ -56,8 +56,6 @@
 	"uncrossed": "Üstündən xətt çəkilməyib",
 	"crossed": "Üstündən xətt çəkilib",
 	"choose_local": "Yerli Fuizlərdən seçin:",
-	"or_paste_config": "Və ya JSON konfiqurasiyasını yapışdırın:",
-	"fuiz_config_json": "Fuiz konfiqurasiyası (JSON)",
 	"connection_closed": "Bağlantı kəsildi. Yenidən qoşulmaq üçün səhifəni yeniləyin.",
 	"game_ended": "Viktorina bitdi",
 	"code_not_exist": "Yanlış oyun kodu",
