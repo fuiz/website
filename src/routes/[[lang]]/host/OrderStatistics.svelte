@@ -3,10 +3,10 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import factual from '$lib/assets/correct.svg';
+	import factual from '$lib/assets/icons/correct.svg';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import Icon from '$lib/media/Icon.svelte';
-	import wrong from '$lib/assets/wrong.svg';
+	import wrong from '$lib/assets/icons/wrong.svg';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 
 	/** @type {{

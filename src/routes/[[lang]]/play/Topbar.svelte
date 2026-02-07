@@ -1,6 +1,6 @@
 <script>
 	import Icon from '$lib/media/Icon.svelte';
-	import score_image from '$lib/assets/score.svg';
+	import score_image from '$lib/assets/icons/score.svg';
 
 	/** @type {{name: string;score?: number | undefined;}} */
 	let { name, score = undefined } = $props();

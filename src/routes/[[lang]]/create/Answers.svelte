@@ -4,7 +4,7 @@
 	import { buttonColors, limits } from '$lib';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Icon from '$lib/media/Icon.svelte';
-	import variables from '$lib/assets/variables.svg';
+	import variables from '$lib/assets/icons/variables.svg';
 	import { scale } from 'svelte/transition';
 	import Answer from './Answer.svelte';
 	import { backOut } from 'svelte/easing';

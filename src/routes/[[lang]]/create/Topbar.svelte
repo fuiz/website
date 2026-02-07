@@ -123,7 +123,7 @@
 			{#if showPublish}
 				<IconButton
 					size="1em"
-					src="$lib/assets/publish.svg"
+					src="$lib/assets/icons/publish.svg"
 					alt={m.publish_title()}
 					onclick={() => goto('publish?id=' + id)}
 				/>
@@ -132,7 +132,7 @@
 				<div bind:this={shareButton}>
 					<IconButton
 						size="1em"
-						src="$lib/assets/share.svg"
+						src="$lib/assets/icons/share.svg"
 						alt={m.share()}
 						onclick={() => {
 							if (shareTippyInstance) onshare(shareTippyInstance);
@@ -142,14 +142,14 @@
 			{/if}
 			<IconButton
 				size="1em"
-				src="$lib/assets/download.svg"
+				src="$lib/assets/icons/download.svg"
 				alt={m.download()}
 				onclick={() => onDownload(id)}
 			/>
 			<div bind:this={playButton}>
 				<IconButton
 					size="1em"
-					src="$lib/assets/slideshow.svg"
+					src="$lib/assets/icons/slideshow.svg"
 					alt={m.host()}
 					disabled={errorMessage != undefined}
 					onclick={() => goto('host?id=' + id)}

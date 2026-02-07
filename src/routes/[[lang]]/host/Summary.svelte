@@ -62,16 +62,16 @@
 				</div>
 				<div class="stat">
 					{correct}
-					<Icon src="$lib/assets/correct.svg" alt={m.correct()} size="1em" />
+					<Icon src="$lib/assets/icons/correct.svg" alt={m.correct()} size="1em" />
 				</div>
 
 				<div class="stat">
 					{wrong}
-					<Icon src="$lib/assets/wrong.svg" alt={m.wrong()} size="1em" />
+					<Icon src="$lib/assets/icons/wrong.svg" alt={m.wrong()} size="1em" />
 				</div>
 				<div class="stat">
 					{unanswered}
-					<Icon src="$lib/assets/timer_off.svg" alt={m.unanswered()} size="1em" />
+					<Icon src="$lib/assets/icons/timer_off.svg" alt={m.unanswered()} size="1em" />
 				</div>
 			</div>
 		{/each}

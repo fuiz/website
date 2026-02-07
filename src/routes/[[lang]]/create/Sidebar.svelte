@@ -4,13 +4,13 @@
 	import { limits } from '$lib';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { flip } from 'svelte/animate';
-	import left from '$lib/assets/left.svg';
-	import right from '$lib/assets/right.svg';
-	import first from '$lib/assets/first.svg';
-	import last from '$lib/assets/last.svg';
+	import left from '$lib/assets/icons/left.svg';
+	import right from '$lib/assets/icons/right.svg';
+	import first from '$lib/assets/icons/first.svg';
+	import last from '$lib/assets/icons/last.svg';
 	import Thumbnail from './Thumbnail.svelte';
 	import { dndzone } from 'svelte-dnd-action';
-	import add_slide from '$lib/assets/add_slide.svg';
+	import add_slide from '$lib/assets/icons/add_slide.svg';
 	import Icon from '$lib/media/Icon.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import { tick } from 'svelte';

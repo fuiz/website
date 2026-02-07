@@ -20,7 +20,7 @@
 					map={(v) => (parseInt(v) / 1000).toString()}
 					bind:selected={activeSlide.introduce_question}
 				>
-					<Icon src="$lib/assets/timer.svg" size="1em" alt="{m.time_before_answers}()}" />
+					<Icon src="$lib/assets/icons/timer.svg" size="1em" alt="{m.time_before_answers}()}" />
 				</SelectTime>
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 					map={(v) => (parseInt(v) / 1000).toString()}
 					bind:selected={activeSlide.time_limit}
 				>
-					<Icon src="$lib/assets/timer.svg" size="1em" alt={m.time_limit()} />
+					<Icon src="$lib/assets/icons/timer.svg" size="1em" alt={m.time_limit()} />
 				</SelectTime>
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 					}}
 					bind:selected={activeSlide.points_awarded}
 				>
-					<Icon src="$lib/assets/score.svg" size="1em" alt={m.points()} />
+					<Icon src="$lib/assets/icons/score.svg" size="1em" alt={m.points()} />
 				</SelectTime>
 			</div>
 		</div>

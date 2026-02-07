@@ -1,10 +1,10 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import strawberry from '$lib/assets/fruits/strawberry.svg';
-	import blueberry from '$lib/assets/fruits/blueberry.svg';
-	import kiwi from '$lib/assets/fruits/kiwi.svg';
-	import orange from '$lib/assets/fruits/orange.svg';
+	import strawberry from '$lib/assets/icons/fruits/strawberry.svg';
+	import blueberry from '$lib/assets/icons/fruits/blueberry.svg';
+	import kiwi from '$lib/assets/icons/fruits/kiwi.svg';
+	import orange from '$lib/assets/icons/fruits/orange.svg';
 
 	let { children } = $props();
 </script>

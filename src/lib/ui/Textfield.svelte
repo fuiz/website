@@ -58,7 +58,7 @@
 	/>
 	<label for={id}>{placeholder}</label>
 	<div id="error">
-		<Icon src="$lib/assets/error.svg" alt={m.length_too_short()} size="1.2em" />
+		<Icon src="$lib/assets/icons/error.svg" alt={m.length_too_short()} size="1.2em" />
 	</div>
 </div>
 

@@ -3,8 +3,8 @@
 
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 
-	import diversity from '$lib/assets/diversity.svg';
-	import balance from '$lib/assets/balance.svg';
+	import diversity from '$lib/assets/icons/diversity.svg';
+	import balance from '$lib/assets/icons/balance.svg';
 	import Icon from '$lib/media/Icon.svelte';
 	import Anchor from '$lib/navigation/Anchor.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';

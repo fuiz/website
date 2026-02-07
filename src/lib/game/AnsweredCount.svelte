@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import Icon from '$lib/media/Icon.svelte';
-	import assignmentTurned from '$lib/assets/answer_turned.svg';
+	import assignmentTurned from '$lib/assets/icons/answer_turned.svg';
 
 	/** @type {{answeredCount: number}} */
 	let { answeredCount } = $props();

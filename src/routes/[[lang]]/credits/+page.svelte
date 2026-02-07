@@ -6,11 +6,11 @@
 	import yichen from '$lib/assets/people/Yichen.webp';
 	import sebastian from '$lib/assets/people/Sebastian.webp';
 
-	import computer from '$lib/assets/computer.svg';
-	import people from '$lib/assets/email.svg';
-	import translator from '$lib/assets/language.svg';
-	import brush from '$lib/assets/brush.svg';
-	import music from '$lib/assets/album.svg';
+	import computer from '$lib/assets/icons/computer.svg';
+	import people from '$lib/assets/icons/email.svg';
+	import translator from '$lib/assets/icons/language.svg';
+	import brush from '$lib/assets/icons/brush.svg';
+	import music from '$lib/assets/icons/album.svg';
 	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';

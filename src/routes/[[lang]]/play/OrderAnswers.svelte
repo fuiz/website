@@ -4,7 +4,7 @@
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import downArrow from '$lib/assets/arrow-down.svg';
+	import downArrow from '$lib/assets/icons/arrow-down.svg';
 	import Topbar from './Topbar.svelte';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';

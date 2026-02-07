@@ -7,10 +7,10 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import PlayersList from '$lib/game/PlayersList.svelte';
-	import volume_up from '$lib/assets/volume_up.svg';
-	import volume_off from '$lib/assets/volume_off.svg';
-	import unlocked from '$lib/assets/unlocked.svg';
-	import locked from '$lib/assets/locked.svg';
+	import volume_up from '$lib/assets/icons/volume_up.svg';
+	import volume_off from '$lib/assets/icons/volume_off.svg';
+	import unlocked from '$lib/assets/icons/unlocked.svg';
+	import locked from '$lib/assets/icons/locked.svg';
 	import QrCode from '$lib/game/QRCode.svelte';
 	import { onMount } from 'svelte';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
@@ -128,7 +128,7 @@
 			>
 				<div style:display="flex" style:gap="0.2em" style:align-items="center">
 					<div style:flex="1" style:display="flex" style:align-items="center">
-						<Icon src="$lib/assets/person.svg" size="1em" alt={m.number_of_players()} />
+						<Icon src="$lib/assets/icons/person.svg" size="1em" alt={m.number_of_players()} />
 						{exact_count}
 					</div>
 					<StatedIconButton

@@ -59,7 +59,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<Icon src="$lib/assets/image.svg" size="2em" alt={m.fallback()} />
+							<Icon src="$lib/assets/icons/image.svg" size="2em" alt={m.fallback()} />
 						</div>
 					{/if}
 				</div>

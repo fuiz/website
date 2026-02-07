@@ -1,8 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import hourglassFilled from '$lib/assets/hourglass_filled.svg';
-	import hourglassEmpty from '$lib/assets/hourglass_empty.svg';
+	import hourglassFilled from '$lib/assets/icons/hourglass_filled.svg';
+	import hourglassEmpty from '$lib/assets/icons/hourglass_empty.svg';
 	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{ timeLeft: number, timeStarted: number }} */

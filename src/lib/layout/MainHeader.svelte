@@ -17,7 +17,7 @@
 		<div>
 			<FancyAnchorButton href={localizeHref('/create')}>
 				<div class="a">
-					<Icon src="$lib/assets/paint.svg" alt={m.create()} size="1.2em" />
+					<Icon src="$lib/assets/icons/paint.svg" alt={m.create()} size="1.2em" />
 					<div>{m.create()}</div>
 				</div>
 			</FancyAnchorButton>
@@ -25,7 +25,7 @@
 		<div>
 			<FancyAnchorButton href={localizeHref('/play')}>
 				<div class="a">
-					<Icon size="1.2em" src="$lib/assets/game.svg" alt={m.play()} />
+					<Icon size="1.2em" src="$lib/assets/icons/game.svg" alt={m.play()} />
 					<div>{m.play()}</div>
 				</div>
 			</FancyAnchorButton>
@@ -34,7 +34,7 @@
 			<div>
 				<FancyAnchorButton href={localizeHref('/library')}>
 					<div class="a">
-						<Icon size="1.2em" src="$lib/assets/library.svg" alt={m.library()} />
+						<Icon size="1.2em" src="$lib/assets/icons/library.svg" alt={m.library()} />
 						<div>{m.library()}</div>
 					</div>
 				</FancyAnchorButton>
@@ -43,7 +43,7 @@
 		<div>
 			<FancyAnchorButton href="https://opencollective.com/fuiz">
 				<div class="a">
-					<Icon size="1.2em" src="$lib/assets/donate.svg" alt={m.donate()} />
+					<Icon size="1.2em" src="$lib/assets/icons/donate.svg" alt={m.donate()} />
 					<div>{m.donate()}</div>
 				</div>
 			</FancyAnchorButton>

@@ -1,6 +1,6 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
-	import factual from '$lib/assets/correct.svg';
+	import factual from '$lib/assets/icons/correct.svg';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import Topbar from './Topbar.svelte';

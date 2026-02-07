@@ -1,8 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import delete_fuiz from '$lib/assets/delete.svg';
-	import present from '$lib/assets/slideshow.svg';
+	import delete_fuiz from '$lib/assets/icons/delete.svg';
+	import present from '$lib/assets/icons/slideshow.svg';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import { onMount } from 'svelte';
@@ -84,12 +84,17 @@
 	<div class="panel">
 		<IconButton size="1em" src={present} alt={m.host()} onclick={onplay} />
 		<IconButton size="1em" src={delete_fuiz} alt={m.delete_confirm()} onclick={ondelete} />
-		<IconButton size="1em" src="$lib/assets/download.svg" alt={m.download()} onclick={ondownload} />
+		<IconButton
+			size="1em"
+			src="$lib/assets/icons/download.svg"
+			alt={m.download()}
+			onclick={ondownload}
+		/>
 		{#if showShare}
 			<div bind:this={shareElement}>
 				<IconButton
 					size="1em"
-					src="$lib/assets/share.svg"
+					src="$lib/assets/icons/share.svg"
 					alt={m.share()}
 					onclick={() => {
 						if (tippyInstance) onshare(tippyInstance);

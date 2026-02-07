@@ -4,7 +4,7 @@
 	import { medalColors } from '$lib';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import medal from '$lib/assets/medal.svg';
+	import medal from '$lib/assets/icons/medal.svg';
 	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{name: string;score: number;position: number | undefined;final: boolean;}} */

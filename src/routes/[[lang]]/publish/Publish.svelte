@@ -317,7 +317,7 @@
 				<Grade bind:tags={grades} />
 				<div>
 					<SelectTime options={[...locales]} bind:selected={lang} {map}>
-						<Icon src="$lib/assets/language.svg" alt={m.language()} size="1em" />
+						<Icon src="$lib/assets/icons/language.svg" alt={m.language()} size="1em" />
 					</SelectTime>
 				</div>
 				<div>

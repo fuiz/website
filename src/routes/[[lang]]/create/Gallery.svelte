@@ -6,7 +6,7 @@
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
 	import Icon from '$lib/media/Icon.svelte';
-	import ghost from '$lib/assets/ghost.svg';
+	import ghost from '$lib/assets/icons/ghost.svg';
 	import { getMedia, type Creation, type Media } from '$lib/types';
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
@@ -173,7 +173,7 @@
 					style:padding="0.15em 0.25em"
 					style:justify-content="center"
 				>
-					<Icon size="1.25em" src="$lib/assets/file_new.svg" alt={m.start_blank()} />
+					<Icon size="1.25em" src="$lib/assets/icons/file_new.svg" alt={m.start_blank()} />
 					<div>{m.start_blank()}</div>
 				</div>
 			</FancyButton>
@@ -198,7 +198,7 @@
 					style:padding="0.15em 0.25em"
 					style:justify-content="center"
 				>
-					<Icon size="1.25em" src="$lib/assets/file_open.svg" alt={m.open_file()} />
+					<Icon size="1.25em" src="$lib/assets/icons/file_open.svg" alt={m.open_file()} />
 					<div>{m.open_file()}</div>
 				</div>
 			</FancyButton>
@@ -217,7 +217,7 @@
 						>
 							<Icon
 								size="1.25em"
-								src="$lib/assets/logout.svg"
+								src="$lib/assets/icons/logout.svg"
 								alt="Log out from {provider.displayName}"
 							/>
 							<div>Log Out</div>
@@ -239,7 +239,7 @@
 						>
 							<Icon
 								size="1.25em"
-								src="$lib/assets/login.svg"
+								src="$lib/assets/icons/login.svg"
 								alt="Synchronize your data with {provider.displayName}"
 							/>
 							<div>Backup to {provider.displayName}</div>

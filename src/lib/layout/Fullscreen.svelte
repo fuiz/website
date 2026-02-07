@@ -1,8 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import fullscreenEnter from '$lib/assets/fullscreen_enter.svg';
-	import fullscreenExit from '$lib/assets/fullscreen_exit.svg';
+	import fullscreenEnter from '$lib/assets/icons/fullscreen_enter.svg';
+	import fullscreenExit from '$lib/assets/icons/fullscreen_exit.svg';
 	import { onMount } from 'svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 

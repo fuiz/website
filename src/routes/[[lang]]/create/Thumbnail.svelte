@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import MultipleChoiceThumbnail from './MultipleChoiceThumbnail.svelte';
-	import delete_slide from '$lib/assets/delete.svg';
-	import content_copy from '$lib/assets/content_copy.svg';
+	import delete_slide from '$lib/assets/icons/delete.svg';
+	import content_copy from '$lib/assets/icons/content_copy.svg';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
 	import OrderThumbnail from './OrderThumbnail.svelte';
