@@ -205,5 +205,18 @@
 	"donate": "Donner",
 	"stay_in_touch_desc": "Nous apprécions les commentaires de chaque utilisateur. Veuillez remplir ce <a class='styled' href='https://forms.gle/orFqr1wnhm6dv7xY7'>formulaire</a> et organiser une réunion avec nous ! Nous sommes impatients de vous rencontrer. Vous pouvez également rejoindre notre <a class='styled' href='https://join.slack.com/t/fuiz/shared_invite/zt-2enihgtpy-C1KxJ96pEQN707msi~vNRg'>communauté Slack</a>.",
 	"stay_in_touch": "Restez en contact",
+	"petnames": "Noms d'animaux",
+	"romannames": "Noms romains",
+	"random_name_length": "Mots par nom",
+	"total_games": "Parties totales",
+	"total_players": "Joueurs totaux",
+	"strawberry": "Fraise",
+	"grape": "Raisin",
+	"olives": "Olives",
+	"watermelon": "Pastèque",
+	"orange": "Orange",
+	"kiwi": "Kiwi",
+	"blueberries": "Myrtilles",
+	"lemon": "Citron",
 	"download_results": "Télécharger les Résultats"
 }

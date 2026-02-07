@@ -205,5 +205,18 @@
 	"donate": "捐赠",
 	"stay_in_touch_desc": "我们重视每位用户的反馈。请填写这份<a class='styled' href='https://forms.gle/orFqr1wnhm6dv7xY7'>表格</a>并与我们安排会面！我们期待与您见面。您也可以加入我们的<a class='styled' href='https://join.slack.com/t/fuiz/shared_invite/zt-2enihgtpy-C1KxJ96pEQN707msi~vNRg'>Slack社区</a>。",
 	"stay_in_touch": "保持联系！",
+	"petnames": "宠物名",
+	"romannames": "罗马名",
+	"random_name_length": "每个名字的词数",
+	"total_games": "总游戏数",
+	"total_players": "总玩家数",
+	"strawberry": "草莓",
+	"grape": "葡萄",
+	"olives": "橄榄",
+	"watermelon": "西瓜",
+	"orange": "橙子",
+	"kiwi": "猕猴桃",
+	"blueberries": "蓝莓",
+	"lemon": "柠檬",
 	"download_results": "下载结果"
 }

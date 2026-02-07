@@ -1,0 +1,7 @@
+check-messages:
+  image: node:lts-alpine
+  script:
+    - node scripts/check-messages.js
+  rules:
+    - changes:
+        - messages/*.json
