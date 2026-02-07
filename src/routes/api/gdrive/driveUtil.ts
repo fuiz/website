@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import type { StrictInternalFuizMetadataStrings } from '$lib/storage';
+import type { InternalFuizMetadataStrings } from '$lib/storage';
 import { error, type Cookies } from '@sveltejs/kit';
 import { drive_v3 } from '@googleapis/drive';
 import { OAuth2Client } from 'google-auth-library';
@@ -220,12 +220,12 @@ async function sequential<O>(values: Array<Promise<O>>): Promise<Array<O>> {
 
 export async function getCreations<T>(
 	service: Drive,
-	f: (file: File & { name: string; properties: StrictInternalFuizMetadataStrings }) => Promise<T>
+	f: (file: File & { name: string; properties: InternalFuizMetadataStrings }) => Promise<T>
 ): Promise<T[]> {
 	return await service.list<
 		{
 			name: string;
-			properties: StrictInternalFuizMetadataStrings;
+			properties: InternalFuizMetadataStrings;
 		},
 		T
 	>(['name', 'properties'], { mimeType: 'application/json' }, f);

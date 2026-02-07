@@ -6,9 +6,9 @@ import type { BaseGitClient } from '$lib/git/base';
 import {
 	type IdlessFullFuizConfig,
 	type IdlessLocalReferenceFuizConfig,
-	mapIdlessMedia,
 	type UrlMedia,
-	type Base64Media
+	type Base64Media,
+	mapIdlessSlidesMedia
 } from '$lib/types';
 import { extensionToMimeType } from '$lib';
 
@@ -68,12 +68,7 @@ export async function fillMediaFromGit(
 	fuizId: string,
 	ref?: string
 ): Promise<IdlessFullFuizConfig> {
-	return {
-		...config,
-		slides: await Promise.all(
-			config.slides.map(async (slide) =>
-				mapIdlessMedia(slide, (media) => resolveMediaFromGit(media, client, fuizId, ref))
-			)
-		)
-	};
+	return await mapIdlessSlidesMedia(config, async (media) =>
+		resolveMediaFromGit(media, client, fuizId, ref)
+	);
 }

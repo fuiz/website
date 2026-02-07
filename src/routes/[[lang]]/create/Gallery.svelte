@@ -2,13 +2,12 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import GalleryCreation from './GalleryCreation.svelte';
-	import { addIds, removeIds } from '$lib';
+	import { addIds, removeIds } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
 	import Icon from '$lib/media/Icon.svelte';
 	import ghost from '$lib/assets/ghost.svg';
-	import { parse } from '@ltd/j-toml';
-	import { getMedia, mapIdlessMedia, type Creation, type Media } from '$lib/types';
+	import { getMedia, type Creation, type Media } from '$lib/types';
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import {
@@ -204,7 +203,7 @@
 				</div>
 			</FancyButton>
 		</div>
-		{#each db.providers as { provider }}
+		{#each db.availableProviders as { provider }}
 			{#if db.remote?.name === provider.name}
 				<div>
 					<FancyButton onclick={() => db.remote?.logout()}>

@@ -1,38 +1,12 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { playJsonString } from '$lib';
-	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
-	import Textarea from '$lib/ui/Textarea.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import { getAllCreations, loadDatabase } from '$lib/storage';
 	import { toSorted } from '$lib/util';
 	import { localizeHref } from '$lib/paraglide/runtime';
-
-	let loading = $state(false);
-	let fuizConfig = $state('');
-	let errorMessage = $state('');
-
-	/**
-	 * @param {string} error
-	 */
-	function reset(error) {
-		errorMessage = error;
-		loading = false;
-	}
-
-	async function submit() {
-		loading = true;
-
-		let value = await playJsonString(fuizConfig);
-
-		if (value) {
-			reset(value);
-		}
-	}
 </script>
 
 {#await loadDatabase().then((db) => getAllCreations(db))}
@@ -58,51 +32,11 @@
 					</FancyAnchorButton>
 				</div>
 			{/if}
-
-			<form
-				onsubmit={(e) => {
-					e.preventDefault();
-					submit();
-				}}
-			>
-				<h2>{m.or_paste_config()}</h2>
-				<ErrorMessage {errorMessage} />
-				<Textarea
-					id="config"
-					placeholder={m.fuiz_config_json()}
-					required={true}
-					disabled={loading}
-					bind:value={fuizConfig}
-				/>
-				<div style:margin="5px 0" style:width="100%">
-					<FancyButton disabled={loading}>
-						<div
-							style:display="flex"
-							style:align-items="center"
-							style:justify-content="center"
-							style:font-family="Poppins"
-						>
-							{m.host()}
-						</div>
-					</FancyButton>
-				</div>
-			</form>
 		</div>
 	</TypicalPage>
 {/await}
 
 <style>
-	form {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		border-radius: 10px;
-		box-sizing: content-box;
-		margin-top: 3em;
-		width: 100%;
-	}
-
 	#creations-list {
 		display: flex;
 		flex-direction: column;

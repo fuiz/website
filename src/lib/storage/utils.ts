@@ -1,15 +1,17 @@
 import {
-	addCreationLocal,
 	generateUuid,
-	getCreationLocal,
-	updateCreationLocal,
 	type InternalFuiz,
 	type LocalDatabase,
-	retrieveMediaFromLocal,
-	updateLocalImagesDatabase,
 	type CreationId,
-	type StrictInternalFuizMetadata
+	type InternalFuizMetadata
 } from '.';
+import {
+	addCreationLocal,
+	getCreationLocal,
+	updateCreationLocal,
+	retrieveMediaFromLocal,
+	updateLocalImagesDatabase
+} from './local';
 import { getMedia, type Base64Media } from '../types';
 import { isNotUndefined } from '../util';
 import type { RemoteSync } from './interface';
@@ -17,11 +19,11 @@ import type { RemoteSync } from './interface';
 export async function reconcile(
 	remoteDatabase: RemoteSync,
 	localDatabase: LocalDatabase,
-	onRemote: StrictInternalFuizMetadata[],
+	onRemote: InternalFuizMetadata[],
 	hashOnRemote: (hash: string) => Promise<boolean>,
-	onLocal: [CreationId, StrictInternalFuizMetadata][]
+	onLocal: [CreationId, InternalFuizMetadata][]
 ) {
-	const uniqueIdToRemoteFuiz: Map<string, StrictInternalFuizMetadata> = new Map();
+	const uniqueIdToRemoteFuiz: Map<string, InternalFuizMetadata> = new Map();
 	for (const remote of onRemote) {
 		const existing = uniqueIdToRemoteFuiz.get(remote.uniqueId);
 		if (existing === undefined || remote.versionId > existing.versionId) {
@@ -33,7 +35,7 @@ export async function reconcile(
 		return uniqueIdToRemoteFuiz.get(id);
 	};
 
-	const uniqueIdToLocalFuiz: Map<string, [CreationId, StrictInternalFuizMetadata]> = new Map();
+	const uniqueIdToLocalFuiz: Map<string, [CreationId, InternalFuizMetadata]> = new Map();
 	for (const [key, local] of onLocal) {
 		const existing = uniqueIdToLocalFuiz.get(local.uniqueId);
 		if (existing === undefined || local.versionId > existing[1].versionId) {
@@ -60,7 +62,7 @@ export async function reconcile(
 			const localVersion = localInternal.versionId ?? 0;
 			const remoteVersion = c.versionId ?? 0;
 			return localVersion < remoteVersion
-				? ([c, localKey] satisfies [StrictInternalFuizMetadata, CreationId])
+				? ([c, localKey] satisfies [InternalFuizMetadata, CreationId])
 				: undefined;
 		})
 		.filter(isNotUndefined);

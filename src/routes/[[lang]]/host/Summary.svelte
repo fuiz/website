@@ -1,7 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { assertUnreachable, playIdlessConfig } from '$lib';
+	import { assertUnreachable } from '$lib';
+	import { playBackendReadyConfig } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Icon from '$lib/media/Icon.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
@@ -21,7 +22,7 @@
 	<div id="summary">
 		<div id="actions">
 			<div class="action-container">
-				<FancyButton onclick={() => playIdlessConfig(config, options)}>
+				<FancyButton onclick={() => playBackendReadyConfig(config, options)}>
 					<div class="action">{m.play_again()}</div>
 				</FancyButton>
 			</div>
