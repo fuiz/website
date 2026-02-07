@@ -5,3 +5,13 @@ check-messages:
   rules:
     - changes:
         - messages/*.json
+
+find-unused-messages:
+  image: node:lts-alpine
+  script:
+    - node scripts/find-unused-messages.js
+  rules:
+    - changes:
+        - messages/*.json
+        - src/**/*.{svelte,ts,js}
+        - scripts/find-unused-messages.js
