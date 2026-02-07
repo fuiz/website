@@ -320,19 +320,3 @@ export async function syncAll(
 
 	console.log('Full sync complete');
 }
-
-// CLI entry point for manual execution
-if (import.meta.url === `file://${process.argv[1]}`) {
-	console.log('Running manual library sync...');
-
-	const botToken = process.env.GIT_BOT_TOKEN;
-	if (!botToken) {
-		console.error('Error: GIT_BOT_TOKEN environment variable is required');
-		process.exit(1);
-	}
-
-	// Note: When running as CLI, you'll need to provide bucket, database, and AI instances
-	// This is a placeholder - actual implementation would need Cloudflare Workers context
-	console.log('CLI mode not fully implemented - use API endpoint instead');
-	console.log('Usage: POST /api/sync-library with admin authentication');
-}

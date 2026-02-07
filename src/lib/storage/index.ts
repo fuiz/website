@@ -1,7 +1,8 @@
 import objectHash from 'object-hash';
 import {
 	getMedia,
-	mapIdlessMedia,
+	mapIdlessSlidesMedia,
+	mapIdlessSlidesMediaSync,
 	type Base64Media,
 	type Creation,
 	type GenericIdlessFuizConfig,
@@ -10,41 +11,16 @@ import {
 	type Modify
 } from '../types';
 import { retrieveRemoteSync, type RemoteSync, type RemoteSyncProvider } from './remoteStorage';
-
-export function generateUuid(): string {
-	function generateRandomHex(length: number): string {
-		function convertToHex(value: number, length: number): string {
-			return value.toString(16).padStart(length, '0');
-		}
-
-		function convertUint8ArrayToHex(values: Uint8Array): string {
-			return [...values].map((v) => convertToHex(v, 2)).join('');
-		}
-
-		const values = new Uint8Array(length / 2);
-		crypto.getRandomValues(values);
-
-		return convertUint8ArrayToHex(values);
-	}
-
-	function splitString(value: string, lengths: number[]): string[] {
-		return lengths.reduce<{ value: string; res: string[] }>(
-			({ value, res }, length) => {
-				return {
-					res: [...res, value.slice(0, length)],
-					value: value.slice(length)
-				};
-			},
-			{ value, res: [] }
-		).res;
-	}
-
-	try {
-		return crypto.randomUUID();
-	} catch {
-		return splitString(generateRandomHex(32), [8, 4, 4, 4, 12]).join('-');
-	}
-}
+import {
+	addCreationLocal,
+	deleteCreationLocal,
+	getAllCreationsLocal,
+	getCreationLocal,
+	loadLocalDatabase,
+	retrieveMediaFromLocal,
+	updateCreationLocal,
+	updateLocalImagesDatabase
+} from './local';
 
 export type LocalDatabase = IDBDatabase;
 export type CreationId = number;
@@ -52,58 +28,64 @@ export type CreationId = number;
 export type Database = {
 	local: LocalDatabase;
 	remote?: RemoteSync;
-	providers: Array<{ provider: RemoteSyncProvider; authenticated: boolean }>;
+	availableProviders: Array<{ provider: RemoteSyncProvider; authenticated: boolean }>;
 };
 
 export type ExportedFuiz = {
 	config: IdlessFullFuizConfig;
-} & StrictInternalFuizMetadata;
-
-type MediaReference =
-	| Base64Media
-	| {
-			Image: {
-				HashReference: {
-					hash: string;
-					alt: string;
-				};
-			};
-	  }
-	| string;
-
-export type MediaReferencedFuizConfig = GenericIdlessFuizConfig<MediaReference | undefined>;
-
-export type InternalFuiz = {
-	config: MediaReferencedFuizConfig;
 } & InternalFuizMetadata;
 
-export type InternalFuizMetadata = {
+type MediaReference = {
+	Image: {
+		HashReference: {
+			hash: string;
+			alt: string;
+		};
+	};
+};
+
+type LooseMediaReference = Base64Media | MediaReference | string;
+
+export type LooseMediaReferencedFuizConfig = GenericIdlessFuizConfig<
+	LooseMediaReference | undefined
+>;
+export type MediaReferencedFuizConfig = GenericIdlessFuizConfig<MediaReference | undefined>;
+
+export type LooseInternalFuiz = {
+	config: LooseMediaReferencedFuizConfig;
+} & LooseInternalFuizMetadata;
+
+export type LooseInternalFuizMetadata = {
 	lastEdited: number;
 	uniqueId?: string;
 	versionId?: number;
 };
 
-export type StrictInternalFuiz = {
+export type InternalFuiz = {
 	config: MediaReferencedFuizConfig;
-} & StrictInternalFuizMetadata;
+} & InternalFuizMetadata;
 
-export type StrictInternalFuizMetadata = Modify<
-	InternalFuizMetadata,
+export type InternalFuizMetadata = Modify<
+	LooseInternalFuizMetadata,
 	{
 		uniqueId: string;
 		versionId: number;
 	}
 >;
 
-export type StrictInternalFuizMetadataStrings = Modify<
-	StrictInternalFuizMetadata,
+export type InternalFuizMetadataStrings = Modify<
+	InternalFuizMetadata,
 	{
 		lastEdited: string;
 		versionId: string;
 	}
 >;
 
-export function hashMedia(media: Base64Media): {
+export function generateUuid(): string {
+	return crypto.randomUUID();
+}
+
+function hashMedia(media: Base64Media): {
 	hash: string;
 	alt: string;
 	dataUri: string;
@@ -116,36 +98,13 @@ export function hashMedia(media: Base64Media): {
 	};
 }
 
-async function hashExists(hash: string, database: LocalDatabase): Promise<boolean> {
-	const imagesStore = database.transaction(['images'], 'readonly').objectStore('images');
-	const request = imagesStore.count(hash);
-	return await new Promise((resolve) => {
-		request.addEventListener('success', () => {
-			resolve(request.result > 0);
-		});
-	});
-}
-
-export async function updateLocalImagesDatabase(
-	media: Base64Media,
-	hash: string,
-	database: LocalDatabase
-): Promise<boolean> {
-	if (!(await hashExists(hash, database))) {
-		const imagesStore = database.transaction(['images'], 'readwrite').objectStore('images');
-		imagesStore.add(media, hash);
-		return true;
-	}
-	return false;
-}
-
 async function updateImagesDatabse(media: Base64Media, hash: string, database: Database) {
 	if (await updateLocalImagesDatabase(media, hash, database.local)) {
 		await database?.remote?.createImage(hash, media);
 	}
 }
 
-export async function internalizeMedia(
+async function internalizeMedia(
 	media: Base64Media | undefined,
 	database: Database
 ): Promise<MediaReference | undefined> {
@@ -163,46 +122,46 @@ export async function internalizeMedia(
 }
 
 async function internalizeFuiz(fuiz: ExportedFuiz, database: Database): Promise<InternalFuiz> {
+	const internalizeMediaClosure = async (media: Base64Media | undefined) =>
+		await internalizeMedia(media, database);
 	return {
 		...fuiz,
-		config: {
-			...fuiz.config,
-			slides: await Promise.all(
-				fuiz.config.slides.map(
-					async (slide) =>
-						await mapIdlessMedia(slide, async (media) => await internalizeMedia(media, database))
-				)
-			)
-		}
+		config: await mapIdlessSlidesMedia(fuiz.config, internalizeMediaClosure)
 	};
 }
 
-export async function retrieveMediaFromLocal(
-	hash: string,
-	database: LocalDatabase,
-	alt?: string
-): Promise<Base64Media | undefined> {
-	const imagesStore = database.transaction(['images'], 'readonly').objectStore('images');
-	const transaction = imagesStore.get(hash);
-
-	return await new Promise((resolve) => {
-		transaction.addEventListener('success', () => {
-			const value: Base64Media | string | undefined = transaction.result ?? undefined;
-			if (!value) resolve(undefined);
-			else if (typeof value === 'string') {
-				resolve({
-					Image: {
-						Base64: {
-							data: value,
-							alt: alt ?? ''
-						}
-					}
-				});
-			} else {
-				resolve(value);
+function coalesceMediaReference(
+	media: LooseMediaReference | undefined
+): MediaReference | undefined {
+	if (media == undefined) return undefined;
+	if (typeof media === 'string') {
+		return {
+			Image: {
+				HashReference: {
+					hash: media,
+					alt: ''
+				}
 			}
-		});
-	});
+		};
+	}
+	if ('Base64' in media.Image) {
+		const { hash, alt } = hashMedia({ Image: media.Image });
+		return {
+			Image: {
+				HashReference: {
+					hash,
+					alt
+				}
+			}
+		};
+	}
+	return { Image: media.Image };
+}
+
+export function strictifyMediaReference(
+	config: LooseMediaReferencedFuizConfig
+): MediaReferencedFuizConfig {
+	return mapIdlessSlidesMediaSync(config, coalesceMediaReference);
 }
 
 async function collectMedia(
@@ -210,110 +169,55 @@ async function collectMedia(
 	database: LocalDatabase
 ): Promise<Base64Media | undefined> {
 	if (media == undefined) return undefined;
-	if (typeof media === 'string') {
-		return await retrieveMediaFromLocal(media, database);
-	} else if ('HashReference' in media.Image) {
+	if ('HashReference' in media.Image) {
 		return await retrieveMediaFromLocal(
 			media.Image.HashReference.hash,
 			database,
 			media.Image.HashReference.alt
 		);
-	} else {
-		return {
-			Image: media.Image
-		};
 	}
+	return {
+		Image: media.Image
+	};
 }
 
 async function collectFuiz(fuiz: InternalFuiz, database: LocalDatabase): Promise<ExportedFuiz> {
+	const collectMediaClosure = async (media: MediaReference | undefined) =>
+		await collectMedia(media, database);
 	return {
 		...fuiz,
-		uniqueId: fuiz.uniqueId ?? generateUuid(),
-		versionId: fuiz.versionId ?? 0,
-		config: {
-			...fuiz.config,
-			slides: await Promise.all(
-				fuiz.config.slides.map(
-					async (slide) =>
-						await mapIdlessMedia(slide, async (media) => await collectMedia(media, database))
-				)
-			)
-		}
+		config: await mapIdlessSlidesMedia(fuiz.config, collectMediaClosure)
 	};
 }
 
 export async function loadDatabase(): Promise<Database> {
-	const request = indexedDB.open('FuizDB', 2);
+	const local = await loadLocalDatabase();
 
-	request.addEventListener('upgradeneeded', (event) => {
-		const db = request.result;
+	let remote: RemoteSync | undefined = undefined;
+	let availableProviders: Array<{ provider: RemoteSyncProvider; authenticated: boolean }> = [];
 
-		if (event.oldVersion != 1) {
-			db.createObjectStore('creations', { autoIncrement: true });
+	try {
+		availableProviders = await retrieveRemoteSync();
+		const authenticatedProvider = availableProviders.find((p) => p.authenticated);
+		if (authenticatedProvider) {
+			remote = new authenticatedProvider.provider();
 		}
-		db.createObjectStore('images');
-	});
+	} catch {
+		// No remote sync if auth check fails
+	}
 
-	return await new Promise((resolve, reject) => {
-		request.addEventListener('success', async () => {
-			let remoteSync: RemoteSync | undefined = undefined;
-			let providers: Array<{ provider: RemoteSyncProvider; authenticated: boolean }> = [];
-
-			try {
-				providers = await retrieveRemoteSync();
-				const authenticatedProvider = providers.find((p) => p.authenticated);
-				if (authenticatedProvider) {
-					remoteSync = new authenticatedProvider.provider();
-				}
-			} catch {
-				// No remote sync if auth check fails
-			}
-
-			resolve({
-				local: request.result,
-				remote: remoteSync,
-				providers
-			});
-		});
-		request.addEventListener('error', reject);
-	});
+	return {
+		local,
+		availableProviders,
+		remote
+	};
 }
 
-export async function sync(database: Database) {
+async function sync(database: Database) {
 	await database.remote?.sync(
 		database.local,
 		(await getAllCreationsLocal(database.local)).map(([k, v]) => [parseInt(k.toString()), v])
 	);
-}
-
-export async function getAllCreationsLocal(
-	database: LocalDatabase
-): Promise<[IDBValidKey, StrictInternalFuiz][]> {
-	const creationsStore = database.transaction(['creations'], 'readwrite').objectStore('creations');
-
-	const creationsTransaction = creationsStore.openCursor();
-
-	return await new Promise((resolve) => {
-		const internals: [IDBValidKey, StrictInternalFuiz][] = [];
-
-		creationsTransaction.addEventListener('success', () => {
-			const cursor = creationsTransaction.result;
-			if (cursor) {
-				const value = cursor.value as InternalFuiz;
-				const strictValue: StrictInternalFuiz = {
-					config: value.config,
-					lastEdited: value.lastEdited,
-					uniqueId: value.uniqueId ?? generateUuid(),
-					versionId: value.versionId ?? 0
-				};
-				cursor.update(strictValue);
-				internals.push([cursor.key, strictValue]);
-				cursor.continue();
-			} else {
-				resolve(internals);
-			}
-		});
-	});
 }
 
 export async function getAllCreations(database: Database): Promise<Creation[]> {
@@ -335,40 +239,12 @@ export async function getAllCreations(database: Database): Promise<Creation[]> {
 	);
 }
 
-export async function getCreationLocal(
-	id: CreationId,
-	database: LocalDatabase
-): Promise<InternalFuiz | undefined> {
-	const creationsStore = database.transaction(['creations'], 'readonly').objectStore('creations');
-	const creationsTransaction = creationsStore.get(id);
-	return await new Promise((resolve) => {
-		creationsTransaction.addEventListener('success', () => {
-			resolve(creationsTransaction.result ?? undefined);
-		});
-	});
-}
-
 export async function getCreation(
 	id: CreationId,
 	database: Database
 ): Promise<ExportedFuiz | undefined> {
 	const internal = await getCreationLocal(id, database.local);
 	return internal ? await collectFuiz(internal, database.local) : undefined;
-}
-
-export async function deleteCreationLocal(id: CreationId, database: LocalDatabase): Promise<void> {
-	const creationsStore = database.transaction(['creations'], 'readwrite').objectStore('creations');
-
-	const request = creationsStore.delete(id);
-
-	return await new Promise((resolve) => {
-		request.addEventListener('success', () => {
-			resolve(undefined);
-		});
-		request.addEventListener('error', () => {
-			resolve(undefined);
-		});
-	});
 }
 
 export async function deleteCreation(id: CreationId, database: Database): Promise<void> {
@@ -378,41 +254,11 @@ export async function deleteCreation(id: CreationId, database: Database): Promis
 	await database.remote?.delete(uniqueId);
 }
 
-export async function addCreationLocal(
-	internalFuiz: InternalFuiz,
-	database: LocalDatabase
-): Promise<CreationId> {
-	const creationsStore = database.transaction(['creations'], 'readwrite').objectStore('creations');
-
-	const request = creationsStore.put(internalFuiz);
-
-	return await new Promise((resolve) => {
-		request.addEventListener('success', () => {
-			resolve(parseInt(request.result.toString()));
-		});
-	});
-}
-
 export async function addCreation(newSlide: ExportedFuiz, database: Database): Promise<CreationId> {
 	const internalFuiz = await internalizeFuiz(newSlide, database);
 	const id = await addCreationLocal(internalFuiz, database.local);
 	await database.remote?.create(newSlide.uniqueId, internalFuiz);
 	return id;
-}
-
-export async function updateCreationLocal(
-	id: CreationId,
-	internalFuiz: InternalFuiz,
-	database: LocalDatabase
-): Promise<void> {
-	const creationsStore = database.transaction(['creations'], 'readwrite').objectStore('creations');
-	const request = creationsStore.put(internalFuiz, id);
-
-	return await new Promise((resolve) => {
-		request.addEventListener('success', () => {
-			resolve(undefined);
-		});
-	});
 }
 
 export async function updateCreation(

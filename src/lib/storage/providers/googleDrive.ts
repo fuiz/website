@@ -1,9 +1,11 @@
-import type {
-	InternalFuiz,
-	CreationId,
-	StrictInternalFuizMetadata,
-	LocalDatabase,
-	MediaReferencedFuizConfig
+import {
+	type CreationId,
+	type InternalFuizMetadata,
+	type LocalDatabase,
+	type LooseMediaReferencedFuizConfig,
+	type InternalFuiz,
+	type MediaReferencedFuizConfig,
+	strictifyMediaReference
 } from '..';
 import type { Base64Media } from '../../types';
 import { bring } from '../../util';
@@ -45,7 +47,7 @@ export class GoogleDriveSync {
 
 	async sync(
 		localDatabase: LocalDatabase,
-		existing: [CreationId, StrictInternalFuizMetadata][]
+		existing: [CreationId, InternalFuizMetadata][]
 	): Promise<void> {
 		const res = await bring(`/api/gdrive/fuiz`);
 		if (!res?.ok) {
@@ -68,7 +70,9 @@ export class GoogleDriveSync {
 	async get(uuid: string): Promise<MediaReferencedFuizConfig | undefined> {
 		const res = await bring(`/api/gdrive/fuiz/${uuid}`);
 
-		return res?.ok ? await res.json() : undefined;
+		return res?.ok
+			? strictifyMediaReference((await res.json()) as LooseMediaReferencedFuizConfig)
+			: undefined;
 	}
 
 	async create(uuid: string, internalFuiz: InternalFuiz): Promise<void> {

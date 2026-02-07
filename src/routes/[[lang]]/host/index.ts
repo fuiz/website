@@ -1,10 +1,10 @@
-import {
-	type Media,
-	type TextOrMedia,
-	type AnswerResult,
-	type IdlessFuizConfig,
-	type FuizOptions,
-	type ServerPossiblyHidden
+import type {
+	Media,
+	TextOrMedia,
+	AnswerResult,
+	IdlessFuizConfig,
+	FuizOptions,
+	ServerPossiblyHidden
 } from '$lib/types';
 import type { TruncatedList } from './+page';
 

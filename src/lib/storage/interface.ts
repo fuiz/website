@@ -1,9 +1,4 @@
-import type {
-	InternalFuiz,
-	CreationId,
-	StrictInternalFuizMetadata,
-	MediaReferencedFuizConfig
-} from '.';
+import type { CreationId, InternalFuizMetadata, MediaReferencedFuizConfig, InternalFuiz } from '.';
 import type { Base64Media } from '../types';
 
 export interface RemoteSyncProviderStatus {
@@ -29,7 +24,7 @@ export interface RemoteSyncProvider {
 		logout(): void;
 		sync(
 			localDatabase: IDBDatabase,
-			creations: [CreationId, StrictInternalFuizMetadata][]
+			creations: [CreationId, InternalFuizMetadata][]
 		): Promise<void>;
 		create(uuid: string, internalFuiz: InternalFuiz): Promise<void>;
 		get(uuid: string): Promise<MediaReferencedFuizConfig | undefined>;

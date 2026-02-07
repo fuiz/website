@@ -14,7 +14,7 @@
 		type Database,
 		type ExportedFuiz
 	} from '$lib/storage';
-	import { addIds } from '$lib';
+	import { addIds } from '$lib/clientOnly';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import type { Base64Media, Creation, GenericFuizConfig } from '$lib/types';
 

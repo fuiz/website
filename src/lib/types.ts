@@ -126,64 +126,7 @@ export function getMedia<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): T |
 	return undefined;
 }
 
-export async function mapMedia<T, O>(
-	slide: GenericSlide<T>,
-	map: (media: T) => Promise<O>
-): Promise<GenericSlide<O>> {
-	if ('MultipleChoice' in slide)
-		return slide.MultipleChoice.media
-			? {
-					MultipleChoice: { ...slide.MultipleChoice, media: await map(slide.MultipleChoice.media) },
-					id: slide.id
-				}
-			: {
-					MultipleChoice: {
-						title: slide.MultipleChoice.title,
-						introduce_question: slide.MultipleChoice.introduce_question,
-						time_limit: slide.MultipleChoice.time_limit,
-						points_awarded: slide.MultipleChoice.points_awarded,
-						answers: slide.MultipleChoice.answers
-					},
-					id: slide.id
-				};
-	if ('TypeAnswer' in slide)
-		return slide.TypeAnswer.media
-			? {
-					TypeAnswer: { ...slide.TypeAnswer, media: await map(slide.TypeAnswer.media) },
-					id: slide.id
-				}
-			: {
-					TypeAnswer: {
-						title: slide.TypeAnswer.title,
-						introduce_question: slide.TypeAnswer.introduce_question,
-						time_limit: slide.TypeAnswer.time_limit,
-						points_awarded: slide.TypeAnswer.points_awarded,
-						answers: slide.TypeAnswer.answers,
-						case_sensitive: slide.TypeAnswer.case_sensitive
-					},
-					id: slide.id
-				};
-	if ('Order' in slide)
-		return slide.Order.media
-			? {
-					Order: { ...slide.Order, media: await map(slide.Order.media) },
-					id: slide.id
-				}
-			: {
-					Order: {
-						title: slide.Order.title,
-						introduce_question: slide.Order.introduce_question,
-						time_limit: slide.Order.time_limit,
-						axis_labels: slide.Order.axis_labels,
-						points_awarded: slide.Order.points_awarded,
-						answers: slide.Order.answers
-					},
-					id: slide.id
-				};
-	return slide;
-}
-
-export async function mapIdlessMedia<T, O>(
+async function mapIdlessMedia<T, O>(
 	slide: GenericIdlessSlide<T>,
 	map: (media: T) => Promise<O>
 ): Promise<GenericIdlessSlide<O>> {
@@ -234,7 +177,17 @@ export async function mapIdlessMedia<T, O>(
 	return slide;
 }
 
-export function mapIdlessMediaSync<T, O>(
+export async function mapIdlessSlidesMedia<T, O>(
+	config: GenericIdlessFuizConfig<T>,
+	map: (media: T) => Promise<O>
+): Promise<GenericIdlessFuizConfig<O>> {
+	return {
+		...config,
+		slides: await Promise.all(config.slides.map((slide) => mapIdlessMedia(slide, map)))
+	};
+}
+
+function mapIdlessMediaSync<T, O>(
 	slide: GenericIdlessSlide<T>,
 	map: (media: T) => O
 ): GenericIdlessSlide<O> {
@@ -283,6 +236,16 @@ export function mapIdlessMediaSync<T, O>(
 					}
 				};
 	return slide;
+}
+
+export function mapIdlessSlidesMediaSync<T, O>(
+	config: GenericIdlessFuizConfig<T>,
+	map: (media: T) => O
+): GenericIdlessFuizConfig<O> {
+	return {
+		...config,
+		slides: config.slides.map((slide) => mapIdlessMediaSync(slide, map))
+	};
 }
 
 export type GenericIdlessSlide<T> =

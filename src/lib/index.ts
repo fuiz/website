@@ -8,21 +8,11 @@ import kiwi from '$lib/assets/fruits/kiwi.svg';
 import orange from '$lib/assets/fruits/orange.svg';
 import olive from '$lib/assets/fruits/olive.svg';
 import watermelon from '$lib/assets/fruits/watermelon.svg';
-import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL } from '$env/static/public';
-import { goto } from '$app/navigation';
 import { Section, stringify } from '@ltd/j-toml';
-import { bring } from './util';
 import {
-	mapIdlessMedia,
-	mapIdlessMediaSync,
-	type FuizConfig,
-	type FuizOptions,
-	type GenericFuizConfig,
-	type GenericIdlessFuizConfig,
-	type IdlessFuizConfig,
+	mapIdlessSlidesMediaSync,
 	type IdlessFullFuizConfig,
 	type IdlessLocalReferenceFuizConfig,
-	type Media,
 	type ReferencingOnlineFuiz
 } from './types';
 import objectHash from 'object-hash';
@@ -90,38 +80,6 @@ export const limits = {
 		maxAnswerTextLength: 200
 	}
 } as const;
-
-export async function getBackendMedia(media: Media | undefined | null): Promise<Media | undefined> {
-	if (!media) {
-		return undefined;
-	}
-	if ('Base64' in media.Image) {
-		const { data, alt } = media.Image.Base64;
-
-		const imageRes = await bring(data);
-		if (!imageRes) return;
-
-		const formData = new FormData();
-		formData.append('image', await imageRes.blob());
-
-		const res = await bring(PUBLIC_CORKBOARD_URL + '/upload', {
-			method: 'POST',
-			mode: 'cors',
-			body: formData
-		});
-
-		const id = await res?.json();
-		if (!id) return undefined;
-
-		return {
-			Image: {
-				Corkboard: { id, alt }
-			}
-		};
-	} else {
-		return media;
-	}
-}
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export function assertUnreachable(_: never): never {
@@ -201,208 +159,20 @@ export function urlifyBase64(
 ): [IdlessLocalReferenceFuizConfig, { name: string; base64: string }[]] {
 	const images: { name: string; base64: string }[] = [];
 
-	const urlifiedConfig = {
-		...config,
-		slides: config.slides.map((s) =>
-			mapIdlessMediaSync(s, (media) => {
-				if (media) {
-					const urlified = urlifyImage(media.Image.Base64);
-					images.push(urlified);
-					return {
-						Image: {
-							Url: {
-								alt: media.Image.Base64.alt,
-								url: urlified.name
-							}
-						}
-					};
+	const urlifiedConfig = mapIdlessSlidesMediaSync(config, (media) => {
+		if (media) {
+			const urlified = urlifyImage(media.Image.Base64);
+			images.push(urlified);
+			return {
+				Image: {
+					Url: {
+						alt: media.Image.Base64.alt,
+						url: urlified.name
+					}
 				}
-				return undefined;
-			})
-		)
-	};
-	return [urlifiedConfig, images];
-}
-
-export function removeIds<T>(
-	config: GenericIdlessFuizConfig<T> | GenericFuizConfig<T>
-): GenericIdlessFuizConfig<T> {
-	return {
-		title: config.title,
-		slides: config.slides.map((slide) => {
-			switch (true) {
-				case 'MultipleChoice' in slide:
-					return {
-						MultipleChoice: {
-							...slide.MultipleChoice,
-							answers: slide.MultipleChoice.answers.map(({ content, correct }) => ({
-								content,
-								correct
-							}))
-						}
-					};
-				case 'TypeAnswer' in slide:
-					return {
-						TypeAnswer: {
-							...slide.TypeAnswer,
-							answers: slide.TypeAnswer.answers.map((text) =>
-								typeof text === 'string' ? text : text.text
-							)
-						}
-					};
-				case 'Order' in slide:
-					return {
-						Order: {
-							...slide.Order,
-							answers: slide.Order.answers.map((text) =>
-								typeof text === 'string' ? text : text.text
-							)
-						}
-					};
-				default:
-					return assertUnreachable(slide);
-			}
-		})
-	};
-}
-
-export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig<T> {
-	return {
-		title: config.title,
-		slides: config.slides.map((slide, id) => {
-			switch (true) {
-				case 'MultipleChoice' in slide:
-					return {
-						MultipleChoice: {
-							...slide.MultipleChoice,
-							answers: slide.MultipleChoice.answers.map(({ content, correct }, id) => ({
-								content,
-								correct,
-								id
-							}))
-						},
-						id
-					};
-				case 'TypeAnswer' in slide:
-					return {
-						TypeAnswer: {
-							...slide.TypeAnswer,
-							answers: slide.TypeAnswer.answers.map((text, id) => ({
-								text,
-								id
-							}))
-						},
-						id
-					};
-				case 'Order' in slide:
-					return {
-						Order: {
-							...slide.Order,
-							answers: slide.Order.answers.map((text, id) => ({
-								text,
-								id
-							}))
-						},
-						id
-					};
-				default:
-					return assertUnreachable(slide);
-			}
-		})
-	};
-}
-
-export async function getBackendConfig(config: IdlessFuizConfig): Promise<IdlessFuizConfig> {
-	return {
-		title: config.title,
-		slides: await Promise.all(
-			config.slides.map(
-				async (slide) => await mapIdlessMedia(slide, async (media) => await getBackendMedia(media))
-			)
-		)
-	};
-}
-
-export async function playJsonString(config: string): Promise<undefined | string> {
-	const res = await bring(PUBLIC_BACKEND_URL + '/add', {
-		method: 'POST',
-		mode: 'cors',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: config
+			};
+		}
+		return undefined;
 	});
-
-	if (res === undefined) return 'Inaccessible Server';
-	if (!res.ok) return await res.text();
-
-	const { game_id, watcher_id } = await res.json();
-
-	localStorage.setItem(game_id + '_host', watcher_id);
-
-	await goto('host?code=' + game_id);
-}
-
-function fixTime(time: number): number {
-	return time <= 1000 ? time * 1000 : time;
-}
-
-export function fixTimes<T>(config: GenericIdlessFuizConfig<T>): GenericIdlessFuizConfig<T> {
-	return {
-		title: config.title,
-		slides: config.slides.map((slide) => {
-			switch (true) {
-				case 'MultipleChoice' in slide:
-					return {
-						MultipleChoice: {
-							...slide.MultipleChoice,
-							introduce_question: fixTime(slide.MultipleChoice.introduce_question),
-							time_limit: fixTime(slide.MultipleChoice.time_limit)
-						}
-					};
-				case 'TypeAnswer' in slide:
-					return {
-						TypeAnswer: {
-							...slide.TypeAnswer,
-							introduce_question: fixTime(slide.TypeAnswer.introduce_question),
-							time_limit: fixTime(slide.TypeAnswer.time_limit)
-						}
-					};
-				case 'Order' in slide:
-					return {
-						Order: {
-							...slide.Order,
-							introduce_question: fixTime(slide.Order.introduce_question),
-							time_limit: fixTime(slide.Order.time_limit)
-						}
-					};
-				default:
-					return assertUnreachable(slide);
-			}
-		})
-	};
-}
-
-export async function playIdlessConfig(
-	config: IdlessFuizConfig,
-	options: FuizOptions
-): Promise<undefined | string> {
-	try {
-		const backendReadyConfig = await getBackendConfig(config);
-		return await playJsonString(
-			JSON.stringify({
-				config: fixTimes(backendReadyConfig),
-				options
-			})
-		);
-	} catch {
-		return 'Failed to upload images';
-	}
-}
-
-export async function playConfig(
-	config: FuizConfig,
-	options: FuizOptions
-): Promise<undefined | string> {
-	return await playIdlessConfig(removeIds(config), options);
+	return [urlifiedConfig, images];
 }

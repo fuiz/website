@@ -1,9 +1,25 @@
 import JSZip from 'jszip';
-import { mapIdlessMedia, type IdlessFuizConfig, type IdlessFullFuizConfig } from './types';
+import {
+	mapIdlessSlidesMedia,
+	type Base64Media,
+	type CorkboardMedia,
+	type FuizOptions,
+	type GenericFuizConfig,
+	type GenericIdlessFuizConfig,
+	type IdlessFuizConfig,
+	type IdlessFullFuizConfig
+} from './types';
 import { parse } from '@ltd/j-toml';
-import { stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
-import { PUBLIC_PLAY_URL } from '$env/static/public';
+import {
+	assertUnreachable,
+	stringifyToml,
+	tomlifyConfig,
+	urlifyBase64
+} from '$lib';
+import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/static/public';
 import { localizeHref } from '$lib/paraglide/runtime';
+import { bring } from './util';
+import { goto } from '$app/navigation';
 
 export function downloadBlob(blobs: BlobPart[], name: string, options?: FilePropertyBag) {
 	const file = new File(blobs, name, options);
@@ -93,28 +109,20 @@ export async function loadZip(file: Blob): Promise<IdlessFullFuizConfig | undefi
 		return betterImages.find(({ name }) => name === imageUrl)?.base64 ?? '';
 	};
 
-	return {
-		...detomlified,
-		slides: await Promise.all(
-			detomlified.slides.map(
-				async (s) =>
-					await mapIdlessMedia(s, async (media) => {
-						if (media?.Image && 'Url' in media.Image) {
-							return {
-								Image: {
-									Base64: {
-										alt: media.Image.Url.alt,
-										data: unurlify(media.Image.Url.url),
-										hash: media.Image.Url.url.split('.')[0]
-									}
-								}
-							};
-						}
-						return undefined;
-					})
-			)
-		)
-	};
+	return await mapIdlessSlidesMedia(detomlified, async (media) => {
+		if (media?.Image && 'Url' in media.Image) {
+			return {
+				Image: {
+					Base64: {
+						alt: media.Image.Url.alt,
+						data: unurlify(media.Image.Url.url),
+						hash: media.Image.Url.url.split('.')[0]
+					}
+				}
+			};
+		}
+		return undefined;
+	});
 }
 
 export async function loadSingleToml(file: Blob) {
@@ -133,4 +141,215 @@ export async function shareAndCopyURL(config: IdlessFullFuizConfig) {
 		})
 	).json();
 	navigator.clipboard.writeText(PUBLIC_PLAY_URL + localizeHref('/share') + '/' + id);
+}
+
+export function removeIds<T>(
+	config: GenericIdlessFuizConfig<T> | GenericFuizConfig<T>
+): GenericIdlessFuizConfig<T> {
+	return {
+		title: config.title,
+		slides: config.slides.map((slide) => {
+			switch (true) {
+				case 'MultipleChoice' in slide:
+					return {
+						MultipleChoice: {
+							...slide.MultipleChoice,
+							answers: slide.MultipleChoice.answers.map(({ content, correct }) => ({
+								content,
+								correct
+							}))
+						}
+					};
+				case 'TypeAnswer' in slide:
+					return {
+						TypeAnswer: {
+							...slide.TypeAnswer,
+							answers: slide.TypeAnswer.answers.map((text) =>
+								typeof text === 'string' ? text : text.text
+							)
+						}
+					};
+				case 'Order' in slide:
+					return {
+						Order: {
+							...slide.Order,
+							answers: slide.Order.answers.map((text) =>
+								typeof text === 'string' ? text : text.text
+							)
+						}
+					};
+				default:
+					return assertUnreachable(slide);
+			}
+		})
+	};
+}
+
+export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig<T> {
+	return {
+		title: config.title,
+		slides: config.slides.map((slide, id) => {
+			switch (true) {
+				case 'MultipleChoice' in slide:
+					return {
+						MultipleChoice: {
+							...slide.MultipleChoice,
+							answers: slide.MultipleChoice.answers.map(({ content, correct }, id) => ({
+								content,
+								correct,
+								id
+							}))
+						},
+						id
+					};
+				case 'TypeAnswer' in slide:
+					return {
+						TypeAnswer: {
+							...slide.TypeAnswer,
+							answers: slide.TypeAnswer.answers.map((text, id) => ({
+								text,
+								id
+							}))
+						},
+						id
+					};
+				case 'Order' in slide:
+					return {
+						Order: {
+							...slide.Order,
+							answers: slide.Order.answers.map((text, id) => ({
+								text,
+								id
+							}))
+						},
+						id
+					};
+				default:
+					return assertUnreachable(slide);
+			}
+		})
+	};
+}
+
+async function playJsonString(config: string): Promise<undefined | string> {
+	const res = await bring(PUBLIC_BACKEND_URL + '/add', {
+		method: 'POST',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: config
+	});
+
+	if (res === undefined) return 'Inaccessible Server';
+	if (!res.ok) return await res.text();
+
+	const { game_id, watcher_id } = await res.json();
+
+	localStorage.setItem(game_id + '_host', watcher_id);
+
+	await goto('host?code=' + game_id);
+}
+
+function fixTime(time: number): number {
+	return time <= 1000 ? time * 1000 : time;
+}
+
+export function fixTimes<T>(config: GenericIdlessFuizConfig<T>): GenericIdlessFuizConfig<T> {
+	return {
+		title: config.title,
+		slides: config.slides.map((slide) => {
+			switch (true) {
+				case 'MultipleChoice' in slide:
+					return {
+						MultipleChoice: {
+							...slide.MultipleChoice,
+							introduce_question: fixTime(slide.MultipleChoice.introduce_question),
+							time_limit: fixTime(slide.MultipleChoice.time_limit)
+						}
+					};
+				case 'TypeAnswer' in slide:
+					return {
+						TypeAnswer: {
+							...slide.TypeAnswer,
+							introduce_question: fixTime(slide.TypeAnswer.introduce_question),
+							time_limit: fixTime(slide.TypeAnswer.time_limit)
+						}
+					};
+				case 'Order' in slide:
+					return {
+						Order: {
+							...slide.Order,
+							introduce_question: fixTime(slide.Order.introduce_question),
+							time_limit: fixTime(slide.Order.time_limit)
+						}
+					};
+				default:
+					return assertUnreachable(slide);
+			}
+		})
+	};
+}
+
+async function getBackendMedia(
+	media: Base64Media | undefined
+): Promise<CorkboardMedia | undefined> {
+	if (!media) {
+		return undefined;
+	}
+	const { data, alt } = media.Image.Base64;
+
+	const imageRes = await bring(data);
+	if (!imageRes) return;
+
+	const formData = new FormData();
+	formData.append('image', await imageRes.blob());
+
+	const res = await bring(PUBLIC_CORKBOARD_URL + '/upload', {
+		method: 'POST',
+		mode: 'cors',
+		body: formData
+	});
+
+	const id = await res?.json();
+	if (!id) return undefined;
+
+	return {
+		Image: {
+			Corkboard: { id, alt }
+		}
+	};
+}
+
+async function getBackendConfig(config: IdlessFullFuizConfig): Promise<IdlessFuizConfig> {
+	return await mapIdlessSlidesMedia(config, getBackendMedia);
+}
+
+export async function playIdlessConfig(
+	config: IdlessFullFuizConfig,
+	options: FuizOptions
+): Promise<undefined | string> {
+	try {
+		const backendReadyConfig = await getBackendConfig(config);
+		return await playJsonString(
+			JSON.stringify({
+				config: fixTimes(backendReadyConfig),
+				options
+			})
+		);
+	} catch {
+		return 'Failed to upload images';
+	}
+}
+
+export async function playBackendReadyConfig(
+	config: IdlessFuizConfig,
+	options: FuizOptions
+): Promise<undefined | string> {
+	return await playJsonString(
+		JSON.stringify({
+			config,
+			options
+		})
+	);
 }

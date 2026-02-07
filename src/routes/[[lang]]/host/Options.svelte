@@ -1,27 +1,26 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { playIdlessConfig } from '$lib';
+	import { playIdlessConfig } from '$lib/clientOnly';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import Slider from '$lib/ui/Slider.svelte';
-	import { getCreation, loadDatabase } from '$lib/storage';
+	import { getCreation, loadDatabase, type CreationId } from '$lib/storage';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import Radio from '$lib/ui/Radio.svelte';
+	import type { GenericIdlessFuizConfig, GenericIdlessSlide, NameStyle } from '$lib/types';
 
-	/** @type {{ id: import('$lib/storage').CreationId}}*/
-	let { id } = $props();
+	let { id }: { id: CreationId } = $props();
 
 	let loading = $state(false);
 
 	let errorMessage = $state('');
 
-	/** @type {import('$lib/types').NameStyle | null} */
-	let nameStyle = $state(null),
+	let nameStyle = $state<NameStyle | null>(null),
 		questionsOnPlayersDevices = $state(false),
 		shuffleAnswers = $state(false),
 		shuffleSlides = $state(false),
@@ -36,13 +35,7 @@
 	];
 
 	// https://stackoverflow.com/a/2450976
-	/**
-	 * Shuffles the elements of an array in place.
-	 * @template T
-	 * @param {Array<T>} array - The array to shuffle.
-	 * @returns {Array<T>} The shuffled array.
-	 */
-	function shuffleArray(array) {
+	function shuffleArray<T>(array: T[]): T[] {
 		let currentIndex = array.length,
 			randomIndex;
 
@@ -59,12 +52,10 @@
 		return array;
 	}
 
-	/**
-	 * @param {import('$lib/types').IdlessSlide} slide
-	 * @param {boolean} shuffleAnswers
-	 * @returns {import('$lib/types').IdlessSlide}
-	 */
-	function conditionalShuffleAnswer(slide, shuffleAnswers) {
+	function conditionalShuffleAnswer<T>(
+		slide: GenericIdlessSlide<T>,
+		shuffleAnswers: boolean
+	): GenericIdlessSlide<T> {
 		return {
 			...slide,
 			...('MultipleChoice' in slide && {
@@ -78,13 +69,11 @@
 		};
 	}
 
-	/**
-	 * @param {import('$lib/types').IdlessFuizConfig} config
-	 * @param {boolean} shuffleSlides
-	 * @param {boolean} shuffleAnswers
-	 * @returns {import('$lib/types').IdlessFuizConfig}
-	 */
-	function shuffle(config, shuffleSlides, shuffleAnswers) {
+	function shuffle<T>(
+		config: GenericIdlessFuizConfig<T>,
+		shuffleSlides: boolean,
+		shuffleAnswers: boolean
+	): GenericIdlessFuizConfig<T> {
 		return {
 			...config,
 			slides: (shuffleSlides ? shuffleArray(config.slides) : config.slides).map((slide) =>

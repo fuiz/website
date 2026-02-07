@@ -1,7 +1,8 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { assertUnreachable, fixTimes, removeIds } from '$lib';
+	import { assertUnreachable } from '$lib';
+	import { fixTimes, removeIds } from '$lib/clientOnly';
 	import { updateCreation, type Database, type ExportedFuiz } from '$lib/storage';
 	import { debounce } from '$lib/util';
 	import { shareAndCopyURL } from '$lib/clientOnly';
