@@ -56,8 +56,6 @@
 	"uncrossed": "Non barrato",
 	"crossed": "Barrato",
 	"choose_local": "Scegli tra i Fuiz locali:",
-	"or_paste_config": "Oppure incolla un JSON Config:",
-	"fuiz_config_json": "Fuiz Config JSON",
 	"connection_closed": "Connessione chiusa",
 	"game_ended": "Gioco terminato",
 	"code_not_exist": "Il codice di gioco non esiste",

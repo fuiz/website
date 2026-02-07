@@ -56,8 +56,6 @@
 	"uncrossed": "Uncrossed",
 	"crossed": "Crossed",
 	"choose_local": "Choose from Local Fuizzes:",
-	"or_paste_config": "Or Paste a JSON Config:",
-	"fuiz_config_json": "Fuiz Config JSON",
 	"connection_closed": "Connection lost. Refresh to reconnect.",
 	"game_ended": "Quiz ended",
 	"code_not_exist": "Invalid game code",

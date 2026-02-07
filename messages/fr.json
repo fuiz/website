@@ -56,8 +56,6 @@
 	"uncrossed": "Décoché",
 	"crossed": "Coché",
 	"choose_local": "Choisissez votre Fuizz localement :",
-	"or_paste_config": "ou collez une configuration JSON :",
-	"fuiz_config_json": "JSON de configuration Fuiz",
 	"connection_closed": "Connexion fermée",
 	"game_ended": "La partie est terminée",
 	"code_not_exist": "Le code de partie n'existe pas",

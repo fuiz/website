@@ -56,8 +56,6 @@
 	"uncrossed": "No cruzado",
 	"crossed": "Cruzado",
 	"choose_local": "Seleccionar de Fuizzes Locales:",
-	"or_paste_config": "O Pegar un JSON Config:",
-	"fuiz_config_json": "Fuiz Config JSON",
 	"connection_closed": "Conexión ha terminado",
 	"game_ended": "Juego Terminado",
 	"code_not_exist": "Código de Juego No Existe",

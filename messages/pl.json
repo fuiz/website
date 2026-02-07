@@ -56,8 +56,6 @@
 	"uncrossed": "niezaznaczone",
 	"crossed": "zaznaczone",
 	"choose_local": "Wybierz z lokalnych Fuizów:",
-	"or_paste_config": "lub wklej plik JSON:",
-	"fuiz_config_json": "Fuiz plik JSON",
 	"connection_closed": "Utracono połączenie. Odśwież stronę, aby połączyć się ponownie.",
 	"game_ended": "Gra zakończona",
 	"code_not_exist": "Ta gra nie istnieje lub została zakończona",

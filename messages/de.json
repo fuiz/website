@@ -56,8 +56,6 @@
 	"uncrossed": "Ungekreuzt",
 	"crossed": "Gekreuzt",
 	"choose_local": "Wählen Sie aus lokalen Fuizzes:",
-	"or_paste_config": "Oder fügen Sie eine JSON-Konfiguration ein:",
-	"fuiz_config_json": "Fuiz-Konfiguration JSON",
 	"connection_closed": "Verbindung geschlossen",
 	"game_ended": "Spiel beendet",
 	"code_not_exist": "Spielcode existiert nicht",

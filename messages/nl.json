@@ -56,8 +56,6 @@
 	"uncrossed": "Niet Aangekruisd",
 	"crossed": "Aangekruisd",
 	"choose_local": "Kies uit Lokale Fuizzen:",
-	"or_paste_config": "Of Plak een JSON Configuratie:",
-	"fuiz_config_json": "Fuiz Configuratie JSON",
 	"connection_closed": "Verbinding Gesloten",
 	"game_ended": "Spel Beëindigd",
 	"code_not_exist": "Spelcode Bestaat Niet",

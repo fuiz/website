@@ -56,8 +56,6 @@
 	"uncrossed": "غير محدد",
 	"crossed": "محدد",
 	"choose_local": "اختر من ملفاتك المحلية:",
-	"or_paste_config": "أو الصق تكوين JSON:",
-	"fuiz_config_json": "تكوين فويز JSON",
 	"connection_closed": "تم قطع الاتصال",
 	"game_ended": "انتهت اللعبة",
 	"code_not_exist": "رمز اللعبة غير موجود",
