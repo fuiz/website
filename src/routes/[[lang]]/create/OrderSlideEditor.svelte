@@ -5,11 +5,11 @@
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import MediaChooser from './MediaChooser.svelte';
-	import arrowDown from '$lib/assets/arrow-down.svg';
-	import addAnswer from '$lib/assets/add.svg';
+	import arrowDown from '$lib/assets/icons/arrow-down.svg';
+	import addAnswer from '$lib/assets/icons/add.svg';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
-	import deleteAnswer from '$lib/assets/delete.svg';
+	import deleteAnswer from '$lib/assets/icons/delete.svg';
 	import Textbox from '$lib/ui/Textbox.svelte';
 
 	/** @type {{slide: import('$lib/types').OrderSlide;}} */

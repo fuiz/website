@@ -15,7 +15,12 @@
 </script>
 
 <div>
-	<IconButton src="$lib/assets/language.svg" alt={m.language()} size="1em" popovertarget={id} />
+	<IconButton
+		src="$lib/assets/icons/language.svg"
+		alt={m.language()}
+		size="1em"
+		popovertarget={id}
+	/>
 
 	<div {id} bind:this={popoverElement} popover="auto" style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>
 		<ul>

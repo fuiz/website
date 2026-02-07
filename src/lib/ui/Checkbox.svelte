@@ -1,8 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import factual from '$lib/assets/correct.svg';
-	import wrong from '$lib/assets/wrong.svg';
+	import factual from '$lib/assets/icons/correct.svg';
+	import wrong from '$lib/assets/icons/wrong.svg';
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	import Icon from '$lib/media/Icon.svelte';

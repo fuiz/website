@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import Icon from '$lib/media/Icon.svelte';
-	import icon from '$lib/assets/icon.svg';
+	import icon from '$lib/assets/icons/icon.svg';
 	import { goto } from '$app/navigation';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 

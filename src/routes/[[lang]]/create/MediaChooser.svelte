@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors } from '$lib';
-	import delete_image from '$lib/assets/delete.svg';
-	import add_photo from '$lib/assets/add_photo.svg';
+	import delete_image from '$lib/assets/icons/delete.svg';
+	import add_photo from '$lib/assets/icons/add_photo.svg';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import Icon from '$lib/media/Icon.svelte';
 	import Textarea from '$lib/ui/Textarea.svelte';
@@ -176,7 +176,7 @@
 					<div id="alt-help">
 						<IconButton
 							size="1.2em"
-							src="$lib/assets/help.svg"
+							src="$lib/assets/icons/help.svg"
 							alt={m.image_alt()}
 							onclick={() => {
 								let element = document.getElementById('alt-help');

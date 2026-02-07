@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import Icon from '$lib/media/Icon.svelte';
-	import ghost from '$lib/assets/ghost.svg';
+	import ghost from '$lib/assets/icons/ghost.svg';
 	import MultipleChoiceSlideEditor from './MultipleChoiceSlideEditor.svelte';
 	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';
 	import OrderSlideEditor from './OrderSlideEditor.svelte';

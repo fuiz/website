@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
-	import warning from '$lib/assets/error.svg';
+	import warning from '$lib/assets/icons/error.svg';
 
 	import Icon from '$lib/media/Icon.svelte';
 	import logo from '$lib/assets/same_color_logo.svg';
@@ -177,7 +177,7 @@
 					{m.about_fuiz_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/help.svg" size="7em" alt={m.about_fuiz()} />
+			<Icon src="$lib/assets/icons/help.svg" size="7em" alt={m.about_fuiz()} />
 		</div>
 	</section>
 	<section>
@@ -191,7 +191,7 @@
 					{m.number_of_participants()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/no_money.svg" size="7em" alt="Free of charge" />
+			<Icon src="$lib/assets/icons/no_money.svg" size="7em" alt="Free of charge" />
 		</div>
 	</section>
 	<section>
@@ -202,7 +202,7 @@
 					{m.well_translated_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/language.svg" size="7em" alt={m.language()} />
+			<Icon src="$lib/assets/icons/language.svg" size="7em" alt={m.language()} />
 		</div>
 	</section>
 	<section>
@@ -213,7 +213,7 @@
 					{m.collab_over_comp_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/collaboration.svg" size="7em" alt="Collaboration" />
+			<Icon src="$lib/assets/icons/collaboration.svg" size="7em" alt="Collaboration" />
 		</div>
 	</section>
 	<section>
@@ -224,7 +224,7 @@
 					{m.community_made_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/diversity.svg" size="7em" alt={m.community_made()} />
+			<Icon src="$lib/assets/icons/diversity.svg" size="7em" alt={m.community_made()} />
 		</div>
 	</section>
 	<section>
@@ -237,7 +237,7 @@
 					{m.always_open_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/code_blocks.svg" size="7em" alt="Peoeple's Choice" />
+			<Icon src="$lib/assets/icons/code_blocks.svg" size="7em" alt="Peoeple's Choice" />
 		</div>
 	</section>
 	<section id="ongoing">
@@ -249,7 +249,7 @@
 					{@html m.stay_in_touch_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/email.svg" size="7em" alt="Email" />
+			<Icon src="$lib/assets/icons/email.svg" size="7em" alt="Email" />
 		</div>
 	</section>
 	<footer>

@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
-	import darkMode from '$lib/assets/dark_mode.svg';
-	import lightMode from '$lib/assets/light_mode.svg';
+	import darkMode from '$lib/assets/icons/dark_mode.svg';
+	import lightMode from '$lib/assets/icons/light_mode.svg';
 	import { browser } from '$app/environment';
 
 	/** @type {boolean | undefined} */

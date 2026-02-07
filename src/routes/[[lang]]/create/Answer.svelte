@@ -3,7 +3,7 @@
 
 	import { buttonColors, limits } from '$lib';
 	import Checkbox from '$lib/ui/Checkbox.svelte';
-	import deleteAnswer from '$lib/assets/delete.svg';
+	import deleteAnswer from '$lib/assets/icons/delete.svg';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textbox from '$lib/ui/Textbox.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';

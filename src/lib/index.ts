@@ -1,13 +1,13 @@
 import * as m from '$lib/paraglide/messages.js';
 
-import strawberry from '$lib/assets/fruits/strawberry.svg';
-import grape from '$lib/assets/fruits/grape.svg';
-import lemon from '$lib/assets/fruits/lemon.svg';
-import blueberry from '$lib/assets/fruits/blueberry.svg';
-import kiwi from '$lib/assets/fruits/kiwi.svg';
-import orange from '$lib/assets/fruits/orange.svg';
-import olive from '$lib/assets/fruits/olive.svg';
-import watermelon from '$lib/assets/fruits/watermelon.svg';
+import strawberry from '$lib/assets/icons/fruits/strawberry.svg';
+import grape from '$lib/assets/icons/fruits/grape.svg';
+import lemon from '$lib/assets/icons/fruits/lemon.svg';
+import blueberry from '$lib/assets/icons/fruits/blueberry.svg';
+import kiwi from '$lib/assets/icons/fruits/kiwi.svg';
+import orange from '$lib/assets/icons/fruits/orange.svg';
+import olive from '$lib/assets/icons/fruits/olive.svg';
+import watermelon from '$lib/assets/icons/fruits/watermelon.svg';
 import { Section, stringify } from '@ltd/j-toml';
 import {
 	mapIdlessSlidesMediaSync,

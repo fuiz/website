@@ -1,5 +1,5 @@
 <script>
-	import image from '$lib/assets/image.svg';
+	import image from '$lib/assets/icons/image.svg';
 	import Icon from '$lib/media/Icon.svelte';
 </script>
 

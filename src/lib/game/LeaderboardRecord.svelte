@@ -2,7 +2,7 @@
 	import { medalColors } from '$lib';
 	import Counter from '$lib/ui/Counter.svelte';
 	import Icon from '$lib/media/Icon.svelte';
-	import medal from '$lib/assets/medal.svg';
+	import medal from '$lib/assets/icons/medal.svg';
 	import { scale } from 'svelte/transition';
 
 	/** @type {{name: string;score: number;index: number;final: boolean;duration: number;delay: number;}} */

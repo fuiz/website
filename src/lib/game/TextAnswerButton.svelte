@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors, buttonSymbols } from '$lib';
-	import wrong from '$lib/assets/wrong.svg';
-	import factual from '$lib/assets/correct.svg';
+	import wrong from '$lib/assets/icons/wrong.svg';
+	import factual from '$lib/assets/icons/correct.svg';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Icon from '$lib/media/Icon.svelte';
 

@@ -143,7 +143,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<Icon src="$lib/assets/ghost.svg" size="min(20vh, 60vw)" alt={m.nothing()} />
+							<Icon src="$lib/assets/icons/ghost.svg" size="min(20vh, 60vw)" alt={m.nothing()} />
 							{m.nothing()}
 						</div>
 					{/each}
@@ -162,7 +162,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<Icon src="$lib/assets/ghost.svg" size="min(20vh, 60vw)" alt={m.nothing()} />
+							<Icon src="$lib/assets/icons/ghost.svg" size="min(20vh, 60vw)" alt={m.nothing()} />
 							{m.nothing()}
 						</div>
 					{/each}

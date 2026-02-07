@@ -10,12 +10,7 @@ import {
 	type IdlessFullFuizConfig
 } from './types';
 import { parse } from '@ltd/j-toml';
-import {
-	assertUnreachable,
-	stringifyToml,
-	tomlifyConfig,
-	urlifyBase64
-} from '$lib';
+import { assertUnreachable, stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
 import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/static/public';
 import { localizeHref } from '$lib/paraglide/runtime';
 import { bring } from './util';

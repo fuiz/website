@@ -4,7 +4,7 @@
 	import { limits } from '$lib';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import MediaChooser from './MediaChooser.svelte';
-	import deleteAnswer from '$lib/assets/delete.svg';
+	import deleteAnswer from '$lib/assets/icons/delete.svg';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
