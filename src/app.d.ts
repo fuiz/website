@@ -1,4 +1,3 @@
-import 'unplugin-icons/types/svelte';
 import type {
 	Ai,
 	D1Database,

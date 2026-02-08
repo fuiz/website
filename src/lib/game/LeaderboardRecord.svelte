@@ -25,7 +25,12 @@
 					style:border-radius="0.6em"
 					style:box-sizing="border-box"
 				>
-					<WorkspacePremiumOutline width="1.2em" height="1.2em" color={medalColors[index]} title="medal" />
+					<WorkspacePremiumOutline
+						width="1.2em"
+						height="1.2em"
+						color={medalColors[index]}
+						title="medal"
+					/>
 				</div>
 			{/if}
 		</div>
