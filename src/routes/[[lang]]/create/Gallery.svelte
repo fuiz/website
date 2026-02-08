@@ -5,8 +5,7 @@
 	import { addIds, removeIds } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
-	import Icon from '$lib/media/Icon.svelte';
-	import ghost from '$lib/assets/icons/ghost.svg';
+	import GhostIcon from '~icons/custom/ghost';
 	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
 	import FileOpenOutline from '~icons/material-symbols/file-open-outline';
 	import Login from '~icons/material-symbols/login';
@@ -295,7 +294,7 @@
 					style:align-items="center"
 					style:opacity="0.3"
 				>
-					<Icon src={ghost} size="min(20vh, 60vw)" alt={m.nothing()} />
+					<GhostIcon height="min(20vh, 60vw)" width="min(20vh, 60vw)" title={m.nothing()} />
 					{m.nothing()}
 				</div>
 			{/if}

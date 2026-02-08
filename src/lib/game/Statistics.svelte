@@ -1,6 +1,5 @@
 <script>
-	import { buttonColors, buttonSymbols } from '$lib';
-	import Icon from '$lib/media/Icon.svelte';
+	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
 
 	/** @type {{ statistics?: { count: number; correct: boolean }[] }}*/
 	let { statistics = [] } = $props();
@@ -17,6 +16,7 @@
 	style:box-sizing="border-box"
 >
 	{#each statistics as { count, correct }, index}
+		{@const buttonSymbol = buttonSymbols[index % buttonColors.length]}
 		<div
 			style:display="flex"
 			style:flex-direction="column-reverse"
@@ -33,11 +33,7 @@
 				style:background={buttonColors.at(index % buttonColors.length)?.at(0)}
 				style:border="0.15em solid {buttonColors.at(index % buttonColors.length)?.at(1)}"
 			>
-				<Icon
-					src={buttonSymbols.at(index % buttonSymbols.length)?.at(0) ?? ''}
-					alt={buttonSymbols.at(index % buttonSymbols.length)?.at(1) ?? ''}
-					size="1em"
-				/>
+				<buttonSymbol.icon title={buttonSymbol.label} height="1em" width="1em" />
 			</div>
 			<div style:display="flex" style:flex-direction="column-reverse" style:height="100%">
 				<div

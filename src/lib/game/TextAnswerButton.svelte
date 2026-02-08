@@ -1,14 +1,15 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { buttonColors, buttonSymbols } from '$lib';
+	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
 	import Close from '~icons/material-symbols/close';
 	import Check from '~icons/material-symbols/check';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{index: number, answerText: string, correct: (boolean|undefined), onclick?: () => void}} */
 	let { index, answerText, correct, onclick } = $props();
+
+	let buttonSymbol = $derived(buttonSymbols[index % buttonSymbols.length]);
 </script>
 
 <div style:opacity={correct === false ? '50%' : '100%'}>
@@ -20,11 +21,7 @@
 	>
 		<div style:height="100%" style:width="100%" style:display="flex" style:align-items="center">
 			<div id="icon" style:display="flex" style:padding="0.2em">
-				<Icon
-					src={buttonSymbols.at(index % buttonSymbols.length)?.at(0) ?? ''}
-					alt={buttonSymbols.at(index % buttonSymbols.length)?.at(1) ?? ''}
-					size="1em"
-				/>
+				<buttonSymbol.icon title={buttonSymbol.label} height="1em" width="1em" />
 			</div>
 			<div
 				id="text"

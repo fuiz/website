@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { goto } from '$app/navigation';
-	import { limits } from '$lib';
+	import { limits } from '$lib/clientOnly';
 	import Globe from '~icons/material-symbols/globe';
 	import Share from '~icons/material-symbols/share';
 	import Download from '~icons/material-symbols/download';

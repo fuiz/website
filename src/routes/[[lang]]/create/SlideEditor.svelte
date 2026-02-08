@@ -1,8 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/media/Icon.svelte';
-	import ghost from '$lib/assets/icons/ghost.svg';
+	import GhostIcon from '~icons/custom/ghost';
 	import MultipleChoiceSlideEditor from './MultipleChoiceSlideEditor.svelte';
 	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';
 	import OrderSlideEditor from './OrderSlideEditor.svelte';
@@ -22,7 +21,7 @@
 		style:font-size="2em"
 		style:opacity="0.4"
 	>
-		<Icon src={ghost} size="min(30vh, 60vw)" alt={m.no_slides()} />
+		<GhostIcon height="min(30vh, 60vw)" width="min(30vh, 60vw)" title={m.no_slides()} />
 		{m.no_slides()}
 	</div>
 {:else if 'MultipleChoice' in slide}

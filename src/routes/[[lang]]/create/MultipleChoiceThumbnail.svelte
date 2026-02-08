@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { buttonColors } from '$lib';
+	import { buttonColors } from '$lib/clientOnly';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 

@@ -1,5 +1,5 @@
 <script>
-	import { medalColors } from '$lib';
+	import { medalColors } from '$lib/clientOnly';
 	import Counter from '$lib/ui/Counter.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 	import { scale } from 'svelte/transition';

@@ -5,7 +5,7 @@
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import Topbar from './Topbar.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import { buttonColors } from '$lib';
+	import { buttonColors } from '$lib/clientOnly';
 	import { toSorted } from '$lib/util';
 
 	/** @type {{

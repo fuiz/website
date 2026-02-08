@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { buttonColors, limits } from '$lib';
+	import { buttonColors, limits } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import VariableAddOutline from '~icons/material-symbols/variable-add-outline';
 	import { scale } from 'svelte/transition';
