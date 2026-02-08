@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { limits } from '$lib';
+	import { limits } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { flip } from 'svelte/animate';
 	import ChevronLeft from '~icons/material-symbols/chevron-left';

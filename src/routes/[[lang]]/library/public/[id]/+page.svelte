@@ -8,7 +8,8 @@
 	import { goto } from '$app/navigation';
 	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
-	import { assertUnreachable, buttonColors } from '$lib';
+	import { assertUnreachable } from '$lib';
+	import { buttonColors } from '$lib/clientOnly';
 
 	let { data } = $props();
 

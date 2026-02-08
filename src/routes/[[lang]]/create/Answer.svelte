@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { buttonColors, limits } from '$lib';
+	import { buttonColors, limits } from '$lib/clientOnly';
 	import Checkbox from '$lib/ui/Checkbox.svelte';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import FancyButton from '$lib/ui/FancyButton.svelte';

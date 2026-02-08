@@ -1,7 +1,6 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/media/Icon.svelte';
 	import { grades, subjects } from '$lib/types';
 	import OnlinePublised from './OnlinePublised.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
@@ -10,6 +9,7 @@
 	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 	import { locales } from '$lib/paraglide/runtime';
 	import { untrack } from 'svelte';
+	import GhostIcon from '~icons/custom/ghost';
 
 	/** @type {{recentlyPublished: import('$lib/types').PublishedFuiz[];}} */
 	let { recentlyPublished } = $props();
@@ -143,7 +143,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<Icon src="$lib/assets/icons/ghost.svg" size="min(20vh, 60vw)" alt={m.nothing()} />
+							<GhostIcon height="min(20vh, 60vw)" width="min(20vh, 60vw)" title={m.nothing()} />
 							{m.nothing()}
 						</div>
 					{/each}
@@ -162,7 +162,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<Icon src="$lib/assets/icons/ghost.svg" size="min(20vh, 60vw)" alt={m.nothing()} />
+							<GhostIcon height="min(20vh, 60vw)" width="min(20vh, 60vw)" title={m.nothing()} />
 							{m.nothing()}
 						</div>
 					{/each}

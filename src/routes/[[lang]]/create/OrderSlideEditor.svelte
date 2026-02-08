@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { buttonColors, limits } from '$lib';
+	import { buttonColors, limits } from '$lib/clientOnly';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import MediaChooser from './MediaChooser.svelte';

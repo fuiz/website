@@ -1,8 +1,7 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/media/Icon.svelte';
-	import icon from '$lib/assets/icons/icon.svg';
+	import FuizIcon from '~icons/custom/icon';
 	import { goto } from '$app/navigation';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 
@@ -25,7 +24,7 @@
 	style:border="none"
 	style:border-radius="100px"
 >
-	<Icon src={icon} alt={m.exit()} size="1em" />
+	<FuizIcon height="1em" width="1em" title={m.exit()} />
 	<div>fuiz</div>
 </button>
 

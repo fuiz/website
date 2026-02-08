@@ -1,10 +1,11 @@
 <script>
-	import { buttonColors, buttonSymbols } from '$lib';
-	import Icon from '$lib/media/Icon.svelte';
+	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 
 	/** @type {{index: number, onclick?: () => void}} */
 	let { index, onclick } = $props();
+
+	let buttonSymbol = $derived(buttonSymbols[index % buttonColors.length]);
 </script>
 
 <div>
@@ -30,11 +31,7 @@
 				style:align-items="center"
 				style:height="100%"
 			>
-				<Icon
-					src={buttonSymbols.at(index % buttonColors.length)?.at(0) ?? ''}
-					alt={buttonSymbols.at(index % buttonColors.length)?.at(1) ?? ''}
-					size="100%"
-				/>
+				<buttonSymbol.icon title={buttonSymbol.label} height="100%" width="100%" />
 			</div>
 		</div>
 	</FancyButton>

@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { medalColors } from '$lib';
+	import { medalColors } from '$lib/clientOnly';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';

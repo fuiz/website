@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { buttonColors } from '$lib';
+	import { buttonColors } from '$lib/clientOnly';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
 	import HelpOutline from '~icons/material-symbols/help-outline';
