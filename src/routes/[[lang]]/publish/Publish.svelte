@@ -5,7 +5,7 @@
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
 	import { locales, getLocale, type Locale } from '$lib/paraglide/runtime.js';
-	import Icon from '$lib/media/Icon.svelte';
+	import Language from '~icons/material-symbols/language';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
@@ -317,7 +317,7 @@
 				<Grade bind:tags={grades} />
 				<div>
 					<SelectTime options={[...locales]} bind:selected={lang} {map}>
-						<Icon src="$lib/assets/icons/language.svg" alt={m.language()} size="1em" />
+						<Language height="1em" />
 					</SelectTime>
 				</div>
 				<div>

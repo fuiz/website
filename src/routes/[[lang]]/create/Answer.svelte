@@ -3,7 +3,7 @@
 
 	import { buttonColors, limits } from '$lib';
 	import Checkbox from '$lib/ui/Checkbox.svelte';
-	import deleteAnswer from '$lib/assets/icons/delete.svg';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textbox from '$lib/ui/Textbox.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -44,6 +44,6 @@
 			lightText
 			maxLength={limits.fuiz.maxAnswerTextLength}
 		/>
-		<IconButton src={deleteAnswer} alt={m.delete_answer()} size="1.25em" {onclick} />
+		<IconButton alt={m.delete_answer()} {onclick}><DeleteOutline height="1.25em" /></IconButton>
 	</div>
 </FancyButton>

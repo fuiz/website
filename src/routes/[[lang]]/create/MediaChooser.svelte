@@ -2,10 +2,10 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors } from '$lib';
-	import delete_image from '$lib/assets/icons/delete.svg';
-	import add_photo from '$lib/assets/icons/add_photo.svg';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
+	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
+	import HelpOutline from '~icons/material-symbols/help-outline';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
-	import Icon from '$lib/media/Icon.svelte';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import tippy from 'tippy.js';
@@ -109,7 +109,7 @@
 					style:cursor="pointer"
 					style:justify-content="center"
 				>
-					<Icon size="1em" src={add_photo} alt={m.open_image()} />
+					<AddPhotoAlternateOutline height="1em" />
 				</label>
 			</div>
 		</button>
@@ -134,13 +134,11 @@
 					{m.local_image()}
 				</div>
 				<IconButton
-					src={delete_image}
 					alt={m.remove()}
-					size="1.2em"
 					onclick={() => {
 						media = undefined;
-					}}
-				/>
+					}}><DeleteOutline height="1.2em" /></IconButton
+				>
 			</div>
 			<div
 				style:flex-direction="column"
@@ -175,8 +173,6 @@
 					</div>
 					<div id="alt-help">
 						<IconButton
-							size="1.2em"
-							src="$lib/assets/icons/help.svg"
 							alt={m.image_alt()}
 							onclick={() => {
 								let element = document.getElementById('alt-help');
@@ -189,8 +185,8 @@
 								});
 
 								instance.show();
-							}}
-						/>
+							}}><HelpOutline height="1.2em" /></IconButton
+						>
 					</div>
 				</div>
 			</div>

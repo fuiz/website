@@ -2,7 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { limits } from '$lib';
-	import Icon from '$lib/media/Icon.svelte';
+	import TimerOutline from '~icons/material-symbols/timer-outline';
+	import SportsScore from '~icons/material-symbols/sports-score';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
 
 	/** @type {{activeSlide: import('$lib/types').OrderSlide;}} */
@@ -19,7 +20,7 @@
 					map={(v) => (parseInt(v) / 1000).toString()}
 					bind:selected={activeSlide.time_limit}
 				>
-					<Icon src="$lib/assets/icons/timer.svg" size="1em" alt={m.time_limit()} />
+					<TimerOutline height="1em" />
 				</SelectTime>
 			</div>
 		</div>
@@ -31,7 +32,7 @@
 					map={(v) => (parseInt(v) / 1000).toString()}
 					bind:selected={activeSlide.introduce_question}
 				>
-					<Icon src="$lib/assets/icons/timer.svg" size="1em" alt="{m.time_before_answers}()}" />
+					<TimerOutline height="1em" />
 				</SelectTime>
 			</div>
 		</div>
@@ -54,7 +55,7 @@
 					}}
 					bind:selected={activeSlide.points_awarded}
 				>
-					<Icon src="$lib/assets/icons/score.svg" size="1em" alt={m.points()} />
+					<SportsScore height="1em" />
 				</SelectTime>
 			</div>
 		</div>

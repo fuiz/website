@@ -1,11 +1,10 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import factual from '$lib/assets/icons/correct.svg';
-	import wrong from '$lib/assets/icons/wrong.svg';
+	import Check from '~icons/material-symbols/check';
+	import Close from '~icons/material-symbols/close';
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
-	import Icon from '$lib/media/Icon.svelte';
 
 	/** @type {{
 	 *  value: boolean;
@@ -16,11 +15,6 @@
 
 	const duration = 150;
 </script>
-
-<svelte:head>
-	<link rel="prefetch" as="image" href={factual} />
-	<link rel="prefetch" as="image" href={wrong} />
-</svelte:head>
 
 <button
 	style:height="100%"
@@ -51,7 +45,7 @@
 				in:scale={{ easing: backOut, duration: duration, delay: duration }}
 				out:scale={{ easing: backOut, duration: duration }}
 			>
-				<Icon src={factual} alt={m.marked_as_correct()} size="100%" />
+				<Check height="100%" />
 			</div>
 		{:else}
 			<div
@@ -59,7 +53,7 @@
 				class={attention ? 'attention' : ''}
 				out:scale={{ easing: backOut, duration: duration }}
 			>
-				<Icon src={wrong} alt={m.marked_as_wrong()} size="100%" />
+				<Close height="100%" />
 			</div>
 		{/if}
 	</div>

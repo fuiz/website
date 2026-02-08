@@ -1,10 +1,7 @@
 <script>
-	import Icon from '$lib/media/Icon.svelte';
-
 	/** @type {{
-	 * src: string,
+	 * children: import('svelte').Snippet,
 	 * alt: string,
-	 * size: string,
 	 * disabled?: boolean | undefined,
 	 * padding?: string | undefined,
 	 * onclick?: (() => void) | undefined,
@@ -14,9 +11,8 @@
 	 * popovertarget?: string | undefined
 	}}*/
 	let {
-		src,
+		children,
 		alt,
-		size,
 		disabled = false,
 		padding = '0',
 		onclick,
@@ -28,30 +24,37 @@
 </script>
 
 <button
-	style:font="inherit"
-	style:display="flex"
-	style:aspect-ratio="1/1"
-	style:appearance="none"
 	style:padding
-	style:box-sizing="border-box"
-	style:border="none"
-	style:cursor={disabled ? 'normal' : 'pointer'}
-	style:opacity={disabled ? '0.7' : '1'}
-	style:color="inherit"
 	{popovertarget}
 	{disabled}
 	{onclick}
 	{onmouseover}
 	{onmouseenter}
 	{onfocus}
+	title={alt}
 >
-	<Icon {alt} {src} {size} />
+	{@render children()}
 </button>
 
 <style>
 	button {
 		background: none;
 		border-radius: 4px;
+		font: inherit;
+		display: flex;
+		align-items: center;
+		aspect-ratio: 1;
+		appearance: none;
+		box-sizing: border-box;
+		border: none;
+		color: inherit;
+
+		cursor: pointer;
+	}
+
+	button:disabled {
+		cursor: normal;
+		opacity: 0.7;
 	}
 
 	button:where(:global(:hover, :focus)) {

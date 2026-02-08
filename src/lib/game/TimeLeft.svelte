@@ -1,9 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import hourglassFilled from '$lib/assets/icons/hourglass_filled.svg';
-	import hourglassEmpty from '$lib/assets/icons/hourglass_empty.svg';
-	import Icon from '$lib/media/Icon.svelte';
+	import Hourglass from '~icons/material-symbols/hourglass';
+	import HourglassEmpty from '~icons/material-symbols/hourglass-empty';
 
 	/** @type {{ timeLeft: number, timeStarted: number }} */
 	let { timeLeft, timeStarted } = $props();
@@ -24,7 +23,7 @@
 >
 	<div style:position="relative" style:width={size} style:height={size} style:background="inherit">
 		<div style:position="absolute" style:height="100%" style:overflow="hidden">
-			<Icon src={hourglassFilled} alt={m.filled_hourglass()} {size} />
+			<Hourglass height={size} />
 		</div>
 		<div
 			style:position="absolute"
@@ -32,10 +31,10 @@
 			style:overflow="hidden"
 			style:background="inherit"
 		>
-			<Icon src={hourglassEmpty} alt={m.empty_hourglass()} {size} />
+			<HourglassEmpty height={size} />
 		</div>
 		<div style:position="absolute" style:height="50%" style:overflow="hidden">
-			<Icon src={hourglassFilled} alt={m.filled_hourglass()} {size} />
+			<Hourglass height={size} />
 		</div>
 		<div
 			style:position="absolute"
@@ -43,7 +42,7 @@
 			style:overflow="hidden"
 			style:background="inherit"
 		>
-			<Icon src={hourglassEmpty} alt={m.empty_hourglass()} {size} />
+			<HourglassEmpty height={size} />
 		</div>
 	</div>
 	<div>

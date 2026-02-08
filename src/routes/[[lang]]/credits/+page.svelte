@@ -6,11 +6,11 @@
 	import yichen from '$lib/assets/people/Yichen.webp';
 	import sebastian from '$lib/assets/people/Sebastian.webp';
 
-	import computer from '$lib/assets/icons/computer.svg';
-	import people from '$lib/assets/icons/email.svg';
-	import translator from '$lib/assets/icons/language.svg';
-	import brush from '$lib/assets/icons/brush.svg';
-	import music from '$lib/assets/icons/album.svg';
+	import ComputerOutline from '~icons/material-symbols/computer-outline';
+	import MailOutline from '~icons/material-symbols/mail-outline';
+	import Language from '~icons/material-symbols/language';
+	import BrushOutline from '~icons/material-symbols/brush-outline';
+	import AlbumOutline from '~icons/material-symbols/album-outline';
 	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
@@ -55,10 +55,11 @@
 					<div>
 						<AnchorMessage
 							href="https://adhami.me"
-							image={{ src: computer, alt: m.developer() }}
 							background="#23456740"
 							message="Khaleel Al-Adhami"
-						/>
+						>
+							{#snippet icon()}<ComputerOutline height="1em" />{/snippet}
+						</AnchorMessage>
 					</div>
 				</li>
 				<li>
@@ -66,10 +67,11 @@
 					<div>
 						<AnchorMessage
 							href="https://www.linkedin.com/in/yichen-gao/"
-							image={{ src: people, alt: 'Community Lead' }}
 							background="#23456740"
 							message="Yichen Gao"
-						/>
+						>
+							{#snippet icon()}<MailOutline height="1em" />{/snippet}
+						</AnchorMessage>
 					</div>
 				</li>
 				<li>
@@ -77,10 +79,11 @@
 					<div>
 						<AnchorMessage
 							href="https://barish.me/"
-							image={{ src: computer, alt: m.developer() }}
 							background="#23456740"
 							message="Abutalib (Barish) Namazov"
-						/>
+						>
+							{#snippet icon()}<ComputerOutline height="1em" />{/snippet}
+						</AnchorMessage>
 					</div>
 				</li>
 				<li>
@@ -88,10 +91,11 @@
 					<div>
 						<AnchorMessage
 							href="https://sebastianwich.com"
-							image={{ src: people, alt: 'Community Lead' }}
 							background="#23456740"
 							message="Sebastian Wich"
-						/>
+						>
+							{#snippet icon()}<MailOutline height="1em" />{/snippet}
+						</AnchorMessage>
 					</div>
 				</li>
 			</ul>
@@ -116,28 +120,32 @@
 			</h2>
 			<AnchorMessage
 				href="https://bragefuglseth.dev/"
-				image={{ src: brush, alt: m.designer() }}
 				background="#23456740"
 				message="Brage Fuglseth"
-			/>
+			>
+				{#snippet icon()}<BrushOutline height="1em" />{/snippet}
+			</AnchorMessage>
 			<AnchorMessage
 				href="https://www.linkedin.com/in/zhironwu/"
-				image={{ src: translator, alt: 'Translator' }}
 				background="#23456740"
 				message="Zhiron Wu"
-			/>
+			>
+				{#snippet icon()}<Language height="1em" />{/snippet}
+			</AnchorMessage>
 			<AnchorMessage
 				href="https://incompetech.com/wordpress/"
-				image={{ src: music, alt: m.music() }}
 				background="#23456740"
 				message="&quot;Thinking Music&quot; Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 4.0 License. http://creativecommons.org/licenses/by/4.0/"
-			/>
+			>
+				{#snippet icon()}<AlbumOutline height="1em" />{/snippet}
+			</AnchorMessage>
 			<AnchorMessage
 				href="https://www.youtube.com/watch?v=_h47TNIKJYo&pp=ygUHIGJlZS4gMw%3D%3D"
-				image={{ src: music, alt: m.music() }}
 				background="#23456740"
 				message="&quot;bee. 3&quot; GroovyDominoes52. can use in your videos or games but always remember to credit and not steal"
-			/>
+			>
+				{#snippet icon()}<AlbumOutline height="1em" />{/snippet}
+			</AnchorMessage>
 		</section>
 	</div>
 </TypicalPage>

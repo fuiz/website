@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import MultipleChoiceThumbnail from './MultipleChoiceThumbnail.svelte';
-	import delete_slide from '$lib/assets/icons/delete.svg';
-	import content_copy from '$lib/assets/icons/content_copy.svg';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
+	import ContentCopyOutline from '~icons/material-symbols/content-copy-outline';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
 	import OrderThumbnail from './OrderThumbnail.svelte';
@@ -30,8 +30,12 @@
 			style:gap="0.2em"
 			style:padding="0.2em 0"
 		>
-			<IconButton onclick={ondelete} src={delete_slide} alt={m.delete_confirm()} size="1em" />
-			<IconButton onclick={onduplicate} src={content_copy} alt={m.duplicate()} size="1em" />
+			<IconButton onclick={ondelete} alt={m.delete_confirm()}
+				><DeleteOutline height="1em" /></IconButton
+			>
+			<IconButton onclick={onduplicate} alt={m.duplicate()}
+				><ContentCopyOutline height="1em" /></IconButton
+			>
 		</div>
 	</div>
 	<button

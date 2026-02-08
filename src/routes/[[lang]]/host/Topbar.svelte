@@ -2,12 +2,12 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import Fullscreen from '$lib/layout/Fullscreen.svelte';
-	import volume_up from '$lib/assets/icons/volume_up.svg';
-	import volume_off from '$lib/assets/icons/volume_off.svg';
-	import unlocked from '$lib/assets/icons/unlocked.svg';
-	import locked from '$lib/assets/icons/locked.svg';
+	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
+	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
+	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
+	import LockOutline from '~icons/material-symbols/lock-outline';
 	import IconButton from '$lib/ui/IconButton.svelte';
-	import skip from '$lib/assets/icons/skip.svg';
+	import SkipNext from '~icons/material-symbols/skip-next';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
@@ -81,12 +81,12 @@
 		style:padding="0.2em"
 	>
 		{#if showSkip}
-			<IconButton src={skip} alt={m.skip()} size="1em" onclick={onnext} />
+			<IconButton alt={m.skip()} onclick={onnext}><SkipNext height="1em" /></IconButton>
 		{/if}
 		<StatedIconButton
 			icons={[
-				{ src: unlocked, alt: m.lock_game() },
-				{ src: locked, alt: m.unlock_game() }
+				{ component: LockOpenRightOutline, alt: m.lock_game() },
+				{ component: LockOutline, alt: m.unlock_game() }
 			]}
 			size="1em"
 			bind:state={bindableGameInfo.locked}
@@ -96,8 +96,8 @@
 		<DarkModeSwitcher />
 		<StatedIconButton
 			icons={[
-				{ src: volume_off, alt: m.turn_on_music() },
-				{ src: volume_up, alt: m.mute_music() }
+				{ component: VolumeOffOutline, alt: m.turn_on_music() },
+				{ component: VolumeUpOutline, alt: m.mute_music() }
 			]}
 			size="1em"
 			bind:state={bindableGameInfo.volumeOn}

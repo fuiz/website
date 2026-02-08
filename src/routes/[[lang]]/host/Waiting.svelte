@@ -7,14 +7,14 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import PlayersList from '$lib/game/PlayersList.svelte';
-	import volume_up from '$lib/assets/icons/volume_up.svg';
-	import volume_off from '$lib/assets/icons/volume_off.svg';
-	import unlocked from '$lib/assets/icons/unlocked.svg';
-	import locked from '$lib/assets/icons/locked.svg';
+	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
+	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
+	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
+	import LockOutline from '~icons/material-symbols/lock-outline';
 	import QrCode from '$lib/game/QRCode.svelte';
 	import { onMount } from 'svelte';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
-	import Icon from '$lib/media/Icon.svelte';
+	import PersonOutline from '~icons/material-symbols/person-outline';
 	import ExitFuiz from './ExitFuiz.svelte';
 	import tippy from 'tippy.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
@@ -128,13 +128,13 @@
 			>
 				<div style:display="flex" style:gap="0.2em" style:align-items="center">
 					<div style:flex="1" style:display="flex" style:align-items="center">
-						<Icon src="$lib/assets/icons/person.svg" size="1em" alt={m.number_of_players()} />
+						<PersonOutline height="1em" />
 						{exact_count}
 					</div>
 					<StatedIconButton
 						icons={[
-							{ src: unlocked, alt: m.lock_game() },
-							{ src: locked, alt: m.unlock_game() }
+							{ component: LockOpenRightOutline, alt: m.lock_game() },
+							{ component: LockOutline, alt: m.unlock_game() }
 						]}
 						size="1em"
 						bind:state={bindableGameInfo.locked}
@@ -142,8 +142,8 @@
 					/>
 					<StatedIconButton
 						icons={[
-							{ src: volume_off, alt: m.turn_on_music() },
-							{ src: volume_up, alt: m.mute_music() }
+							{ component: VolumeOffOutline, alt: m.turn_on_music() },
+							{ component: VolumeUpOutline, alt: m.mute_music() }
 						]}
 						size="1em"
 						bind:state={bindableGameInfo.volumeOn}

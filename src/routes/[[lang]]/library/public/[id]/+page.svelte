@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import Icon from '$lib/media/Icon.svelte';
+	import ImageOutline from '~icons/material-symbols/image-outline';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
@@ -59,7 +59,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<Icon src="$lib/assets/icons/image.svg" size="2em" alt={m.fallback()} />
+							<ImageOutline height="2em" width="2em" />
 						</div>
 					{/if}
 				</div>

@@ -1,8 +1,7 @@
 <script>
 	import { medalColors } from '$lib';
 	import Counter from '$lib/ui/Counter.svelte';
-	import Icon from '$lib/media/Icon.svelte';
-	import medal from '$lib/assets/icons/medal.svg';
+	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 	import { scale } from 'svelte/transition';
 
 	/** @type {{name: string;score: number;index: number;final: boolean;duration: number;delay: number;}} */
@@ -26,9 +25,7 @@
 					style:border-radius="0.6em"
 					style:box-sizing="border-box"
 				>
-					<div style:color={medalColors[index]}>
-						<Icon src={medal} alt="medal" size="1.3em" />
-					</div>
+					<WorkspacePremiumOutline width="1.2em" height="1.2em" color={medalColors[index]} />
 				</div>
 			{/if}
 		</div>

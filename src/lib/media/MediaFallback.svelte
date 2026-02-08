@@ -1,6 +1,5 @@
 <script>
-	import image from '$lib/assets/icons/image.svg';
-	import Icon from '$lib/media/Icon.svelte';
+	import ImageOutline from '~icons/material-symbols/image-outline';
 </script>
 
 <div
@@ -11,5 +10,5 @@
 	style:justify-content="center"
 	style:opacity="0.4"
 >
-	<Icon src={image} alt="fallback" size="50%" />
+	<ImageOutline height="50%" />
 </div>

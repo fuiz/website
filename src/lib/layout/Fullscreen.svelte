@@ -1,8 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import fullscreenEnter from '$lib/assets/icons/fullscreen_enter.svg';
-	import fullscreenExit from '$lib/assets/icons/fullscreen_exit.svg';
+	import OpenInFull from '~icons/material-symbols/open-in-full';
+	import CloseFullscreen from '~icons/material-symbols/close-fullscreen';
 	import { onMount } from 'svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 
@@ -28,9 +28,10 @@
 	}
 </script>
 
-<IconButton
-	onclick={toggle}
-	src={fullscreen ? fullscreenExit : fullscreenEnter}
-	alt={fullscreen ? m.exit_fullscreen() : m.enter_fullscreen()}
-	size="1em"
-/>
+<IconButton onclick={toggle} alt={fullscreen ? m.exit_fullscreen() : m.enter_fullscreen()}>
+	{#if fullscreen}
+		<CloseFullscreen height="1em" />
+	{:else}
+		<OpenInFull height="1em" />
+	{/if}
+</IconButton>

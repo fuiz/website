@@ -4,7 +4,7 @@
 	import { limits } from '$lib';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import MediaChooser from './MediaChooser.svelte';
-	import deleteAnswer from '$lib/assets/icons/delete.svg';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -71,11 +71,11 @@
 					maxLength={limits.fuiz.maxAnswerTextLength}
 				/>
 				<IconButton
-					src={deleteAnswer}
-					size="1.5em"
 					alt={m.delete_answer()}
 					onclick={() => (slide.answers = slide.answers.filter((a) => a.id !== answer.id))}
-				/>
+				>
+					<DeleteOutline height="1.5em" />
+				</IconButton>
 			</div>
 		{/each}
 		{#if slide.answers.length < limits.fuiz.typeAnswer.maxAnswerCount}

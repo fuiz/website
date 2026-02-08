@@ -3,6 +3,7 @@
 
 	import { locales, setLocale, type Locale } from '$lib/paraglide/runtime.js';
 	import IconButton from './IconButton.svelte';
+	import Language from '~icons/material-symbols/language';
 
 	let popoverElement = $state<HTMLElement>();
 
@@ -15,12 +16,9 @@
 </script>
 
 <div>
-	<IconButton
-		src="$lib/assets/icons/language.svg"
-		alt={m.language()}
-		size="1em"
-		popovertarget={id}
-	/>
+	<IconButton alt={m.language()} popovertarget={id}>
+		<Language height="1em" />
+	</IconButton>
 
 	<div {id} bind:this={popoverElement} popover="auto" style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>
 		<ul>

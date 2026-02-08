@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
-	import darkMode from '$lib/assets/icons/dark_mode.svg';
-	import lightMode from '$lib/assets/icons/light_mode.svg';
+	import DarkModeOutline from '~icons/material-symbols/dark-mode-outline';
+	import LightModeOutline from '~icons/material-symbols/light-mode-outline';
 	import { browser } from '$app/environment';
 
 	/** @type {boolean | undefined} */
@@ -32,8 +32,8 @@
 {#if theme !== undefined}
 	<StatedIconButton
 		icons={[
-			{ src: lightMode, alt: m.switch_dark() },
-			{ src: darkMode, alt: m.switch_light() }
+			{ component: LightModeOutline, alt: m.switch_dark() },
+			{ component: DarkModeOutline, alt: m.switch_light() }
 		]}
 		bind:state={theme}
 		size="1em"

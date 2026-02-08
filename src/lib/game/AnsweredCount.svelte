@@ -1,11 +1,8 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
+	import AssignmentTurnedIn from '~icons/material-symbols/assignment-turned-in';
 
-	import Icon from '$lib/media/Icon.svelte';
-	import assignmentTurned from '$lib/assets/icons/answer_turned.svg';
-
-	/** @type {{answeredCount: number}} */
-	let { answeredCount } = $props();
+	let { answeredCount }: { answeredCount: number } = $props();
 </script>
 
 <div
@@ -17,8 +14,9 @@
 	style:background="var(--background-color)"
 	style:border="0.15em solid"
 	style:border-radius="200px"
+	title={m.answered_count()}
 >
-	<Icon src={assignmentTurned} alt={m.answered_count()} size="1.2em" />
+	<AssignmentTurnedIn height="1.2em" />
 	<div style:font-size="1em" style:font-family="Poppins">
 		{answeredCount}
 	</div>

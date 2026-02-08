@@ -1,8 +1,10 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import delete_fuiz from '$lib/assets/icons/delete.svg';
-	import present from '$lib/assets/icons/slideshow.svg';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
+	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
+	import Download from '~icons/material-symbols/download';
+	import Share from '~icons/material-symbols/share';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import { onMount } from 'svelte';
@@ -82,24 +84,19 @@
 		</div>
 	</a>
 	<div class="panel">
-		<IconButton size="1em" src={present} alt={m.host()} onclick={onplay} />
-		<IconButton size="1em" src={delete_fuiz} alt={m.delete_confirm()} onclick={ondelete} />
-		<IconButton
-			size="1em"
-			src="$lib/assets/icons/download.svg"
-			alt={m.download()}
-			onclick={ondownload}
-		/>
+		<IconButton alt={m.host()} onclick={onplay}><SlideshowOutlineSharp height="1em" /></IconButton>
+		<IconButton alt={m.delete_confirm()} onclick={ondelete}
+			><DeleteOutline height="1em" /></IconButton
+		>
+		<IconButton alt={m.download()} onclick={ondownload}><Download height="1em" /></IconButton>
 		{#if showShare}
 			<div bind:this={shareElement}>
 				<IconButton
-					size="1em"
-					src="$lib/assets/icons/share.svg"
 					alt={m.share()}
 					onclick={() => {
 						if (tippyInstance) onshare(tippyInstance);
-					}}
-				/>
+					}}><Share height="1em" /></IconButton
+				>
 			</div>
 		{/if}
 	</div>

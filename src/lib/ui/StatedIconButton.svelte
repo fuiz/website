@@ -2,7 +2,7 @@
 	import IconButton from './IconButton.svelte';
 
 	/** @type {{
-	 * 	icons: [{ src: string; alt: string }, { src: string; alt: string }],
+	 * 	icons: [{ component: import('svelte').Component, alt: string }, { component: import('svelte').Component, alt: string }],
 	 * 	size: string,
 	 * 	state: boolean,
 	 * 	onchange?: (state: boolean) => void
@@ -13,11 +13,12 @@
 </script>
 
 <IconButton
-	src={icon.src}
 	alt={icon.alt}
-	{size}
 	onclick={() => {
 		state = !state;
 		if (onchange) onchange(state);
 	}}
-/>
+>
+	{@const Component = icon.component}
+	<Component height={size} />
+</IconButton>

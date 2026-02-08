@@ -1,7 +1,8 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/media/Icon.svelte';
+	import Check from '~icons/material-symbols/check';
+	import Close from '~icons/material-symbols/close';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 
 	/** @typedef {{points: number, position: number} | undefined} Score */
@@ -40,9 +41,9 @@
 						</div>
 					{/if}
 					{#if correct}
-						<Icon src="$lib/assets/icons/correct.svg" alt={m.correct()} size="1em" />
+						<Check height="1em" />
 					{:else}
-						<Icon src="$lib/assets/icons/wrong.svg" alt={m.wrong()} size="1em" />
+						<Close height="1em" />
 						<div class="answers">
 							<div>{m.correct_answers()}</div>
 							{#if 'TypeAnswer' in slide}
