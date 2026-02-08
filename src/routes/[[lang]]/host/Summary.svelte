@@ -4,7 +4,9 @@
 	import { assertUnreachable } from '$lib';
 	import { playBackendReadyConfig } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Icon from '$lib/media/Icon.svelte';
+	import Check from '~icons/material-symbols/check';
+	import Close from '~icons/material-symbols/close';
+	import TimerOffOutline from '~icons/material-symbols/timer-off-outline';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 
@@ -62,16 +64,16 @@
 				</div>
 				<div class="stat">
 					{correct}
-					<Icon src="$lib/assets/icons/correct.svg" alt={m.correct()} size="1em" />
+					<Check height="1em" title={m.correct()} />
 				</div>
 
 				<div class="stat">
 					{wrong}
-					<Icon src="$lib/assets/icons/wrong.svg" alt={m.wrong()} size="1em" />
+					<Close height="1em" title={m.wrong()} />
 				</div>
 				<div class="stat">
 					{unanswered}
-					<Icon src="$lib/assets/icons/timer_off.svg" alt={m.unanswered()} size="1em" />
+					<TimerOffOutline height="1em" title={m.unanswered()} />
 				</div>
 			</div>
 		{/each}

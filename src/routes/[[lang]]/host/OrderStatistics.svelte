@@ -3,10 +3,9 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import factual from '$lib/assets/icons/correct.svg';
+	import Check from '~icons/material-symbols/check';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
-	import Icon from '$lib/media/Icon.svelte';
-	import wrong from '$lib/assets/icons/wrong.svg';
+	import Close from '~icons/material-symbols/close';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 
 	/** @type {{
@@ -62,7 +61,7 @@
 							style:gap="0.2em"
 						>
 							{results[0]}
-							<Icon src={factual} alt={m.correct()} size="1.25em" />
+							<Check height="1.25em" title={m.correct()} />
 						</div>
 						<div
 							style:display="inline-flex"
@@ -71,7 +70,7 @@
 							style:gap="0.2em"
 						>
 							{results[1]}
-							<Icon src={wrong} alt={m.wrong()} size="1.25em" />
+							<Close height="1.25em" title={m.wrong()} />
 						</div>
 					</div>
 				{/snippet}

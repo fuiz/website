@@ -1,6 +1,5 @@
 <script>
-	import Icon from '$lib/media/Icon.svelte';
-	import score_image from '$lib/assets/icons/score.svg';
+	import SportsScore from '~icons/material-symbols/sports-score';
 
 	/** @type {{name: string;score?: number | undefined;}} */
 	let { name, score = undefined } = $props();
@@ -36,7 +35,7 @@
 			<div style:font-family="Poppins">
 				{score}
 			</div>
-			<Icon src={score_image} alt="points" size="1.25em" />
+			<SportsScore height="1.25em" title="points" />
 		</div>
 	{/if}
 </div>

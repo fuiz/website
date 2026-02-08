@@ -1,13 +1,11 @@
 <script>
-	import Icon from '$lib/media/Icon.svelte';
-
 	/** @type {{
 	 *  message: string;
-	 *  image: { src: string; alt: string };
+	 *  icon: import('svelte').Snippet;
 	 *  background: string;
 	 *  color: string;
 	}} */
-	let { message, image, background, color } = $props();
+	let { message, icon, background, color } = $props();
 </script>
 
 {#if message}
@@ -25,7 +23,7 @@
 		style:border="1px solid {color}"
 		style:word-wrap="anywhere"
 	>
-		<Icon size="1em" src={image.src} alt={image.alt} />
+		{@render icon()}
 		<div style:flex="1" style:text-align="center">
 			{message}
 		</div>

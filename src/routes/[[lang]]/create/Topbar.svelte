@@ -3,6 +3,10 @@
 
 	import { goto } from '$app/navigation';
 	import { limits } from '$lib';
+	import Globe from '~icons/material-symbols/globe';
+	import Share from '~icons/material-symbols/share';
+	import Download from '~icons/material-symbols/download';
+	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import Logo from '$lib/media/Logo.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
@@ -121,41 +125,35 @@
 		</div>
 		<div style:display="flex" style:align-items="center" style:gap="0.2em" style:padding="0.2em">
 			{#if showPublish}
-				<IconButton
-					size="1em"
-					src="$lib/assets/icons/publish.svg"
-					alt={m.publish_title()}
-					onclick={() => goto('publish?id=' + id)}
-				/>
+				<IconButton alt={m.publish_title()} onclick={() => goto('publish?id=' + id)}>
+					<Globe height="1em" />
+				</IconButton>
 			{/if}
 			{#if showShare}
 				<div bind:this={shareButton}>
 					<IconButton
-						size="1em"
-						src="$lib/assets/icons/share.svg"
 						alt={m.share()}
 						onclick={() => {
 							if (shareTippyInstance) onshare(shareTippyInstance);
 						}}
-					/>
+					>
+						<Share height="1em" />
+					</IconButton>
 				</div>
 			{/if}
-			<IconButton
-				size="1em"
-				src="$lib/assets/icons/download.svg"
-				alt={m.download()}
-				onclick={() => onDownload(id)}
-			/>
+			<IconButton alt={m.download()} onclick={() => onDownload(id)}>
+				<Download height="1em" />
+			</IconButton>
 			<div bind:this={playButton}>
 				<IconButton
-					size="1em"
-					src="$lib/assets/icons/slideshow.svg"
 					alt={m.host()}
 					disabled={errorMessage != undefined}
 					onclick={() => goto('host?id=' + id)}
 					onmouseenter={() => onmouseenter()}
 					onfocus={() => onmouseenter()}
-				/>
+				>
+					<SlideshowOutlineSharp height="1em" />
+				</IconButton>
 			</div>
 		</div>
 	</div>

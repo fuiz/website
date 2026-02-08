@@ -4,7 +4,7 @@
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import downArrow from '$lib/assets/icons/arrow-down.svg';
+	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 	import Topbar from './Topbar.svelte';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -110,9 +110,7 @@
 									</div>
 									{#if actualIndex < answersIndexed.length - 1}
 										<IconButton
-											src={downArrow}
 											alt="Move down"
-											size="1.5em"
 											onclick={() => {
 												answersIndexed = [
 													...answersIndexed.slice(0, actualIndex),
@@ -120,8 +118,8 @@
 													answersIndexed[actualIndex],
 													...answersIndexed.slice(actualIndex + 2)
 												];
-											}}
-										/>
+											}}><ArrowDownward height="1.5em" /></IconButton
+										>
 									{/if}
 								</div>
 							{/each}

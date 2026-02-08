@@ -3,9 +3,8 @@
 
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 
-	import diversity from '$lib/assets/icons/diversity.svg';
-	import balance from '$lib/assets/icons/balance.svg';
-	import Icon from '$lib/media/Icon.svelte';
+	import Diversity1 from '~icons/material-symbols/diversity-1';
+	import Balance from '~icons/material-symbols/balance';
 	import Anchor from '$lib/navigation/Anchor.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
@@ -27,13 +26,13 @@
 >
 	<Anchor href={localizeHref('/credits')}>
 		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
-			<Icon src={diversity} alt={m.community()} size="1em" />
+			<Diversity1 height="1em" title={m.community()} />
 			<div>{m.community()}</div>
 		</div>
 	</Anchor>
 	<Anchor href="https://gitlab.com/fuiz/website">
 		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
-			<Icon src={balance} alt={m.open_source()} size="1em" />
+			<Balance height="1em" title={m.open_source()} />
 			<div>GNU AGPLv3</div>
 		</div>
 	</Anchor>

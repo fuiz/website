@@ -2,8 +2,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { buttonColors, buttonSymbols } from '$lib';
-	import wrong from '$lib/assets/icons/wrong.svg';
-	import factual from '$lib/assets/icons/correct.svg';
+	import Close from '~icons/material-symbols/close';
+	import Check from '~icons/material-symbols/check';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Icon from '$lib/media/Icon.svelte';
 
@@ -39,11 +39,11 @@
 			</div>
 			{#if correct === false}
 				<div style:display="flex" style:padding="0.2em">
-					<Icon src={wrong} alt={m.wrong()} size="1em" />
+					<Close height="1em" title={m.wrong()} />
 				</div>
 			{:else if correct === true}
 				<div style:display="flex" style:padding="0.2em">
-					<Icon src={factual} alt={m.correct()} size="1em" />
+					<Check height="1em" title={m.correct()} />
 				</div>
 			{/if}
 		</div>

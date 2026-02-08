@@ -5,11 +5,11 @@
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import MediaChooser from './MediaChooser.svelte';
-	import arrowDown from '$lib/assets/icons/arrow-down.svg';
-	import addAnswer from '$lib/assets/icons/add.svg';
+	import ArrowDownward from '~icons/material-symbols/arrow-downward';
+	import Add from '~icons/material-symbols/add';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
-	import deleteAnswer from '$lib/assets/icons/delete.svg';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import Textbox from '$lib/ui/Textbox.svelte';
 
 	/** @type {{slide: import('$lib/types').OrderSlide;}} */
@@ -76,26 +76,22 @@
 			<div style:display="flex" style:gap="0.5em" style:align-items="center">
 				{#if index < slide.answers.length - 1}
 					<IconButton
-						src={arrowDown}
 						alt="Move down"
-						size="1.25em"
 						onclick={() => {
 							if (index < slide.answers.length - 1) {
 								const temp = slide.answers[index];
 								slide.answers[index] = slide.answers[index + 1];
 								slide.answers[index + 1] = temp;
 							}
-						}}
-					/>
+						}}><ArrowDownward height="1.25em" /></IconButton
+					>
 				{:else if slide.answers.length < limits.fuiz.order.maxAnswerCount}
 					<IconButton
-						src={addAnswer}
 						alt={m.add_answer()}
-						size="1.25em"
 						onclick={() => {
 							slide.answers = [...slide.answers, { text: '', id: Date.now() }];
-						}}
-					/>
+						}}><Add height="1.25em" /></IconButton
+					>
 				{/if}
 				<FancyButton
 					backgroundColor={buttonColors.at(index % buttonColors.length)?.[0]}
@@ -111,13 +107,11 @@
 					/>
 				</FancyButton>
 				<IconButton
-					src={deleteAnswer}
 					alt={m.delete_answer()}
-					size="1.25em"
 					onclick={() => {
 						slide.answers = slide.answers.filter((a) => a.id !== answer.id);
-					}}
-				/>
+					}}><DeleteOutline height="1.25em" /></IconButton
+				>
 			</div>
 		{/each}
 		{#if slide.answers.length === 0}

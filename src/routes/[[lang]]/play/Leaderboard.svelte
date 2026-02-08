@@ -4,8 +4,7 @@
 	import { medalColors } from '$lib';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import medal from '$lib/assets/icons/medal.svg';
-	import Icon from '$lib/media/Icon.svelte';
+	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 
 	/** @type {{name: string;score: number;position: number | undefined;final: boolean;}} */
 	let { name, score, position, final } = $props();
@@ -44,7 +43,7 @@
 								style:box-sizing="border-box"
 							>
 								<div style:color={medalColors[position]}>
-									<Icon size="200px" src={medal} alt="medal" />
+									<WorkspacePremiumOutline height="200px" width="200px" title="medal" />
 								</div>
 								<div style:color={medalColors[position]}>
 									{#if position === 0}

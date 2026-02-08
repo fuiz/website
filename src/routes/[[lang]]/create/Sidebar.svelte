@@ -4,14 +4,13 @@
 	import { limits } from '$lib';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { flip } from 'svelte/animate';
-	import left from '$lib/assets/icons/left.svg';
-	import right from '$lib/assets/icons/right.svg';
-	import first from '$lib/assets/icons/first.svg';
-	import last from '$lib/assets/icons/last.svg';
+	import ChevronLeft from '~icons/material-symbols/chevron-left';
+	import ChevronRight from '~icons/material-symbols/chevron-right';
+	import FirstPage from '~icons/material-symbols/first-page';
+	import LastPage from '~icons/material-symbols/last-page';
 	import Thumbnail from './Thumbnail.svelte';
 	import { dndzone } from 'svelte-dnd-action';
-	import add_slide from '$lib/assets/icons/add_slide.svg';
-	import Icon from '$lib/media/Icon.svelte';
+	import MagnifyDocked from '~icons/material-symbols/magnify-docked';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import { tick } from 'svelte';
 
@@ -234,7 +233,7 @@
 					style:justify-content="center"
 					style:gap="0.2em"
 				>
-					<Icon size="1em" src={add_slide} alt={m.add_slide()} />
+					<MagnifyDocked height="1em" title={m.add_slide()} />
 					<div class="would-be-hidden">{m.add_slide()}</div>
 				</div>
 			</FancyButton>
@@ -242,22 +241,17 @@
 	</div>
 	<div id="controls">
 		<div>
-			<IconButton
-				src={first}
-				alt={m.first_slide()}
-				size="1.2em"
-				padding="0.2em"
-				onclick={() => changeSelected(0)}
-			/>
+			<IconButton alt={m.first_slide()} padding="0.2em" onclick={() => changeSelected(0)}
+				><FirstPage height="1.2em" /></IconButton
+			>
 		</div>
 		<div>
 			<IconButton
-				src={left}
 				alt={m.prev_slide()}
-				size="1.2em"
 				padding="0.2em"
 				onclick={() => changeSelected(selectedSlideIndex - 1)}
-			/>
+				><ChevronLeft height="1.2em" /></IconButton
+			>
 		</div>
 		<div>
 			<div
@@ -272,21 +266,18 @@
 		</div>
 		<div>
 			<IconButton
-				src={right}
 				alt={m.next_slide()}
-				size="1.2em"
 				padding="0.2em"
 				onclick={() => changeSelected(selectedSlideIndex + 1)}
-			/>
+				><ChevronRight height="1.2em" /></IconButton
+			>
 		</div>
 		<div>
 			<IconButton
-				src={last}
 				alt={m.last_slide()}
-				size="1.2em"
 				padding="0.2em"
-				onclick={() => changeSelected(slides.length - 1)}
-			/>
+				onclick={() => changeSelected(slides.length - 1)}><LastPage height="1.2em" /></IconButton
+			>
 		</div>
 	</div>
 </div>

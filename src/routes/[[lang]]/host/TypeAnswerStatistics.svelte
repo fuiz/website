@@ -1,11 +1,10 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
-	import factual from '$lib/assets/icons/correct.svg';
+	import Check from '~icons/material-symbols/check';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import Topbar from './Topbar.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import Icon from '$lib/media/Icon.svelte';
 	import { buttonColors } from '$lib';
 	import { toSorted } from '$lib/util';
 
@@ -120,7 +119,7 @@
 								{count}
 								{#if correct}
 									<div style:display="flex" style:padding="0.2em 0">
-										<Icon src={factual} alt={m.correct()} size="1.2em" />
+										<Check height="1.2em" title={m.correct()} />
 									</div>
 								{/if}
 							</div>

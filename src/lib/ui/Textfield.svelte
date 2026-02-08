@@ -1,7 +1,7 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
 
-	import Icon from '$lib/media/Icon.svelte';
+	import ErrorOutline from '~icons/material-symbols/error-outline';
 
 	/** @type {{
 	* id: string;
@@ -58,7 +58,7 @@
 	/>
 	<label for={id}>{placeholder}</label>
 	<div id="error">
-		<Icon src="$lib/assets/icons/error.svg" alt={m.length_too_short()} size="1.2em" />
+		<ErrorOutline height="1.2em" title={m.length_too_short()} />
 	</div>
 </div>
 

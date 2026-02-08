@@ -1,12 +1,14 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
-
+	import { localizeHref } from '$lib/paraglide/runtime';
+	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import Header from '$lib/layout/Header.svelte';
-	import Icon from '$lib/media/Icon.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
-	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
-	import { localizeHref } from '$lib/paraglide/runtime';
+	import LibraryBooks from '~icons/material-symbols/library-books';
+	import Palette from '~icons/material-symbols/palette';
+	import StadiaController from '~icons/material-symbols/stadia-controller';
+	import VolunteerActivism from '~icons/material-symbols/volunteer-activism';
 
 	let { showLibrary = false } = $props();
 </script>
@@ -17,7 +19,7 @@
 		<div>
 			<FancyAnchorButton href={localizeHref('/create')}>
 				<div class="a">
-					<Icon src="$lib/assets/icons/paint.svg" alt={m.create()} size="1.2em" />
+					<Palette height="1.2em" title={m.create()} />
 					<div>{m.create()}</div>
 				</div>
 			</FancyAnchorButton>
@@ -25,7 +27,7 @@
 		<div>
 			<FancyAnchorButton href={localizeHref('/play')}>
 				<div class="a">
-					<Icon size="1.2em" src="$lib/assets/icons/game.svg" alt={m.play()} />
+					<StadiaController height="1.2em" title={m.play()} />
 					<div>{m.play()}</div>
 				</div>
 			</FancyAnchorButton>
@@ -34,7 +36,7 @@
 			<div>
 				<FancyAnchorButton href={localizeHref('/library')}>
 					<div class="a">
-						<Icon size="1.2em" src="$lib/assets/icons/library.svg" alt={m.library()} />
+						<LibraryBooks height="1.2em" title={m.library()} />
 						<div>{m.library()}</div>
 					</div>
 				</FancyAnchorButton>
@@ -43,7 +45,7 @@
 		<div>
 			<FancyAnchorButton href="https://opencollective.com/fuiz">
 				<div class="a">
-					<Icon size="1.2em" src="$lib/assets/icons/donate.svg" alt={m.donate()} />
+					<VolunteerActivism height="1.2em" title={m.donate()} />
 					<div>{m.donate()}</div>
 				</div>
 			</FancyAnchorButton>

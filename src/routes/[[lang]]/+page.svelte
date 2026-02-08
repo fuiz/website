@@ -1,8 +1,15 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
-	import warning from '$lib/assets/icons/error.svg';
 
-	import Icon from '$lib/media/Icon.svelte';
+	import ErrorOutline from '~icons/material-symbols/error-outline';
+	import HelpOutline from '~icons/material-symbols/help-outline';
+	import MoneyOff from '~icons/material-symbols/money-off';
+	import Language from '~icons/material-symbols/language';
+	import Diversity2Outline from '~icons/material-symbols/diversity-2-outline';
+	import Diversity1 from '~icons/material-symbols/diversity-1';
+	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
+	import MailOutline from '~icons/material-symbols/mail-outline';
+
 	import logo from '$lib/assets/same_color_logo.svg';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
 	import Anchor from '$lib/navigation/Anchor.svelte';
@@ -158,15 +165,9 @@
 	{/if}
 	<section>
 		<div>
-			<AnchorMessage
-				image={{
-					src: warning,
-					alt: m.warning()
-				}}
-				background="#23456740"
-				message={m.fuiz_is_ongoing()}
-				href="#ongoing"
-			/>
+			<AnchorMessage background="#23456740" message={m.fuiz_is_ongoing()} href="#ongoing">
+				{#snippet icon()}<ErrorOutline height="1em" title={m.warning()} />{/snippet}
+			</AnchorMessage>
 		</div>
 	</section>
 	<section>
@@ -177,7 +178,7 @@
 					{m.about_fuiz_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/help.svg" size="7em" alt={m.about_fuiz()} />
+			<HelpOutline height="7em" width="7em" title={m.about_fuiz()} />
 		</div>
 	</section>
 	<section>
@@ -191,7 +192,7 @@
 					{m.number_of_participants()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/no_money.svg" size="7em" alt="Free of charge" />
+			<MoneyOff height="7em" width="7em" title="Free of charge" />
 		</div>
 	</section>
 	<section>
@@ -202,7 +203,7 @@
 					{m.well_translated_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/language.svg" size="7em" alt={m.language()} />
+			<Language height="7em" width="7em" title={m.language()} />
 		</div>
 	</section>
 	<section>
@@ -213,7 +214,7 @@
 					{m.collab_over_comp_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/collaboration.svg" size="7em" alt="Collaboration" />
+			<Diversity2Outline height="7em" width="7em" title="Collaboration" />
 		</div>
 	</section>
 	<section>
@@ -224,7 +225,7 @@
 					{m.community_made_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/diversity.svg" size="7em" alt={m.community_made()} />
+			<Diversity1 height="7em" width="7em" title={m.community_made()} />
 		</div>
 	</section>
 	<section>
@@ -237,7 +238,7 @@
 					{m.always_open_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/code_blocks.svg" size="7em" alt="Peoeple's Choice" />
+			<CodeBlocksOutline height="7em" width="7em" title="People's Choice" />
 		</div>
 	</section>
 	<section id="ongoing">
@@ -249,7 +250,7 @@
 					{@html m.stay_in_touch_desc()}
 				</p>
 			</div>
-			<Icon src="$lib/assets/icons/email.svg" size="7em" alt="Email" />
+			<MailOutline height="7em" width="7em" title="Email" />
 		</div>
 	</section>
 	<footer>

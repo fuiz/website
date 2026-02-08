@@ -3,8 +3,7 @@
 
 	import { buttonColors, limits } from '$lib';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Icon from '$lib/media/Icon.svelte';
-	import variables from '$lib/assets/icons/variables.svg';
+	import VariableAddOutline from '~icons/material-symbols/variable-add-outline';
 	import { scale } from 'svelte/transition';
 	import Answer from './Answer.svelte';
 	import { backOut } from 'svelte/easing';
@@ -55,7 +54,7 @@
 					style:gap="0.2em"
 					style:box-sizing="border-box"
 				>
-					<Icon size="1.25em" src={variables} alt={m.add_answer()} />
+					<VariableAddOutline height="1.25em" title={m.add_answer()} />
 					<div>{m.add_answer()}</div>
 				</div>
 			</FancyButton>
