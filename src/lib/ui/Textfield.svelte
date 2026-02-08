@@ -58,7 +58,7 @@
 	/>
 	<label for={id}>{placeholder}</label>
 	<div id="error">
-		<ErrorOutline height="1.2em" />
+		<ErrorOutline height="1.2em" title={m.length_too_short()} />
 	</div>
 </div>
 

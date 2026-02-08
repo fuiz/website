@@ -26,13 +26,13 @@
 >
 	<Anchor href={localizeHref('/credits')}>
 		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
-			<Diversity1 height="1em" />
+			<Diversity1 height="1em" title={m.community()} />
 			<div>{m.community()}</div>
 		</div>
 	</Anchor>
 	<Anchor href="https://gitlab.com/fuiz/website">
 		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
-			<Balance height="1em" />
+			<Balance height="1em" title={m.open_source()} />
 			<div>GNU AGPLv3</div>
 		</div>
 	</Anchor>

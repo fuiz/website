@@ -109,7 +109,7 @@
 					style:cursor="pointer"
 					style:justify-content="center"
 				>
-					<AddPhotoAlternateOutline height="1em" />
+					<AddPhotoAlternateOutline height="1em" title={m.open_image()} />
 				</label>
 			</div>
 		</button>

@@ -58,7 +58,7 @@
 							background="#23456740"
 							message="Khaleel Al-Adhami"
 						>
-							{#snippet icon()}<ComputerOutline height="1em" />{/snippet}
+							{#snippet icon()}<ComputerOutline height="1em" title={m.developer()} />{/snippet}
 						</AnchorMessage>
 					</div>
 				</li>
@@ -70,7 +70,7 @@
 							background="#23456740"
 							message="Yichen Gao"
 						>
-							{#snippet icon()}<MailOutline height="1em" />{/snippet}
+							{#snippet icon()}<MailOutline height="1em" title="Community Lead" />{/snippet}
 						</AnchorMessage>
 					</div>
 				</li>
@@ -82,7 +82,7 @@
 							background="#23456740"
 							message="Abutalib (Barish) Namazov"
 						>
-							{#snippet icon()}<ComputerOutline height="1em" />{/snippet}
+							{#snippet icon()}<ComputerOutline height="1em" title={m.developer()} />{/snippet}
 						</AnchorMessage>
 					</div>
 				</li>
@@ -94,7 +94,7 @@
 							background="#23456740"
 							message="Sebastian Wich"
 						>
-							{#snippet icon()}<MailOutline height="1em" />{/snippet}
+							{#snippet icon()}<MailOutline height="1em" title="Community Lead" />{/snippet}
 						</AnchorMessage>
 					</div>
 				</li>
@@ -123,28 +123,28 @@
 				background="#23456740"
 				message="Brage Fuglseth"
 			>
-				{#snippet icon()}<BrushOutline height="1em" />{/snippet}
+				{#snippet icon()}<BrushOutline height="1em" title={m.designer()} />{/snippet}
 			</AnchorMessage>
 			<AnchorMessage
 				href="https://www.linkedin.com/in/zhironwu/"
 				background="#23456740"
 				message="Zhiron Wu"
 			>
-				{#snippet icon()}<Language height="1em" />{/snippet}
+				{#snippet icon()}<Language height="1em" title="Translator" />{/snippet}
 			</AnchorMessage>
 			<AnchorMessage
 				href="https://incompetech.com/wordpress/"
 				background="#23456740"
 				message="&quot;Thinking Music&quot; Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 4.0 License. http://creativecommons.org/licenses/by/4.0/"
 			>
-				{#snippet icon()}<AlbumOutline height="1em" />{/snippet}
+				{#snippet icon()}<AlbumOutline height="1em" title={m.music()} />{/snippet}
 			</AnchorMessage>
 			<AnchorMessage
 				href="https://www.youtube.com/watch?v=_h47TNIKJYo&pp=ygUHIGJlZS4gMw%3D%3D"
 				background="#23456740"
 				message="&quot;bee. 3&quot; GroovyDominoes52. can use in your videos or games but always remember to credit and not steal"
 			>
-				{#snippet icon()}<AlbumOutline height="1em" />{/snippet}
+				{#snippet icon()}<AlbumOutline height="1em" title={m.music()} />{/snippet}
 			</AnchorMessage>
 		</section>
 	</div>

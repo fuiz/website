@@ -43,7 +43,7 @@
 								style:box-sizing="border-box"
 							>
 								<div style:color={medalColors[position]}>
-									<WorkspacePremiumOutline height="200px" width="200px" />
+									<WorkspacePremiumOutline height="200px" width="200px" title="medal" />
 								</div>
 								<div style:color={medalColors[position]}>
 									{#if position === 0}

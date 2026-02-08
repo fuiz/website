@@ -10,5 +10,5 @@
 	style:justify-content="center"
 	style:opacity="0.4"
 >
-	<ImageOutline height="50%" />
+	<ImageOutline height="50%" title="fallback" />
 </div>

@@ -59,7 +59,7 @@
 							style:align-items="center"
 							style:justify-content="center"
 						>
-							<ImageOutline height="2em" width="2em" />
+							<ImageOutline height="2em" width="2em" title={m.fallback()} />
 						</div>
 					{/if}
 				</div>

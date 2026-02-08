@@ -54,7 +54,7 @@
 					style:gap="0.2em"
 					style:box-sizing="border-box"
 				>
-					<VariableAddOutline height="1.25em" />
+					<VariableAddOutline height="1.25em" title={m.add_answer()} />
 					<div>{m.add_answer()}</div>
 				</div>
 			</FancyButton>

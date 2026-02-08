@@ -20,7 +20,7 @@
 					map={(v) => (parseInt(v) / 1000).toString()}
 					bind:selected={activeSlide.time_limit}
 				>
-					<TimerOutline height="1em" />
+					<TimerOutline height="1em" title={m.time_limit()} />
 				</SelectTime>
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 					map={(v) => (parseInt(v) / 1000).toString()}
 					bind:selected={activeSlide.introduce_question}
 				>
-					<TimerOutline height="1em" />
+					<TimerOutline height="1em" title={m.time_limit()} />
 				</SelectTime>
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 					}}
 					bind:selected={activeSlide.points_awarded}
 				>
-					<SportsScore height="1em" />
+					<SportsScore height="1em" title={m.points()} />
 				</SelectTime>
 			</div>
 		</div>

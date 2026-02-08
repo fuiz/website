@@ -41,9 +41,9 @@
 						</div>
 					{/if}
 					{#if correct}
-						<Check height="1em" />
+						<Check height="1em" title={m.correct()} />
 					{:else}
-						<Close height="1em" />
+						<Close height="1em" title={m.wrong()} />
 						<div class="answers">
 							<div>{m.correct_answers()}</div>
 							{#if 'TypeAnswer' in slide}

@@ -61,7 +61,7 @@
 							style:gap="0.2em"
 						>
 							{results[0]}
-							<Check height="1.25em" />
+							<Check height="1.25em" title={m.correct()} />
 						</div>
 						<div
 							style:display="inline-flex"
@@ -70,7 +70,7 @@
 							style:gap="0.2em"
 						>
 							{results[1]}
-							<Close height="1.25em" />
+							<Close height="1.25em" title={m.wrong()} />
 						</div>
 					</div>
 				{/snippet}

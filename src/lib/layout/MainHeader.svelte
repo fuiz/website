@@ -19,7 +19,7 @@
 		<div>
 			<FancyAnchorButton href={localizeHref('/create')}>
 				<div class="a">
-					<Palette height="1.2em" />
+					<Palette height="1.2em" title={m.create()} />
 					<div>{m.create()}</div>
 				</div>
 			</FancyAnchorButton>
@@ -27,7 +27,7 @@
 		<div>
 			<FancyAnchorButton href={localizeHref('/play')}>
 				<div class="a">
-					<StadiaController height="1.2em" />
+					<StadiaController height="1.2em" title={m.play()} />
 					<div>{m.play()}</div>
 				</div>
 			</FancyAnchorButton>
@@ -36,7 +36,7 @@
 			<div>
 				<FancyAnchorButton href={localizeHref('/library')}>
 					<div class="a">
-						<LibraryBooks height="1.2em" />
+						<LibraryBooks height="1.2em" title={m.library()} />
 						<div>{m.library()}</div>
 					</div>
 				</FancyAnchorButton>
@@ -45,7 +45,7 @@
 		<div>
 			<FancyAnchorButton href="https://opencollective.com/fuiz">
 				<div class="a">
-					<VolunteerActivism height="1.2em" />
+					<VolunteerActivism height="1.2em" title={m.donate()} />
 					<div>{m.donate()}</div>
 				</div>
 			</FancyAnchorButton>

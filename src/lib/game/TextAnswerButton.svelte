@@ -39,11 +39,11 @@
 			</div>
 			{#if correct === false}
 				<div style:display="flex" style:padding="0.2em">
-					<Close height="1em" />
+					<Close height="1em" title={m.wrong()} />
 				</div>
 			{:else if correct === true}
 				<div style:display="flex" style:padding="0.2em">
-					<Check height="1em" />
+					<Check height="1em" title={m.correct()} />
 				</div>
 			{/if}
 		</div>

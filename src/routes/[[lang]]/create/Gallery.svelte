@@ -177,7 +177,7 @@
 					style:padding="0.15em 0.25em"
 					style:justify-content="center"
 				>
-					<NoteAddOutline height="1.25em" />
+					<NoteAddOutline height="1.25em" title={m.start_blank()} />
 					<div>{m.start_blank()}</div>
 				</div>
 			</FancyButton>
@@ -202,7 +202,7 @@
 					style:padding="0.15em 0.25em"
 					style:justify-content="center"
 				>
-					<FileOpenOutline height="1.25em" />
+					<FileOpenOutline height="1.25em" title={m.open_file()} />
 					<div>{m.open_file()}</div>
 				</div>
 			</FancyButton>
@@ -219,7 +219,7 @@
 							style:padding="0.15em 0.25em"
 							style:justify-content="center"
 						>
-							<Logout height="1.25em" />
+							<Logout height="1.25em" title="Log Out" />
 							<div>Log Out</div>
 						</div>
 					</FancyButton>
@@ -237,7 +237,7 @@
 							style:padding="0.15em 0.25em"
 							style:justify-content="center"
 						>
-							<Login height="1.25em" />
+							<Login height="1.25em" title="Backup to {provider.displayName}" />
 							<div>Backup to {provider.displayName}</div>
 						</div>
 					</FancyButton>

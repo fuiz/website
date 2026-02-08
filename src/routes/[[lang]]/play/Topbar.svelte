@@ -35,7 +35,7 @@
 			<div style:font-family="Poppins">
 				{score}
 			</div>
-			<SportsScore height="1.25em" />
+			<SportsScore height="1.25em" title="points" />
 		</div>
 	{/if}
 </div>

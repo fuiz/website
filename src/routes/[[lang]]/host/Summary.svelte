@@ -64,16 +64,16 @@
 				</div>
 				<div class="stat">
 					{correct}
-					<Check height="1em" />
+					<Check height="1em" title={m.correct()} />
 				</div>
 
 				<div class="stat">
 					{wrong}
-					<Close height="1em" />
+					<Close height="1em" title={m.wrong()} />
 				</div>
 				<div class="stat">
 					{unanswered}
-					<TimerOffOutline height="1em" />
+					<TimerOffOutline height="1em" title={m.unanswered()} />
 				</div>
 			</div>
 		{/each}

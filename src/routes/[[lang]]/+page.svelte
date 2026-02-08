@@ -166,7 +166,7 @@
 	<section>
 		<div>
 			<AnchorMessage background="#23456740" message={m.fuiz_is_ongoing()} href="#ongoing">
-				{#snippet icon()}<ErrorOutline height="1em" />{/snippet}
+				{#snippet icon()}<ErrorOutline height="1em" title={m.warning()} />{/snippet}
 			</AnchorMessage>
 		</div>
 	</section>
@@ -178,7 +178,7 @@
 					{m.about_fuiz_desc()}
 				</p>
 			</div>
-			<HelpOutline height="7em" width="7em" />
+			<HelpOutline height="7em" width="7em" title={m.about_fuiz()} />
 		</div>
 	</section>
 	<section>
@@ -192,7 +192,7 @@
 					{m.number_of_participants()}
 				</p>
 			</div>
-			<MoneyOff height="7em" width="7em" />
+			<MoneyOff height="7em" width="7em" title="Free of charge" />
 		</div>
 	</section>
 	<section>
@@ -203,7 +203,7 @@
 					{m.well_translated_desc()}
 				</p>
 			</div>
-			<Language height="7em" width="7em" />
+			<Language height="7em" width="7em" title={m.language()} />
 		</div>
 	</section>
 	<section>
@@ -214,7 +214,7 @@
 					{m.collab_over_comp_desc()}
 				</p>
 			</div>
-			<Diversity2Outline height="7em" width="7em" />
+			<Diversity2Outline height="7em" width="7em" title="Collaboration" />
 		</div>
 	</section>
 	<section>
@@ -225,7 +225,7 @@
 					{m.community_made_desc()}
 				</p>
 			</div>
-			<Diversity1 height="7em" width="7em" />
+			<Diversity1 height="7em" width="7em" title={m.community_made()} />
 		</div>
 	</section>
 	<section>
@@ -238,7 +238,7 @@
 					{m.always_open_desc()}
 				</p>
 			</div>
-			<CodeBlocksOutline height="7em" width="7em" />
+			<CodeBlocksOutline height="7em" width="7em" title="People's Choice" />
 		</div>
 	</section>
 	<section id="ongoing">
@@ -250,7 +250,7 @@
 					{@html m.stay_in_touch_desc()}
 				</p>
 			</div>
-			<MailOutline height="7em" width="7em" />
+			<MailOutline height="7em" width="7em" title="Email" />
 		</div>
 	</section>
 	<footer>

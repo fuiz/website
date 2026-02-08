@@ -317,7 +317,7 @@
 				<Grade bind:tags={grades} />
 				<div>
 					<SelectTime options={[...locales]} bind:selected={lang} {map}>
-						<Language height="1em" />
+						<Language height="1em" title={m.language()} />
 					</SelectTime>
 				</div>
 				<div>

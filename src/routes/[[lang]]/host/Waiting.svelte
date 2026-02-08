@@ -128,7 +128,7 @@
 			>
 				<div style:display="flex" style:gap="0.2em" style:align-items="center">
 					<div style:flex="1" style:display="flex" style:align-items="center">
-						<PersonOutline height="1em" />
+						<PersonOutline height="1em" title={m.number_of_players()} />
 						{exact_count}
 					</div>
 					<StatedIconButton

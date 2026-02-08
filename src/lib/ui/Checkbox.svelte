@@ -45,7 +45,7 @@
 				in:scale={{ easing: backOut, duration: duration, delay: duration }}
 				out:scale={{ easing: backOut, duration: duration }}
 			>
-				<Check height="100%" />
+				<Check height="100%" title={m.marked_as_correct()} />
 			</div>
 		{:else}
 			<div
@@ -53,7 +53,7 @@
 				class={attention ? 'attention' : ''}
 				out:scale={{ easing: backOut, duration: duration }}
 			>
-				<Close height="100%" />
+				<Close height="100%" title={m.marked_as_wrong()} />
 			</div>
 		{/if}
 	</div>

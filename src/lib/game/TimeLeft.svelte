@@ -23,7 +23,7 @@
 >
 	<div style:position="relative" style:width={size} style:height={size} style:background="inherit">
 		<div style:position="absolute" style:height="100%" style:overflow="hidden">
-			<Hourglass height={size} />
+			<Hourglass height={size} title={m.filled_hourglass()} />
 		</div>
 		<div
 			style:position="absolute"
@@ -31,10 +31,10 @@
 			style:overflow="hidden"
 			style:background="inherit"
 		>
-			<HourglassEmpty height={size} />
+			<HourglassEmpty height={size} title={m.empty_hourglass()} />
 		</div>
 		<div style:position="absolute" style:height="50%" style:overflow="hidden">
-			<Hourglass height={size} />
+			<Hourglass height={size} title={m.filled_hourglass()} />
 		</div>
 		<div
 			style:position="absolute"
@@ -42,7 +42,7 @@
 			style:overflow="hidden"
 			style:background="inherit"
 		>
-			<HourglassEmpty height={size} />
+			<HourglassEmpty height={size} title={m.empty_hourglass()} />
 		</div>
 	</div>
 	<div>

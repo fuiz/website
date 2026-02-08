@@ -119,7 +119,7 @@
 								{count}
 								{#if correct}
 									<div style:display="flex" style:padding="0.2em 0">
-										<Check height="1.2em" />
+										<Check height="1.2em" title={m.correct()} />
 									</div>
 								{/if}
 							</div>

@@ -10,6 +10,6 @@
 
 <Message message={errorMessage} background="#e01b2430" color="#e01b24">
 	{#snippet icon()}
-		<WarningOutlineRounded height="1.2em" />
+		<WarningOutlineRounded height="1.2em" title={m.error_alt()} />
 	{/snippet}
 </Message>

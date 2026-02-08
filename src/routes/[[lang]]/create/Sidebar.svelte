@@ -233,7 +233,7 @@
 					style:justify-content="center"
 					style:gap="0.2em"
 				>
-					<MagnifyDocked height="1em" />
+					<MagnifyDocked height="1em" title={m.add_slide()} />
 					<div class="would-be-hidden">{m.add_slide()}</div>
 				</div>
 			</FancyButton>
