@@ -84,7 +84,7 @@
 		<details>
 			<summary>Grades</summary>
 			<div class="checkbox-list">
-				{#each gradesSelected as grade}
+				{#each gradesSelected as grade (grade.name)}
 					<label>
 						<input type="checkbox" bind:checked={grade.selected} style:display="none" />
 						<RegularCheckbox checked={grade.selected} />
@@ -96,7 +96,7 @@
 		<details>
 			<summary>Subjects</summary>
 			<div class="checkbox-list">
-				{#each subjectsSelected as subject}
+				{#each subjectsSelected as subject (subject.name)}
 					<label>
 						<input type="checkbox" bind:checked={subject.selected} style:display="none" />
 						<RegularCheckbox checked={subject.selected} />
@@ -108,7 +108,7 @@
 		<details>
 			<summary>Language</summary>
 			<div class="checkbox-list">
-				{#each languagesSelected as language}
+				{#each languagesSelected as language (language.name)}
 					<label>
 						<input type="checkbox" bind:checked={language.selected} style:display="none" />
 						<RegularCheckbox checked={language.selected} />
@@ -129,11 +129,11 @@
 				<LoadingCircle />
 			</div>
 		</div>
-	{:then res}
-		{#if res && (searchTerm.length || subjectsList.length || gradesList.length || languagesList.length)}
+	{:then results}
+		{#if results && (searchTerm.length || subjectsList.length || gradesList.length || languagesList.length)}
 			<div class="section">
 				<div class="grid">
-					{#each res as fuiz}
+					{#each results as fuiz (fuiz.storage_id)}
 						<OnlinePublised data={fuiz} />
 					{:else}
 						<div
@@ -152,7 +152,7 @@
 		{:else}
 			<div class="section">
 				<div class="grid">
-					{#each recentlyPublished as fuiz}
+					{#each recentlyPublished as fuiz (fuiz.storage_id)}
 						<OnlinePublised data={fuiz} />
 					{:else}
 						<div

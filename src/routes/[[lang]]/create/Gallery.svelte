@@ -5,6 +5,7 @@
 	import { addIds, removeIds } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import GhostIcon from '~icons/custom/ghost';
 	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
 	import FileOpenOutline from '~icons/material-symbols/file-open-outline';
@@ -23,6 +24,7 @@
 	} from '$lib/storage';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 	import { downloadFuiz, loadSingleToml, loadZip, shareAndCopyURL } from '$lib/clientOnly';
+	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let {
 		creations = $bindable(),
@@ -59,7 +61,7 @@
 			}
 		];
 
-		await goto(`?id=${id}`);
+		await goto(resolve(`?id=${id}`));
 	}
 
 	async function deleteSlide(id: number) {
@@ -77,8 +79,8 @@
 		if (!target) {
 			return;
 		}
-		// @ts-ignore
-		const inputImage = target as HTMLInputElement;
+		// @ts-expect-error we know it's an HTMLInputElement because of the querySelector
+		const inputImage: HTMLInputElement = target;
 		const filesList = inputImage.files;
 		if (!filesList) {
 			return;
@@ -206,7 +208,7 @@
 				</div>
 			</FancyButton>
 		</div>
-		{#each db.availableProviders as { provider }}
+		{#each db.availableProviders as { provider } (provider.name)}
 			{#if db.remote?.name === provider.name}
 				<div>
 					<FancyButton onclick={() => db.remote?.logout()}>
@@ -269,7 +271,7 @@
 					style:grid-auto-rows="1fr"
 					style:grid-gap="0.4em"
 				>
-					{#each sortedCreations as { id, title, lastEdited, slidesCount, media }}
+					{#each sortedCreations as { id, title, lastEdited, slidesCount, media } (id)}
 						<GalleryCreation
 							{id}
 							{title}
@@ -281,7 +283,7 @@
 								selectedToDeletion = id;
 								deleteDialog?.open();
 							}}
-							onplay={() => goto('host?id=' + id)}
+							onplay={() => goto(resolve(localizeHref('/host?id=' + id)))}
 							ondownload={() => onDownload(id)}
 							onshare={(e) => onShare(id, e)}
 						/>

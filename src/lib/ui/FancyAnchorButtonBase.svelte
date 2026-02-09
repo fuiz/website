@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	/** @type {{
 	 * foregroundColor: string;
 	 * backgroundColor: string;
@@ -12,7 +13,7 @@
 </script>
 
 <a
-	{href}
+	href={resolve(href)}
 	{download}
 	style:display="flex"
 	style:background="none"

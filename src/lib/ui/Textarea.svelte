@@ -1,5 +1,4 @@
-<script>
-	/** @type {{id: string;placeholder: string;required: boolean;disabled: boolean;value: string;maxHeight?: string;maxLength?: number | undefined;}} */
+<script lang="ts">
 	let {
 		id,
 		placeholder,
@@ -8,10 +7,17 @@
 		value = $bindable(),
 		maxHeight = '4em',
 		maxLength = undefined
+	}: {
+		id: string;
+		placeholder: string;
+		required: boolean;
+		disabled: boolean;
+		value?: string;
+		maxHeight?: string;
+		maxLength?: number | undefined;
 	} = $props();
 
-	/** @type {HTMLTextAreaElement | undefined} */
-	let editableElement = $state();
+	let editableElement = $state<HTMLTextAreaElement>();
 
 	$effect(() => {
 		value = value;
@@ -20,11 +26,9 @@
 		editableElement.style.height = (editableElement.scrollHeight + 4).toString() + 'px';
 	});
 
-	/** @type {import('svelte/elements').FormEventHandler<HTMLTextAreaElement>} */
-	const onInput = (e) => {
-		/** @type {HTMLTextAreaElement | null} */
-		// @ts-ignore
-		const target = e?.target ?? null;
+	const onInput: import('svelte/elements').FormEventHandler<HTMLTextAreaElement> = (e) => {
+		/* @ts-expect-error target will be HTMLTextAreaElement, the type system doesn't know */
+		const target: HTMLTextAreaElement | null = e?.target ?? null;
 		const inputtedValue = target?.value;
 		value = inputtedValue?.replaceAll('\n', '').replaceAll('\r', '') ?? value;
 	};

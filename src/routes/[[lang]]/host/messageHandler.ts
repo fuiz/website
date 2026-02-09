@@ -1,3 +1,4 @@
+import { addIds } from '$lib/clientOnly';
 import type { State } from './index';
 import type {
 	GameIncomingMessage,
@@ -96,6 +97,7 @@ export function handleGameMessage(
 				Game: {
 					Summary: {
 						...game.Summary.Host,
+						config: addIds(game.Summary.Host.config),
 						team_mapping: Object.fromEntries(game.Summary.Host.team_mapping),
 						results: Object.fromEntries(game.Summary.Host.results)
 					}

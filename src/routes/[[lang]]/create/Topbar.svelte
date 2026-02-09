@@ -2,6 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { limits } from '$lib/clientOnly';
 	import Globe from '~icons/material-symbols/globe';
 	import Share from '~icons/material-symbols/share';
@@ -90,7 +91,7 @@
 	style:justify-content="center"
 >
 	<a
-		href={localizeHref('/create')}
+		href={resolve(localizeHref('/create'))}
 		style:height="65px"
 		style:margin="0 5px"
 		style:overflow="hidden"
@@ -125,7 +126,10 @@
 		</div>
 		<div style:display="flex" style:align-items="center" style:gap="0.2em" style:padding="0.2em">
 			{#if showPublish}
-				<IconButton alt={m.publish_title()} onclick={() => goto('publish?id=' + id)}>
+				<IconButton
+					alt={m.publish_title()}
+					onclick={() => goto(resolve(localizeHref('/publish?id=' + id)))}
+				>
 					<Globe height="1em" />
 				</IconButton>
 			{/if}
@@ -148,7 +152,7 @@
 				<IconButton
 					alt={m.host()}
 					disabled={errorMessage != undefined}
-					onclick={() => goto('host?id=' + id)}
+					onclick={() => goto(resolve(localizeHref('/host?id=' + id)))}
 					onmouseenter={() => onmouseenter()}
 					onfocus={() => onmouseenter()}
 				>

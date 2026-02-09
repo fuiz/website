@@ -23,6 +23,7 @@
 	}} */
 	let { questionText, name, score, media, axisLabels, showAnswers, answers, onanswer } = $props();
 
+	// svelte-ignore state_referenced_locally
 	let answersIndexed = $state(answers.map((answer, index) => ({ answer, id: index })));
 
 	/**

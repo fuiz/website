@@ -46,7 +46,7 @@
 
 <div id="container">
 	<div id="inner">
-		{#each answersFiltered.knownAnswers as answer}
+		{#each answersFiltered.knownAnswers as answer (answer.index)}
 			<TextAnswerButton
 				index={answer.index}
 				answerText={answer.text}
@@ -56,7 +56,7 @@
 				}}
 			/>
 		{/each}
-		{#each answersFiltered.unknownAnswers as { index }}
+		{#each answersFiltered.unknownAnswers as { index } (index)}
 			<EmptyAnswerButton
 				{index}
 				onclick={() => {

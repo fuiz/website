@@ -7,6 +7,7 @@
 	import { getAllCreations, loadDatabase } from '$lib/storage';
 	import { toSorted } from '$lib/util';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import { resolve } from '$app/paths';
 </script>
 
 {#await loadDatabase().then((db) => getAllCreations(db))}
@@ -18,8 +19,10 @@
 			{#if creations.length > 0}
 				<h2>{m.choose_local()}</h2>
 				<ul id="creations-list">
-					{#each sortedCreations as { title, id, slidesCount }, index}
-						<li class="creation"><a href={'?id=' + id}>{title} · {slidesCount} slides</a></li>
+					{#each sortedCreations as { title, id, slidesCount }, index (id)}
+						<li class="creation">
+							<a href={resolve('?id=' + id)}>{title} · {slidesCount} slides</a>
+						</li>
 						{#if index + 1 != creations.length}
 							<hr />
 						{/if}

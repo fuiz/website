@@ -114,7 +114,7 @@
 								style:gap="0.4em"
 								style:flex="1"
 							>
-								{#each answers as answer, index}
+								{#each answers as answer, index (index)}
 									<TextAnswerButton answerText={answer} {index} correct={undefined} />
 								{/each}
 							</div>

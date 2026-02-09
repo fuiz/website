@@ -1,15 +1,26 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from './+page';
 
-	/** @type {{bindableGameInfo: import('./+page').BindableGameInfo;gameInfo: import('./+page').SharedGameInfo;winners: string[];lock: () => void;next: () => void;}} */
-	let { bindableGameInfo = $bindable(), gameInfo, winners, lock, next } = $props();
+	let {
+		bindableGameInfo = $bindable(),
+		gameInfo,
+		winners,
+		lock,
+		next
+	}: {
+		bindableGameInfo: BindableGameInfo;
+		gameInfo: SharedGameInfo;
+		winners: string[];
+		lock: () => void;
+		next: () => void;
+	} = $props();
 
-	/** @type {HTMLElement | undefined} */
-	let fullscreenElement = $state();
+	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <div style:height="100%" bind:this={fullscreenElement}>
@@ -25,7 +36,7 @@
 			style:padding="0.3em"
 			style:gap="0.3em"
 		>
-			{#each winners as w}
+			{#each winners as w (w)}
 				<div
 					style:background="var(--background-color)"
 					style:border="0.15em solid currentcolor"

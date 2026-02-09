@@ -2,6 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
@@ -29,7 +30,7 @@
 		} else {
 			let text = await res.text();
 			if (text === 'true') {
-				await goto('?code=' + gameCode.toUpperCase());
+				await goto(resolve('?code=' + gameCode.toUpperCase()));
 				return;
 			} else {
 				errorMessage = m.code_not_exist();

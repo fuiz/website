@@ -19,7 +19,7 @@
 		const target = document.querySelector('input[type=file]');
 		if (target) {
 			/** @type {HTMLInputElement} */
-			// @ts-ignore
+			// @ts-expect-error we know it's an HTMLInputElement because of the querySelector
 			const inputImage = target;
 			loadFile(inputImage.files?.item(0) ?? undefined);
 		}

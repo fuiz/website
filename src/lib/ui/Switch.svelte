@@ -1,13 +1,22 @@
-<script>
-	/** @type {{checked: boolean;id: string;stuck?: boolean | undefined;children?: import('svelte').Snippet;onchange?: (boolean: boolean) => void;}} */
-	let { checked = $bindable(), id, stuck = undefined, children, onchange } = $props();
+<script lang="ts">
+	let {
+		checked = $bindable(),
+		id,
+		stuck = undefined,
+		children,
+		onchange
+	}: {
+		checked: boolean;
+		id: string;
+		stuck?: boolean | undefined;
+		children?: import('svelte').Snippet;
+		onchange?: (boolean: boolean) => void;
+	} = $props();
 
-	/** @type {import('svelte/elements').FormEventHandler<HTMLInputElement>} */
-	const onInput = (e) => {
+	const onInput: import('svelte/elements').FormEventHandler<HTMLInputElement> = (e) => {
 		if (stuck === undefined) {
-			/** @type {HTMLInputElement | undefined} */
-			// @ts-ignore
-			const target = e?.target;
+			/* @ts-expect-error target will be HTMLInputElement, the type system doesn't know */
+			const target: HTMLInputElement | null = e?.target ?? null;
 			checked = target?.checked ?? checked;
 			onchange?.(checked);
 		}

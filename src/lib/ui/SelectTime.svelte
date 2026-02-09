@@ -20,7 +20,7 @@
 <dialog bind:this={dialog}>
 	<div id="container">
 		<ul>
-			{#each options as value}
+			{#each options as value (value)}
 				<li>
 					<FancyButton
 						onclick={() => {

@@ -13,7 +13,7 @@
 	style:gap="0.2em"
 	style:padding="0.2em"
 >
-	{#each indices as index}
+	{#each indices as index (index)}
 		<EmptyAnswerButton
 			{index}
 			onclick={() => {

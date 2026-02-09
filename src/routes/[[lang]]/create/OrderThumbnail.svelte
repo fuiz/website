@@ -68,7 +68,7 @@
 					{m.duplicate_answers()}
 				</div>
 			{:else}
-				{#each slide.answers.keys() as i}
+				{#each slide.answers as answer, i (answer.id)}
 					<div
 						style:background={buttonColors.at(i % buttonColors.length)?.at(0) ??
 							'var(--accent-color)'}

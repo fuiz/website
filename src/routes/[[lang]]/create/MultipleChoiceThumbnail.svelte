@@ -84,7 +84,7 @@
 					style:gap="0.2em"
 					style:padding="0.2em"
 				>
-					{#each slide.answers.keys() as i}
+					{#each slide.answers as answer, i (answer.id)}
 						<div
 							style:background={buttonColors.at(i % buttonColors.length)?.[0]}
 							style:height="0.5em"

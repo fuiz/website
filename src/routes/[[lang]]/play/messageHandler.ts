@@ -7,6 +7,7 @@ import type {
 	OrderSlideIncomingMessage
 } from './index';
 import * as m from '$lib/paraglide/messages.js';
+import { addIds } from '$lib/clientOnly';
 
 // Game message types
 export interface GameMessageContext {
@@ -154,7 +155,10 @@ export function handleGameMessage(
 		return {
 			newState: {
 				Game: {
-					Summary: game.Summary.Player
+					Summary: {
+						...game.Summary.Player,
+						config: addIds(game.Summary.Player.config)
+					}
 				}
 			},
 			shouldMarkFinished: true,

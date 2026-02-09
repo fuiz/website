@@ -7,7 +7,7 @@
 
 	/** @typedef {{points: number, position: number} | undefined} Score */
 
-	/** @type {{score: Score; points: number[]; config: import('$lib/types').IdlessFuizConfig;}} */
+	/** @type {{score: Score; points: number[]; config: import('$lib/types').FuizConfig;}} */
 	let { score, points, config } = $props();
 </script>
 
@@ -24,7 +24,7 @@
 			{/if}
 		</div>
 		<div id="summary">
-			{#each config.slides as slide, index}
+			{#each config.slides as slide, index (slide.id)}
 				{@const correct = points.at(index) || 0 > 0}
 				<div class="line">
 					{#if 'MultipleChoice' in slide}
@@ -48,7 +48,7 @@
 							<div>{m.correct_answers()}</div>
 							{#if 'TypeAnswer' in slide}
 								<ul>
-									{#each slide.TypeAnswer.answers as answer}
+									{#each slide.TypeAnswer.answers as answer (answer.id)}
 										<li>
 											{answer}
 										</li>
@@ -56,7 +56,7 @@
 								</ul>
 							{:else if 'Order' in slide}
 								<ol>
-									{#each slide.Order.answers as answer}
+									{#each slide.Order.answers as answer (answer.id)}
 										<li>
 											{answer}
 										</li>
@@ -64,7 +64,7 @@
 								</ol>
 							{:else}
 								<ul>
-									{#each slide.MultipleChoice.answers.filter((a) => a.correct) as answer}
+									{#each slide.MultipleChoice.answers.filter((a) => a.correct) as answer (answer.id)}
 										<li>
 											{answer.content.Text}
 										</li>

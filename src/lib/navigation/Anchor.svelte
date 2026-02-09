@@ -1,9 +1,10 @@
 <script>
+	import { resolve } from '$app/paths';
 	/** @type {{href: string, children?: import('svelte').Snippet}}*/
 	let { href, children } = $props();
 </script>
 
-<a {href} target="_blank">
+<a href={resolve(href)} target="_blank">
 	{@render children?.()}
 </a>
 

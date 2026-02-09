@@ -19,8 +19,6 @@
 		}
 	}
 
-	let { data } = $props();
-
 	let code = $derived(page.url.searchParams.get('code'));
 	let id = $derived(parseInt(page.url.searchParams.get('id')));
 </script>

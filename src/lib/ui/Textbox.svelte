@@ -1,5 +1,4 @@
-<script>
-	/** @type {{value: string;placeholder: string;textAlign?: string;lightText?: boolean;padding?: string;maxLength?: number | undefined;}} */
+<script lang="ts">
 	let {
 		value = $bindable(),
 		placeholder,
@@ -7,12 +6,18 @@
 		lightText = false,
 		padding = '5px',
 		maxLength = undefined
+	}: {
+		value: string;
+		placeholder: string;
+		textAlign?: string;
+		lightText?: boolean;
+		padding?: string;
+		maxLength?: number | undefined;
 	} = $props();
 
 	let placeholderColor = $derived(lightText ? '#FFFFFF80' : '#00000080');
 
-	/** @type {HTMLTextAreaElement | undefined} */
-	let editableElement = $state();
+	let editableElement = $state<HTMLTextAreaElement>();
 
 	$effect(() => {
 		if (!editableElement) return;
@@ -20,11 +25,9 @@
 		editableElement.style.height = (editableElement.scrollHeight + 4).toString() + 'px';
 	});
 
-	/** @type {import('svelte/elements').FormEventHandler<HTMLTextAreaElement>} */
-	const onInput = (e) => {
-		/** @type {HTMLTextAreaElement | null} */
-		// @ts-ignore
-		const target = e?.target ?? null;
+	const onInput: import('svelte/elements').FormEventHandler<HTMLTextAreaElement> = (e) => {
+		/* @ts-expect-error target will be HTMLTextAreaElement, the type system doesn't know */
+		const target: HTMLTextAreaElement | null = e?.target ?? null;
 		const inputtedValue = target?.value;
 		value = inputtedValue?.replaceAll('\n', '').replaceAll('\r', '') ?? value;
 	};

@@ -28,6 +28,7 @@
 		onnext
 	} = $props();
 
+	// svelte-ignore state_referenced_locally
 	let displayed = $state({
 		exact_count: current.exact_count,
 		items: prior.items
