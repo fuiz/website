@@ -61,7 +61,7 @@
 			}
 		];
 
-		await goto(resolve(`?id=${id}`));
+		await goto(resolve(localizeHref(`/create?id=${id}`)));
 	}
 
 	async function deleteSlide(id: number) {

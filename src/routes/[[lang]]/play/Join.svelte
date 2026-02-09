@@ -12,6 +12,7 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import { bring } from '$lib/util';
+	import { localizeHref } from '$lib/paraglide/runtime.js';
 
 	let sending = $state(false);
 	let gameCode = $state('');
@@ -30,7 +31,7 @@
 		} else {
 			let text = await res.text();
 			if (text === 'true') {
-				await goto(resolve('?code=' + gameCode.toUpperCase()));
+				await goto(resolve(localizeHref(`/play?code=${gameCode.toUpperCase()}`)));
 				return;
 			} else {
 				errorMessage = m.code_not_exist();

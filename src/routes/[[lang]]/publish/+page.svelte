@@ -85,7 +85,7 @@
 						<ul id="creations-list">
 							{#each sortedCreations as { title, id, slidesCount }, index (id)}
 								<li class="creation">
-									<a href={resolve('?id=' + id)}>
+									<a href={resolve(localizeHref(`/publish?id=${id}`))}>
 										{title} · {m.slides_count({ count: slidesCount })}
 									</a>
 								</li>
