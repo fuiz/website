@@ -2,7 +2,6 @@
 	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 	import { subjects } from '$lib/types';
 
-	// eslint-disable-next-line no-useless-assignment
 	let { tags = $bindable() }: { tags: string[] } = $props();
 
 	let selectedOptions = $state<[string, boolean][]>(subjects.map((o) => [o, false]));
