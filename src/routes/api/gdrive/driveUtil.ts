@@ -153,6 +153,7 @@ class Drive {
 		const { id, ...metadata } = file;
 
 		await this.drive.files.update({
+			uploadType: 'media',
 			fileId: id,
 			requestBody: metadata,
 			media: {
@@ -164,6 +165,7 @@ class Drive {
 
 	async create(fileProperties: ExportFileProperties, data: MediaData) {
 		await this.drive.files.create({
+			uploadType: 'media',
 			requestBody: {
 				...fileProperties,
 				parents: ['appDataFolder']
