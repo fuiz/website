@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import answered_penguin from '$lib/assets/answered_penguin.svg';
+	import answered_penguin from '$lib/assets/visuals/answered_penguin.svg';
 	import Topbar from './Topbar.svelte';
 
 	/** @type {{name: string;score: number;}} */
