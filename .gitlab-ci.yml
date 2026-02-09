@@ -21,3 +21,7 @@ lint:
   script:
     - bun install --frozen-lockfile
     - bun run lint
+  rules:
+    - changes:
+        - src/**/*.{svelte,ts,js}
+        - bun.lock
