@@ -6,9 +6,6 @@
 	import LightModeOutline from '~icons/material-symbols/light-mode-outline';
 	import { browser } from '$app/environment';
 
-	/** @type {boolean | undefined} */
-	let theme = $state(undefined);
-
 	/**
 	 * @param {boolean} state
 	 * @returns {string}
@@ -17,9 +14,8 @@
 		return state ? 'dark' : 'light';
 	}
 
-	$effect(() => {
-		theme = (localStorage.getItem('theme') ?? 'light') === 'dark';
-	});
+	/** @type {boolean | undefined} */
+	let theme = $state(browser ? (localStorage.getItem('theme') ?? 'light') === 'dark' : undefined);
 
 	$effect.pre(() => {
 		if (browser && theme !== undefined) {

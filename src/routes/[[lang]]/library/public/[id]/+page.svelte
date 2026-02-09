@@ -6,6 +6,7 @@
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 	import { assertUnreachable } from '$lib';
@@ -37,12 +38,12 @@
 
 	async function onImport() {
 		const id = await addToCollection();
-		await goto(localizeHref('/create') + '?id=' + id.toString());
+		await goto(resolve(localizeHref('/create') + '?id=' + id.toString()));
 	}
 
 	async function onStart() {
 		const id = await addToCollection();
-		await goto(localizeHref('/host') + '?id=' + id.toString());
+		await goto(resolve(localizeHref('/host') + '?id=' + id.toString()));
 	}
 </script>
 
@@ -96,7 +97,7 @@
 			style:gap="0.5em"
 			style:height="fit-content"
 		>
-			{#each config.slides as slide}
+			{#each config.slides as slide, index (index)}
 				{@const { title, answers, media } = ((slide) => {
 					switch (true) {
 						case 'MultipleChoice' in slide:
@@ -125,7 +126,7 @@
 					<div style:min-width="fit-content" style:padding="0.2em" style:flex="1">
 						{title}
 						<ul>
-							{#each answers as answer}
+							{#each answers as answer, answerIndex (answerIndex)}
 								{#if typeof answer === 'string'}
 									<li>{answer}</li>
 								{:else}

@@ -3,7 +3,9 @@
 
 	import FuizIcon from '~icons/custom/icon';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
+	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let exitDialog: ConfirmationDialog | undefined = $state();
 </script>
@@ -33,5 +35,5 @@
 	title={m.end_fuiz()}
 	message=""
 	confirmText={m.end()}
-	onConfirm={() => goto('create')}
+	onConfirm={() => goto(resolve(localizeHref('/create')))}
 />

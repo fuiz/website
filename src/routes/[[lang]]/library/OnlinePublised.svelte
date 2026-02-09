@@ -1,9 +1,10 @@
 <script>
+	import { resolve } from '$app/paths';
 	/** @type {{data: import('$lib/types').PublishedFuiz;}} */
 	let { data } = $props();
 </script>
 
-<a class="container" href="library/public/{data.storage_id}">
+<a class="container" href={resolve(`library/public/${data.storage_id}`)}>
 	<div class="image-container">
 		{#if data.thumbnail}
 			<img src={data.thumbnail} alt={data.thumbnail_alt} />

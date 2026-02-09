@@ -96,7 +96,7 @@
 					style:align-items="center"
 					style:gap="0.5em"
 				>
-					{#each allAnswers as [text, count]}
+					{#each allAnswers as [text, count] (text)}
 						{@const correct = isCorrect(text)}
 						<div style:text-align="end" style:font-family="Poppins">
 							{text}

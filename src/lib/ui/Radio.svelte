@@ -1,24 +1,26 @@
-<script>
-	/** @type {{
-	 * options: { value: string; label: string }[];
-	 * label: string;
-	 * value: string;
-	 * onchange?: (value: string) => void;
-	}}*/
-	let { options, label, value = $bindable(), onchange } = $props();
+<script lang="ts">
+	let {
+		options,
+		label,
+		value = $bindable(),
+		onchange
+	}: {
+		options: { value: string; label: string }[];
+		label: string;
+		value: string;
+		onchange?: (value: string) => void;
+	} = $props();
 
-	/** @type {import('svelte/elements').ChangeEventHandler<HTMLInputElement>} */
-	const onChange = (e) => {
-		/** @type {HTMLInputElement | undefined} */
-		// @ts-ignore
-		const target = e?.target;
+	const onChange: import('svelte/elements').ChangeEventHandler<HTMLInputElement> = (e) => {
+		/* @ts-expect-error target will be HTMLInputElement, the type system doesn't know */
+		const target: HTMLInputElement | null = e?.target ?? null;
 		value = target?.value ?? value;
 		onchange?.(value);
 	};
 </script>
 
 <div class="radio-group">
-	{#each options as option}
+	{#each options as option (option.value)}
 		<label>
 			<input
 				type="radio"

@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 
 	import { assertUnreachable } from '$lib';
-	import { playBackendReadyConfig } from '$lib/clientOnly';
+	import { playBackendReadyIdConfig } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Check from '~icons/material-symbols/check';
 	import Close from '~icons/material-symbols/close';
@@ -13,7 +13,7 @@
 	/** @type {{
 	 * stats: [number, number][];
 	 * player_count: number;
-	 * config: import('$lib/types').IdlessFuizConfig;
+	 * config: import('$lib/types').FuizConfig;
 	 * options: import('$lib/types').FuizOptions;
 	 * results: { [k: string]: number };
 	}}*/
@@ -24,7 +24,7 @@
 	<div id="summary">
 		<div id="actions">
 			<div class="action-container">
-				<FancyButton onclick={() => playBackendReadyConfig(config, options)}>
+				<FancyButton onclick={() => playBackendReadyIdConfig(config, options)}>
 					<div class="action">{m.play_again()}</div>
 				</FancyButton>
 			</div>
@@ -43,7 +43,7 @@
 				</div>
 			{/if}
 		</div>
-		{#each config.slides as slide, index}
+		{#each config.slides as slide, index (slide.id)}
 			{@const [correct, wrong] = stats.at(index) || [0, 0]}
 			{@const unanswered = player_count - correct - wrong}
 			{@const title = ((slide) => {

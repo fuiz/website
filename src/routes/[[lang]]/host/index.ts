@@ -4,7 +4,8 @@ import type {
 	AnswerResult,
 	IdlessFuizConfig,
 	FuizOptions,
-	ServerPossiblyHidden
+	ServerPossiblyHidden,
+	FuizConfig
 } from '$lib/types';
 import type { TruncatedList } from './+page';
 
@@ -18,7 +19,7 @@ type GameState =
 				player_count: number;
 				results: { [k: string]: number };
 				team_mapping: { [k: string]: string[] };
-				config: IdlessFuizConfig;
+				config: FuizConfig;
 				options: FuizOptions;
 			};
 	  };

@@ -3,7 +3,8 @@ import type {
 	TextOrMedia,
 	Media,
 	IdlessFuizConfig,
-	ServerPossiblyHidden
+	ServerPossiblyHidden,
+	FuizConfig
 } from '$lib/types';
 
 type GameState =
@@ -34,7 +35,7 @@ type GameState =
 					position: number;
 				};
 				points: [number];
-				config: IdlessFuizConfig;
+				config: FuizConfig;
 			};
 	  };
 

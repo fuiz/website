@@ -15,7 +15,7 @@
 	style:height="100%"
 	style:box-sizing="border-box"
 >
-	{#each statistics as { count, correct }, index}
+	{#each statistics as { count, correct }, index (index)}
 		{@const buttonSymbol = buttonSymbols[index % buttonColors.length]}
 		<div
 			style:display="flex"

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
@@ -15,7 +16,7 @@
 			db
 		);
 
-		await goto(localizeHref('/create') + '?id=' + id.toString());
+		await goto(resolve(localizeHref('/create') + '?id=' + id.toString()));
 	});
 </script>
 

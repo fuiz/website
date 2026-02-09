@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
-
+	import { resolve } from '$app/paths';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
@@ -127,7 +127,7 @@
 			});
 
 			eventSource.addEventListener('error', (e) => {
-				// @ts-ignore
+				// @ts-expect-error SSE error event may have data property
 				const data = e.data ? JSON.parse(e.data) : {};
 				publishingState = null;
 				publishError = data.message || 'Failed to publish';
@@ -201,7 +201,7 @@
 					style:background="var(--background-color)"
 				>
 					<div style:display="flex" style:flex-direction="column" style:gap="0.5em">
-						{#each steps as step, i}
+						{#each steps as step, i (step.state)}
 							<div
 								class="step"
 								class:step-done={publishingState &&
@@ -259,7 +259,7 @@
 							</p>
 						</div>
 						<a
-							href="/api/git/login?provider=gitlab&return=/publish?id={id}"
+							href={resolve(`/api/git/login?provider=gitlab&return=/publish?id=${id}`)}
 							style:display="inline-block"
 							style:text-decoration="none"
 						>

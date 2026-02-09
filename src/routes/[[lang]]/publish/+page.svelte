@@ -13,6 +13,7 @@
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import { toSorted } from '$lib/util';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import { resolve } from '$app/paths';
 
 	/**
 	 * @param {string | null} str
@@ -82,9 +83,11 @@
 					{#if creations.length > 0}
 						<h2>{m.choose_local()}</h2>
 						<ul id="creations-list">
-							{#each sortedCreations as { title, id, slidesCount }, index}
+							{#each sortedCreations as { title, id, slidesCount }, index (id)}
 								<li class="creation">
-									<a href={'?id=' + id}>{title} · {m.slides_count({ count: slidesCount })}</a>
+									<a href={resolve('?id=' + id)}>
+										{title} · {m.slides_count({ count: slidesCount })}
+									</a>
 								</li>
 								{#if index + 1 != creations.length}
 									<hr />

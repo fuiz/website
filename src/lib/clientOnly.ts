@@ -13,6 +13,7 @@ import {
 	mapIdlessSlidesMedia,
 	type Base64Media,
 	type CorkboardMedia,
+	type FuizConfig,
 	type FuizOptions,
 	type GenericFuizConfig,
 	type GenericIdlessFuizConfig,
@@ -25,6 +26,7 @@ import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/
 import { localizeHref } from '$lib/paraglide/runtime';
 import { bring } from './util';
 import { goto } from '$app/navigation';
+import { resolve } from '$app/paths';
 
 export function downloadBlob(blobs: BlobPart[], name: string, options?: FilePropertyBag) {
 	const file = new File(blobs, name, options);
@@ -253,7 +255,7 @@ async function playJsonString(config: string): Promise<undefined | string> {
 
 	localStorage.setItem(game_id + '_host', watcher_id);
 
-	await goto('host?code=' + game_id);
+	await goto(resolve(localizeHref('/host?code=' + game_id)));
 }
 
 function fixTime(time: number): number {
@@ -347,13 +349,13 @@ export async function playIdlessConfig(
 	}
 }
 
-export async function playBackendReadyConfig(
-	config: IdlessFuizConfig,
+export async function playBackendReadyIdConfig(
+	config: FuizConfig,
 	options: FuizOptions
 ): Promise<undefined | string> {
 	return await playJsonString(
 		JSON.stringify({
-			config,
+			config: removeIds(config),
 			options
 		})
 	);

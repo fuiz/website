@@ -15,3 +15,9 @@ find-unused-messages:
         - messages/*.json
         - src/**/*.{svelte,ts,js}
         - scripts/find-unused-messages.js
+
+lint:
+  image: oven/bun:alpine
+  script:
+    - bun install --frozen-lockfile
+    - bun run lint

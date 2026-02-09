@@ -55,7 +55,7 @@
 		</div>
 	</div>
 	<div style:display="flex" style:flex-direction="column" style:gap="0.4em" style:width="20ch">
-		{#each slide.answers as answer}
+		{#each slide.answers as answer (answer.id)}
 			<div
 				style:display="flex"
 				style:gap="0.2em"

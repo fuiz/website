@@ -1,6 +1,6 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
-
+	import { resolve } from '$app/paths';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 	import Download from '~icons/material-symbols/download';
@@ -70,7 +70,7 @@
 </script>
 
 <div class="entry">
-	<a class="main" href="?id={id}">
+	<a class="main" href={resolve(`?id=${id}`)}>
 		<div class="media">
 			<MediaContainer {media} fit="cover" />
 		</div>

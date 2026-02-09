@@ -22,7 +22,7 @@
 
 	<div {id} bind:this={popoverElement} popover="auto" style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>
 		<ul>
-			{#each locales as lang}
+			{#each locales as lang (lang)}
 				<li>
 					<!-- the hreflang attribute decides which language the link points to -->
 					<button onclick={() => handleLanguageSelect(lang)}>

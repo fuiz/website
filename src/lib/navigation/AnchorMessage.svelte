@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	/** @type {{
 	 * message: string;
 	 * icon: import('svelte').Snippet;
@@ -10,7 +11,7 @@
 </script>
 
 {#if message}
-	<a {href} style:--background={background} style:--color={color}>
+	<a href={resolve(href)} style:--background={background} style:--color={color}>
 		{@render icon()}
 		<div style:flex="1" style:text-align="center">
 			{message}
