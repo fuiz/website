@@ -225,8 +225,8 @@
 							style:padding="0.15em 0.25em"
 							style:justify-content="center"
 						>
-							<Logout height="1.25em" title="Log Out" />
-							<div>Log Out</div>
+							<Logout height="1.25em" title={m.log_out()} />
+							<div>{m.log_out()}</div>
 						</div>
 					</FancyButton>
 				</div>
@@ -243,8 +243,8 @@
 							style:padding="0.15em 0.25em"
 							style:justify-content="center"
 						>
-							<Login height="1.25em" title="Backup to {provider.displayName}" />
-							<div>Backup to {provider.displayName}</div>
+							<Login height="1.25em" title={m.backup_to({ provider: provider.displayName })} />
+							<div>{m.backup_to({ provider: provider.displayName })}</div>
 						</div>
 					</FancyButton>
 				</div>

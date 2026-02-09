@@ -20,7 +20,7 @@
 				<ul id="creations-list">
 					{#each sortedCreations as { title, id, slidesCount }, index (id)}
 						<li class="creation">
-							<a href={resolve(localizeHref(`/host?id=${id}`))}>{title} · {slidesCount} slides</a>
+							<a href={resolve(localizeHref(`/host?id=${id}`))}>{title} · {m.slides_count({ count: slidesCount })}</a>
 						</li>
 						{#if index + 1 != creations.length}
 							<hr />

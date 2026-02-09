@@ -111,7 +111,7 @@
 									</div>
 									{#if actualIndex < answersIndexed.length - 1}
 										<IconButton
-											alt="Move down"
+											alt={m.move_down()}
 											onclick={() => {
 												answersIndexed = [
 													...answersIndexed.slice(0, actualIndex),

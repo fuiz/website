@@ -190,7 +190,7 @@
 					{m.number_of_participants()}
 				</p>
 			</div>
-			<MoneyOff height="7em" width="7em" title="Free of charge" />
+			<MoneyOff height="7em" width="7em" title={m.free_of_charge()} />
 		</div>
 	</section>
 	<section>
@@ -212,7 +212,7 @@
 					{m.collab_over_comp_desc()}
 				</p>
 			</div>
-			<Diversity2Outline height="7em" width="7em" title="Collaboration" />
+			<Diversity2Outline height="7em" width="7em" title={m.collab_over_comp()} />
 		</div>
 	</section>
 	<section>
@@ -236,7 +236,7 @@
 					{m.always_open_desc()}
 				</p>
 			</div>
-			<CodeBlocksOutline height="7em" width="7em" title="People's Choice" />
+			<CodeBlocksOutline height="7em" width="7em" title={m.always_open()} />
 		</div>
 	</section>
 	<section id="ongoing">
@@ -248,7 +248,7 @@
 					{@html m.stay_in_touch_desc()}
 				</p>
 			</div>
-			<MailOutline height="7em" width="7em" title="Email" />
+			<MailOutline height="7em" width="7em" title={m.stay_in_touch()} />
 		</div>
 	</section>
 	<footer>

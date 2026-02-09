@@ -1,4 +1,5 @@
 <script>
+	import * as m from '$lib/paraglide/messages.js';
 	import SportsScore from '~icons/material-symbols/sports-score';
 
 	/** @type {{name: string;score?: number | undefined;}} */
@@ -35,7 +36,7 @@
 			<div style:font-family="Poppins">
 				{score}
 			</div>
-			<SportsScore height="1.25em" title="points" />
+			<SportsScore height="1.25em" title={m.points()} />
 		</div>
 	{/if}
 </div>

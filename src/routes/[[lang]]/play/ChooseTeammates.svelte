@@ -38,9 +38,9 @@
 						style:max-width="10ch"
 						style:text-align="center"
 					>
-						Choose Your Teammates
+						{m.choose_teammates()}
 					</div>
-					<div>and tell them to choose you!</div>
+					<div>{m.choose_teammates_desc()}</div>
 					<div
 						style:display="flex"
 						style:gap="0.5em"

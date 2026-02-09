@@ -19,7 +19,7 @@
 			>
 				<div style:display="flex" style:flex-direction="column" style:align-items="center">
 					<div style:font-weight="bold" style:max-width="10ch" style:text-align="center">
-						Find {teamName}!
+						{m.find_team({ team: teamName })}
 					</div>
 				</div>
 			</div>
