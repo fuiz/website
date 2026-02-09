@@ -1,4 +1,5 @@
 <script>
+	import * as m from '$lib/paraglide/messages.js';
 	import ImageOutline from '~icons/material-symbols/image-outline';
 </script>
 
@@ -10,5 +11,5 @@
 	style:justify-content="center"
 	style:opacity="0.4"
 >
-	<ImageOutline height="50%" title="fallback" />
+	<ImageOutline height="50%" title={m.fallback()} />
 </div>

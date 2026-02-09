@@ -167,16 +167,15 @@
 					style:background="var(--background-color)"
 				>
 					<h2 style:font-family="Poppins" style:margin="0 0 0.5em" style:font-size="1.75em">
-						Fuiz Submitted!
+						{m.fuiz_submitted()}
 					</h2>
 					<p style:margin="0 0 1em 0" style:line-height="1.4">
-						Your fuiz has been submitted for review. It will be published once the pull request is
-						reviewed and merged by maintainers.
+						{m.fuiz_submitted_desc()}
 					</p>
 					{#if prUrl}
 						<div>
 							<FancyAnchorButton href={prUrl}>
-								<div style:padding="0.5em 1em" style:font-family="Poppins">View on GitLab</div>
+								<div style:padding="0.5em 1em" style:font-family="Poppins">{m.view_on_gitlab()}</div>
 							</FancyAnchorButton>
 						</div>
 					{/if}
@@ -191,7 +190,7 @@
 				style:gap="1em"
 				style:padding="2em 1em"
 			>
-				<h2 style:font-family="Poppins" style:margin="0" style:font-size="1.5em">Publishing...</h2>
+				<h2 style:font-family="Poppins" style:margin="0" style:font-size="1.5em">{m.publishing()}</h2>
 				<div
 					style:border="0.15em solid currentcolor"
 					style:border-radius="0.7em"
@@ -252,10 +251,10 @@
 					>
 						<div style:display="flex" style:flex-direction="column" style:gap="0.3em">
 							<p style:margin="0" style:font-family="Poppins" style:font-weight="500">
-								Login Required
+								{m.login_required()}
 							</p>
 							<p style:margin="0" style:font-size="0.9em" style:opacity="0.8">
-								You need to authenticate with GitLab to publish fuizzes
+								{m.login_required_desc()}
 							</p>
 						</div>
 						<a
@@ -275,7 +274,7 @@
 									style:align-items="center"
 									style:padding="0 0.5em"
 								>
-									Connect GitLab Account
+									{m.connect_gitlab()}
 								</div>
 							</FancyButton>
 						</a>
@@ -334,7 +333,7 @@
 
 <ConfirmationDialog
 	bind:this={warningDialog}
-	title="Warning"
+	title={m.warning()}
 	message="Requesting to publish this fuiz will make it public to everyone after it is reviewed and approved. Your fuiz will be visible in the public library and accessible to all users."
 	cancelText="Cancel"
 	confirmText="Continue"

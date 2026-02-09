@@ -73,13 +73,13 @@
 	required={false}
 	disabled={false}
 	bind:value={searchTerm}
-	placeholder="Search"
+	placeholder={m.search()}
 />
 
 <div class="main-view">
 	<div class="filters">
 		<details>
-			<summary>Grades</summary>
+			<summary>{m.grade()}</summary>
 			<div class="checkbox-list">
 				{#each gradesSelected as grade (grade.name)}
 					<label>
@@ -91,7 +91,7 @@
 			</div>
 		</details>
 		<details>
-			<summary>Subjects</summary>
+			<summary>{m.subject()}</summary>
 			<div class="checkbox-list">
 				{#each subjectsSelected as subject (subject.name)}
 					<label>
@@ -103,7 +103,7 @@
 			</div>
 		</details>
 		<details>
-			<summary>Language</summary>
+			<summary>{m.language()}</summary>
 			<div class="checkbox-list">
 				{#each languagesSelected as language (language.name)}
 					<label>

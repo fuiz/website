@@ -16,6 +16,17 @@ find-unused-messages:
         - src/**/*.{svelte,ts,js}
         - scripts/find-unused-messages.js
 
+find-untranslated:
+  image: oven/bun:alpine
+  script:
+    - bun install --frozen-lockfile
+    - bun scripts/find-untranslated.js
+  rules:
+    - changes:
+        - messages/en.json
+        - src/**/*.svelte
+        - scripts/find-untranslated.js
+
 lint:
   image: oven/bun:alpine
   script:

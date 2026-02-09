@@ -26,6 +26,7 @@
 	style:border-radius="100px"
 >
 	<FuizIcon height="1em" width="1em" title={m.exit()} />
+	<!-- i18n-ignore -->
 	<div>fuiz</div>
 </button>
 

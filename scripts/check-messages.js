@@ -1,17 +1,14 @@
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { getLocales, getTranslations } from './message-utils.js';
 
-const messagesDir = join(import.meta.dirname, '..', 'messages');
-
-const en = JSON.parse(readFileSync(join(messagesDir, 'en.json'), 'utf-8'));
+const en = getTranslations();
 const enKeys = Object.keys(en);
 
-const files = readdirSync(messagesDir).filter((f) => f.endsWith('.json') && f !== 'en.json');
+const locales = getLocales().filter((l) => l !== 'en');
 
 let failed = false;
 
-for (const file of files.sort()) {
-	const data = JSON.parse(readFileSync(join(messagesDir, file), 'utf-8'));
+for (const locale of locales.sort()) {
+	const data = getTranslations(locale);
 	const keys = Object.keys(data);
 	const errors = [];
 
@@ -33,13 +30,13 @@ for (const file of files.sort()) {
 	}
 
 	if (errors.length) {
-		console.error(`FAIL ${file}:`);
+		console.error(`FAIL ${locale}.json:`);
 		for (const e of errors) {
 			console.error(`  - ${e}`);
 		}
 		failed = true;
 	} else {
-		console.log(`OK   ${file}`);
+		console.log(`OK   ${locale}.json`);
 	}
 }
 

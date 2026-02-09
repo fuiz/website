@@ -1,11 +1,11 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
+import { getTranslations } from './message-utils.js';
 
-const messagesDir = join(import.meta.dirname, '..', 'messages');
 const srcDir = join(import.meta.dirname, '..', 'src');
 
-const en = JSON.parse(readFileSync(join(messagesDir, 'en.json'), 'utf-8'));
-const keys = Object.keys(en).filter((k) => !k.startsWith('$'));
+const en = getTranslations();
+const keys = Object.keys(en);
 
 function collectFiles(dir) {
 	const results = [];

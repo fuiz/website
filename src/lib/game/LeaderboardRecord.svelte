@@ -1,6 +1,7 @@
 <script>
 	import { scale } from 'svelte/transition';
 	import { medalColors } from '$lib/clientOnly';
+	import * as m from '$lib/paraglide/messages.js';
 	import Counter from '$lib/ui/Counter.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 
@@ -29,7 +30,7 @@
 						width="1.2em"
 						height="1.2em"
 						color={medalColors[index]}
-						title="medal"
+						title={m.medal()}
 					/>
 				</div>
 			{/if}

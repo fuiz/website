@@ -45,11 +45,11 @@
 				style:font-family="Poppins"
 				style:font-size="1.25em"
 			>
-				Core Team
+				{m.core_team()}
 			</h2>
 			<ul id="core-team">
 				<li>
-					<img src={khaleel} alt="Khaleel Al-Adhami Avatar" />
+					<img src={khaleel} alt={m.person_avatar({ name: 'Khaleel Al-Adhami' })} />
 					<div>
 						<AnchorMessage
 							href="https://adhami.me"
@@ -61,19 +61,19 @@
 					</div>
 				</li>
 				<li>
-					<img src={yichen} alt="Yichen Gao Avatar" />
+					<img src={yichen} alt={m.person_avatar({ name: 'Yichen Gao' })} />
 					<div>
 						<AnchorMessage
 							href="https://www.linkedin.com/in/yichen-gao/"
 							background="#23456740"
 							message="Yichen Gao"
 						>
-							{#snippet icon()}<MailOutline height="1em" title="Community Lead" />{/snippet}
+							{#snippet icon()}<MailOutline height="1em" title={m.community_lead()} />{/snippet}
 						</AnchorMessage>
 					</div>
 				</li>
 				<li>
-					<img src={barish} alt="Abutalib (Barish) Namazov Avatar" />
+					<img src={barish} alt={m.person_avatar({ name: 'Abutalib (Barish) Namazov' })} />
 					<div>
 						<AnchorMessage
 							href="https://barish.me/"
@@ -85,14 +85,14 @@
 					</div>
 				</li>
 				<li>
-					<img src={sebastian} alt="Sebastian Wich Avatar" />
+					<img src={sebastian} alt={m.person_avatar({ name: 'Sebastian Wich' })} />
 					<div>
 						<AnchorMessage
 							href="https://sebastianwich.com"
 							background="#23456740"
 							message="Sebastian Wich"
 						>
-							{#snippet icon()}<MailOutline height="1em" title="Community Lead" />{/snippet}
+							{#snippet icon()}<MailOutline height="1em" title={m.community_lead()} />{/snippet}
 						</AnchorMessage>
 					</div>
 				</li>
@@ -114,7 +114,7 @@
 				style:font-family="Poppins"
 				style:font-size="1.25em"
 			>
-				Contributors
+				{m.contributors()}
 			</h2>
 			<AnchorMessage
 				href="https://bragefuglseth.dev/"
@@ -128,7 +128,7 @@
 				background="#23456740"
 				message="Zhiron Wu"
 			>
-				{#snippet icon()}<Language height="1em" title="Translator" />{/snippet}
+				{#snippet icon()}<Language height="1em" title={m.translator()} />{/snippet}
 			</AnchorMessage>
 			<AnchorMessage
 				href="https://incompetech.com/wordpress/"

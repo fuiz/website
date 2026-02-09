@@ -31,6 +31,7 @@
 	<Anchor href="https://gitlab.com/fuiz/website">
 		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
 			<Balance height="1em" title={m.open_source()} />
+			<!-- i18n-ignore -->
 			<div>GNU AGPLv3</div>
 		</div>
 	</Anchor>

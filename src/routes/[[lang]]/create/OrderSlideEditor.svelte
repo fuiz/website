@@ -66,7 +66,7 @@
 	>
 		<Textfield
 			id="from"
-			placeholder="From"
+			placeholder={m.from()}
 			disabled={false}
 			required={false}
 			bind:value={slide.axis_labels.from}
@@ -75,7 +75,7 @@
 			<div style:display="flex" style:gap="0.5em" style:align-items="center">
 				{#if index < slide.answers.length - 1}
 					<IconButton
-						alt="Move down"
+						alt={m.move_down()}
 						onclick={() => {
 							if (index < slide.answers.length - 1) {
 								const temp = slide.answers[index];

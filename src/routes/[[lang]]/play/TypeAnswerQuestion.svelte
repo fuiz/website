@@ -3,6 +3,7 @@
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import Topbar from './Topbar.svelte';
@@ -46,9 +47,9 @@
 				style:flex="1"
 				style:box-sizing="border-box"
 			>
-				<Textfield id="answer" placeholder="Answer" required disabled={false} bind:value />
+				<Textfield id="answer" placeholder={m.answer_text()} required disabled={false} bind:value />
 				<div style:width="100%">
-					<FancyButton onclick={() => onanswer(value)}>Submit</FancyButton>
+					<FancyButton onclick={() => onanswer(value)}>{m.submit()}</FancyButton>
 				</div>
 			</div>
 		</div>
