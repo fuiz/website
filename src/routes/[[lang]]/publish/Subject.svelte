@@ -1,12 +1,11 @@
-<script>
+<script lang="ts">
 	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 	import { subjects } from '$lib/types';
 
-	/** @type {{tags: string[];}} */
-	let { tags = $bindable() } = $props();
+	// eslint-disable-next-line no-useless-assignment
+	let { tags = $bindable() }: { tags: string[] } = $props();
 
-	/** @type {[string, boolean][]} */
-	let selectedOptions = $state(subjects.map((o) => [o, false]));
+	let selectedOptions = $state<[string, boolean][]>(subjects.map((o) => [o, false]));
 
 	$effect.pre(() => {
 		tags = selectedOptions.filter(([, selected]) => selected).map(([option]) => option);

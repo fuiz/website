@@ -223,69 +223,64 @@ export class GitLabClient extends BaseGitClient {
 		forkId: number;
 		upstreamId: number;
 	}> {
-		try {
-			const upstreamProject = await this.request<{
+		const upstreamProject = await this.request<{
+			id: number;
+		}>(`/projects/${this.projectPath}`);
+
+		const upstreamId = upstreamProject.id;
+
+		// Check if fork already exists with Owner access
+		// List all forks where user has Owner access (min_access_level=50)
+		// https://docs.gitlab.com/api/project_forks/
+		console.log('[GitLab] Checking for existing forks with owner access...');
+		const forks = await this.request<
+			Array<{
 				id: number;
-			}>(`/projects/${this.projectPath}`);
+				import_status?: string;
+			}>
+		>(`/projects/${upstreamId}/forks?min_access_level=50`);
 
-			const upstreamId = upstreamProject.id;
+		// If any fork with owner access exists, use the first one
+		if (forks.length > 0) {
+			const fork = forks[0];
+			console.log('[GitLab] Using existing fork with owner access:', fork.id);
 
-			// Check if fork already exists with Owner access
-			// List all forks where user has Owner access (min_access_level=50)
-			// https://docs.gitlab.com/api/project_forks/
-			console.log('[GitLab] Checking for existing forks with owner access...');
-			const forks = await this.request<
-				Array<{
-					id: number;
-					import_status?: string;
-				}>
-			>(`/projects/${upstreamId}/forks?min_access_level=50`);
-
-			// If any fork with owner access exists, use the first one
-			if (forks.length > 0) {
-				const fork = forks[0];
-				console.log('[GitLab] Using existing fork with owner access:', fork.id);
-
-				// Ensure fork is ready
-				if (
-					fork.import_status &&
-					fork.import_status !== 'finished' &&
-					fork.import_status !== 'none'
-				) {
-					console.log('[GitLab] Waiting for fork to complete...');
-					await this.waitForFork(fork.id);
-				}
-
-				return {
-					forkId: fork.id,
-					upstreamId
-				};
+			// Ensure fork is ready
+			if (
+				fork.import_status &&
+				fork.import_status !== 'finished' &&
+				fork.import_status !== 'none'
+			) {
+				console.log('[GitLab] Waiting for fork to complete...');
+				await this.waitForFork(fork.id);
 			}
 
-			// No fork with owner access exists, try to create one
-			console.log('[GitLab] No fork with owner access found, creating new fork...');
-			const response = await this.request<{
-				id: number;
-			}>(`/projects/${upstreamId}/fork`, {
-				method: 'POST',
-				body: JSON.stringify({})
-			});
-
-			const forkId = response.id;
-
-			// Wait for fork to complete (GitLab forks asynchronously)
-			console.log('[GitLab] Waiting for fork to complete...');
-			await this.waitForFork(forkId);
-			console.log('[GitLab] Fork ready:', forkId);
-
 			return {
-				forkId,
+				forkId: fork.id,
 				upstreamId
 			};
-		} catch (error) {
-			console.error('Fork creation failed:', error);
-			throw new Error('Failed to fork repository');
 		}
+
+		// No fork with owner access exists, try to create one
+		console.log('[GitLab] No fork with owner access found, creating new fork...');
+		const response = await this.request<{
+			id: number;
+		}>(`/projects/${upstreamId}/fork`, {
+			method: 'POST',
+			body: JSON.stringify({})
+		});
+
+		const forkId = response.id;
+
+		// Wait for fork to complete (GitLab forks asynchronously)
+		console.log('[GitLab] Waiting for fork to complete...');
+		await this.waitForFork(forkId);
+		console.log('[GitLab] Fork ready:', forkId);
+
+		return {
+			forkId,
+			upstreamId
+		};
 	}
 
 	/**
