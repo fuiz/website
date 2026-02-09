@@ -48,7 +48,6 @@
 		"@oddbird/popover-polyfill": "^0.6.1",
 		"@svelte-put/inline-svg": "^4.0.2",
 		"@sveltejs/enhanced-img": "^0.10.0",
-		"google-auth-library": "^10.5.0",
 		"jszip": "^3.10.1",
 		"object-hash": "^3.0.0",
 		"qrcode": "^1.5.4",

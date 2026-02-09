@@ -149,32 +149,73 @@ class Drive {
 		}
 	}
 
+	private async getAuthToken(): Promise<string> {
+		const { token } = await this.oauth2Client.getAccessToken();
+		if (!token) throw new Error('Failed to get access token');
+		return token;
+	}
+
+	private buildMultipartBody(
+		metadata: object,
+		data: MediaData
+	): { body: string; boundary: string } {
+		const boundary = 'fuiz_boundary_' + crypto.randomUUID();
+		const body = [
+			`--${boundary}`,
+			'Content-Type: application/json; charset=UTF-8',
+			'',
+			JSON.stringify(metadata),
+			`--${boundary}`,
+			`Content-Type: ${data.type}`,
+			'',
+			data.data,
+			`--${boundary}--`
+		].join('\r\n');
+		return { body, boundary };
+	}
+
 	async update(file: File & ExportFileProperties, data: MediaData) {
 		const { id, ...metadata } = file;
+		const token = await this.getAuthToken();
+		const { body, boundary } = this.buildMultipartBody(metadata, data);
 
-		await this.drive.files.update({
-			uploadType: 'media',
-			fileId: id,
-			requestBody: metadata,
-			media: {
-				mimeType: data.type,
-				body: data.data
+		const response = await fetch(
+			`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(id)}?uploadType=multipart`,
+			{
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': `multipart/related; boundary=${boundary}`
+				},
+				body
 			}
-		});
+		);
+
+		if (!response.ok) {
+			throw new Error(`Failed to update file: ${response.status} ${response.statusText}`);
+		}
 	}
 
 	async create(fileProperties: ExportFileProperties, data: MediaData) {
-		await this.drive.files.create({
-			uploadType: 'media',
-			requestBody: {
-				...fileProperties,
-				parents: ['appDataFolder']
-			},
-			media: {
-				mimeType: data.type,
-				body: data.data
+		const token = await this.getAuthToken();
+		const metadata = { ...fileProperties, parents: ['appDataFolder'] };
+		const { body, boundary } = this.buildMultipartBody(metadata, data);
+
+		const response = await fetch(
+			'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': `multipart/related; boundary=${boundary}`
+				},
+				body
 			}
-		});
+		);
+
+		if (!response.ok) {
+			throw new Error(`Failed to create file: ${response.status} ${response.statusText}`);
+		}
 	}
 
 	async list<T extends FileProperties, O>(
