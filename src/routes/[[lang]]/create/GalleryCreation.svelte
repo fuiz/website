@@ -8,7 +8,7 @@
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import { onMount } from 'svelte';
-	import { getLocale } from '$lib/paraglide/runtime.js';
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime.js';
 	import tippy from 'tippy.js';
 
 	/** @type {{
@@ -46,7 +46,7 @@
 	 */
 	function dateToString(date) {
 		let currentDate = new Date();
-		if (currentDate.getFullYear() == date.getFullYear()) {
+		if (currentDate.getFullYear() === date.getFullYear()) {
 			return date.toLocaleDateString(getLocale(), same_year);
 		} else {
 			return date.toLocaleDateString(getLocale(), diff_year);
@@ -70,7 +70,7 @@
 </script>
 
 <div class="entry">
-	<a class="main" href={resolve(`?id=${id}`)}>
+	<a class="main" href={resolve(localizeHref(`/create?id=${id}`))}>
 		<div class="media">
 			<MediaContainer {media} fit="cover" />
 		</div>

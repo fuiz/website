@@ -1,7 +1,6 @@
 import type { RequestHandler } from './$types';
 import { getOAuth2Client, scope, options } from '../driveUtil';
 import { error } from '@sveltejs/kit';
-import { randomBytes } from 'crypto';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	const { clientId, redirectUri } = options();
@@ -13,7 +12,9 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const oauth2Client = getOAuth2Client();
 
 	// Generate cryptographically secure random state for CSRF protection
-	const state = randomBytes(32).toString('hex');
+	const randomBytes = new Uint8Array(32);
+	crypto.getRandomValues(randomBytes);
+	const state = randomBytes.toBase64();
 
 	// Get the return URL from query params
 	const returnUrl = url.searchParams.get('return') || '/';

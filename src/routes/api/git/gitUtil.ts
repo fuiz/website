@@ -4,7 +4,6 @@
  */
 
 import { error, type Cookies } from '@sveltejs/kit';
-import { randomBytes } from 'crypto';
 import type { GitProvider, OAuthTokens } from '$lib/git/types';
 import { getOAuthConfig } from '$lib/git/factory';
 
@@ -14,7 +13,9 @@ const COOKIE_PREFIX = 'git_tokens';
  * Generate cryptographically secure random state for CSRF protection
  */
 export function generateState(): string {
-	return randomBytes(32).toString('hex');
+	const randomBytes = new Uint8Array(32);
+	crypto.getRandomValues(randomBytes);
+	return randomBytes.toBase64();
 }
 
 /**

@@ -61,12 +61,12 @@
 			}
 		];
 
-		await goto(resolve(`?id=${id}`));
+		await goto(resolve(localizeHref(`/create?id=${id}`)));
 	}
 
 	async function deleteSlide(id: number) {
 		await deleteCreation(id, db);
-		creations = creations.filter((c) => c.id != id);
+		creations = creations.filter((c) => c.id !== id);
 	}
 
 	let deleteDialog = $state<ConfirmationDialog>();

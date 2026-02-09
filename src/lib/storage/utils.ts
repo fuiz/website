@@ -57,7 +57,7 @@ export async function reconcile(
 		.values()
 		.map((c) => {
 			const local = getLocal(c.uniqueId);
-			if (!local) return;
+			if (!local) return undefined;
 			const [localKey, localInternal] = local;
 			const localVersion = localInternal.versionId ?? 0;
 			const remoteVersion = c.versionId ?? 0;

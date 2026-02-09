@@ -6,7 +6,7 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
-import { timingSafeEqual } from 'crypto';
+import { timingSafeEqual } from 'node:crypto';
 import { syncSingleFuiz } from '$lib/scripts/syncLibrary';
 
 /**

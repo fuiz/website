@@ -7,7 +7,7 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
-import { timingSafeEqual } from 'crypto';
+import { timingSafeEqual } from 'node:crypto';
 import { syncAll } from '$lib/scripts/syncLibrary';
 
 /**
@@ -56,6 +56,11 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
 	try {
 		console.log('Manual full sync requested');
+
+		if (!platform?.env.BUCKET || !platform?.env.DATABASE) {
+			console.error('Missing R2 bucket or D1 database configuration');
+			error(500, 'Server configuration error');
+		}
 
 		await syncAll(platform?.env.BUCKET, platform?.env.DATABASE, env.GIT_BOT_TOKEN);
 
