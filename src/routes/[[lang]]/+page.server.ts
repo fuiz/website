@@ -7,8 +7,8 @@ async function getStatistics(platform: Readonly<App.Platform> | undefined): Prom
 	try {
 		const allCounts = (await platform?.env.COUNTER.getAllCounts()) ?? {};
 		return {
-			gamesPlayed: allCounts['game_count'],
-			playersJoined: allCounts['player_count']
+			gamesPlayed: allCounts.game_count,
+			playersJoined: allCounts.player_count
 		};
 	} catch {
 		return {

@@ -30,7 +30,7 @@
 	 */
 	function loadFile(file) {
 		dragOver = false;
-		if (file == undefined) {
+		if (file === undefined) {
 			media = undefined;
 			return;
 		}

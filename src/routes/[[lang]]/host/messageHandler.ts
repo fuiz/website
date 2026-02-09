@@ -164,7 +164,7 @@ export function handleMultipleChoiceMessage(
 					question,
 					media,
 					answers: answers.map((a) => {
-						if (a == 'Hidden') return undefined;
+						if (a === 'Hidden') return undefined;
 						return a.Visible;
 					}),
 					answered_count

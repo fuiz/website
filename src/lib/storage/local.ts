@@ -23,7 +23,7 @@ export async function loadLocalDatabase(): Promise<LocalDatabase> {
 	request.addEventListener('upgradeneeded', (event) => {
 		const db = request.result;
 
-		if (event.oldVersion != 1) {
+		if (event.oldVersion !== 1) {
 			db.createObjectStore('creations', { autoIncrement: true });
 		}
 		db.createObjectStore('images');

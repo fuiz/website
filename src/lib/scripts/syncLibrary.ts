@@ -224,8 +224,8 @@ export async function syncSingleFuiz(
  * Sync all fuizzes from Git repository (manual full sync)
  */
 export async function syncAll(
-	bucket?: R2Bucket,
-	database?: D1Database,
+	bucket: R2Bucket,
+	database: D1Database,
 	botToken?: string
 ): Promise<void> {
 	if (!botToken) {
@@ -262,7 +262,7 @@ export async function syncAll(
 
 			// Check if already exists in fuizzes table with same commit
 			const existing = await database
-				?.prepare(
+				.prepare(
 					'SELECT git_commit_sha, played_count, view_count, published_at FROM fuizzes WHERE id = ?'
 				)
 				.bind(fuizId)
@@ -290,7 +290,7 @@ export async function syncAll(
 				publishedAt = new Date(existing.published_at);
 
 				// Delete old entry (we'll insert the new one)
-				await database?.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
+				await database.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
 			} else {
 				console.log(`Processing new fuiz: ${fuizId}`);
 				// New fuiz - use first commit date as published date
@@ -302,8 +302,8 @@ export async function syncAll(
 				fuizId,
 				new TextDecoder().decode(configContentBytes),
 				client,
-				bucket!,
-				database!,
+				bucket,
+				database,
 				commitInfo.sha,
 				playedCount,
 				viewCount,

@@ -66,7 +66,7 @@
 
 	async function deleteSlide(id: number) {
 		await deleteCreation(id, db);
-		creations = creations.filter((c) => c.id != id);
+		creations = creations.filter((c) => c.id !== id);
 	}
 
 	let deleteDialog = $state<ConfirmationDialog>();

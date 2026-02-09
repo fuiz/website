@@ -46,7 +46,7 @@
 	 */
 	function dateToString(date) {
 		let currentDate = new Date();
-		if (currentDate.getFullYear() == date.getFullYear()) {
+		if (currentDate.getFullYear() === date.getFullYear()) {
 			return date.toLocaleDateString(getLocale(), same_year);
 		} else {
 			return date.toLocaleDateString(getLocale(), diff_year);

@@ -1,5 +1,5 @@
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 const messagesDir = join(import.meta.dirname, '..', 'messages');
 

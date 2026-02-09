@@ -19,7 +19,7 @@
 	 * @param {string | null} str
 	 * @returns {number | null}
 	 */
-	function parseInt(str) {
+	function parseIntOrNull(str) {
 		if (str === null) {
 			return null;
 		}
@@ -30,7 +30,7 @@
 		}
 	}
 
-	let id = $derived(parseInt(page.url.searchParams.get('id')));
+	let id = $derived(parseIntOrNull(page.url.searchParams.get('id')));
 	const title = m.publish_title();
 	const description = m.publish_desc();
 

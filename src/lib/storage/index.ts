@@ -108,7 +108,7 @@ async function internalizeMedia(
 	media: Base64Media | undefined,
 	database: Database
 ): Promise<MediaReference | undefined> {
-	if (media == undefined) return undefined;
+	if (media === undefined) return undefined;
 	const { hash, alt } = hashMedia(media);
 	await updateImagesDatabse(media, hash, database);
 	return {
@@ -133,7 +133,7 @@ async function internalizeFuiz(fuiz: ExportedFuiz, database: Database): Promise<
 function coalesceMediaReference(
 	media: LooseMediaReference | undefined
 ): MediaReference | undefined {
-	if (media == undefined) return undefined;
+	if (media === undefined) return undefined;
 	if (typeof media === 'string') {
 		return {
 			Image: {
@@ -168,7 +168,7 @@ async function collectMedia(
 	media: MediaReference | undefined,
 	database: LocalDatabase
 ): Promise<Base64Media | undefined> {
-	if (media == undefined) return undefined;
+	if (media === undefined) return undefined;
 	if ('HashReference' in media.Image) {
 		return await retrieveMediaFromLocal(
 			media.Image.HashReference.hash,

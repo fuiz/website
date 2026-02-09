@@ -52,11 +52,11 @@
 		config.slides.filter((s) => {
 			switch (true) {
 				case 'MultipleChoice' in s:
-					return s.MultipleChoice.answers.length == 0;
+					return s.MultipleChoice.answers.length === 0;
 				case 'TypeAnswer' in s:
-					return s.TypeAnswer.answers.length == 0;
+					return s.TypeAnswer.answers.length === 0;
 				case 'Order' in s:
-					return s.Order.answers.length == 0;
+					return s.Order.answers.length === 0;
 				default:
 					return assertUnreachable(s);
 			}
@@ -67,7 +67,7 @@
 		config.slides.filter((s) => {
 			switch (true) {
 				case 'MultipleChoice' in s:
-					return s.MultipleChoice.answers.filter((s) => s.correct).length == 0;
+					return s.MultipleChoice.answers.filter((s) => s.correct).length === 0;
 				case 'TypeAnswer' in s:
 					return false;
 				case 'Order' in s:

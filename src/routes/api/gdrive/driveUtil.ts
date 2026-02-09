@@ -40,9 +40,13 @@ export async function refreshToken(tokens: OAuthTokens): Promise<OAuthTokens | u
 
 		const { credentials } = await oauth2Client.refreshAccessToken();
 
+		if (!credentials.access_token) {
+			throw new Error('Failed to refresh access token, no access token returned');
+		}
+
 		return {
 			...tokens,
-			access_token: credentials.access_token!,
+			access_token: credentials.access_token,
 			...(credentials.refresh_token && { refresh_token: credentials.refresh_token }),
 			...(credentials.expiry_date && {
 				expires_in: Math.floor((credentials.expiry_date - Date.now()) / 1000)

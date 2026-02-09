@@ -19,22 +19,20 @@
 	/** @type {Promise<import('$lib/types').PublishedFuiz[] | undefined> | undefined} */
 	let results = $state(undefined);
 
-	const search = debounce(
-		() =>
-			(results = fetch('library/search', {
-				method: 'POST',
-				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({
-					term: searchTerm,
-					subjects: subjectsList,
-					grades: gradesList,
-					languages: languagesList
-				})
+	const search = debounce(() => {
+		results = fetch('library/search', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({
+				term: searchTerm,
+				subjects: subjectsList,
+				grades: gradesList,
+				languages: languagesList
 			})
-				.then((res) => (res.ok ? res.json() : undefined))
-				.catch(() => undefined)),
-		500
-	);
+		})
+			.then((res) => (res.ok ? res.json() : undefined))
+			.catch(() => undefined);
+	}, 500);
 
 	let subjectsSelected = $state(subjects.map((subject) => ({ name: subject, selected: false })));
 
