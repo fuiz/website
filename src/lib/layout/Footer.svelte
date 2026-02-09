@@ -6,6 +6,7 @@
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import Balance from '~icons/material-symbols/balance';
 	import Diversity1 from '~icons/material-symbols/diversity-1';
+	import Policy from '~icons/material-symbols/policy';
 </script>
 
 <div
@@ -33,6 +34,12 @@
 			<Balance height="1em" title={m.open_source()} />
 			<!-- i18n-ignore -->
 			<div>GNU AGPLv3</div>
+		</div>
+	</Anchor>
+	<Anchor href={localizeHref('/privacy')}>
+		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
+			<Policy height="1em" title={m.privacy_policy()} />
+			<div>{m.privacy_policy()}</div>
 		</div>
 	</Anchor>
 	<LanguageSwitcher id="footer" up={true} />

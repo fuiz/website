@@ -212,5 +212,13 @@
 	"publishing": "Dərc olunur...",
 	"login_required": "Giriş Tələb Olunur",
 	"login_required_desc": "Fuizləri dərc etmək üçün GitLab ilə autentifikasiya lazımdır",
-	"connect_gitlab": "GitLab Hesabını Bağla"
+	"connect_gitlab": "GitLab Hesabını Bağla",
+	"publish_checklist_title": "Dərc Etmədən Əvvəl",
+	"publish_checklist_desc": "Fuizinizi ictimai nəzərdən keçirmə üçün göndərməzdən əvvəl aşağıdakıları təsdiqləyin:",
+	"publish_check_accurate": "Bütün suallar və cavablar dəqiq və faktiki cəhətdən düzgündür",
+	"publish_check_appropriate": "Məzmun bütün auditoriyalar üçün uyğundur",
+	"publish_check_language": "Seçilmiş dil quiz məzmununa uyğundur",
+	"publish_check_media": "Şəkillər və media uyğundur və düzgün mənbələrdəndir",
+	"publish_check_relevant": "Quiz uyğun, təhsil verici və başqaları üçün faydalıdır",
+	"privacy_policy": "Məxfilik Siyasəti"
 }

@@ -333,11 +333,18 @@
 
 <ConfirmationDialog
 	bind:this={warningDialog}
-	title={m.warning()}
-	message="Requesting to publish this fuiz will make it public to everyone after it is reviewed and approved. Your fuiz will be visible in the public library and accessible to all users."
-	cancelText="Cancel"
-	confirmText="Continue"
+	title={m.publish_checklist_title()}
+	message={m.publish_checklist_desc()}
+	cancelText={m.cancel()}
+	confirmText={m.request_publish()}
 	onConfirm={publish}
+	checklist={[
+		m.publish_check_accurate(),
+		m.publish_check_appropriate(),
+		m.publish_check_language(),
+		m.publish_check_media(),
+		m.publish_check_relevant()
+	]}
 />
 
 <style>

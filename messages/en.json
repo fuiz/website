@@ -212,5 +212,13 @@
 	"publishing": "Publishing...",
 	"login_required": "Login Required",
 	"login_required_desc": "You need to authenticate with GitLab to publish fuizzes",
-	"connect_gitlab": "Connect GitLab Account"
+	"connect_gitlab": "Connect GitLab Account",
+	"publish_checklist_title": "Before Publishing",
+	"publish_checklist_desc": "Please confirm the following before submitting your fuiz for public review:",
+	"publish_check_accurate": "All questions and answers are accurate and factually correct",
+	"publish_check_appropriate": "Content is appropriate for all audiences",
+	"publish_check_language": "The selected language matches the quiz content",
+	"publish_check_media": "Images and media are relevant and properly sourced",
+	"publish_check_relevant": "The quiz is relevant, educational, and useful to others",
+	"privacy_policy": "Privacy Policy"
 }

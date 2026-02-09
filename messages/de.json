@@ -212,5 +212,13 @@
 	"publishing": "Wird veröffentlicht...",
 	"login_required": "Anmeldung erforderlich",
 	"login_required_desc": "Du musst dich bei GitLab authentifizieren, um Fuizze zu veröffentlichen",
-	"connect_gitlab": "GitLab-Konto verbinden"
+	"connect_gitlab": "GitLab-Konto verbinden",
+	"publish_checklist_title": "Vor dem Veröffentlichen",
+	"publish_checklist_desc": "Bitte bestätige Folgendes, bevor du dein Fuiz zur öffentlichen Überprüfung einreichst:",
+	"publish_check_accurate": "Alle Fragen und Antworten sind korrekt und sachlich richtig",
+	"publish_check_appropriate": "Der Inhalt ist für alle Zielgruppen geeignet",
+	"publish_check_language": "Die ausgewählte Sprache stimmt mit dem Quiz-Inhalt überein",
+	"publish_check_media": "Bilder und Medien sind relevant und ordnungsgemäß quellenangegeben",
+	"publish_check_relevant": "Das Quiz ist relevant, lehrreich und für andere nützlich",
+	"privacy_policy": "Datenschutzrichtlinie"
 }

@@ -24,7 +24,8 @@ export const POST: RequestHandler = async ({ params: { hash }, cookies, request 
 		);
 
 		return new Response(null, { status: 201 });
-	} catch {
+	} catch (err) {
+		console.error('Failed to create image', err);
 		error(500, 'Failed to create image');
 	}
 };

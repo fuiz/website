@@ -212,5 +212,13 @@
 	"publishing": "جارٍ النشر...",
 	"login_required": "تسجيل الدخول مطلوب",
 	"login_required_desc": "تحتاج إلى المصادقة مع GitLab لنشر الفويزات",
-	"connect_gitlab": "ربط حساب GitLab"
+	"connect_gitlab": "ربط حساب GitLab",
+	"publish_checklist_title": "قبل النشر",
+	"publish_checklist_desc": "يرجى التأكد مما يلي قبل تقديم الفويز للمراجعة العامة:",
+	"publish_check_accurate": "جميع الأسئلة والإجابات دقيقة وصحيحة",
+	"publish_check_appropriate": "المحتوى مناسب لجميع الجماهير",
+	"publish_check_language": "اللغة المختارة تتوافق مع محتوى الاختبار",
+	"publish_check_media": "الصور والوسائط ذات صلة ومن مصادر موثوقة",
+	"publish_check_relevant": "الاختبار ذو صلة وتعليمي ومفيد للآخرين",
+	"privacy_policy": "سياسة الخصوصية"
 }

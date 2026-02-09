@@ -212,5 +212,13 @@
 	"publishing": "Publiceren...",
 	"login_required": "Inloggen Vereist",
 	"login_required_desc": "Je moet je authenticeren met GitLab om fuizzen te publiceren",
-	"connect_gitlab": "GitLab Account Verbinden"
+	"connect_gitlab": "GitLab Account Verbinden",
+	"publish_checklist_title": "Voor Publicatie",
+	"publish_checklist_desc": "Bevestig het volgende voordat je je fuiz indient voor openbare beoordeling:",
+	"publish_check_accurate": "Alle vragen en antwoorden zijn nauwkeurig en feitelijk correct",
+	"publish_check_appropriate": "De inhoud is geschikt voor alle doelgroepen",
+	"publish_check_language": "De geselecteerde taal komt overeen met de quizinhoud",
+	"publish_check_media": "Afbeeldingen en media zijn relevant en correct bronvermeld",
+	"publish_check_relevant": "De quiz is relevant, leerzaam en nuttig voor anderen",
+	"privacy_policy": "Privacybeleid"
 }
