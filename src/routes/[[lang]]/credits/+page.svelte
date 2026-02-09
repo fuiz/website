@@ -1,20 +1,18 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import khaleel from '$lib/assets/people/Khaleel.webp';
-	import barish from '$lib/assets/people/Barish.webp';
-	import yichen from '$lib/assets/people/Yichen.webp';
-	import sebastian from '$lib/assets/people/Sebastian.webp';
-
-	import ComputerOutline from '~icons/material-symbols/computer-outline';
-	import MailOutline from '~icons/material-symbols/mail-outline';
-	import Language from '~icons/material-symbols/language';
-	import BrushOutline from '~icons/material-symbols/brush-outline';
-	import AlbumOutline from '~icons/material-symbols/album-outline';
-	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import barish from '$lib/assets/people/Barish.webp';
+	import khaleel from '$lib/assets/people/Khaleel.webp';
+	import sebastian from '$lib/assets/people/Sebastian.webp';
+	import yichen from '$lib/assets/people/Yichen.webp';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import AlbumOutline from '~icons/material-symbols/album-outline';
+	import BrushOutline from '~icons/material-symbols/brush-outline';
+	import ComputerOutline from '~icons/material-symbols/computer-outline';
+	import Language from '~icons/material-symbols/language';
+	import MailOutline from '~icons/material-symbols/mail-outline';
 
 	const title = m.credits_title();
 	const description = m.credits_desc();

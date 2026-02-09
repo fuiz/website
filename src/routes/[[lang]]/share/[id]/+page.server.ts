@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 import type { IdlessFullFuizConfig } from '$lib/types';
+import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params, platform }) => {
 	const id = params.id;

@@ -1,8 +1,8 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
+	import waiting_penguin from '$lib/assets/visuals/waiting.svg';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import waiting_penguin from '$lib/assets/visuals/waiting.svg';
+	import * as m from '$lib/paraglide/messages.js';
 	import Topbar from './Topbar.svelte';
 
 	/** @type {{name: string;gameCode: string;}} */

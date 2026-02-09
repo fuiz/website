@@ -1,13 +1,13 @@
-import type { State } from './index';
+import { addIds } from '$lib/clientOnly';
+import * as m from '$lib/paraglide/messages.js';
 import type {
-	NameError,
 	GameIncomingMessage,
 	MultipleChoiceIncomingMessage,
-	TypeAnswerIncomingMessage,
-	OrderSlideIncomingMessage
+	NameError,
+	OrderSlideIncomingMessage,
+	State,
+	TypeAnswerIncomingMessage
 } from './index';
-import * as m from '$lib/paraglide/messages.js';
-import { addIds } from '$lib/clientOnly';
 
 // Game message types
 export interface GameMessageContext {

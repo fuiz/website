@@ -1,13 +1,12 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
+	import { flip } from 'svelte/animate';
+	import { backOut } from 'svelte/easing';
+	import { scale } from 'svelte/transition';
 	import { buttonColors, limits } from '$lib/clientOnly';
+	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import VariableAddOutline from '~icons/material-symbols/variable-add-outline';
-	import { scale } from 'svelte/transition';
 	import Answer from './Answer.svelte';
-	import { backOut } from 'svelte/easing';
-	import { flip } from 'svelte/animate';
 
 	/** @type {{answers: import('$lib/types').MultipleChoiceAnswer[];}} */
 	let { answers = $bindable() } = $props();

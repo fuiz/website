@@ -1,9 +1,9 @@
 <script>
+	import Header from '$lib/layout/Header.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
-	import Header from '$lib/layout/Header.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import LibraryBooks from '~icons/material-symbols/library-books';
 	import Palette from '~icons/material-symbols/palette';

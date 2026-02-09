@@ -13,7 +13,7 @@
 			return null;
 		}
 		try {
-			return Number.parseInt(str);
+			return Number.parseInt(str, 10);
 		} catch {
 			return null;
 		}

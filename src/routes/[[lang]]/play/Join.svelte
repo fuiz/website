@@ -1,18 +1,17 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import Header from '$lib/layout/Header.svelte';
-	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { localizeHref } from '$lib/paraglide/runtime.js';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import { bring } from '$lib/util';
-	import { localizeHref } from '$lib/paraglide/runtime.js';
 
 	let sending = $state(false);
 	let gameCode = $state('');

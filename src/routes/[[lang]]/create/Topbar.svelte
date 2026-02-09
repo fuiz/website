@@ -1,21 +1,19 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
-	import { limits } from '$lib/clientOnly';
-	import Globe from '~icons/material-symbols/globe';
-	import Share from '~icons/material-symbols/share';
-	import Download from '~icons/material-symbols/download';
-	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
-	import IconButton from '$lib/ui/IconButton.svelte';
-	import Logo from '$lib/media/Logo.svelte';
-	import Textfield from '$lib/ui/Textfield.svelte';
-	import { getCreation } from '$lib/storage';
 	import { onMount } from 'svelte';
 	import tippy from 'tippy.js';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { downloadFuiz, limits } from '$lib/clientOnly';
+	import Logo from '$lib/media/Logo.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { downloadFuiz } from '$lib/clientOnly';
+	import { getCreation } from '$lib/storage';
+	import IconButton from '$lib/ui/IconButton.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
+	import Download from '~icons/material-symbols/download';
+	import Globe from '~icons/material-symbols/globe';
+	import Share from '~icons/material-symbols/share';
+	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 
 	/** @type {{
 	 * title: string;

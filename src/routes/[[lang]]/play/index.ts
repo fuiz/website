@@ -1,10 +1,10 @@
 import type {
 	AnswerResult,
-	TextOrMedia,
-	Media,
+	FuizConfig,
 	IdlessFuizConfig,
+	Media,
 	ServerPossiblyHidden,
-	FuizConfig
+	TextOrMedia
 } from '$lib/types';
 
 type GameState =

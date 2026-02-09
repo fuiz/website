@@ -13,7 +13,7 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "biome format && biome lint && eslint .",
+		"lint": "biome format && biome check && eslint .",
 		"format": "biome format --write"
 	},
 	"devDependencies": {

@@ -1,11 +1,10 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { page } from '$app/state';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import * as m from '$lib/paraglide/messages.js';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import Join from './Join.svelte';
 	import Play from './Play.svelte';
-	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let code = $derived(page.url.searchParams.get('code'));
 

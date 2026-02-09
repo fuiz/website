@@ -1,9 +1,8 @@
 <script>
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-
 	import Check from '~icons/material-symbols/check';
 	import Close from '~icons/material-symbols/close';
-	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 
 	/** @typedef {{points: number, position: number} | undefined} Score */
 

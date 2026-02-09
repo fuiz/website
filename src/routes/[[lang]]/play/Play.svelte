@@ -1,31 +1,30 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { untrack } from 'svelte';
-	import ChooseName from './ChooseName.svelte';
-	import WaitingMobile from './WaitingMobile.svelte';
-	import Question from './Question.svelte';
-	import Answers from './Answers.svelte';
-	import Result from './Result.svelte';
-	import WaitingOthers from './WaitingOthers.svelte';
-	import Leaderboard from './Leaderboard.svelte';
-	import Loading from '$lib/feedback/Loading.svelte';
+	import { browser } from '$app/environment';
 	import { PUBLIC_BACKEND_URL, PUBLIC_WS_URL } from '$env/static/public';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
-	import { browser } from '$app/environment';
-	import Summary from './Summary.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { bring, zip } from '$lib/util';
-	import FindTeam from './FindTeam.svelte';
+	import type { IncomingMessage, State } from '.';
+	import Answers from './Answers.svelte';
+	import ChooseName from './ChooseName.svelte';
 	import ChooseTeammates from './ChooseTeammates.svelte';
-	import TypeAnswerQuestion from './TypeAnswerQuestion.svelte';
-	import OrderAnswers from './OrderAnswers.svelte';
+	import FindTeam from './FindTeam.svelte';
+	import Leaderboard from './Leaderboard.svelte';
 	import {
 		handleGameMessage,
 		handleMultipleChoiceMessage,
-		handleTypeAnswerMessage,
-		handleOrderMessage
+		handleOrderMessage,
+		handleTypeAnswerMessage
 	} from './messageHandler';
-	import type { IncomingMessage, State } from '.';
+	import OrderAnswers from './OrderAnswers.svelte';
+	import Question from './Question.svelte';
+	import Result from './Result.svelte';
+	import Summary from './Summary.svelte';
+	import TypeAnswerQuestion from './TypeAnswerQuestion.svelte';
+	import WaitingMobile from './WaitingMobile.svelte';
+	import WaitingOthers from './WaitingOthers.svelte';
 
 	let currentState = $state<State>();
 

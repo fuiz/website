@@ -1,12 +1,12 @@
 <script>
-	import * as m from '$lib/paraglide/messages';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
-	import Check from '~icons/material-symbols/check';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
-	import Close from '~icons/material-symbols/close';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import * as m from '$lib/paraglide/messages';
+	import Check from '~icons/material-symbols/check';
+	import Close from '~icons/material-symbols/close';
+	import Topbar from './Topbar.svelte';
 
 	/** @type {{
 	 * bindableGameInfo: import('./+page').BindableGameInfo;

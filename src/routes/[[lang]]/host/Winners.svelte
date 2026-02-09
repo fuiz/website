@@ -1,10 +1,10 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
+	import TextBar from '$lib/game/TextBar.svelte';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import type { BindableGameInfo, SharedGameInfo } from './+page';
+	import Topbar from './Topbar.svelte';
 
 	let {
 		bindableGameInfo = $bindable(),

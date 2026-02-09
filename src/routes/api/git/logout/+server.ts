@@ -3,9 +3,9 @@
  * Clears OAuth tokens from cookies
  */
 
-import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 import { clearTokens, getAuthenticatedProvider } from '../gitUtil';
+import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ cookies }) => {
 	const provider = getAuthenticatedProvider(cookies);

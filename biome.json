@@ -20,9 +20,6 @@
 			"style": {
 				"useTemplate": "off"
 			},
-			"correctness": {
-				"useParseIntRadix": "off"
-			},
 			"complexity": {
 				"noUselessUndefinedInitialization": "off"
 			},
@@ -45,9 +42,7 @@
 	"assist": {
 		"enabled": true,
 		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
+			"recommended": true
 		}
 	},
 	"overrides": [

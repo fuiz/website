@@ -1,11 +1,11 @@
 import { Section, stringify } from '@ltd/j-toml';
+import objectHash from 'object-hash';
 import {
-	mapIdlessSlidesMediaSync,
 	type IdlessFullFuizConfig,
 	type IdlessLocalReferenceFuizConfig,
+	mapIdlessSlidesMediaSync,
 	type ReferencingOnlineFuiz
 } from './types';
-import objectHash from 'object-hash';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export function assertUnreachable(_: never): never {

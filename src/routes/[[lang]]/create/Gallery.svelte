@@ -1,30 +1,35 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
-
-	import GalleryCreation from './GalleryCreation.svelte';
-	import { addIds, removeIds } from '$lib/clientOnly';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import {
+		addIds,
+		downloadFuiz,
+		loadSingleToml,
+		loadZip,
+		removeIds,
+		shareAndCopyURL
+	} from '$lib/clientOnly';
+	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { localizeHref } from '$lib/paraglide/runtime';
+	import {
+		addCreation,
+		type CreationId,
+		type Database,
+		deleteCreation,
+		generateUuid,
+		getCreation
+	} from '$lib/storage';
+	import { type Creation, getMedia, type Media } from '$lib/types';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import { isNotUndefined, toSorted } from '$lib/util';
 	import GhostIcon from '~icons/custom/ghost';
-	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
 	import FileOpenOutline from '~icons/material-symbols/file-open-outline';
 	import Login from '~icons/material-symbols/login';
 	import Logout from '~icons/material-symbols/logout';
-	import { getMedia, type Creation, type Media } from '$lib/types';
-	import { isNotUndefined, toSorted } from '$lib/util';
-	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import {
-		getCreation,
-		deleteCreation,
-		addCreation,
-		generateUuid,
-		type Database,
-		type CreationId
-	} from '$lib/storage';
-	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
-	import { downloadFuiz, loadSingleToml, loadZip, shareAndCopyURL } from '$lib/clientOnly';
-	import { localizeHref } from '$lib/paraglide/runtime';
+	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
+	import GalleryCreation from './GalleryCreation.svelte';
 
 	let {
 		creations = $bindable(),

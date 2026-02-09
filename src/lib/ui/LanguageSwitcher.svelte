@@ -1,9 +1,9 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
-	import { locales, setLocale, type Locale } from '$lib/paraglide/runtime.js';
-	import IconButton from './IconButton.svelte';
+	import { type Locale, locales, setLocale } from '$lib/paraglide/runtime.js';
 	import Language from '~icons/material-symbols/language';
+	import IconButton from './IconButton.svelte';
 
 	let popoverElement = $state<HTMLElement>();
 

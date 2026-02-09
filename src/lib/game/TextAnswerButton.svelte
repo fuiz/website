@@ -1,10 +1,9 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
-	import Close from '~icons/material-symbols/close';
-	import Check from '~icons/material-symbols/check';
+	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Check from '~icons/material-symbols/check';
+	import Close from '~icons/material-symbols/close';
 
 	/** @type {{index: number, answerText: string, correct: (boolean|undefined), onclick?: () => void}} */
 	let { index, answerText, correct, onclick } = $props();

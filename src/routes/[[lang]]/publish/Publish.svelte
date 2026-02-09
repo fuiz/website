@@ -1,21 +1,21 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
 	import { resolve } from '$app/paths';
-	import Textfield from '$lib/ui/Textfield.svelte';
-	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import SelectTime from '$lib/ui/SelectTime.svelte';
-	import { locales, getLocale, type Locale } from '$lib/paraglide/runtime.js';
-	import Language from '~icons/material-symbols/language';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
-	import { getMedia, type FullOnlineFuiz, type GenericIdlessSlide, type Media } from '$lib/types';
-	import { type ExportedFuiz } from '$lib/storage';
-	import Subject from './Subject.svelte';
-	import Grade from './Grade.svelte';
-	import type { PublishingState } from '../../api/library/publish-stream/types';
-	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
+	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { getLocale, type Locale, locales } from '$lib/paraglide/runtime.js';
+	import { type ExportedFuiz } from '$lib/storage';
+	import { type FullOnlineFuiz, type GenericIdlessSlide, getMedia, type Media } from '$lib/types';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import SelectTime from '$lib/ui/SelectTime.svelte';
+	import Textfield from '$lib/ui/Textfield.svelte';
+	import Language from '~icons/material-symbols/language';
+	import type { PublishingState } from '../../api/library/publish-stream/types';
+	import Grade from './Grade.svelte';
+	import Subject from './Subject.svelte';
 
 	let {
 		creation = $bindable(),

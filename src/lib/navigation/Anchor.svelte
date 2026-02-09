@@ -1,5 +1,6 @@
 <script>
 	import { resolve } from '$app/paths';
+
 	/** @type {{href: string, children?: import('svelte').Snippet}}*/
 	let { href, children } = $props();
 </script>

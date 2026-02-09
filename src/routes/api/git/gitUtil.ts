@@ -3,9 +3,9 @@
  * Provides helpers for OAuth authentication with Git providers (GitLab, GitHub)
  */
 
-import { error, type Cookies } from '@sveltejs/kit';
-import type { GitProvider, OAuthTokens } from '$lib/git/types';
+import { type Cookies, error } from '@sveltejs/kit';
 import { getOAuthConfig } from '$lib/git/factory';
+import type { GitProvider, OAuthTokens } from '$lib/git/types';
 
 const COOKIE_PREFIX = 'git_tokens';
 

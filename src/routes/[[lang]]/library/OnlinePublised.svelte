@@ -1,6 +1,7 @@
 <script>
 	import { resolve } from '$app/paths';
 	import { localizeHref } from '$lib/paraglide/runtime.js';
+
 	let { data } = $props();
 </script>
 

@@ -1,8 +1,7 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { toDataURL } from 'qrcode';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 
 	/** @type {{url: string;smallSize: string;}} */
 	let { url, smallSize } = $props();

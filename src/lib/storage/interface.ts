@@ -1,5 +1,5 @@
-import type { CreationId, InternalFuizMetadata, MediaReferencedFuizConfig, InternalFuiz } from '.';
 import type { Base64Media } from '../types';
+import type { CreationId, InternalFuiz, InternalFuizMetadata, MediaReferencedFuizConfig } from '.';
 
 export interface RemoteSyncProviderStatus {
 	authenticated: boolean;

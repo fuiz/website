@@ -1,6 +1,6 @@
-import { paraglideMiddleware } from '$lib/paraglide/server';
 import type { Handle } from '@sveltejs/kit';
 import { deLocalizeUrl } from '$lib/paraglide/runtime';
+import { paraglideMiddleware } from '$lib/paraglide/server';
 
 export const handle: Handle = ({ event, resolve }) => {
 	if (!event.route.id?.startsWith('/[[lang]]')) {

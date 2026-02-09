@@ -1,23 +1,23 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
+	import { onMount } from 'svelte';
+	import tippy from 'tippy.js';
 	import { PUBLIC_DISPLAY_PLAY_URL, PUBLIC_PLAY_URL } from '$env/static/public';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import bee3 from '$lib/assets/music/bee3.mp3';
+	import PlayersList from '$lib/game/PlayersList.svelte';
+	import QrCode from '$lib/game/QRCode.svelte';
+	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
-	import PlayersList from '$lib/game/PlayersList.svelte';
-	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
-	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
+	import * as m from '$lib/paraglide/messages.js';
+	import { localizeHref } from '$lib/paraglide/runtime';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
 	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
 	import LockOutline from '~icons/material-symbols/lock-outline';
-	import QrCode from '$lib/game/QRCode.svelte';
-	import { onMount } from 'svelte';
-	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
 	import PersonOutline from '~icons/material-symbols/person-outline';
+	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
+	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
 	import ExitFuiz from './ExitFuiz.svelte';
-	import tippy from 'tippy.js';
-	import { localizeHref } from '$lib/paraglide/runtime';
 
 	/** @type {{
 	 * code: string;

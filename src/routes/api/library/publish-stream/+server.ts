@@ -3,16 +3,16 @@
  * Sends progress updates as Server-Sent Events
  */
 
-import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
-import { createGitClient } from '$lib/git/factory';
-import type { FullOnlineFuiz, ReferencingOnlineFuiz, IdlessFullFuizConfig } from '$lib/types';
-import { tomlifyConfig, stringifyToml, assertUnreachable, urlifyBase64 } from '$lib';
-import type { RequestHandler } from './$types';
-import { env } from '$env/dynamic/private';
-import { json } from '@sveltejs/kit';
 import type { Ai } from '@cloudflare/workers-types';
-import type { PublishingState } from './types';
+import { json } from '@sveltejs/kit';
 import { v5 as uuidv5 } from 'uuid';
+import { env } from '$env/dynamic/private';
+import { assertUnreachable, stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
+import { createGitClient } from '$lib/git/factory';
+import type { FullOnlineFuiz, IdlessFullFuizConfig, ReferencingOnlineFuiz } from '$lib/types';
+import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
+import type { RequestHandler } from './$types';
+import type { PublishingState } from './types';
 
 async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
 	const messages: { role: 'system' | 'user'; content: string }[] = [

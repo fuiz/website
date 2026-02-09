@@ -1,9 +1,9 @@
 <script>
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
 	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
+	import TextBar from '$lib/game/TextBar.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import Topbar from './Topbar.svelte';
 
 	/** @type {{
 	 * bindableGameInfo: import('./+page').BindableGameInfo;

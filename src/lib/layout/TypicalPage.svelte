@@ -1,7 +1,7 @@
 <script>
-	import NiceBackground from './NiceBackground.svelte';
-	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
+	import Header from './Header.svelte';
+	import NiceBackground from './NiceBackground.svelte';
 
 	let { children } = $props();
 </script>

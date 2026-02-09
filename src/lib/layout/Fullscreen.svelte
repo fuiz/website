@@ -1,10 +1,9 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import OpenInFull from '~icons/material-symbols/open-in-full';
-	import CloseFullscreen from '~icons/material-symbols/close-fullscreen';
 	import { onMount } from 'svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import IconButton from '$lib/ui/IconButton.svelte';
+	import CloseFullscreen from '~icons/material-symbols/close-fullscreen';
+	import OpenInFull from '~icons/material-symbols/open-in-full';
 
 	let fullscreen = $state(false);
 

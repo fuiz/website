@@ -1,14 +1,14 @@
 <script>
-	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
 	import think from '$lib/assets/music/kevin_macleod_thinking_music.mp3';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
+	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import VerticalTripleSplit from '$lib/game/VerticalTripleSplit.svelte';
-	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
-	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import Topbar from './Topbar.svelte';
 
 	/** @type {{
 	 * bindableGameInfo: import('./+page').BindableGameInfo;

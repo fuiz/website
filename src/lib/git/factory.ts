@@ -4,9 +4,9 @@
  */
 
 import { env } from '$env/dynamic/private';
-import type { GitProvider, OAuthTokens, OAuthConfig } from './types';
-import { GitLabClient } from './gitlab';
 import type { BaseGitClient } from './base';
+import { GitLabClient } from './gitlab';
+import type { GitProvider, OAuthConfig, OAuthTokens } from './types';
 
 /**
  * Get OAuth configuration for a Git provider

@@ -2,8 +2,8 @@
 	import Answers from '$lib/game/Answers.svelte';
 	import EmptyAnswers from '$lib/game/EmptyAnswers.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import Topbar from './Topbar.svelte';
 
 	/** @type {{questionText: string;name: string;score: number;media: undefined | import('$lib/types').Media;showAnswers: boolean;answers: (import('$lib/types').TextOrMedia | undefined)[];onanswer?: (answer: number) => void;}} */

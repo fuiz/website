@@ -4,9 +4,9 @@
 	import '@fontsource/atkinson-hyperlegible';
 	import 'tippy.js/dist/tippy.css';
 
+	import { onMount, untrack } from 'svelte';
 	import { navigating } from '$app/state';
 	import Loading from '$lib/feedback/Loading.svelte';
-	import { onMount, untrack } from 'svelte';
 
 	let { children } = $props();
 

@@ -1,12 +1,12 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-	import Check from '~icons/material-symbols/check';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import TimeLeft from '$lib/game/TimeLeft.svelte';
-	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
 	import { buttonColors } from '$lib/clientOnly';
+	import TextBar from '$lib/game/TextBar.svelte';
+	import TimeLeft from '$lib/game/TimeLeft.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { toSorted } from '$lib/util';
+	import Check from '~icons/material-symbols/check';
+	import Topbar from './Topbar.svelte';
 
 	/** @type {{
 	 * bindableGameInfo: import('./+page').BindableGameInfo;

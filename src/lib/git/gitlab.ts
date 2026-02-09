@@ -5,7 +5,7 @@
  */
 
 import { BaseGitClient } from './base';
-import type { OAuthTokens, PROptions, PRResponse, BranchInfo, GitUser } from './types';
+import type { BranchInfo, GitUser, OAuthTokens, PROptions, PRResponse } from './types';
 
 export class GitLabClient extends BaseGitClient {
 	private apiBase = 'https://gitlab.com/api/v4';

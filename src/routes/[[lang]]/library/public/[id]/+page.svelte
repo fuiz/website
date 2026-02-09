@@ -1,16 +1,15 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import ImageOutline from '~icons/material-symbols/image-outline';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 	import { assertUnreachable } from '$lib';
 	import { buttonColors } from '$lib/clientOnly';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
+	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import ImageOutline from '~icons/material-symbols/image-outline';
 
 	let { data } = $props();
 

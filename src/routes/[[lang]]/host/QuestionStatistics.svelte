@@ -1,11 +1,11 @@
 <script>
 	import Answers from '$lib/game/Answers.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Statistics from '$lib/game/Statistics.svelte';
+	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
 
 	/** @type {{
 	 * bindableGameInfo: import('./+page').BindableGameInfo;

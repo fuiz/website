@@ -3,10 +3,10 @@
  * Handles OAuth callback from Git provider and exchanges code for tokens
  */
 
-import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
-import { exchangeCodeForTokens, storeTokens } from '../gitUtil';
 import type { GitProvider } from '$lib/git/types';
+import { exchangeCodeForTokens, storeTokens } from '../gitUtil';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	const code = url.searchParams.get('code');

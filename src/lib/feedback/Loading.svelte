@@ -1,6 +1,6 @@
 <script>
-	import LoadingCircle from './LoadingCircle.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import LoadingCircle from './LoadingCircle.svelte';
 </script>
 
 <div style:height="100%" style:display="flex" style:flex-direction="column">

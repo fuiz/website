@@ -1,14 +1,13 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { assertUnreachable } from '$lib';
 	import { playBackendReadyIdConfig } from '$lib/clientOnly';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Check from '~icons/material-symbols/check';
 	import Close from '~icons/material-symbols/close';
 	import TimerOffOutline from '~icons/material-symbols/timer-off-outline';
-	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 
 	/** @type {{
 	 * stats: [number, number][];

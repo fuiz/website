@@ -1,5 +1,5 @@
-import type { RequestHandler } from './$types';
 import { options } from '../driveUtil';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ cookies }) => {
 	const googleCookie = cookies.get('google');

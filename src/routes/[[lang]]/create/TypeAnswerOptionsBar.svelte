@@ -1,11 +1,10 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { limits } from '$lib/clientOnly';
-	import TimerOutline from '~icons/material-symbols/timer-outline';
-	import SportsScore from '~icons/material-symbols/sports-score';
+	import * as m from '$lib/paraglide/messages.js';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
+	import SportsScore from '~icons/material-symbols/sports-score';
+	import TimerOutline from '~icons/material-symbols/timer-outline';
 
 	/** @type {{activeSlide: import('$lib/types').TypeAnswer;}} */
 	let { activeSlide = $bindable() } = $props();

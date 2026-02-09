@@ -2,15 +2,15 @@
  * Image handling utilities for Git sync
  */
 
+import { extensionToMimeType } from '$lib';
 import type { BaseGitClient } from '$lib/git/base';
 import {
+	type Base64Media,
 	type IdlessFullFuizConfig,
 	type IdlessLocalReferenceFuizConfig,
-	type UrlMedia,
-	type Base64Media,
-	mapIdlessSlidesMedia
+	mapIdlessSlidesMedia,
+	type UrlMedia
 } from '$lib/types';
-import { extensionToMimeType } from '$lib';
 
 /** Resolve media from Git repository
  */

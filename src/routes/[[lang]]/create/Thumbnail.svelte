@@ -1,12 +1,11 @@
 <script>
 	import * as m from '$lib/paraglide/messages.js';
-
-	import MultipleChoiceThumbnail from './MultipleChoiceThumbnail.svelte';
-	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import ContentCopyOutline from '~icons/material-symbols/content-copy-outline';
 	import IconButton from '$lib/ui/IconButton.svelte';
-	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
+	import ContentCopyOutline from '~icons/material-symbols/content-copy-outline';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
+	import MultipleChoiceThumbnail from './MultipleChoiceThumbnail.svelte';
 	import OrderThumbnail from './OrderThumbnail.svelte';
+	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
 
 	/** @type {{slide: import('$lib/types').Slide;index: number;selected: boolean;ondelete: () => void;onduplicate: () => void;onselect: () => void;}} */
 	let { slide, index, selected, ondelete, onduplicate, onselect } = $props();

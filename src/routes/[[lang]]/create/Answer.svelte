@@ -1,12 +1,11 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { buttonColors, limits } from '$lib/clientOnly';
+	import * as m from '$lib/paraglide/messages.js';
 	import Checkbox from '$lib/ui/Checkbox.svelte';
-	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Textbox from '$lib/ui/Textbox.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
+	import Textbox from '$lib/ui/Textbox.svelte';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
 
 	/** @type {{correct: boolean;content: import('$lib/types').TextOrMedia;index: number;attention?: boolean;onclick?: () => void;}} */
 	let {

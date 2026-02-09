@@ -1,10 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 
 	let { data } = $props();
 

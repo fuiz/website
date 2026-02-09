@@ -1,6 +1,6 @@
+import { json } from '@sveltejs/kit';
 import type { IdlessFullFuizConfig } from '$lib/types';
 import type { RequestHandler } from './$types';
-import { json } from '@sveltejs/kit';
 
 export const PUT: RequestHandler = async ({ request, platform }) => {
 	const config: IdlessFullFuizConfig = await request.json();

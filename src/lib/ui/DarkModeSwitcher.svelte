@@ -1,10 +1,9 @@
 <script>
+	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages.js';
-
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
 	import DarkModeOutline from '~icons/material-symbols/dark-mode-outline';
 	import LightModeOutline from '~icons/material-symbols/light-mode-outline';
-	import { browser } from '$app/environment';
 
 	/**
 	 * @param {boolean} state

@@ -3,14 +3,14 @@
  * Syncs fuizzes from Git repository to the database
  */
 
+import type { D1Database, R2Bucket } from '@cloudflare/workers-types';
 import { parse } from '@ltd/j-toml';
-import type { FullOnlineFuiz, ReferencingOnlineFuiz } from '$lib/types';
+import type { BaseGitClient } from '$lib/git/base';
 import { createGitClient, getDefaultProvider } from '$lib/git/factory';
 import type { OAuthTokens } from '$lib/git/types';
-import type { BaseGitClient } from '$lib/git/base';
-import { fillMediaFromGit } from './imageHandler';
 import { getThumbnail } from '$lib/serverOnlyUtils';
-import type { R2Bucket, D1Database } from '@cloudflare/workers-types';
+import type { FullOnlineFuiz, ReferencingOnlineFuiz } from '$lib/types';
+import { fillMediaFromGit } from './imageHandler';
 
 /**
  * Delete a fuiz from database and R2 bucket

@@ -1,11 +1,10 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import { Confetti } from 'svelte-confetti';
 	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import Topbar from './Topbar.svelte';
-	import { Confetti } from 'svelte-confetti';
 
 	/** @type {{name: string;score: number;correct: boolean;}} */
 	let { name, score, correct } = $props();
