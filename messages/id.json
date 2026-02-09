@@ -212,5 +212,13 @@
 	"publishing": "Menerbitkan...",
 	"login_required": "Login Diperlukan",
 	"login_required_desc": "Anda perlu mengautentikasi dengan GitLab untuk menerbitkan fuiz",
-	"connect_gitlab": "Hubungkan Akun GitLab"
+	"connect_gitlab": "Hubungkan Akun GitLab",
+	"publish_checklist_title": "Sebelum Menerbitkan",
+	"publish_checklist_desc": "Harap konfirmasi hal-hal berikut sebelum mengirimkan fuiz Anda untuk tinjauan publik:",
+	"publish_check_accurate": "Semua pertanyaan dan jawaban akurat dan benar secara faktual",
+	"publish_check_appropriate": "Konten sesuai untuk semua kalangan",
+	"publish_check_language": "Bahasa yang dipilih sesuai dengan konten kuis",
+	"publish_check_media": "Gambar dan media relevan dan bersumber dengan benar",
+	"publish_check_relevant": "Kuis ini relevan, edukatif, dan bermanfaat bagi orang lain",
+	"privacy_policy": "Kebijakan Privasi"
 }

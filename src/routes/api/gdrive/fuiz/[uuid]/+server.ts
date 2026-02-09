@@ -51,7 +51,8 @@ export const POST: RequestHandler = async ({ params: { uuid }, cookies, request 
 		);
 
 		return new Response(null, { status: 201 });
-	} catch {
+	} catch (err) {
+		console.error('Failed to create file', err);
 		error(500, 'Failed to create file');
 	}
 };
@@ -84,7 +85,8 @@ export const PUT: RequestHandler = async ({ params: { uuid }, cookies, request }
 		);
 
 		return new Response(null, { status: 200 });
-	} catch {
+	} catch (err) {
+		console.error('Failed to update file', err);
 		error(500, 'Failed to update file');
 	}
 };
@@ -103,7 +105,8 @@ export const DELETE: RequestHandler = async ({ params: { uuid }, cookies }) => {
 			await drive.deleteFile(file);
 		}
 		return new Response(null, { status: 204 });
-	} catch {
+	} catch (err) {
+		console.error('Failed to delete file', err);
 		error(500, 'Failed to delete file');
 	}
 };

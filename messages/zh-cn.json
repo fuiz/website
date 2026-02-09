@@ -212,5 +212,13 @@
 	"publishing": "发布中...",
 	"login_required": "需要登录",
 	"login_required_desc": "您需要通过GitLab认证才能发布问答",
-	"connect_gitlab": "连接GitLab账户"
+	"connect_gitlab": "连接GitLab账户",
+	"publish_checklist_title": "发布前确认",
+	"publish_checklist_desc": "请在提交问答进行公开审核前确认以下事项：",
+	"publish_check_accurate": "所有问题和答案准确无误",
+	"publish_check_appropriate": "内容适合所有受众",
+	"publish_check_language": "所选语言与测验内容一致",
+	"publish_check_media": "图片和媒体内容相关且来源正确",
+	"publish_check_relevant": "测验具有相关性、教育性，对他人有用",
+	"privacy_policy": "隐私政策"
 }

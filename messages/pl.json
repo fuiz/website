@@ -212,5 +212,13 @@
 	"publishing": "Publikowanie...",
 	"login_required": "Wymagane Logowanie",
 	"login_required_desc": "Musisz uwierzytelnić się przez GitLab, aby publikować fuizy",
-	"connect_gitlab": "Połącz Konto GitLab"
+	"connect_gitlab": "Połącz Konto GitLab",
+	"publish_checklist_title": "Przed Opublikowaniem",
+	"publish_checklist_desc": "Proszę potwierdź poniższe przed przesłaniem fuiz-a do publicznej recenzji:",
+	"publish_check_accurate": "Wszystkie pytania i odpowiedzi są dokładne i merytorycznie poprawne",
+	"publish_check_appropriate": "Treść jest odpowiednia dla wszystkich odbiorców",
+	"publish_check_language": "Wybrany język odpowiada treści quizu",
+	"publish_check_media": "Obrazy i media są odpowiednie i prawidłowo oznaczone źródłowo",
+	"publish_check_relevant": "Quiz jest istotny, edukacyjny i przydatny dla innych",
+	"privacy_policy": "Polityka Prywatności"
 }

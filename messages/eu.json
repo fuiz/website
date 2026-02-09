@@ -212,5 +212,13 @@
 	"publishing": "Argitaratzen...",
 	"login_required": "Saioa hasi behar da",
 	"login_required_desc": "GitLab-ekin autentifikatu behar zara fuiz-ak argitaratzeko",
-	"connect_gitlab": "GitLab Kontua Konektatu"
+	"connect_gitlab": "GitLab Kontua Konektatu",
+	"publish_checklist_title": "Argitaratu Aurretik",
+	"publish_checklist_desc": "Mesedez, baieztatu ondorengoa zure fuiz-a berrikuspen publikorako bidali aurretik:",
+	"publish_check_accurate": "Galdera eta erantzun guztiak zehatzak eta zuzenak dira",
+	"publish_check_appropriate": "Edukia publiko guztientzat egokia da",
+	"publish_check_language": "Hautatutako hizkuntza quiz-aren edukiarekin bat dator",
+	"publish_check_media": "Irudiak eta multimedia garrantzitsuak dira eta behar bezala iturriak dituzte",
+	"publish_check_relevant": "Quiz-a garrantzitsua, hezigarria eta besteentzat erabilgarria da",
+	"privacy_policy": "Pribatutasun Politika"
 }

@@ -212,5 +212,13 @@
 	"publishing": "Publicando...",
 	"login_required": "Inicio de Sesión Requerido",
 	"login_required_desc": "Necesitas autenticarte con GitLab para publicar fuizzes",
-	"connect_gitlab": "Conectar Cuenta de GitLab"
+	"connect_gitlab": "Conectar Cuenta de GitLab",
+	"publish_checklist_title": "Antes de Publicar",
+	"publish_checklist_desc": "Por favor, confirma lo siguiente antes de enviar tu fuiz para revisión pública:",
+	"publish_check_accurate": "Todas las preguntas y respuestas son precisas y correctas",
+	"publish_check_appropriate": "El contenido es apropiado para todas las audiencias",
+	"publish_check_language": "El idioma seleccionado coincide con el contenido del cuestionario",
+	"publish_check_media": "Las imágenes y medios son relevantes y tienen fuentes adecuadas",
+	"publish_check_relevant": "El cuestionario es relevante, educativo y útil para otros",
+	"privacy_policy": "Política de Privacidad"
 }

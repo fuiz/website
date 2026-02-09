@@ -1,18 +1,8 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 
-	/**
-	 * @type {{
-	 *   title: string;
-	 *   message: string;
-	 *   cancelText?: string;
-	 *   confirmText: string;
-	 *   onConfirm: () => void;
-	 *   confirmButtonColor?: string;
-	 *   confirmButtonDeepColor?: string;
-	 * }}
-	 */
 	let {
 		title,
 		message,
@@ -20,16 +10,30 @@
 		confirmText,
 		onConfirm,
 		confirmButtonColor,
-		confirmButtonDeepColor
+		confirmButtonDeepColor,
+		checklist = []
+	}: {
+		title: string;
+		message: string;
+		cancelText?: string;
+		confirmText: string;
+		onConfirm: () => void;
+		confirmButtonColor?: string;
+		confirmButtonDeepColor?: string;
+		checklist?: string[];
 	} = $props();
 
-	/** @type {HTMLDialogElement | undefined} */
-	let dialogElement = $state();
+	let checked = $state<boolean[]>([]);
+
+	let allChecked = $derived(checked.every(Boolean));
+
+	let dialogElement = $state<HTMLDialogElement>();
 
 	/**
 	 * Opens the dialog
 	 */
 	export function open() {
+		checked = checklist.map(() => false);
 		dialogElement?.showModal();
 	}
 
@@ -64,6 +68,16 @@
 			{message}
 		</p>
 	{/if}
+	{#if checklist.length > 0}
+		<div style:display="flex" style:flex-direction="column" style:gap="0.5em" style:margin="0 0 1em 0">
+			{#each checklist as item, i (i)}
+				<button class="checklist-item" onclick={() => (checked[i] = !checked[i])}>
+					<RegularCheckbox checked={checked[i]} />
+					<span>{item}</span>
+				</button>
+			{/each}
+		</div>
+	{/if}
 	<div
 		style:display="flex"
 		style:gap="0.5em"
@@ -87,6 +101,7 @@
 			<FancyButton
 				type="button"
 				onclick={handleConfirm}
+				disabled={!allChecked}
 				backgroundColor={confirmButtonColor}
 				backgroundDeepColor={confirmButtonDeepColor}
 			>
@@ -101,5 +116,19 @@
 <style>
 	dialog::backdrop {
 		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.checklist-item {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5em;
+		cursor: pointer;
+		line-height: 1.4;
+		background: none;
+		border: none;
+		padding: 0;
+		font: inherit;
+		color: inherit;
+		text-align: start;
 	}
 </style>
