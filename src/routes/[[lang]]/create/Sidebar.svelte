@@ -1,18 +1,17 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import { limits } from '$lib/clientOnly';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import { tick } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { dndzone } from 'svelte-dnd-action';
+	import { limits } from '$lib/clientOnly';
+	import * as m from '$lib/paraglide/messages.js';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import ChevronLeft from '~icons/material-symbols/chevron-left';
 	import ChevronRight from '~icons/material-symbols/chevron-right';
 	import FirstPage from '~icons/material-symbols/first-page';
 	import LastPage from '~icons/material-symbols/last-page';
-	import Thumbnail from './Thumbnail.svelte';
-	import { dndzone } from 'svelte-dnd-action';
 	import MagnifyDocked from '~icons/material-symbols/magnify-docked';
-	import IconButton from '$lib/ui/IconButton.svelte';
-	import { tick } from 'svelte';
+	import Thumbnail from './Thumbnail.svelte';
 
 	/** @type {{slides: import('$lib/types').Slide[];selectedSlideIndex: number;}} */
 	let { slides = $bindable(), selectedSlideIndex = $bindable() } = $props();

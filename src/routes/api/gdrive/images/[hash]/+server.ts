@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
 import { getDrive, getFilesIdFromName } from '../../driveUtil';
+import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ params: { hash }, cookies, request }) => {
 	const drive = getDrive(cookies);

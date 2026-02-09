@@ -3,7 +3,7 @@
  * Provides a common interface for different Git providers (GitLab, GitHub, etc.)
  */
 
-import type { OAuthTokens, PROptions, PRResponse, BranchInfo, GitUser } from './types';
+import type { BranchInfo, GitUser, OAuthTokens, PROptions, PRResponse } from './types';
 
 export abstract class BaseGitClient {
 	protected tokens: OAuthTokens;

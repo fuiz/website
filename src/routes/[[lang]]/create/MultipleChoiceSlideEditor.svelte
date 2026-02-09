@@ -1,7 +1,6 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { limits } from '$lib/clientOnly';
+	import * as m from '$lib/paraglide/messages.js';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import Answers from './Answers.svelte';
 	import MediaChooser from './MediaChooser.svelte';

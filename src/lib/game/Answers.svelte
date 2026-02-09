@@ -1,6 +1,6 @@
 <script>
-	import TextAnswerButton from './TextAnswerButton.svelte';
 	import EmptyAnswerButton from './EmptyAnswerButton.svelte';
+	import TextAnswerButton from './TextAnswerButton.svelte';
 
 	/** @type {{answers: { text: string | undefined; correct: boolean | undefined }[], onanswer?: (index: number) => void}}*/
 	let { answers, onanswer } = $props();

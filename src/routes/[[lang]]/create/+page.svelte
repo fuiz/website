@@ -1,22 +1,21 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { page } from '$app/state';
-	import Editor from './Editor.svelte';
-	import Loading from '$lib/feedback/Loading.svelte';
-	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
-	import Gallery from './Gallery.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import { addIds } from '$lib/clientOnly';
+	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import {
+		type Database,
+		type ExportedFuiz,
 		getAllCreations,
 		getCreation,
-		loadDatabase,
-		type Database,
-		type ExportedFuiz
+		loadDatabase
 	} from '$lib/storage';
-	import { addIds } from '$lib/clientOnly';
-	import { localizeHref } from '$lib/paraglide/runtime';
 	import type { Base64Media, Creation, GenericFuizConfig } from '$lib/types';
+	import Editor from './Editor.svelte';
+	import Gallery from './Gallery.svelte';
 
 	let { data } = $props();
 
@@ -38,7 +37,7 @@
 	async function getStatus(idParam: string | null) {
 		const db = await loadDatabase();
 		if (idParam) {
-			const id = parseInt(idParam);
+			const id = parseInt(idParam, 10);
 			const exportedFuiz = await getCreation(id, db);
 			if (!exportedFuiz) {
 				status = { creation: 'failure', db };

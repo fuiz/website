@@ -1,5 +1,6 @@
 <script>
 	import { resolve } from '$app/paths';
+
 	/** @type {{
 	 * foregroundColor: string;
 	 * backgroundColor: string;

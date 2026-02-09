@@ -1,13 +1,12 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import { resolve } from '$app/paths';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import { getAllCreations, loadDatabase } from '$lib/storage';
-	import { toSorted } from '$lib/util';
+	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { resolve } from '$app/paths';
+	import { getAllCreations, loadDatabase } from '$lib/storage';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import { toSorted } from '$lib/util';
 </script>
 
 {#await loadDatabase().then((db) => getAllCreations(db))}

@@ -1,16 +1,20 @@
-import * as m from '$lib/paraglide/messages.js';
-
-import StrawberryIcon from '~icons/custom/strawberry';
-import GrapeIcon from '~icons/custom/grape';
-import LemonIcon from '~icons/custom/lemon';
-import BlueberryIcon from '~icons/custom/blueberry';
-import KiwiIcon from '~icons/custom/kiwi';
-import OrangeIcon from '~icons/custom/orange';
-import OliveIcon from '~icons/custom/olive';
-import WatermelonIcon from '~icons/custom/watermelon';
+import { parse } from '@ltd/j-toml';
 import JSZip from 'jszip';
+import { goto } from '$app/navigation';
+import { resolve } from '$app/paths';
+import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/static/public';
+import { assertUnreachable, stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
+import * as m from '$lib/paraglide/messages.js';
+import { localizeHref } from '$lib/paraglide/runtime';
+import BlueberryIcon from '~icons/custom/blueberry';
+import GrapeIcon from '~icons/custom/grape';
+import KiwiIcon from '~icons/custom/kiwi';
+import LemonIcon from '~icons/custom/lemon';
+import OliveIcon from '~icons/custom/olive';
+import OrangeIcon from '~icons/custom/orange';
+import StrawberryIcon from '~icons/custom/strawberry';
+import WatermelonIcon from '~icons/custom/watermelon';
 import {
-	mapIdlessSlidesMedia,
 	type Base64Media,
 	type CorkboardMedia,
 	type FuizConfig,
@@ -18,15 +22,10 @@ import {
 	type GenericFuizConfig,
 	type GenericIdlessFuizConfig,
 	type IdlessFuizConfig,
-	type IdlessFullFuizConfig
+	type IdlessFullFuizConfig,
+	mapIdlessSlidesMedia
 } from './types';
-import { parse } from '@ltd/j-toml';
-import { assertUnreachable, stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
-import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/static/public';
-import { localizeHref } from '$lib/paraglide/runtime';
 import { bring } from './util';
-import { goto } from '$app/navigation';
-import { resolve } from '$app/paths';
 
 export function downloadBlob(blobs: BlobPart[], name: string, options?: FilePropertyBag) {
 	const file = new File(blobs, name, options);

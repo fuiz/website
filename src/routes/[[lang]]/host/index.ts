@@ -1,11 +1,11 @@
 import type {
-	Media,
-	TextOrMedia,
 	AnswerResult,
-	IdlessFuizConfig,
+	FuizConfig,
 	FuizOptions,
+	IdlessFuizConfig,
+	Media,
 	ServerPossiblyHidden,
-	FuizConfig
+	TextOrMedia
 } from '$lib/types';
 import type { TruncatedList } from './+page';
 

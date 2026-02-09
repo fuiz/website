@@ -1,9 +1,9 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
+	import PlayersList from '$lib/game/PlayersList.svelte';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import Topbar from './Topbar.svelte';
-	import PlayersList from '$lib/game/PlayersList.svelte';
 
 	/** @type {{
 	 * name: string;

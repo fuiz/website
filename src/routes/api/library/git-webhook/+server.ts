@@ -3,11 +3,11 @@
  * Processes push events to the default branch to sync modified fuizzes
  */
 
-import { json, error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { env } from '$env/dynamic/private';
 import { timingSafeEqual } from 'node:crypto';
+import { error, json } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 import { syncSingleFuiz } from '$lib/scripts/syncLibrary';
+import type { RequestHandler } from './$types';
 
 /**
  * Timing-safe string comparison to prevent timing attacks

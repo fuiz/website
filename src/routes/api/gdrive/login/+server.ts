@@ -1,6 +1,6 @@
-import type { RequestHandler } from './$types';
-import { getOAuth2Client, scope, options } from '../driveUtil';
 import { error } from '@sveltejs/kit';
+import { getOAuth2Client, options, scope } from '../driveUtil';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	const { clientId, redirectUri } = options();

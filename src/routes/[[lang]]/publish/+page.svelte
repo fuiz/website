@@ -1,19 +1,19 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
+	import { resolve } from '$app/paths';
 
 	import { page } from '$app/state';
-	import Loading from '$lib/feedback/Loading.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import Header from '$lib/layout/Header.svelte';
-	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
-	import Footer from '$lib/layout/Footer.svelte';
 	import { PUBLIC_PLAY_URL } from '$env/static/public';
-	import Publish from './Publish.svelte';
-	import { getAllCreations, getCreation, loadDatabase } from '$lib/storage';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
-	import { toSorted } from '$lib/util';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
+	import Header from '$lib/layout/Header.svelte';
+	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { resolve } from '$app/paths';
+	import { getAllCreations, getCreation, loadDatabase } from '$lib/storage';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
+	import { toSorted } from '$lib/util';
+	import Publish from './Publish.svelte';
 
 	/**
 	 * @param {string | null} str
@@ -24,7 +24,7 @@
 			return null;
 		}
 		try {
-			return Number.parseInt(str);
+			return Number.parseInt(str, 10);
 		} catch {
 			return null;
 		}

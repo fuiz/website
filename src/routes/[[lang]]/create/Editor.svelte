@@ -1,15 +1,14 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
+	import { untrack } from 'svelte';
 
 	import { assertUnreachable } from '$lib';
-	import { fixTimes, removeIds } from '$lib/clientOnly';
-	import { updateCreation, type Database, type ExportedFuiz } from '$lib/storage';
+	import { fixTimes, removeIds, shareAndCopyURL } from '$lib/clientOnly';
+	import * as m from '$lib/paraglide/messages.js';
+	import { type Database, type ExportedFuiz, updateCreation } from '$lib/storage';
+	import type { Base64Media, GenericFuizConfig } from '$lib/types';
 	import { debounce } from '$lib/util';
-	import { shareAndCopyURL } from '$lib/clientOnly';
 	import Main from './Main.svelte';
 	import Topbar from './Topbar.svelte';
-	import { untrack } from 'svelte';
-	import type { Base64Media, GenericFuizConfig } from '$lib/types';
 
 	let {
 		id = $bindable(),

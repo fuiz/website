@@ -1,9 +1,9 @@
-import { fixPublish } from '$lib/serverOnlyUtils';
-import { subjects as allSubjects, grades as allGrades, type PublishedFuizDB } from '$lib/types';
 import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { locales, type Locale } from '$lib/paraglide/runtime';
+import { type Locale, locales } from '$lib/paraglide/runtime';
+import { fixPublish } from '$lib/serverOnlyUtils';
+import { grades as allGrades, subjects as allSubjects, type PublishedFuizDB } from '$lib/types';
 import { isNotNull } from '$lib/util';
+import type { RequestHandler } from './$types';
 
 function restrict<T extends string>(
 	value: string | null | undefined,

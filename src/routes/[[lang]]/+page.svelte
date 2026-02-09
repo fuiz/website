@@ -1,26 +1,24 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import logo from '$lib/assets/same_color_logo.svg';
+	import Footer from '$lib/layout/Footer.svelte';
+	import MainHeader from '$lib/layout/MainHeader.svelte';
+	import Anchor from '$lib/navigation/Anchor.svelte';
+	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-
+	import { localizeHref } from '$lib/paraglide/runtime';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
+	import Diversity1 from '~icons/material-symbols/diversity-1';
+	import Diversity2Outline from '~icons/material-symbols/diversity-2-outline';
 	import ErrorOutline from '~icons/material-symbols/error-outline';
 	import HelpOutline from '~icons/material-symbols/help-outline';
-	import MoneyOff from '~icons/material-symbols/money-off';
 	import Language from '~icons/material-symbols/language';
-	import Diversity2Outline from '~icons/material-symbols/diversity-2-outline';
-	import Diversity1 from '~icons/material-symbols/diversity-1';
-	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
 	import MailOutline from '~icons/material-symbols/mail-outline';
-
-	import logo from '$lib/assets/same_color_logo.svg';
-	import { PUBLIC_PLAY_URL } from '$env/static/public';
-	import Anchor from '$lib/navigation/Anchor.svelte';
+	import MoneyOff from '~icons/material-symbols/money-off';
 	import QuestionAnswers from './host/QuestionAnswers.svelte';
-	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
-	import MainHeader from '$lib/layout/MainHeader.svelte';
-	import Footer from '$lib/layout/Footer.svelte';
 	import QuestionStatistics from './host/QuestionStatistics.svelte';
-	import { onMount } from 'svelte';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let { data = $bindable() } = $props();
 

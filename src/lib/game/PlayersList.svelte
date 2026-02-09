@@ -1,8 +1,7 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
+	import * as m from '$lib/paraglide/messages.js';
 
 	/** @type {{
 	 * players: [string, boolean][];

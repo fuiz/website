@@ -1,6 +1,6 @@
 <script>
-	import logo from '$lib/assets/logo.svg';
 	import { inlineSvg } from '@svelte-put/inline-svg';
+	import logo from '$lib/assets/logo.svg';
 
 	/** @type {{ height?: number }}*/
 	let { height = 60 } = $props();

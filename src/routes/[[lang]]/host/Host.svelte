@@ -1,30 +1,28 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
-
-	import Waiting from './Waiting.svelte';
-	import Question from './Question.svelte';
-	import QuestionAnswers from './QuestionAnswers.svelte';
-	import QuestionStatistics from './QuestionStatistics.svelte';
-
-	import Leaderboard from './Leaderboard.svelte';
-	import Loading from '$lib/feedback/Loading.svelte';
+	import { onMount, untrack } from 'svelte';
 	import { PUBLIC_BACKEND_URL, PUBLIC_WS_URL } from '$env/static/public';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
-	import Summary from './Summary.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { bring, zip } from '$lib/util';
-	import TypeAnswerStatistics from './TypeAnswerStatistics.svelte';
-	import OrderAnswers from './OrderAnswers.svelte';
-	import OrderStatistics from './OrderStatistics.svelte';
-	import { onMount, untrack } from 'svelte';
+	import type { IncomingMessage, State } from '.';
+	import type { BindableGameInfo } from './+page';
+	import Leaderboard from './Leaderboard.svelte';
 	import {
 		handleGameMessage,
 		handleMultipleChoiceMessage,
-		handleTypeAnswerMessage,
 		handleOrderMessage,
+		handleTypeAnswerMessage,
 		type QuestionMessageResult
 	} from './messageHandler';
-	import type { IncomingMessage, State } from '.';
-	import type { BindableGameInfo } from './+page';
+	import OrderAnswers from './OrderAnswers.svelte';
+	import OrderStatistics from './OrderStatistics.svelte';
+	import Question from './Question.svelte';
+	import QuestionAnswers from './QuestionAnswers.svelte';
+	import QuestionStatistics from './QuestionStatistics.svelte';
+	import Summary from './Summary.svelte';
+	import TypeAnswerStatistics from './TypeAnswerStatistics.svelte';
+	import Waiting from './Waiting.svelte';
 
 	let currentState = $state<State>();
 

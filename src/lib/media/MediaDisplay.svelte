@@ -1,6 +1,6 @@
 <script>
-	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
 	import { inlineSvg } from '@svelte-put/inline-svg';
+	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
 	import MediaFallback from './MediaFallback.svelte';
 
 	/** @type {{ media: import('$lib/types').Media, fit: string }} */

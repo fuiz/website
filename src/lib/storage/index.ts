@@ -1,16 +1,15 @@
 import objectHash from 'object-hash';
 import {
-	getMedia,
-	mapIdlessSlidesMedia,
-	mapIdlessSlidesMediaSync,
 	type Base64Media,
 	type Creation,
 	type GenericIdlessFuizConfig,
+	getMedia,
 	type IdlessFullFuizConfig,
 	type Media,
-	type Modify
+	type Modify,
+	mapIdlessSlidesMedia,
+	mapIdlessSlidesMediaSync
 } from '../types';
-import { retrieveRemoteSync, type RemoteSync, type RemoteSyncProvider } from './remoteStorage';
 import {
 	addCreationLocal,
 	deleteCreationLocal,
@@ -21,6 +20,7 @@ import {
 	updateCreationLocal,
 	updateLocalImagesDatabase
 } from './local';
+import { type RemoteSync, type RemoteSyncProvider, retrieveRemoteSync } from './remoteStorage';
 
 export type LocalDatabase = IDBDatabase;
 export type CreationId = number;
@@ -216,7 +216,7 @@ export async function loadDatabase(): Promise<Database> {
 async function sync(database: Database) {
 	await database.remote?.sync(
 		database.local,
-		(await getAllCreationsLocal(database.local)).map(([k, v]) => [parseInt(k.toString()), v])
+		(await getAllCreationsLocal(database.local)).map(([k, v]) => [parseInt(k.toString(), 10), v])
 	);
 }
 
@@ -229,7 +229,7 @@ export async function getAllCreations(database: Database): Promise<Creation[]> {
 		internals.map(async ([key, f]) => {
 			const value = await collectFuiz(f, database.local);
 			return {
-				id: parseInt(key.toString()),
+				id: parseInt(key.toString(), 10),
 				lastEdited: value.lastEdited,
 				title: value.config.title,
 				slidesCount: value.config.slides.length,

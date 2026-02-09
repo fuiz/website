@@ -1,8 +1,8 @@
 <script>
+	import { scale } from 'svelte/transition';
 	import { medalColors } from '$lib/clientOnly';
 	import Counter from '$lib/ui/Counter.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
-	import { scale } from 'svelte/transition';
 
 	/** @type {{name: string;score: number;index: number;final: boolean;duration: number;delay: number;}} */
 	let { name, score, index, final, duration, delay } = $props();

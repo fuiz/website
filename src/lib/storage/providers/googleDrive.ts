@@ -1,14 +1,14 @@
+import type { Base64Media } from '../../types';
+import { bring } from '../../util';
 import {
 	type CreationId,
+	type InternalFuiz,
 	type InternalFuizMetadata,
 	type LocalDatabase,
 	type LooseMediaReferencedFuizConfig,
-	type InternalFuiz,
 	type MediaReferencedFuizConfig,
 	strictifyMediaReference
 } from '..';
-import type { Base64Media } from '../../types';
-import { bring } from '../../util';
 import { reconcile } from '../utils';
 
 export class GoogleDriveSync {

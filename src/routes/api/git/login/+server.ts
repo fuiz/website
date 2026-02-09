@@ -3,10 +3,10 @@
  * Initiates OAuth flow with selected Git provider
  */
 
-import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
-import { generateState, getAuthUrl } from '../gitUtil';
 import type { GitProvider } from '$lib/git/types';
+import { generateState, getAuthUrl } from '../gitUtil';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	// Get provider from query params (default to gitlab)

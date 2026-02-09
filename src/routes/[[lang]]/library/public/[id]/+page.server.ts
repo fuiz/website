@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 import { fixPublish } from '$lib/serverOnlyUtils';
 import type { FullOnlineFuiz, PublishedFuizDB } from '$lib/types';
+import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params, platform }) => {
 	const published: PublishedFuizDB | undefined =

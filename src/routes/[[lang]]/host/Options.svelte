@@ -1,18 +1,17 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
-
 	import { playIdlessConfig } from '$lib/clientOnly';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Loading from '$lib/feedback/Loading.svelte';
-	import Switch from '$lib/ui/Switch.svelte';
-	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import Slider from '$lib/ui/Slider.svelte';
-	import { getCreation, loadDatabase, type CreationId } from '$lib/storage';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
+	import Loading from '$lib/feedback/Loading.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
-	import Radio from '$lib/ui/Radio.svelte';
+	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { type CreationId, getCreation, loadDatabase } from '$lib/storage';
 	import type { GenericIdlessFuizConfig, GenericIdlessSlide, NameStyle } from '$lib/types';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import Radio from '$lib/ui/Radio.svelte';
+	import Slider from '$lib/ui/Slider.svelte';
+	import Switch from '$lib/ui/Switch.svelte';
 
 	let { id }: { id: CreationId } = $props();
 

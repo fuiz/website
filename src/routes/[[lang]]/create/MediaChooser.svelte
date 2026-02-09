@@ -1,14 +1,14 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
+	import tippy from 'tippy.js';
 
 	import { buttonColors } from '$lib/clientOnly';
-	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
-	import HelpOutline from '~icons/material-symbols/help-outline';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
-	import Textarea from '$lib/ui/Textarea.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import IconButton from '$lib/ui/IconButton.svelte';
-	import tippy from 'tippy.js';
+	import Textarea from '$lib/ui/Textarea.svelte';
+	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
+	import HelpOutline from '~icons/material-symbols/help-outline';
 
 	/** @type {{media: import('$lib/types').Media | null | undefined;}} */
 	let { media = $bindable() } = $props();

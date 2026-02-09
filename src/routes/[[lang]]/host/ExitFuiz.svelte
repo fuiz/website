@@ -1,11 +1,10 @@
 <script lang="ts">
-	import * as m from '$lib/paraglide/messages.js';
-
-	import FuizIcon from '~icons/custom/icon';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
+	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import FuizIcon from '~icons/custom/icon';
 
 	let exitDialog: ConfirmationDialog | undefined = $state();
 </script>

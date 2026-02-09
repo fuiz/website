@@ -3,10 +3,10 @@
  * Returns current authentication status and user information
  */
 
-import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
-import { getAuthenticatedProvider, getTokens } from '../gitUtil';
 import { createGitClient } from '$lib/git/factory';
+import { getAuthenticatedProvider, getTokens } from '../gitUtil';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ cookies }) => {
 	const provider = getAuthenticatedProvider(cookies);

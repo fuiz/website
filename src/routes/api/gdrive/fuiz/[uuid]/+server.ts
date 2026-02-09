@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { getDrive, getFilesIdFromName } from '../../driveUtil';
 import type { InternalFuiz } from '$lib/storage';
+import { getDrive, getFilesIdFromName } from '../../driveUtil';
+import type { RequestHandler } from './$types';
 
 // GET - Read a fuiz file
 export const GET: RequestHandler = async ({ params: { uuid }, cookies }) => {

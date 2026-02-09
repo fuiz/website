@@ -1,10 +1,10 @@
 import { addIds } from '$lib/clientOnly';
-import type { State } from './index';
 import type {
 	GameIncomingMessage,
 	MultipleChoiceIncomingMessage,
-	TypeAnswerIncomingMessage,
-	OrderSlideIncomingMessage
+	OrderSlideIncomingMessage,
+	State,
+	TypeAnswerIncomingMessage
 } from './index';
 
 // Game message types

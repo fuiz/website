@@ -1,5 +1,6 @@
 <script>
 	import { resolve } from '$app/paths';
+
 	/** @type {{
 	 * message: string;
 	 * icon: import('svelte').Snippet;

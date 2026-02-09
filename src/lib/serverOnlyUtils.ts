@@ -1,12 +1,12 @@
-import { bring } from './util';
 import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
+import type { Locale } from '$lib/paraglide/runtime.js';
 import {
 	getMedia,
 	type IdlessFullFuizConfig,
 	type PublishedFuiz,
 	type PublishedFuizDB
 } from './types';
-import type { Locale } from '$lib/paraglide/runtime.js';
+import { bring } from './util';
 
 export function dataURIToBlob(dataURI: string): Blob {
 	const [info, data] = dataURI.split(',');

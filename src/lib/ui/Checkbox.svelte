@@ -1,10 +1,9 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
-
-	import Check from '~icons/material-symbols/check';
-	import Close from '~icons/material-symbols/close';
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
+	import * as m from '$lib/paraglide/messages.js';
+	import Check from '~icons/material-symbols/check';
+	import Close from '~icons/material-symbols/close';
 
 	/** @type {{
 	 *  value: boolean;

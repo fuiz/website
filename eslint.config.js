@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { includeIgnoreFile } from '@eslint/compat';
-import svelte from 'eslint-plugin-svelte';
 import { defineConfig } from 'eslint/config';
+import svelte from 'eslint-plugin-svelte';
 import ts from 'typescript-eslint';
 import svelteConfig from './svelte.config.js';
 

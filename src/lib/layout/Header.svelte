@@ -1,7 +1,7 @@
 <script>
+	import { resolve } from '$app/paths';
 	import Logo from '$lib/media/Logo.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { resolve } from '$app/paths';
 </script>
 
 <div style:display="flex" style:justify-content="center">

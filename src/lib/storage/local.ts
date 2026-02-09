@@ -1,11 +1,11 @@
 import type { Base64Media } from '$lib/types';
 import {
-	generateUuid,
-	strictifyMediaReference,
 	type CreationId,
-	type LooseInternalFuiz,
+	generateUuid,
+	type InternalFuiz,
 	type LocalDatabase,
-	type InternalFuiz
+	type LooseInternalFuiz,
+	strictifyMediaReference
 } from '.';
 
 function strictifyInternalFuiz(internal: LooseInternalFuiz): InternalFuiz {
@@ -125,7 +125,7 @@ export async function addCreationLocal(
 
 	return await new Promise((resolve) => {
 		request.addEventListener('success', () => {
-			resolve(parseInt(request.result.toString()));
+			resolve(parseInt(request.result.toString(), 10));
 		});
 	});
 }

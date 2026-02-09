@@ -1,20 +1,20 @@
+import { type Base64Media, getMedia } from '../types';
+import { isNotUndefined } from '../util';
 import {
+	type CreationId,
 	generateUuid,
 	type InternalFuiz,
-	type LocalDatabase,
-	type CreationId,
-	type InternalFuizMetadata
+	type InternalFuizMetadata,
+	type LocalDatabase
 } from '.';
+import type { RemoteSync } from './interface';
 import {
 	addCreationLocal,
 	getCreationLocal,
-	updateCreationLocal,
 	retrieveMediaFromLocal,
+	updateCreationLocal,
 	updateLocalImagesDatabase
 } from './local';
-import { getMedia, type Base64Media } from '../types';
-import { isNotUndefined } from '../util';
-import type { RemoteSync } from './interface';
 
 export async function reconcile(
 	remoteDatabase: RemoteSync,

@@ -3,8 +3,8 @@
 
 	import GhostIcon from '~icons/custom/ghost';
 	import MultipleChoiceSlideEditor from './MultipleChoiceSlideEditor.svelte';
-	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';
 	import OrderSlideEditor from './OrderSlideEditor.svelte';
+	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';
 
 	/** @type {{slide: import('$lib/types').Slide | undefined;}} */
 	let { slide = $bindable() } = $props();

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 	import { grades } from '$lib/types';
+	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
 
 	let { tags = $bindable() }: { tags: string[] } = $props();
 

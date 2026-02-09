@@ -1,15 +1,15 @@
 <script>
-	import * as m from '$lib/paraglide/messages.js';
+	import { onMount } from 'svelte';
+	import tippy from 'tippy.js';
 	import { resolve } from '$app/paths';
+	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import * as m from '$lib/paraglide/messages.js';
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime.js';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 	import Download from '~icons/material-symbols/download';
 	import Share from '~icons/material-symbols/share';
-	import IconButton from '$lib/ui/IconButton.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import { onMount } from 'svelte';
-	import { getLocale, localizeHref } from '$lib/paraglide/runtime.js';
-	import tippy from 'tippy.js';
+	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 
 	/** @type {{
 	 * id: number;
