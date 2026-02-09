@@ -3,7 +3,7 @@
 	import { PUBLIC_DISPLAY_PLAY_URL, PUBLIC_PLAY_URL } from '$env/static/public';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Fullscreen from '$lib/layout/Fullscreen.svelte';
-	import bee3 from '$lib/assets/bee3.mp3';
+	import bee3 from '$lib/assets/music/bee3.mp3';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import PlayersList from '$lib/game/PlayersList.svelte';
