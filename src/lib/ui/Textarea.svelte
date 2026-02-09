@@ -20,7 +20,6 @@
 	let editableElement = $state<HTMLTextAreaElement>();
 
 	$effect(() => {
-		value = value;
 		if (!editableElement) return;
 		editableElement.style.height = '0';
 		editableElement.style.height = (editableElement.scrollHeight + 4).toString() + 'px';

@@ -25,6 +25,9 @@
 			},
 			"complexity": {
 				"noUselessUndefinedInitialization": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "off"
 			}
 		}
 	},

@@ -8,7 +8,7 @@
 	 * @param {string | null} str
 	 * @returns {number | null}
 	 */
-	function parseInt(str) {
+	function parseIntOrNull(str) {
 		if (str === null) {
 			return null;
 		}
@@ -20,7 +20,7 @@
 	}
 
 	let code = $derived(page.url.searchParams.get('code'));
-	let id = $derived(parseInt(page.url.searchParams.get('id')));
+	let id = $derived(parseIntOrNull(page.url.searchParams.get('id')));
 </script>
 
 {#if code !== null}

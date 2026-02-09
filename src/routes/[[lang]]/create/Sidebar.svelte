@@ -23,7 +23,7 @@
 	async function handleConsider(e) {
 		const id = slides.at(selectedSlideIndex)?.id ?? 0;
 		slides = e.detail.items;
-		const newIndex = e.detail.items.findIndex((s) => s.id == id);
+		const newIndex = e.detail.items.findIndex((s) => s.id === id);
 		selectedSlideIndex =
 			newIndex === -1
 				? e.detail.items.findIndex((s) => s.id.toString().startsWith('id'))
@@ -40,7 +40,7 @@
 
 		if (id.toString().startsWith('id')) {
 			selectedSlideIndex = e.detail.items.findIndex(
-				(s) => s.id.toString() == e.detail.info.id.toString()
+				(s) => s.id.toString() === e.detail.info.id.toString()
 			);
 		}
 	}
@@ -95,7 +95,6 @@
 		if (index <= selectedSlideIndex) {
 			await changeSelected(selectedSlideIndex - 1);
 		}
-		slides = slides;
 	}
 </script>
 
