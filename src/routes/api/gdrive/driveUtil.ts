@@ -1,4 +1,3 @@
-import { drive_v3 } from '@googleapis/drive';
 import { type Cookies, error } from '@sveltejs/kit';
 import { OAuth2Client } from 'google-auth-library';
 import { env } from '$env/dynamic/private';
@@ -71,7 +70,6 @@ interface MediaData {
 }
 
 class Drive {
-	private drive: drive_v3.Drive;
 	private oauth2Client: OAuth2Client;
 
 	constructor(
@@ -83,8 +81,6 @@ class Drive {
 			access_token: tokens.access_token,
 			refresh_token: tokens.refresh_token
 		});
-
-		this.drive = new drive_v3.Drive({ auth: this.oauth2Client });
 
 		this.oauth2Client.on('tokens', (tokens) => {
 			if (this.cookies && tokens.access_token) {
@@ -108,10 +104,32 @@ class Drive {
 		});
 	}
 
-	async deleteFile(file: File) {
-		await this.drive.files.delete({
-			fileId: file.id
+	private async apiFetch(
+		path: string,
+		{ upload, headers, ...init }: RequestInit & { upload?: boolean } = {}
+	): Promise<Response> {
+		const { token } = await this.oauth2Client.getAccessToken();
+		if (!token) throw new Error('Failed to get access token');
+		const base = upload
+			? 'https://www.googleapis.com/upload/drive/v3/files'
+			: 'https://www.googleapis.com/drive/v3/files';
+		return fetch(`${base}${path}`, {
+			...init,
+			headers: {
+				...(headers as Record<string, string>),
+				Authorization: `Bearer ${token}`
+			}
 		});
+	}
+
+	async deleteFile(file: File) {
+		const response = await this.apiFetch(`/${encodeURIComponent(file.id)}`, {
+			method: 'DELETE'
+		});
+
+		if (!response.ok) {
+			throw new Error(`Failed to delete file: ${response.status} ${response.statusText}`);
+		}
 	}
 
 	async file<T extends FileProperties>(
@@ -122,37 +140,34 @@ class Drive {
 			.map((k) => `${k} = '${search[k]}'`)
 			.join('');
 
-		const response = await this.drive.files.list({
+		const params = new URLSearchParams({
 			q,
 			fields: `files(${fields.join(', ')})`,
 			spaces: 'appDataFolder'
 		});
 
-		return response.data.files as (File[] & T) | undefined;
+		const response = await this.apiFetch(`?${params}`);
+
+		if (!response.ok) {
+			throw new Error(`Failed to list files: ${response.status} ${response.statusText}`);
+		}
+
+		const data = await response.json();
+		return data.files as (File[] & T) | undefined;
 	}
 
 	async content(file: File): Promise<string | undefined> {
 		try {
-			const response = await this.drive.files.get(
-				{
-					fileId: file.id,
-					alt: 'media'
-				},
-				{
-					responseType: 'text'
-				}
-			);
+			const response = await this.apiFetch(`/${encodeURIComponent(file.id)}?alt=media`);
 
-			return response.data as unknown as string;
+			if (!response.ok) {
+				return undefined;
+			}
+
+			return await response.text();
 		} catch {
 			return undefined;
 		}
-	}
-
-	private async getAuthToken(): Promise<string> {
-		const { token } = await this.oauth2Client.getAccessToken();
-		if (!token) throw new Error('Failed to get access token');
-		return token;
 	}
 
 	private buildMultipartBody(
@@ -176,20 +191,14 @@ class Drive {
 
 	async update(file: File & ExportFileProperties, data: MediaData) {
 		const { id, ...metadata } = file;
-		const token = await this.getAuthToken();
 		const { body, boundary } = this.buildMultipartBody(metadata, data);
 
-		const response = await fetch(
-			`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(id)}?uploadType=multipart`,
-			{
-				method: 'PATCH',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': `multipart/related; boundary=${boundary}`
-				},
-				body
-			}
-		);
+		const response = await this.apiFetch(`/${encodeURIComponent(id)}?uploadType=multipart`, {
+			upload: true,
+			method: 'PATCH',
+			headers: { 'Content-Type': `multipart/related; boundary=${boundary}` },
+			body
+		});
 
 		if (!response.ok) {
 			throw new Error(`Failed to update file: ${response.status} ${response.statusText}`);
@@ -197,21 +206,15 @@ class Drive {
 	}
 
 	async create(fileProperties: ExportFileProperties, data: MediaData) {
-		const token = await this.getAuthToken();
 		const metadata = { ...fileProperties, parents: ['appDataFolder'] };
 		const { body, boundary } = this.buildMultipartBody(metadata, data);
 
-		const response = await fetch(
-			'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
-			{
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': `multipart/related; boundary=${boundary}`
-				},
-				body
-			}
-		);
+		const response = await this.apiFetch('?uploadType=multipart', {
+			upload: true,
+			method: 'POST',
+			headers: { 'Content-Type': `multipart/related; boundary=${boundary}` },
+			body
+		});
 
 		if (!response.ok) {
 			throw new Error(`Failed to create file: ${response.status} ${response.statusText}`);
@@ -228,20 +231,25 @@ class Drive {
 			.map((k) => `${k} = '${search[k]}'`)
 			.join('');
 
-		const response = await this.drive.files.list({
+		const params = new URLSearchParams({
 			q,
-			pageToken,
 			fields: `nextPageToken, files(id, ${fields.join(', ')})`,
 			spaces: 'appDataFolder'
 		});
+		if (pageToken) params.set('pageToken', pageToken);
 
-		const files = (response.data.files || []) as Array<File & T>;
+		const response = await this.apiFetch(`?${params}`);
+
+		if (!response.ok) {
+			throw new Error(`Failed to list files: ${response.status} ${response.statusText}`);
+		}
+
+		const data = await response.json();
+		const files = (data.files || []) as Array<File & T>;
 		const transformedFiles = await sequential(files.map(transform));
 
-		return response.data.nextPageToken
-			? transformedFiles.concat(
-					await this.list(fields, search, transform, response.data.nextPageToken)
-				)
+		return data.nextPageToken
+			? transformedFiles.concat(await this.list(fields, search, transform, data.nextPageToken))
 			: transformedFiles;
 	}
 }
