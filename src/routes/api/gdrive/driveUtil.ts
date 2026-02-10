@@ -242,7 +242,7 @@ class Drive {
 	async list<T extends FileProperties, O>(
 		fields: Array<keyof T>,
 		search: Record<string, string>,
-		transform: (file: File & T) => Promise<O>,
+		transform: (file: File & T) => O,
 		pageToken?: string
 	): Promise<O[]> {
 		const q = Object.keys(search)
@@ -264,7 +264,7 @@ class Drive {
 
 		const data = await response.json();
 		const files = (data.files || []) as Array<File & T>;
-		const transformedFiles = await sequential(files.map(transform));
+		const transformedFiles = files.map(transform);
 
 		return data.nextPageToken
 			? transformedFiles.concat(await this.list(fields, search, transform, data.nextPageToken))
@@ -283,17 +283,9 @@ export async function getFilesIdFromName(
 	return await service.file(['id'], { name });
 }
 
-async function sequential<O>(values: Array<Promise<O>>): Promise<Array<O>> {
-	const results: O[] = [];
-	for (const value of values) {
-		results.push(await value);
-	}
-	return results;
-}
-
 export async function getCreations<T>(
 	service: Drive,
-	f: (file: File & { name: string; properties: InternalFuizMetadataStrings }) => Promise<T>
+	f: (file: File & { name: string; properties: InternalFuizMetadataStrings }) => T
 ): Promise<T[]> {
 	return await service.list<
 		{
