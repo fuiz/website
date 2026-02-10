@@ -1,5 +1,4 @@
 <script>
-	import { inlineSvg } from '@svelte-put/inline-svg';
 	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
 	import MediaFallback from './MediaFallback.svelte';
 
@@ -30,13 +29,12 @@
 		alt={media.Image.Corkboard.alt}
 	/>
 {:else if 'Url' in media.Image}
-	<div
+	<img
 		style:display="flex"
 		style:height="100%"
 		style:width="100%"
-		style:align-items="center"
-		style:justify-content="center"
-	>
-		<svg use:inlineSvg={media.Image.Url.url} />
-	</div>
+		style:object-fit={fit}
+		src={media.Image.Url.url}
+		alt={media.Image.Url.alt}
+	/>
 {/if}
