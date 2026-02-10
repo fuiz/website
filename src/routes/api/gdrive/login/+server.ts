@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getOAuth2Client, options, scope } from '../driveUtil';
+import { generateAuthUrl, options } from '../driveUtil';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
@@ -8,8 +8,6 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	if (!clientId || !redirectUri) {
 		error(500, 'Google Drive OAuth not configured');
 	}
-
-	const oauth2Client = getOAuth2Client();
 
 	// Generate cryptographically secure random state for CSRF protection
 	const randomBytes = new Uint8Array(32);
@@ -36,17 +34,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		maxAge: 60 * 10 // 10 minutes
 	});
 
-	const authUrl = oauth2Client.generateAuthUrl({
-		access_type: 'offline',
-		scope: [scope],
-		prompt: 'consent',
-		state: state
-	});
-
 	return new Response(null, {
 		status: 302,
 		headers: {
-			Location: authUrl
+			Location: generateAuthUrl(state)
 		}
 	});
 };

@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { getOAuth2Client } from '../driveUtil';
+import { exchangeCodeForTokens } from '../driveUtil';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
@@ -37,10 +37,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	cookies.delete('oauth_state', { path: '/' });
 	cookies.delete('oauth_return', { path: '/' });
 
-	const oauth2Client = getOAuth2Client();
-
 	try {
-		const { tokens } = await oauth2Client.getToken(code);
+		const tokens = await exchangeCodeForTokens(code);
 
 		cookies.set('google', JSON.stringify(tokens), {
 			path: '/',

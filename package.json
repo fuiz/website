@@ -43,7 +43,6 @@
 	"dependencies": {
 		"@fontsource/atkinson-hyperlegible": "^5.2.8",
 		"@fontsource/poppins": "^5.2.7",
-		"@googleapis/drive": "^20.1.0",
 		"@ltd/j-toml": "^1.38.0",
 		"@oddbird/popover-polyfill": "^0.6.1",
 		"@svelte-put/inline-svg": "^4.0.2",
