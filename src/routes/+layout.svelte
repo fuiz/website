@@ -75,11 +75,13 @@
 	:global(html[data-theme='light']) {
 		--background-color: #fffbf5;
 		--color: #241f31;
+		color-scheme: light;
 	}
 
 	:global(html[data-theme='dark']) {
 		--background-color: #241f31;
 		--color: #fffbf5;
+		color-scheme: dark;
 	}
 
 	:global(body) {
