@@ -46,7 +46,6 @@
 		"@fontsource/poppins": "^5.2.7",
 		"@ltd/j-toml": "^1.38.0",
 		"@oddbird/popover-polyfill": "^0.6.1",
-		"@sveltejs/enhanced-img": "^0.10.0",
 		"jszip": "^3.10.1",
 		"object-hash": "^3.0.0",
 		"svelte-confetti": "^2.3.2",
