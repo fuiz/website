@@ -17,7 +17,7 @@
 	<div
 		style:display="flex"
 		style:padding="0.2em"
-		style:font-family="Poppins"
+		style:font-family="var(--alternative-font)"
 		style:overflow-wrap="anywhere"
 		style:box-sizing="border-box"
 	>
@@ -33,7 +33,7 @@
 			style:box-sizing="border-box"
 			style:align-items="center"
 		>
-			<div style:font-family="Poppins">
+			<div style:font-family="var(--alternative-font)">
 				{score}
 			</div>
 			<SportsScore height="1.25em" title={m.points()} />

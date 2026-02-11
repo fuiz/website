@@ -42,7 +42,7 @@
 				style:margin="0.5em 0"
 				style:padding="0"
 				style:text-align="center"
-				style:font-family="Poppins"
+				style:font-family="var(--alternative-font)"
 				style:font-size="1.25em"
 			>
 				{m.core_team()}
@@ -111,7 +111,7 @@
 				style:margin="0.5em 0"
 				style:padding="0"
 				style:text-align="center"
-				style:font-family="Poppins"
+				style:font-family="var(--alternative-font)"
 				style:font-size="1.25em"
 			>
 				{m.contributors()}

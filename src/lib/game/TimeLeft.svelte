@@ -17,7 +17,7 @@
 	style:padding="0.2em 0.6em"
 	style:gap="0.3em"
 	style:align-items="center"
-	style:font-family="Poppins"
+	style:font-family="var(--alternative-font)"
 	style:border-radius="200px"
 	style:overflow="hidden"
 >

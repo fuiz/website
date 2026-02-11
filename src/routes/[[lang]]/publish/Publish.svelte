@@ -166,7 +166,7 @@
 					style:padding="1.5em"
 					style:background="var(--background-color)"
 				>
-					<h2 style:font-family="Poppins" style:margin="0 0 0.5em" style:font-size="1.75em">
+					<h2 style:font-family="var(--alternative-font)" style:margin="0 0 0.5em" style:font-size="1.75em">
 						{m.fuiz_submitted()}
 					</h2>
 					<p style:margin="0 0 1em 0" style:line-height="1.4">
@@ -175,7 +175,7 @@
 					{#if prUrl}
 						<div>
 							<FancyAnchorButton href={prUrl}>
-								<div style:padding="0.5em 1em" style:font-family="Poppins">{m.view_on_gitlab()}</div>
+								<div style:padding="0.5em 1em" style:font-family="var(--alternative-font)">{m.view_on_gitlab()}</div>
 							</FancyAnchorButton>
 						</div>
 					{/if}
@@ -190,7 +190,7 @@
 				style:gap="1em"
 				style:padding="2em 1em"
 			>
-				<h2 style:font-family="Poppins" style:margin="0" style:font-size="1.5em">{m.publishing()}</h2>
+				<h2 style:font-family="var(--alternative-font)" style:margin="0" style:font-size="1.5em">{m.publishing()}</h2>
 				<div
 					style:border="0.15em solid currentcolor"
 					style:border-radius="0.7em"
@@ -250,7 +250,7 @@
 						style:align-items="center"
 					>
 						<div style:display="flex" style:flex-direction="column" style:gap="0.3em">
-							<p style:margin="0" style:font-family="Poppins" style:font-weight="500">
+							<p style:margin="0" style:font-family="var(--alternative-font)" style:font-weight="500">
 								{m.login_required()}
 							</p>
 							<p style:margin="0" style:font-size="0.9em" style:opacity="0.8">
@@ -269,7 +269,7 @@
 								foregroundColor="#FFFFFF"
 							>
 								<div
-									style:font-family="Poppins"
+									style:font-family="var(--alternative-font)"
 									style:display="flex"
 									style:align-items="center"
 									style:padding="0 0.5em"
@@ -321,7 +321,7 @@
 				</div>
 				<div>
 					<FancyButton disabled={!gitAuthStatus || !gitAuthStatus.authenticated}
-						><div style:font-family="Poppins">
+						><div style:font-family="var(--alternative-font)">
 							{m.request_publish()}
 						</div>
 					</FancyButton>

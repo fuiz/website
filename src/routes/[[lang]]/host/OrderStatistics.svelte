@@ -56,7 +56,7 @@
 					>
 						<div
 							style:display="inline-flex"
-							style:font-family="Poppins"
+							style:font-family="var(--alternative-font)"
 							style:align-items="center"
 							style:gap="0.2em"
 						>
@@ -65,7 +65,7 @@
 						</div>
 						<div
 							style:display="inline-flex"
-							style:font-family="Poppins"
+							style:font-family="var(--alternative-font)"
 							style:align-items="center"
 							style:gap="0.2em"
 						>

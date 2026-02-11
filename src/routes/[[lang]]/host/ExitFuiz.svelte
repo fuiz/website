@@ -19,7 +19,7 @@
 	style:align-items="center"
 	style:line-height="1em"
 	style:font-size="inherit"
-	style:font-family="Poppins"
+	style:font-family="var(--alternative-font)"
 	style:background="var(--color)"
 	style:color="var(--background-color)"
 	style:border="none"

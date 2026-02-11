@@ -15,7 +15,6 @@
 	style:width="100%"
 	style:font-size="0.75em"
 	style:box-sizing="border-box"
-	style:font-family="Poppins"
 	style:padding="8px"
 	style:display="flex"
 	style:align-items="center"

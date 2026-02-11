@@ -17,7 +17,7 @@
 	title={m.answered_count()}
 >
 	<AssignmentTurnedIn height="1.2em" title={m.answered_count()} />
-	<div style:font-size="1em" style:font-family="Poppins">
+	<div style:font-size="1em" style:font-family="var(--alternative-font)">
 		{answeredCount}
 	</div>
 </div>

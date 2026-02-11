@@ -5,7 +5,7 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = async ({ cookies }) => {
 	const drive = getDrive(cookies);
 
-	const files = await getCreations(drive, (file) => {
+	const files = (await getCreations(drive)).map((file) => {
 		const properties = file.properties;
 		return {
 			uniqueId: file.name,

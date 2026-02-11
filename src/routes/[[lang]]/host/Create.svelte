@@ -74,7 +74,7 @@
 	}
 
 	.create {
-		font-family: Poppins;
+		font-family: var(--alternative-font);
 		text-align: center;
 	}
 </style>
