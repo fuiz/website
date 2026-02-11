@@ -38,7 +38,7 @@
 	<div
 		style:height="100%"
 		style:padding="5px"
-		style:font-weight="bold"
+		style:font-weight=500
 		style:box-sizing="border-box"
 	>
 		{@render children?.()}

@@ -1,7 +1,7 @@
 <script>
 	import '@oddbird/popover-polyfill';
 	import '@fontsource/poppins/800.css';
-	import '@fontsource/atkinson-hyperlegible';
+	import '@fontsource-variable/atkinson-hyperlegible-next';
 	import 'tippy.js/dist/tippy.css';
 
 	import { onMount, untrack } from 'svelte';
@@ -85,7 +85,7 @@
 	}
 
 	:global(body) {
-		font-family: 'Atkinson Hyperlegible', sans-serif;
+		font-family: 'Atkinson Hyperlegible Next Variable', sans-serif;
 		font-size: 32px;
 		color: var(--color);
 	}
