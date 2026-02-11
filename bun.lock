@@ -5,7 +5,7 @@
     "": {
       "name": "fuiz-website",
       "dependencies": {
-        "@fontsource/atkinson-hyperlegible": "^5.2.8",
+        "@fontsource-variable/atkinson-hyperlegible-next": "^5.2.6",
         "@fontsource/poppins": "^5.2.7",
         "@ltd/j-toml": "^1.38.0",
         "@oddbird/popover-polyfill": "^0.6.1",
@@ -151,7 +151,7 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.6.0", "", { "dependencies": { "@eslint/core": "^1.1.0", "levn": "^0.4.1" } }, "sha512-bIZEUzOI1jkhviX2cp5vNyXQc6olzb2ohewQubuYlMXZ2Q/XjBO0x0XhGPvc9fjSIiUN0vw+0hq53BJ4eQSJKQ=="],
 
-    "@fontsource/atkinson-hyperlegible": ["@fontsource/atkinson-hyperlegible@5.2.8", "", {}, "sha512-HciLcJ5DIK/OVOdo71EbEN4NnvDFlp6/SpAxtcbWf2aAdcsOuPqITxj5KNEXb48qSPSdnnZdGGnSJChPKi3/bA=="],
+    "@fontsource-variable/atkinson-hyperlegible-next": ["@fontsource-variable/atkinson-hyperlegible-next@5.2.6", "", {}, "sha512-D0Z8peFkRGYACvmWp8Sl8YPGYLBEJbzqapugtsMEYSUUtpQDiZVDHjk9s7bqB4hSCRYCrKuW6V1V+mnHybVnPw=="],
 
     "@fontsource/poppins": ["@fontsource/poppins@5.2.7", "", {}, "sha512-6uQyPmseo4FgI97WIhA4yWRlNaoLk4vSDK/PyRwdqqZb5zAEuc+Kunt8JTMcsHYUEGYBtN15SNkMajMdqUSUmg=="],
 
