@@ -153,10 +153,10 @@ class Drive {
 	async file<T extends FileProperties>(
 		fields: Array<keyof T>,
 		search: Record<string, string>
-	): Promise<(File[] & T) | undefined> {
+	): Promise<T[] | undefined> {
 		const q = Object.keys(search)
 			.map((k) => `${k} = '${search[k]}'`)
-			.join('');
+			.join(' and ');
 
 		const params = new URLSearchParams({
 			q,
@@ -171,7 +171,7 @@ class Drive {
 		}
 
 		const data = await response.json();
-		return data.files as (File[] & T) | undefined;
+		return data.files as T[] | undefined;
 	}
 
 	async content(file: File): Promise<string | undefined> {
@@ -279,7 +279,7 @@ export async function getFilesIdFromName(
 	service: Drive,
 	name: string
 ): Promise<File[] | undefined> {
-	return await service.file(['id'], { name });
+	return await service.file<{ id: string }>(['id'], { name });
 }
 
 export async function getCreations(

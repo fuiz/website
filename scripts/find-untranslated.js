@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join } from 'node:path';
-import { walk } from 'estree-walker';
 import { parse } from 'svelte/compiler';
+import { walk } from 'zimmerframe';
 import { getTranslations } from './message-utils.js';
 
 const srcDir = join(import.meta.dirname, '..', 'src');
@@ -97,47 +97,45 @@ for (const file of files) {
 		return false;
 	}
 
-	let ignoreDepth = 0;
+	walk(
+		ast.fragment,
+		{ ignored: false },
+		{
+			_(node, { state, next, path }) {
+				const parent = path.at(-1);
 
-	walk(ast.fragment, {
-		enter(node, parent) {
-			// Track elements preceded by <!-- i18n-ignore --> and all their descendants
-			if (node.fragment && parent?.type === 'Fragment') {
-				if (hasPrecedingIgnore(node, parent)) {
-					ignoreDepth++;
+				// Propagate ignored state for elements preceded by <!-- i18n-ignore -->
+				if (node.fragment && parent?.type === 'Fragment' && hasPrecedingIgnore(node, parent)) {
+					next({ ignored: true });
+					return;
 				}
-			}
 
-			if (ignoreDepth > 0) return;
+				if (!state.ignored) {
+					// Text nodes: only direct element content (parent is Fragment)
+					if (node.type === 'Text' && parent?.type === 'Fragment' && isNonTrivialText(node.data)) {
+						if (!hasPrecedingIgnore(node, parent)) {
+							report(node, 'text', node.data.trim());
+						}
+					}
 
-			// Text nodes: only direct element content (parent is Fragment)
-			if (node.type === 'Text' && parent?.type === 'Fragment' && isNonTrivialText(node.data)) {
-				if (!hasPrecedingIgnore(node, parent)) {
-					report(node, 'text', node.data.trim());
-				}
-			}
-
-			// Attributes with static string values on user-facing attr names
-			if (node.type === 'Attribute' && USER_FACING_ATTRS.has(node.name)) {
-				if (Array.isArray(node.value)) {
-					const allText = node.value.every((v) => v.type === 'Text');
-					if (allText) {
-						const text = node.value.map((v) => v.data).join('');
-						if (isNonTrivialText(text)) {
-							report(node, `attr:${node.name}`, text);
+					// Attributes with static string values on user-facing attr names
+					if (node.type === 'Attribute' && USER_FACING_ATTRS.has(node.name)) {
+						if (Array.isArray(node.value)) {
+							const allText = node.value.every((v) => v.type === 'Text');
+							if (allText) {
+								const text = node.value.map((v) => v.data).join('');
+								if (isNonTrivialText(text)) {
+									report(node, `attr:${node.name}`, text);
+								}
+							}
 						}
 					}
 				}
-			}
-		},
-		leave(node, parent) {
-			if (node.fragment && parent?.type === 'Fragment') {
-				if (hasPrecedingIgnore(node, parent)) {
-					ignoreDepth--;
-				}
+
+				next();
 			}
 		}
-	});
+	);
 }
 
 if (count) {
