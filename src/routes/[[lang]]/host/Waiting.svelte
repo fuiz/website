@@ -96,7 +96,7 @@
 				style:background="none"
 				style:cursor="pointer"
 				style:text-align="start"
-				style:font-family="Poppins"
+				style:font-family="var(--alternative-font)"
 			>
 				<div style:font-size="1em">{m.game_code()}</div>
 				<div style:font-size="3em" style:line-height="1em" style:text-transform="uppercase">
@@ -112,7 +112,7 @@
 			style:font-size="1.5em"
 		>
 			<FancyButton onclick={onnext}>
-				<div style:padding="0 1em" style:font-family="Poppins">{m.start()}</div>
+				<div style:padding="0 1em" style:font-family="var(--alternative-font)">{m.start()}</div>
 			</FancyButton>
 		</div>
 	</div>

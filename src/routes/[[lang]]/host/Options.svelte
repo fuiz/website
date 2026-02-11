@@ -248,6 +248,6 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5em;
-		font-family: Poppins;
+		font-family: var(--alternative-font);
 	}
 </style>

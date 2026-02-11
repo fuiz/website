@@ -178,7 +178,7 @@
 				<div
 					style:display="flex"
 					style:align-items="center"
-					style:font-family="Poppins"
+					style:font-family="var(--alternative-font)"
 					style:gap="0.2em"
 					style:padding="0.15em 0.25em"
 					style:justify-content="center"
@@ -203,7 +203,7 @@
 				<div
 					style:display="flex"
 					style:align-items="center"
-					style:font-family="Poppins"
+					style:font-family="var(--alternative-font)"
 					style:gap="0.2em"
 					style:padding="0.15em 0.25em"
 					style:justify-content="center"
@@ -220,7 +220,7 @@
 						<div
 							style:display="flex"
 							style:align-items="center"
-							style:font-family="Poppins"
+							style:font-family="var(--alternative-font)"
 							style:gap="0.2em"
 							style:padding="0.15em 0.25em"
 							style:justify-content="center"
@@ -238,7 +238,7 @@
 						<div
 							style:display="flex"
 							style:align-items="center"
-							style:font-family="Poppins"
+							style:font-family="var(--alternative-font)"
 							style:gap="0.2em"
 							style:padding="0.15em 0.25em"
 							style:justify-content="center"
@@ -262,7 +262,7 @@
 			style:border-radius="0.7em"
 		>
 			<h2
-				style:font-family="Poppins"
+				style:font-family="var(--alternative-font)"
 				style:line-height="1"
 				style:margin="0 0 0.2em"
 				style:border-bottom="0.05em solid color-mix(in srgb, currentColor 80%, transparent)"

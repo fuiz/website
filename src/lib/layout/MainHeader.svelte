@@ -84,7 +84,7 @@
 
 	.a {
 		display: flex;
-		font-family: 'Poppins';
+		font-family: var(--alternative-font);
 		white-space: nowrap;
 		align-items: center;
 		justify-content: center;

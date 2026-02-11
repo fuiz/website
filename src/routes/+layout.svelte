@@ -2,6 +2,8 @@
 	import '@oddbird/popover-polyfill';
 	import '@fontsource/poppins/800.css';
 	import '@fontsource-variable/atkinson-hyperlegible-next';
+	import '@fontsource-variable/noto-sans';
+	import '@fontsource-variable/noto-sans-arabic';
 	import 'tippy.js/dist/tippy.css';
 
 	import { onMount, untrack } from 'svelte';
@@ -84,8 +86,17 @@
 		color-scheme: dark;
 	}
 
+	@font-face {
+		font-family: 'Atkinson Hyperlegible Next Variable Fallback';
+		src: local('Arial');
+		ascent-override: 95%;
+		descent-override: 29%;
+		line-gap-override: 0%;
+	}
+
 	:global(body) {
-		font-family: 'Atkinson Hyperlegible Next Variable', sans-serif;
+		font-family: 'Atkinson Hyperlegible Next Variable', 'Noto Sans Variable', 'Noto Sans Arabic Variable', 'Atkinson Hyperlegible Next Variable Fallback', sans-serif;
+		--alternative-font: 'Poppins', 'Atkinson Hyperlegible Next Variable', 'Noto Sans Variable', 'Noto Sans Arabic Variable', 'Atkinson Hyperlegible Next Variable Fallback', sans-serif;
 		font-size: 32px;
 		color: var(--color);
 	}

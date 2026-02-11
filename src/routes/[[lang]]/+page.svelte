@@ -275,7 +275,7 @@
 
 	h2 {
 		margin: 0 0 0.5em;
-		font-family: 'Poppins';
+		font-family: var(--alternative-font);
 	}
 
 	p {
@@ -314,7 +314,7 @@
 			display: block;
 			font-size: 2em;
 			font-weight: bold;
-			font-family: 'Poppins';
+			font-family: var(--alternative-font);
 		}
 	}
 

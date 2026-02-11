@@ -98,7 +98,7 @@
 				>
 					{#each allAnswers as [text, count] (text)}
 						{@const correct = isCorrect(text)}
-						<div style:text-align="end" style:font-family="Poppins">
+						<div style:text-align="end" style:font-family="var(--alternative-font)">
 							{text}
 						</div>
 						<div
@@ -115,7 +115,7 @@
 								style:border-radius="0.6em"
 								style:height="100%"
 							></div>
-							<div style:font-family="Poppins" style:display="flex" style:gap="0.2em">
+							<div style:font-family="var(--alternative-font)" style:display="flex" style:gap="0.2em">
 								{count}
 								{#if correct}
 									<div style:display="flex" style:padding="0.2em 0">

@@ -47,10 +47,10 @@
 		style:padding="0.2em 0.4em"
 		style:gap="2px"
 		style:align-items="center"
-		style:font-family="Poppins"
+		style:font-family="var(--alternative-font)"
 		style:font-weight="800"
 	>
-		<div style:font-family="Poppins">
+		<div style:font-family="var(--alternative-font)">
 			{m.slide_index({
 				index: gameInfo.questionIndex + 1,
 				total: gameInfo.questionTotalCount
@@ -64,7 +64,7 @@
 		style:gap="1ch"
 		style:align-items="baseline"
 		style:white-space="nowrap"
-		style:font-family="Poppins"
+		style:font-family="var(--alternative-font)"
 		style:font-weight="800"
 	>
 		{m.game_code_display({

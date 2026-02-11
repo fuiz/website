@@ -38,7 +38,7 @@
 								style:border="0.15em solid"
 								style:border-radius="0.7em"
 								style:padding="0.5em"
-								style:font-family="Poppins"
+								style:font-family="var(--alternative-font)"
 								style:box-sizing="border-box"
 							>
 								<div style:color={medalColors[position]}>

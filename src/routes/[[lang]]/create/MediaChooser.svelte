@@ -130,7 +130,7 @@
 			style:margin="auto"
 		>
 			<div style:display="flex" style:align-items="center">
-				<div style:flex="1" style:text-align="center" style:font-family="Poppins">
+				<div style:flex="1" style:text-align="center" style:font-family="var(--alternative-font)">
 					{m.local_image()}
 				</div>
 				<IconButton

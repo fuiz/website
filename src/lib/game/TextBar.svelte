@@ -16,7 +16,7 @@
 <div
 	style:background="var(--background-color)"
 	style:display="flex"
-	style:line-height="1.2"
+	style:line-height="1.5"
 	style:align-items="center"
 	style:justify-content="center"
 	style:padding="0.2em 0.4em"
@@ -30,12 +30,12 @@
 		style:font-size="1.5em"
 		style:font-weight=500
 		style:word-break="break-word"
-		style:font-family={heading ? 'Poppins' : 'inherit'}
+		style:font-family={heading ? 'var(--alternative-font)' : 'inherit'}
 	>
 		{text}
 	</div>
 	{#if showNext}
-		<div style:font-size="1.2em" style:font-family="Poppins">
+		<div style:font-size="1.2em" style:font-family="var(--alternative-font)">
 			<FancyButton onclick={onnext}>
 				<div style:padding="0.2em 0.4em">{m.next()}</div>
 			</FancyButton>

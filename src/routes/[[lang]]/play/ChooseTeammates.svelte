@@ -33,7 +33,7 @@
 				>
 					<div
 						style:font-weight="bold"
-						style:font-family="Poppins"
+						style:font-family="var(--alternative-font)"
 						style:font-size="1.5em"
 						style:max-width="10ch"
 						style:text-align="center"
@@ -67,7 +67,7 @@
 		style:border-top="0.15em solid"
 	>
 		<div style:font-weight="bold">{m.game_code()}</div>
-		<div style:font-size="2em" style:font-family="Poppins" style:text-transform="uppercase">
+		<div style:font-size="2em" style:font-family="var(--alternative-font)" style:text-transform="uppercase">
 			{gameCode}
 		</div>
 	</div>

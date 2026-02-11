@@ -239,20 +239,20 @@ class Drive {
 		}
 	}
 
-	async list<T extends FileProperties, O>(
+	async list<T extends FileProperties>(
 		fields: Array<keyof T>,
 		search: Record<string, string>,
-		transform: (file: File & T) => O,
 		pageToken?: string
-	): Promise<O[]> {
+	): Promise<T[]> {
 		const q = Object.keys(search)
 			.map((k) => `${k} = '${search[k]}'`)
-			.join('');
+			.join(' and ');
 
 		const params = new URLSearchParams({
 			q,
-			fields: `nextPageToken, files(id, ${fields.join(', ')})`,
-			spaces: 'appDataFolder'
+			fields: `nextPageToken, files(${fields.join(', ')})`,
+			spaces: 'appDataFolder',
+			pageSize: '1000'
 		});
 		if (pageToken) params.set('pageToken', pageToken);
 
@@ -263,12 +263,11 @@ class Drive {
 		}
 
 		const data = await response.json();
-		const files = (data.files || []) as Array<File & T>;
-		const transformedFiles = files.map(transform);
+		const files = (data.files || []) as Array<T>;
 
 		return data.nextPageToken
-			? transformedFiles.concat(await this.list(fields, search, transform, data.nextPageToken))
-			: transformedFiles;
+			? files.concat(await this.list(fields, search, data.nextPageToken))
+			: files;
 	}
 }
 
@@ -283,15 +282,11 @@ export async function getFilesIdFromName(
 	return await service.file(['id'], { name });
 }
 
-export async function getCreations<T>(
-	service: Drive,
-	f: (file: File & { name: string; properties: InternalFuizMetadataStrings }) => T
-): Promise<T[]> {
-	return await service.list<
-		{
-			name: string;
-			properties: InternalFuizMetadataStrings;
-		},
-		T
-	>(['name', 'properties'], { mimeType: 'application/json' }, f);
+export async function getCreations(
+	service: Drive
+): Promise<{ name: string; properties: InternalFuizMetadataStrings }[]> {
+	return await service.list<{
+		name: string;
+		properties: InternalFuizMetadataStrings;
+	}>(['name', 'properties'], { mimeType: 'application/json' });
 }

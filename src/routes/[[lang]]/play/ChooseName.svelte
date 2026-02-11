@@ -50,7 +50,7 @@
 						style:display="flex"
 						style:align-items="center"
 						style:justify-content="center"
-						style:font-family="Poppins"
+						style:font-family="var(--alternative-font)"
 					>
 						{#if sending}
 							<div style:height="1em" style:aspect-ratio="1/1" style:margin="0 5px">

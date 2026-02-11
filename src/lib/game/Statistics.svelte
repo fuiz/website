@@ -46,7 +46,7 @@
 					style:display="flex"
 					style:justify-content="center"
 					style:color={buttonColors.at(index % buttonColors.length)?.at(0)}
-					style:font-family="Poppins"
+					style:font-family="var(--alternative-font)"
 				>
 					{count}
 				</div>

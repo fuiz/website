@@ -79,14 +79,14 @@
 				</div>
 			</div>
 			<FancyButton onclick={onImport}>
-				<div style:font-family="Poppins">{m.import_fuiz()}</div>
+				<div style:font-family="var(--alternative-font)">{m.import_fuiz()}</div>
 			</FancyButton>
 			<FancyButton
 				onclick={onStart}
 				backgroundColor={buttonColors[1][0]}
 				backgroundDeepColor={buttonColors[1][1]}
 			>
-				<div style:font-family="Poppins">{m.host()}</div>
+				<div style:font-family="var(--alternative-font)">{m.host()}</div>
 			</FancyButton>
 		</div>
 		<div

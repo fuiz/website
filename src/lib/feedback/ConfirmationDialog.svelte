@@ -60,7 +60,7 @@
 	style:background="var(--background-color)"
 	style:color="inherit"
 >
-	<h2 style:font-family="Poppins" style:margin="0 0 0.5em 0" style:font-size="1.25em">
+	<h2 style:font-family="var(--alternative-font)" style:margin="0 0 0.5em 0" style:font-size="1.25em">
 		{title}
 	</h2>
 	{#if message.length > 0}
