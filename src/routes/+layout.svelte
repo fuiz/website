@@ -4,7 +4,6 @@
 	import '@fontsource-variable/atkinson-hyperlegible-next';
 	import '@fontsource-variable/noto-sans';
 	import '@fontsource-variable/noto-sans-arabic';
-	import 'tippy.js/dist/tippy.css';
 
 	import { onMount, untrack } from 'svelte';
 	import { navigating } from '$app/state';
@@ -51,6 +50,8 @@
 
 	onMount(() => {
 		mounting = false;
+		// load interestfor polyfill on the client
+		import('interestfor');
 	});
 </script>
 
@@ -105,12 +106,15 @@
 		background: var(--background-color);
 	}
 
-	:global(.tippy-box[data-theme~='fuiz']) {
+	:global([popover].fuiz-popover) {
 		background-color: var(--background-color);
 		border: 3px solid;
 		border-radius: 0.7em;
 		padding: 0em 0.4em;
 		font-size: inherit;
 		color: inherit;
+		margin: 0;
+		inset: auto;
+		position-area: top;
 	}
 </style>

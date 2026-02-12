@@ -1,6 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
-	import tippy from 'tippy.js';
 	import { PUBLIC_DISPLAY_PLAY_URL, PUBLIC_PLAY_URL } from '$env/static/public';
 	import bee3 from '$lib/assets/music/bee3.mp3';
 	import PlayersList from '$lib/game/PlayersList.svelte';
@@ -38,23 +36,28 @@
 	/** @type {HTMLElement | undefined} */
 	let fullscreenElement = $state();
 
+	/** @type {HTMLDivElement | undefined} */
+	let copiedPopover = $state();
 	/** @type {HTMLButtonElement | undefined} */
-	let copyUrlButton = $state();
+	let copyButton = $state();
+	/** @type {ReturnType<typeof setTimeout> | undefined} */
+	let copiedTimer;
 
-	onMount(() => {
-		if (!copyUrlButton) return;
-		tippy(copyUrlButton, {
-			content: m.copy_clipboard(),
-			arrow: false,
-			theme: 'fuiz'
-		});
-		tippy(copyUrlButton, {
-			trigger: 'click',
-			content: m.copied(),
-			arrow: false,
-			theme: 'fuiz'
-		});
-	});
+	function showCopied() {
+		try {
+			copiedPopover?.showPopover({ source: copyButton });
+		} catch {
+			/* already shown */
+		}
+		clearTimeout(copiedTimer);
+		copiedTimer = setTimeout(() => {
+			try {
+				copiedPopover?.hidePopover();
+			} catch {
+				/* already hidden */
+			}
+		}, 1500);
+	}
 </script>
 
 <Audio audioUrl={bee3} volumeOn={bindableGameInfo.volumeOn} />
@@ -87,8 +90,9 @@
 			style:border-radius="0.4em"
 		>
 			<button
-				onclick={copy_url_to_clipboard}
-				bind:this={copyUrlButton}
+				bind:this={copyButton}
+				onclick={() => { copy_url_to_clipboard(); showCopied(); }}
+				interestfor="hover-popover"
 				style:font="inherit"
 				style:color="inherit"
 				style:appearance="none"
@@ -103,6 +107,8 @@
 					{code}
 				</div>
 			</button>
+			<div id="hover-popover" popover="hint" class="fuiz-popover">{m.copy_clipboard()}</div>
+			<div bind:this={copiedPopover} popover="manual" class="fuiz-popover">{m.copied()}</div>
 			<QrCode url={actualUrl} smallSize="9em" />
 		</div>
 		<div

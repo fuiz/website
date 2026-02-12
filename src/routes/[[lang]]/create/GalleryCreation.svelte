@@ -1,6 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
-	import tippy from 'tippy.js';
 	import { resolve } from '$app/paths';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
@@ -19,7 +17,7 @@
 	 * media: import('$lib/types').Media | undefined;
 	 * ondelete: () => void;onplay: () => void;
 	 * ondownload: () => void;
-	 * onshare: (tippyInstance: import('tippy.js').Instance) => void;
+	 * onshare: (showCopied: () => void) => void;
 	 * showShare?: boolean;
 	 * }} */
 	let {
@@ -53,20 +51,28 @@
 		}
 	}
 
-	/** @type {HTMLElement | undefined} */
-	let shareElement = $state();
-	/** @type {import('tippy.js').Instance | undefined} */
-	let tippyInstance = $state();
+	/** @type {HTMLDivElement | undefined} */
+	let copiedPopover = $state();
+	/** @type {HTMLDivElement | undefined} */
+	let shareWrapper = $state();
+	/** @type {ReturnType<typeof setTimeout> | undefined} */
+	let copiedTimer;
 
-	onMount(() => {
-		if (!shareElement) return;
-		tippyInstance = tippy(shareElement, {
-			trigger: 'manual',
-			content: m.copied(),
-			arrow: false,
-			theme: 'fuiz'
-		});
-	});
+	function showCopied() {
+		try {
+			copiedPopover?.showPopover({ source: shareWrapper });
+		} catch {
+			/* already shown */
+		}
+		clearTimeout(copiedTimer);
+		copiedTimer = setTimeout(() => {
+			try {
+				copiedPopover?.hidePopover();
+			} catch {
+				/* already hidden */
+			}
+		}, 1500);
+	}
 </script>
 
 <div class="entry">
@@ -90,13 +96,14 @@
 		>
 		<IconButton alt={m.download()} onclick={ondownload}><Download height="1em" /></IconButton>
 		{#if showShare}
-			<div bind:this={shareElement}>
+			<div bind:this={shareWrapper}>
 				<IconButton
 					alt={m.share()}
 					onclick={() => {
-						if (tippyInstance) onshare(tippyInstance);
+						onshare(showCopied);
 					}}><Share height="1em" /></IconButton
 				>
+				<div bind:this={copiedPopover} popover="manual" class="fuiz-popover" style:position-area="left">{m.copied()}</div>
 			</div>
 		{/if}
 	</div>

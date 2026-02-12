@@ -1,6 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
-	import tippy from 'tippy.js';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { downloadFuiz, limits } from '$lib/clientOnly';
@@ -20,51 +18,33 @@
 	 * id: number;
 	 * db: import('$lib/storage').Database;
 	 * errorMessage: string | undefined;
-	 * onshare: (instance: import('tippy.js').Instance) => void;
+	 * onshare: (showCopied: () => void) => void;
 	 * showPublish?: boolean;
 	 * showShare?: boolean;
 	 * }} */
 	let { title = $bindable(), id, db, errorMessage, onshare, showPublish, showShare } = $props();
 
-	/** @type {HTMLElement | undefined} */
-	let shareButton = $state();
-	/** @type {import('tippy.js').Instance | undefined} */
-	let shareTippyInstance = $state();
+	/** @type {HTMLDivElement | undefined} */
+	let copiedPopover = $state();
+	/** @type {HTMLDivElement | undefined} */
+	let shareWrapper = $state();
+	/** @type {ReturnType<typeof setTimeout> | undefined} */
+	let copiedTimer;
 
-	/** @type {HTMLElement | undefined} */
-	let playButton = $state();
-	/** @type {import('tippy.js').Instance | undefined} */
-	let playTippyInstance = $state();
-
-	onMount(() => {
-		if (!shareButton) return;
-
-		shareTippyInstance = tippy(shareButton, {
-			trigger: 'manual',
-			content: m.copied(),
-			arrow: false,
-			theme: 'fuiz'
-		});
-	});
-
-	$effect(() => {
-		if (errorMessage === undefined || errorMessage.length === 0) {
-			playTippyInstance?.destroy();
+	function showCopied() {
+		try {
+			copiedPopover?.showPopover({ source: shareWrapper });
+		} catch {
+			/* already shown */
 		}
-	});
-
-	function onmouseenter() {
-		if (!playButton || !errorMessage) return;
-
-		playTippyInstance?.destroy();
-
-		playTippyInstance = tippy(playButton, {
-			content: errorMessage,
-			arrow: false,
-			theme: 'fuiz'
-		});
-
-		playTippyInstance.show();
+		clearTimeout(copiedTimer);
+		copiedTimer = setTimeout(() => {
+			try {
+				copiedPopover?.hidePopover();
+			} catch {
+				/* already hidden */
+			}
+		}, 1500);
 	}
 
 	/**
@@ -132,30 +112,34 @@
 				</IconButton>
 			{/if}
 			{#if showShare}
-				<div bind:this={shareButton}>
+				<div bind:this={shareWrapper}>
 					<IconButton
 						alt={m.share()}
 						onclick={() => {
-							if (shareTippyInstance) onshare(shareTippyInstance);
+							onshare(showCopied);
 						}}
 					>
 						<Share height="1em" />
 					</IconButton>
+					<div bind:this={copiedPopover} popover="manual" class="fuiz-popover" style:position-area="bottom">{m.copied()}</div>
 				</div>
 			{/if}
 			<IconButton alt={m.download()} onclick={() => onDownload(id)}>
 				<Download height="1em" />
 			</IconButton>
-			<div bind:this={playButton}>
+			<div
+				interestfor="error-popover"
+			>
 				<IconButton
 					alt={m.host()}
 					disabled={errorMessage != undefined}
 					onclick={() => goto(resolve(localizeHref('/host?id=' + id)))}
-					onmouseenter={() => onmouseenter()}
-					onfocus={() => onmouseenter()}
 				>
 					<SlideshowOutlineSharp height="1em" />
 				</IconButton>
+				{#if errorMessage}
+					<div id="error-popover" popover="hint" class="fuiz-popover" style:position-area="bottom">{errorMessage}</div>
+				{/if}
 			</div>
 		</div>
 	</div>

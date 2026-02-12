@@ -1,6 +1,4 @@
 <script>
-	import tippy from 'tippy.js';
-
 	import { buttonColors } from '$lib/clientOnly';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
@@ -171,22 +169,14 @@
 							placeholder={m.image_alt()}
 						/>
 					</div>
-					<div id="alt-help">
+					<div>
 						<IconButton
 							alt={m.image_alt()}
-							onclick={() => {
-								let element = document.getElementById('alt-help');
-								if (!element) return;
-								const instance = tippy(element, {
-									trigger: 'manual',
-									content: m.image_alt_desc(),
-									arrow: false,
-									theme: 'fuiz'
-								});
-
-								instance.show();
-							}}><HelpOutline height="1.2em" /></IconButton
+							popovertarget="alt-help-popover"
 						>
+							<HelpOutline height="1.2em" />
+						</IconButton>
+						<div id="alt-help-popover" popover class="fuiz-popover">{m.image_alt_desc()}</div>
 					</div>
 				</div>
 			</div>

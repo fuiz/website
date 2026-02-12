@@ -156,12 +156,12 @@
 		await downloadFuiz(configJson);
 	}
 
-	async function onShare(id: CreationId, e: import('tippy.js').Instance) {
+	async function onShare(id: CreationId, showCopied: () => void) {
 		const creation = await getCreation(id, db);
 		if (creation) {
 			await shareAndCopyURL(creation.config);
 		}
-		e.show();
+		showCopied();
 	}
 </script>
 
