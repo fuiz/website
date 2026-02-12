@@ -112,9 +112,9 @@
 		}).length > 0
 	);
 
-	async function onShare(e: import('tippy.js').Instance) {
+	async function onShare(showCopied: () => void) {
 		await shareAndCopyURL(removeIds(config));
-		e.show();
+		showCopied();
 	}
 </script>
 
