@@ -14,7 +14,7 @@
 	 * player_count: number;
 	 * config: import('$lib/types').FuizConfig;
 	 * options: import('$lib/types').FuizOptions;
-	 * results: { [k: string]: number };
+	 * results: { [k: string]: number[] };
 	}}*/
 	let { stats, player_count, config, options, results } = $props();
 </script>
@@ -32,7 +32,7 @@
 					<FancyAnchorButton
 						href="data:text/csv;charset=utf-8,{encodeURIComponent(
 							Object.entries(results)
-								.map(([team, score]) => `${team},${score}`)
+								.map(([team, scores]) => `${team},${scores.join(',')}`)
 								.join('\n')
 						)}"
 						download="results.csv"

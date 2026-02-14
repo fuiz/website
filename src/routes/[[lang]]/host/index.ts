@@ -17,7 +17,7 @@ type GameState =
 			Summary: {
 				stats: [number, number][];
 				player_count: number;
-				results: { [k: string]: number };
+				results: { [k: string]: number[] };
 				team_mapping: { [k: string]: string[] };
 				config: FuizConfig;
 				options: FuizOptions;
@@ -90,8 +90,8 @@ export type GameIncomingMessage =
 	  }
 	| {
 			Leaderboard: {
-				index?: number;
-				count?: number;
+				index?: number | null;
+				count?: number | null;
 				leaderboard: {
 					current: TruncatedList<[string, number]>;
 					prior: TruncatedList<[string, number]>;
@@ -110,7 +110,7 @@ export type GameIncomingMessage =
 				Host: {
 					stats: [number, number][];
 					player_count: number;
-					results: [string, number][];
+					results: [string, number[]][];
 					team_mapping: [string, string[]][];
 					config: IdlessFuizConfig;
 					options: FuizOptions;
@@ -124,18 +124,18 @@ export type MultipleChoiceIncomingMessage =
 				index: number;
 				count: number;
 				question: string;
-				media?: Media;
+				media?: Media | null;
 				duration: number;
 			};
 	  }
 	| {
 			AnswersAnnouncement: {
-				index?: number;
-				count?: number;
-				question?: string;
-				media?: Media;
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				answers: Array<ServerPossiblyHidden<TextOrMedia>>;
-				answered_count?: number;
+				answered_count?: number | null;
 				duration: number;
 			};
 	  }
@@ -144,10 +144,10 @@ export type MultipleChoiceIncomingMessage =
 	  }
 	| {
 			AnswersResults: {
-				index?: number;
-				count?: number;
-				question?: string;
-				media?: Media;
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				answers: Array<TextOrMedia>;
 				results: Array<AnswerResult>;
 			};
@@ -159,7 +159,7 @@ export type TypeAnswerIncomingMessage =
 				index: number;
 				count: number;
 				question: string;
-				media?: Media;
+				media?: Media | null;
 				duration: number;
 				accept_answers: boolean;
 			};
@@ -169,10 +169,10 @@ export type TypeAnswerIncomingMessage =
 	  }
 	| {
 			AnswersResults: {
-				index?: number;
-				count?: number;
-				question?: string;
-				media?: Media;
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				answers: Array<string>;
 				results: Array<[string, number]>;
 				case_sensitive: boolean;
@@ -185,35 +185,35 @@ export type OrderSlideIncomingMessage =
 				index: number;
 				count: number;
 				question: string;
-				media?: Media;
+				media?: Media | null;
 				duration: number;
 			};
 	  }
 	| {
 			AnswersAnnouncement: {
-				index?: number;
-				count?: number;
-				question?: string;
-				media?: Media;
-				answered_count?: number;
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				answered_count?: number | null;
 				duration: number;
 				answers: string[];
 				axis_labels: {
-					from?: string;
-					to?: string;
+					from?: string | null;
+					to?: string | null;
 				};
 			};
 	  }
 	| {
 			AnswersResults: {
-				index?: number;
-				count?: number;
-				question?: string;
-				media?: Media;
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				axis_labels?: {
-					from?: string;
-					to?: string;
-				};
+					from?: string | null;
+					to?: string | null;
+				} | null;
 				answers: string[];
 				results: [number, number];
 			};

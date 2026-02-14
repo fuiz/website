@@ -100,24 +100,17 @@ export function handleGameMessage(
 	}
 
 	if ('Score' in game) {
-		const {
-			index = context.previousIndex,
-			count = context.previousCount,
-			score: { points, position } = {
-				points: context.previousScore,
-				position: undefined
-			}
-		} = game.Score;
+		const { index, count, score } = game.Score;
 
 		return {
 			newState: {
-				index,
-				count,
-				score: points,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: score?.points ?? context.previousScore,
 				Slide: {
 					Score: {
-						points,
-						position
+						points: score?.points ?? context.previousScore,
+						position: score?.position ?? undefined
 					}
 				}
 			}
@@ -157,6 +150,7 @@ export function handleGameMessage(
 				Game: {
 					Summary: {
 						...game.Summary.Player,
+						score: game.Summary.Player.score ?? undefined,
 						config: addIds(game.Summary.Player.config)
 					}
 				}
@@ -214,29 +208,23 @@ export function handleMultipleChoiceMessage(
 				Slide: {
 					MultipleChoice: 'QuestionAnnouncement',
 					question,
-					media
+					media: media ?? undefined
 				}
 			}
 		};
 	}
 
 	if ('AnswersAnnouncement' in mc) {
-		const {
-			index = context.previousIndex,
-			count = context.previousCount,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answers
-		} = mc.AnswersAnnouncement;
+		const { index, count, question, media, answers } = mc.AnswersAnnouncement;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					MultipleChoice: 'AnswersAnnouncement',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers: answers.map((a) => {
 						if (a === 'Hidden') return undefined;
 						return a.Visible;
@@ -247,23 +235,16 @@ export function handleMultipleChoiceMessage(
 	}
 
 	if ('AnswersResults' in mc) {
-		const {
-			index = context.previousIndex,
-			count = context.previousCount,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answers,
-			results
-		} = mc.AnswersResults;
+		const { index, count, question, media, answers, results } = mc.AnswersResults;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					MultipleChoice: 'AnswersResults',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
 					results,
 					answered: previous_state?.answered
@@ -299,7 +280,7 @@ export function handleTypeAnswerMessage(
 				Slide: {
 					TypeAnswer: 'QuestionAnnouncement',
 					question,
-					media,
+					media: media ?? undefined,
 					accept_answers
 				}
 			}
@@ -307,24 +288,16 @@ export function handleTypeAnswerMessage(
 	}
 
 	if ('AnswersResults' in ta) {
-		const {
-			index = context.previousIndex,
-			count = context.previousCount,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answers,
-			results,
-			case_sensitive
-		} = ta.AnswersResults;
+		const { index, count, question, media, answers, results, case_sensitive } = ta.AnswersResults;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					TypeAnswer: 'AnswersResults',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
 					results,
 					case_sensitive,
@@ -359,32 +332,28 @@ export function handleOrderMessage(
 				Slide: {
 					Order: 'QuestionAnnouncement',
 					question,
-					media
+					media: media ?? undefined
 				}
 			}
 		};
 	}
 
 	if ('AnswersAnnouncement' in order) {
-		const {
-			index = context.previousIndex,
-			count = context.previousCount,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answers,
-			axis_labels
-		} = order.AnswersAnnouncement;
+		const { index, count, question, media, answers, axis_labels } = order.AnswersAnnouncement;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Order: 'AnswersAnnouncement',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
-					axis_labels,
+					axis_labels: {
+						from: axis_labels?.from ?? undefined,
+						to: axis_labels?.to ?? undefined
+					},
 					answered: previous_state?.answered
 				}
 			}
@@ -392,28 +361,23 @@ export function handleOrderMessage(
 	}
 
 	if ('AnswersResults' in order) {
-		const {
-			index = context.previousIndex,
-			count = context.previousCount,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			axis_labels = previous_state?.axis_labels,
-			answers,
-			results
-		} = order.AnswersResults;
+		const { index, count, question, media, axis_labels, answers, results } = order.AnswersResults;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Order: 'AnswersResults',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
 					results,
 					answered: previous_state?.answered,
-					axis_labels
+					axis_labels: {
+						from: axis_labels?.from ?? previous_state?.axis_labels?.from,
+						to: axis_labels?.to ?? previous_state?.axis_labels?.to
+					}
 				}
 			}
 		};

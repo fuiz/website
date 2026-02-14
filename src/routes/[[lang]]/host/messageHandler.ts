@@ -137,7 +137,7 @@ export function handleMultipleChoiceMessage(
 				Slide: {
 					MultipleChoice: 'QuestionAnnouncement',
 					question,
-					media
+					media: media ?? undefined
 				}
 			},
 			timer: duration,
@@ -146,28 +146,21 @@ export function handleMultipleChoiceMessage(
 	}
 
 	if ('AnswersAnnouncement' in mc) {
-		const {
-			index = previous_index,
-			count = previous_count,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			duration,
-			answers,
-			answered_count
-		} = mc.AnswersAnnouncement;
+		const { index, count, question, media, duration, answers, answered_count } =
+			mc.AnswersAnnouncement;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? previous_index,
+				count: count ?? previous_count,
 				Slide: {
 					MultipleChoice: 'AnswersAnnouncement',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers: answers.map((a) => {
 						if (a === 'Hidden') return undefined;
 						return a.Visible;
 					}),
-					answered_count
+					answered_count: answered_count ?? undefined
 				}
 			},
 			timer: duration,
@@ -189,22 +182,15 @@ export function handleMultipleChoiceMessage(
 	}
 
 	if ('AnswersResults' in mc) {
-		const {
-			index = previous_index,
-			count = previous_count,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answers,
-			results
-		} = mc.AnswersResults;
+		const { index, count, question, media, answers, results } = mc.AnswersResults;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? previous_index,
+				count: count ?? previous_count,
 				Slide: {
 					MultipleChoice: 'AnswersResults',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
 					results
 				}
@@ -241,7 +227,7 @@ export function handleTypeAnswerMessage(
 				Slide: {
 					TypeAnswer: 'QuestionAnnouncement',
 					question,
-					media,
+					media: media ?? undefined,
 					accept_answers
 				}
 			},
@@ -263,23 +249,15 @@ export function handleTypeAnswerMessage(
 	}
 
 	if ('AnswersResults' in ta) {
-		const {
-			index = previous_index,
-			count = previous_count,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answers,
-			results,
-			case_sensitive
-		} = ta.AnswersResults;
+		const { index, count, question, media, answers, results, case_sensitive } = ta.AnswersResults;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? previous_index,
+				count: count ?? previous_count,
 				Slide: {
 					TypeAnswer: 'AnswersResults',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
 					results,
 					case_sensitive
@@ -315,7 +293,7 @@ export function handleOrderMessage(
 				Slide: {
 					Order: 'QuestionAnnouncement',
 					question,
-					media
+					media: media ?? undefined
 				}
 			},
 			timer: duration,
@@ -324,27 +302,22 @@ export function handleOrderMessage(
 	}
 
 	if ('AnswersAnnouncement' in order) {
-		const {
-			index = previous_index,
-			count = previous_count,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			answered_count = previous_state?.answered_count,
-			duration,
-			answers,
-			axis_labels
-		} = order.AnswersAnnouncement;
+		const { index, count, question, media, answered_count, duration, answers, axis_labels } =
+			order.AnswersAnnouncement;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? previous_index,
+				count: count ?? previous_count,
 				Slide: {
 					Order: 'AnswersAnnouncement',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
-					answered_count,
-					axis_labels
+					answered_count: answered_count ?? previous_state?.answered_count,
+					axis_labels: {
+						from: axis_labels.from ?? undefined,
+						to: axis_labels.to ?? undefined
+					}
 				}
 			},
 			timer: duration,
@@ -353,26 +326,21 @@ export function handleOrderMessage(
 	}
 
 	if ('AnswersResults' in order) {
-		const {
-			index = previous_index,
-			count = previous_count,
-			question = previous_state?.question,
-			media = previous_state?.media,
-			axis_labels = previous_state?.axis_labels,
-			answers,
-			results
-		} = order.AnswersResults;
+		const { index, count, question, media, axis_labels, answers, results } = order.AnswersResults;
 		return {
 			newState: {
-				index,
-				count,
+				index: index ?? previous_index,
+				count: count ?? previous_count,
 				Slide: {
 					Order: 'AnswersResults',
-					question,
-					media,
+					question: question ?? previous_state?.question,
+					media: media ?? previous_state?.media,
 					answers,
 					results,
-					axis_labels
+					axis_labels: {
+						from: axis_labels?.from ?? previous_state?.axis_labels?.from,
+						to: axis_labels?.to ?? previous_state?.axis_labels?.to
+					}
 				}
 			}
 		};
