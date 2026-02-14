@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	import Header from '$lib/layout/Header.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
@@ -17,7 +18,7 @@
 	<Header />
 	<nav style:font-size="0.8em">
 		<div>
-			<FancyAnchorButton href={localizeHref('/create')}>
+			<FancyAnchorButton href={resolve(localizeHref('/create'))}>
 				<div class="a">
 					<Palette height="1.2em" title={m.create()} />
 					<div>{m.create()}</div>
@@ -25,7 +26,7 @@
 			</FancyAnchorButton>
 		</div>
 		<div>
-			<FancyAnchorButton href={localizeHref('/play')}>
+			<FancyAnchorButton href={resolve(localizeHref('/play'))}>
 				<div class="a">
 					<StadiaController height="1.2em" title={m.play()} />
 					<div>{m.play()}</div>
@@ -34,7 +35,7 @@
 		</div>
 		{#if showLibrary}
 			<div>
-				<FancyAnchorButton href={localizeHref('/library')}>
+				<FancyAnchorButton href={resolve(localizeHref('/library'))}>
 					<div class="a">
 						<LibraryBooks height="1.2em" title={m.library()} />
 						<div>{m.library()}</div>

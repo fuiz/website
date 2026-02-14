@@ -96,7 +96,7 @@
 						</ul>
 					{:else}
 						<div>
-							<FancyAnchorButton href={localizeHref('/create')}>
+							<FancyAnchorButton href={resolve(localizeHref('/create'))}>
 								<div class="create">{m.create()}</div>
 							</FancyAnchorButton>
 						</div>

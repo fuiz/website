@@ -1,6 +1,4 @@
 <script>
-	import { resolve } from '$app/paths';
-
 	/** @type {{
 	 * foregroundColor: string;
 	 * backgroundColor: string;
@@ -13,8 +11,9 @@
 		$props();
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
-	href={resolve(href)}
+	{href}
 	{download}
 	style:display="flex"
 	style:background="none"
@@ -48,6 +47,7 @@
 		</div>
 	</div>
 </a>
+<!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 <style>
 	a .front {
