@@ -120,9 +120,17 @@ export type GenericTypeAnswer<T> = Modify<
 
 export type TypeAnswer = GenericTypeAnswer<Media | undefined>;
 
+export function getTitle<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): string {
+	if ('MultipleChoice' in slide) return slide.MultipleChoice.title;
+	if ('TypeAnswer' in slide) return slide.TypeAnswer.title;
+	if ('Order' in slide) return slide.Order.title;
+	throw new Error('Unknown slide type');
+}
+
 export function getMedia<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): T | undefined {
 	if ('MultipleChoice' in slide) return slide.MultipleChoice.media;
 	if ('TypeAnswer' in slide) return slide.TypeAnswer.media;
+	if ('Order' in slide) return slide.Order.media;
 	return undefined;
 }
 
@@ -133,7 +141,10 @@ async function mapIdlessMedia<T, O>(
 	if ('MultipleChoice' in slide)
 		return slide.MultipleChoice.media
 			? {
-					MultipleChoice: { ...slide.MultipleChoice, media: await map(slide.MultipleChoice.media) }
+					MultipleChoice: {
+						...slide.MultipleChoice,
+						media: await map(slide.MultipleChoice.media)
+					}
 				}
 			: {
 					MultipleChoice: {
@@ -147,7 +158,10 @@ async function mapIdlessMedia<T, O>(
 	if ('TypeAnswer' in slide)
 		return slide.TypeAnswer.media
 			? {
-					TypeAnswer: { ...slide.TypeAnswer, media: await map(slide.TypeAnswer.media) }
+					TypeAnswer: {
+						...slide.TypeAnswer,
+						media: await map(slide.TypeAnswer.media)
+					}
 				}
 			: {
 					TypeAnswer: {
@@ -183,7 +197,19 @@ export async function mapIdlessSlidesMedia<T, O>(
 ): Promise<GenericIdlessFuizConfig<O>> {
 	return {
 		...config,
-		slides: await Promise.all(config.slides.map((slide) => mapIdlessMedia(slide, map)))
+		slides: await Promise.all(
+			config.slides.map(async (slide, index) => {
+				try {
+					return await mapIdlessMedia(slide, map);
+				} catch (error) {
+					if (error instanceof Error) {
+						(error as any).slideContext = slide;
+						(error as any).slideIndex = index;
+					}
+					throw error;
+				}
+			})
+		)
 	};
 }
 
@@ -194,7 +220,10 @@ function mapIdlessMediaSync<T, O>(
 	if ('MultipleChoice' in slide)
 		return slide.MultipleChoice.media
 			? {
-					MultipleChoice: { ...slide.MultipleChoice, media: map(slide.MultipleChoice.media) }
+					MultipleChoice: {
+						...slide.MultipleChoice,
+						media: map(slide.MultipleChoice.media)
+					}
 				}
 			: {
 					MultipleChoice: {
@@ -208,7 +237,10 @@ function mapIdlessMediaSync<T, O>(
 	if ('TypeAnswer' in slide)
 		return slide.TypeAnswer.media
 			? {
-					TypeAnswer: { ...slide.TypeAnswer, media: map(slide.TypeAnswer.media) }
+					TypeAnswer: {
+						...slide.TypeAnswer,
+						media: map(slide.TypeAnswer.media)
+					}
 				}
 			: {
 					TypeAnswer: {

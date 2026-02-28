@@ -21,6 +21,8 @@ import {
 	type FuizOptions,
 	type GenericFuizConfig,
 	type GenericIdlessFuizConfig,
+	type GenericIdlessSlide,
+	getTitle,
 	type IdlessFuizConfig,
 	type IdlessFullFuizConfig,
 	mapIdlessSlidesMedia
@@ -297,6 +299,18 @@ export function fixTimes<T>(config: GenericIdlessFuizConfig<T>): GenericIdlessFu
 	};
 }
 
+class ImageUploadError extends Error {
+	slideContext: GenericIdlessSlide<object | undefined> | undefined;
+	slideIndex: number | undefined;
+
+	constructor(message: string) {
+		super(message);
+		this.name = 'ImageUploadError';
+		this.slideContext = undefined;
+		this.slideIndex = undefined;
+	}
+}
+
 async function getBackendMedia(
 	media: Base64Media | undefined
 ): Promise<CorkboardMedia | undefined> {
@@ -317,8 +331,18 @@ async function getBackendMedia(
 		body: formData
 	});
 
-	const id = await res?.json();
-	if (!id) return undefined;
+	if (res === undefined) {
+		throw new ImageUploadError('Inaccessible Corkboard Server');
+	}
+
+	if (!res.ok) {
+		throw new ImageUploadError('Server Error: ' + res.status + ' ' + (await res?.text()));
+	}
+
+	const id = await res.json();
+	if (!id) {
+		throw new ImageUploadError('No ID returned');
+	}
 
 	return {
 		Image: {
@@ -335,8 +359,23 @@ export async function playIdlessConfig(
 	config: IdlessFullFuizConfig,
 	options: FuizOptions
 ): Promise<undefined | string> {
+	let backendReadyConfig: IdlessFuizConfig;
 	try {
-		const backendReadyConfig = await getBackendConfig(config);
+		backendReadyConfig = await getBackendConfig(config);
+	} catch (error) {
+		if (error instanceof ImageUploadError) {
+			let imageIdentifier = 'image';
+			if (error.slideIndex !== undefined) {
+				imageIdentifier = imageIdentifier + ` at index ${error.slideIndex + 1}`;
+			}
+			if (error.slideContext !== undefined) {
+				imageIdentifier = imageIdentifier + ` with title "${getTitle(error.slideContext)}"`;
+			}
+			return `Failed to upload ${imageIdentifier}: ${error.message}`;
+		}
+		return 'Failed to upload images: ' + (error as Error).message;
+	}
+	try {
 		return await playJsonString(
 			JSON.stringify({
 				config: fixTimes(backendReadyConfig),
@@ -344,7 +383,7 @@ export async function playIdlessConfig(
 			})
 		);
 	} catch {
-		return 'Failed to upload images';
+		return 'Failed to start game';
 	}
 }
 
