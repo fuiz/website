@@ -450,11 +450,11 @@ export const buttonSymbols = [
 // must be a subset of https://gitlab.com/fuiz/game/-/raw/main/config.toml
 export const limits = {
 	fuiz: {
-		maxSlidesCount: 100,
-		maxTitleLength: 200,
+		maxSlidesCount: 500,
+		maxTitleLength: 500,
 		maxPlayerCount: 1000,
 		multipleChoice: {
-			maxTitleLength: 200,
+			maxTitleLength: 500,
 			introduceQuestion: 5000,
 			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000],
 			pointsAwarded: 1000,
@@ -464,7 +464,7 @@ export const limits = {
 			maxAnswerCount: 8
 		},
 		typeAnswer: {
-			maxTitleLength: 200,
+			maxTitleLength: 500,
 			introduceQuestion: 5000,
 			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000],
 			pointsAwarded: 1000,
@@ -474,7 +474,7 @@ export const limits = {
 			maxAnswerCount: 16
 		},
 		order: {
-			maxTitleLength: 200,
+			maxTitleLength: 500,
 			introduceQuestion: 5000,
 			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000],
 			pointsAwarded: 1000,
@@ -483,6 +483,6 @@ export const limits = {
 			defaultTimeLimit: 60000,
 			maxAnswerCount: 8
 		},
-		maxAnswerTextLength: 200
+		maxAnswerTextLength: 500
 	}
 } as const;
