@@ -3,7 +3,7 @@
 	import MediaFallback from './MediaFallback.svelte';
 
 	/** @type {{ media: import('$lib/types').Media | undefined, align?: string, fit?: string, showFallback?: boolean }} */
-	let { media, align = 'center', fit = 'scale-down', showFallback = true } = $props();
+	let { media, align = 'center', fit = 'contain', showFallback = true } = $props();
 </script>
 
 <div
