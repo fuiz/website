@@ -49,7 +49,7 @@
 								<ul>
 									{#each slide.TypeAnswer.answers as answer (answer.id)}
 										<li>
-											{answer}
+											{answer.text}
 										</li>
 									{/each}
 								</ul>
@@ -57,7 +57,7 @@
 								<ol>
 									{#each slide.Order.answers as answer (answer.id)}
 										<li>
-											{answer}
+											{answer.text}
 										</li>
 									{/each}
 								</ol>
