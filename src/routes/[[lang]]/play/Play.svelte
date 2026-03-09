@@ -212,6 +212,22 @@
 		sendEvent(JSON.stringify({ Player: { IndexAnswer: index } }));
 	}
 
+	function sendIndexArrayAnswer(indices: number[]) {
+		const uniqueIndices = Array.from(new Set(indices));
+
+		if (currentState && 'Slide' in currentState && 'MultipleChoice' in currentState.Slide) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					answered: uniqueIndices
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { IndexArrayAnswer: uniqueIndices } }));
+	}
+
 	function sendStringAnswer(text: string) {
 		if (currentState && 'Slide' in currentState && 'TypeAnswer' in currentState.Slide) {
 			currentState = {
@@ -273,13 +289,15 @@
 {:else if 'Slide' in currentState}
 	{@const { Slide: slide, index, count, score } = currentState}
 	{#if 'MultipleChoice' in slide}
-		{@const { MultipleChoice: kind, question, answers, media, results, answered } = slide}
+		{@const { MultipleChoice: kind, question, answers, media, results, answered, answer_mode } = slide}
 		{#if kind === 'QuestionAnnouncement'}
 			<Question {name} {score} {media} questionText={question || ''} />
 		{:else if kind === 'AnswersAnnouncement'}
 			{#if answered === undefined}
 				<Answers
 					onanswer={sendAnswer}
+					onarrayanswer={sendIndexArrayAnswer}
+					answerMode={answer_mode}
 					questionText={question || ''}
 					{media}
 					{name}
@@ -294,7 +312,14 @@
 			<Result
 				{name}
 				{score}
-				correct={answered === undefined ? false : results?.at(answered)?.correct || false}
+				correct={answered === undefined
+					? false
+					: Array.isArray(answered)
+						? (results !== undefined &&
+								answered.every((i) => results.at(i)?.correct) &&
+								results.every((r, i) => !r.correct || answered.includes(i))) ||
+							false
+						: results?.at(answered)?.correct || false}
 			/>
 		{/if}
 	{:else if 'Score' in slide}

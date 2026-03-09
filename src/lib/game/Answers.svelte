@@ -1,26 +1,34 @@
-<script>
+<script lang="ts">
 	import EmptyAnswerButton from './EmptyAnswerButton.svelte';
 	import TextAnswerButton from './TextAnswerButton.svelte';
 
-	/** @type {{answers: { text: string | undefined; correct: boolean | undefined }[], onanswer?: (index: number) => void}}*/
-	let { answers, onanswer } = $props();
+	let {
+		answers,
+		selected,
+		onanswer
+	}: {
+		answers: { text: string | undefined; correct: boolean | undefined }[];
+		selected?: Set<number>;
+		onanswer?: (index: number) => void;
+	} = $props();
 
-	/** @typedef {{index: number, text: string, correct: (boolean|undefined)}} KnownAnswer */
-	/** @typedef {{index: number, correct: (boolean|undefined)}} UnknownAnswer */
+	type KnownAnswer = { index: number; text: string; correct: boolean | undefined };
+	type UnknownAnswer = { index: number; correct: boolean | undefined };
 
 	/**
 	 * Filters an array of answers, separating them into two groups: known and unknown.
 	 * 'Known' answers are assumed to have defined `text` and `correct` properties,
 	 * while 'unknown' answers are placeholders that may lack these properties.
 	 *
-	 * @param {{ text: string | undefined; correct: boolean | undefined }[]} answers - The array of answer objects to filter.
-	 * @returns {{knownAnswers: KnownAnswer[], unknownAnswers: UnknownAnswer[]}} An object containing two arrays: one for answers with complete data (`knownAnswers`) and one for answers with incomplete data (`unknownAnswers`).
+	 * @param answers - The array of answer objects to filter.
+	 * @returns An object containing two arrays: one for answers with complete data (`knownAnswers`) and one for answers with incomplete data (`unknownAnswers`).
 	 */
-	function filterAnswers(answers) {
-		/** @type {KnownAnswer[]} */
-		let knownAnswers = [];
-		/** @type {UnknownAnswer[]} */
-		let unknownAnswers = [];
+	function filterAnswers(answers: { text: string | undefined; correct: boolean | undefined }[]): {
+		knownAnswers: KnownAnswer[];
+		unknownAnswers: UnknownAnswer[];
+	} {
+		let knownAnswers: KnownAnswer[] = [];
+		let unknownAnswers: UnknownAnswer[] = [];
 		answers.forEach(({ text, correct }, index) => {
 			if (text) {
 				knownAnswers.push({
@@ -51,6 +59,7 @@
 				index={answer.index}
 				answerText={answer.text}
 				correct={answer.correct}
+				selected={selected?.has(answer.index)}
 				onclick={() => {
 					if (onanswer) onanswer(answer.index);
 				}}
@@ -59,6 +68,7 @@
 		{#each answersFiltered.unknownAnswers as { index } (index)}
 			<EmptyAnswerButton
 				{index}
+				selected={selected?.has(index)}
 				onclick={() => {
 					if (onanswer) onanswer(index);
 				}}

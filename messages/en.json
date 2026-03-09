@@ -220,5 +220,6 @@
 	"publish_check_language": "The selected language matches the quiz content",
 	"publish_check_media": "Images and media are relevant and properly sourced",
 	"publish_check_relevant": "The quiz is relevant, educational, and useful to others",
-	"privacy_policy": "Privacy Policy"
+	"privacy_policy": "Privacy Policy",
+	"multiple_answers": "Multiple answers"
 }

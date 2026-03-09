@@ -1,8 +1,15 @@
-<script>
+<script lang="ts">
 	import EmptyAnswerButton from './EmptyAnswerButton.svelte';
 
-	/** @type {{indices: number[];onanswer?: (index: number) => void;}} */
-	let { indices, onanswer } = $props();
+	let {
+		indices,
+		selected,
+		onanswer
+	}: {
+		indices: number[];
+		selected?: Set<number>;
+		onanswer?: (index: number) => void;
+	} = $props();
 </script>
 
 <div
@@ -10,12 +17,13 @@
 	style:height="100%"
 	style:box-sizing="border-box"
 	style:grid-template-columns="1fr 1fr"
-	style:gap="0.2em"
-	style:padding="0.2em"
+	style:gap="0.8em"
+	style:padding="0.8em"
 >
 	{#each indices as index (index)}
 		<EmptyAnswerButton
 			{index}
+			selected={selected?.has(index)}
 			onclick={() => {
 				if (onanswer) onanswer(index);
 			}}

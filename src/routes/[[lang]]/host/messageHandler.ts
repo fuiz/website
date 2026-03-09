@@ -146,7 +146,7 @@ export function handleMultipleChoiceMessage(
 	}
 
 	if ('AnswersAnnouncement' in mc) {
-		const { index, count, question, media, duration, answers, answered_count } =
+		const { index, count, question, media, duration, answers, answered_count, answer_mode } =
 			mc.AnswersAnnouncement;
 		return {
 			newState: {
@@ -156,6 +156,7 @@ export function handleMultipleChoiceMessage(
 					MultipleChoice: 'AnswersAnnouncement',
 					question: question ?? previous_state?.question,
 					media: media ?? previous_state?.media,
+					answer_mode: answer_mode ?? previous_state?.answer_mode,
 					answers: answers.map((a) => {
 						if (a === 'Hidden') return undefined;
 						return a.Visible;
@@ -182,7 +183,7 @@ export function handleMultipleChoiceMessage(
 	}
 
 	if ('AnswersResults' in mc) {
-		const { index, count, question, media, answers, results } = mc.AnswersResults;
+		const { index, count, question, media, answers, results, answer_mode } = mc.AnswersResults;
 		return {
 			newState: {
 				index: index ?? previous_index,
@@ -191,6 +192,7 @@ export function handleMultipleChoiceMessage(
 					MultipleChoice: 'AnswersResults',
 					question: question ?? previous_state?.question,
 					media: media ?? previous_state?.media,
+					answer_mode: answer_mode ?? previous_state?.answer_mode,
 					answers,
 					results
 				}

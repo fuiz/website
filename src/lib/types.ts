@@ -39,6 +39,8 @@ export type AnswerResult = {
 	count: number;
 };
 
+export type AnswerMode = 'SingleAnswer' | 'MultipleAnswers';
+
 export type IdlessMultipleChoiceAnswer = {
 	correct: boolean;
 	content: TextOrMedia;
@@ -54,6 +56,7 @@ export type GenericIdlessMultipleChoiceSlide<T> = {
 	introduce_question: number;
 	time_limit: number;
 	points_awarded: number;
+	answer_mode?: AnswerMode;
 
 	answers: IdlessMultipleChoiceAnswer[];
 };
@@ -152,6 +155,7 @@ async function mapIdlessMedia<T, O>(
 						introduce_question: slide.MultipleChoice.introduce_question,
 						time_limit: slide.MultipleChoice.time_limit,
 						points_awarded: slide.MultipleChoice.points_awarded,
+						answer_mode: slide.MultipleChoice.answer_mode,
 						answers: slide.MultipleChoice.answers
 					}
 				};
@@ -231,6 +235,7 @@ function mapIdlessMediaSync<T, O>(
 						introduce_question: slide.MultipleChoice.introduce_question,
 						time_limit: slide.MultipleChoice.time_limit,
 						points_awarded: slide.MultipleChoice.points_awarded,
+						answer_mode: slide.MultipleChoice.answer_mode,
 						answers: slide.MultipleChoice.answers
 					}
 				};

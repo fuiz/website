@@ -220,5 +220,6 @@
 	"publish_check_language": "El idioma seleccionado coincide con el contenido del cuestionario",
 	"publish_check_media": "Las imágenes y medios son relevantes y tienen fuentes adecuadas",
 	"publish_check_relevant": "El cuestionario es relevante, educativo y útil para otros",
-	"privacy_policy": "Política de Privacidad"
+	"privacy_policy": "Política de Privacidad",
+	"multiple_answers": "Respuestas múltiples"
 }

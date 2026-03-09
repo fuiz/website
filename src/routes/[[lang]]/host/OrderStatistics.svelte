@@ -4,8 +4,8 @@
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages';
-	import Check from '~icons/material-symbols/check';
-	import Close from '~icons/material-symbols/close';
+	import Check from '~icons/custom/check';
+	import Close from '~icons/custom/close';
 	import Topbar from './Topbar.svelte';
 
 	/** @type {{

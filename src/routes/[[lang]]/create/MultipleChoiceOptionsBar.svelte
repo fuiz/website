@@ -2,6 +2,7 @@
 	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
+	import Switch from '$lib/ui/Switch.svelte';
 	import SportsScore from '~icons/material-symbols/sports-score';
 	import TimerOutline from '~icons/material-symbols/timer-outline';
 
@@ -58,6 +59,20 @@
 				</SelectTime>
 			</div>
 		</div>
+		<div>
+			<div class="field-title">
+				{m.multiple_answers()}
+				<div>
+					<Switch
+						checked={activeSlide.answer_mode === 'MultipleAnswers'}
+						onchange={(checked) => {
+							activeSlide.answer_mode = checked ? 'MultipleAnswers' : 'SingleAnswer';
+						}}
+						id="answer-mode"
+					/>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -75,6 +90,8 @@
 
 		& .field-title {
 			font-size: 0.6em;
+			display: flex;
+			justify-content: space-between;
 		}
 	}
 
@@ -94,6 +111,16 @@
 		#sidebar-container {
 			min-width: 100%;
 			width: 0px;
+		}
+
+		.field-title {
+			flex-direction: column;
+			align-items: start;
+		}
+
+		.field-title div {
+			font-size: 2em;
+			padding: 0.2em;
 		}
 	}
 </style>

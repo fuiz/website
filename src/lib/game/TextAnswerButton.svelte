@@ -1,12 +1,23 @@
-<script>
+<script lang="ts">
 	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Check from '~icons/material-symbols/check';
-	import Close from '~icons/material-symbols/close';
+	import Check from '~icons/custom/check';
+	import Close from '~icons/custom/close';
 
-	/** @type {{index: number, answerText: string, correct: (boolean|undefined), onclick?: () => void}} */
-	let { index, answerText, correct, onclick } = $props();
+	let {
+		index,
+		answerText,
+		correct,
+		selected = false,
+		onclick
+	}: {
+		index: number;
+		answerText: string;
+		correct: boolean | undefined;
+		selected?: boolean;
+		onclick?: () => void;
+	} = $props();
 
 	let buttonSymbol = $derived(buttonSymbols[index % buttonSymbols.length]);
 </script>
@@ -37,7 +48,7 @@
 				<div style:display="flex" style:padding="0.2em">
 					<Close height="1em" title={m.wrong()} />
 				</div>
-			{:else if correct === true}
+			{:else if correct === true || selected}
 				<div style:display="flex" style:padding="0.2em">
 					<Check height="1em" title={m.correct()} />
 				</div>

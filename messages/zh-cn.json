@@ -220,5 +220,6 @@
 	"publish_check_language": "所选语言与测验内容一致",
 	"publish_check_media": "图片和媒体内容相关且来源正确",
 	"publish_check_relevant": "测验具有相关性、教育性，对他人有用",
-	"privacy_policy": "隐私政策"
+	"privacy_policy": "隐私政策",
+	"multiple_answers": "多选"
 }
