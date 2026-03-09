@@ -5,8 +5,8 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Check from '~icons/material-symbols/check';
-	import Close from '~icons/material-symbols/close';
+	import Check from '~icons/custom/check';
+	import Close from '~icons/custom/close';
 	import TimerOffOutline from '~icons/material-symbols/timer-off-outline';
 
 	/** @type {{

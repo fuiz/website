@@ -220,5 +220,6 @@
 	"publish_check_language": "اللغة المختارة تتوافق مع محتوى الاختبار",
 	"publish_check_media": "الصور والوسائط ذات صلة ومن مصادر موثوقة",
 	"publish_check_relevant": "الاختبار ذو صلة وتعليمي ومفيد للآخرين",
-	"privacy_policy": "سياسة الخصوصية"
+	"privacy_policy": "سياسة الخصوصية",
+	"multiple_answers": "إجابات متعددة"
 }

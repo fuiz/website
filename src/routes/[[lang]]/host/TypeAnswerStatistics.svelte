@@ -5,7 +5,7 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { toSorted } from '$lib/util';
-	import Check from '~icons/material-symbols/check';
+	import Check from '~icons/custom/check';
 	import Topbar from './Topbar.svelte';
 
 	/** @type {{

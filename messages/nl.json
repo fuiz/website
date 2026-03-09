@@ -220,5 +220,6 @@
 	"publish_check_language": "De geselecteerde taal komt overeen met de quizinhoud",
 	"publish_check_media": "Afbeeldingen en media zijn relevant en correct bronvermeld",
 	"publish_check_relevant": "De quiz is relevant, leerzaam en nuttig voor anderen",
-	"privacy_policy": "Privacybeleid"
+	"privacy_policy": "Privacybeleid",
+	"multiple_answers": "Meerdere antwoorden"
 }

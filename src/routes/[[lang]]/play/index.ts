@@ -1,4 +1,5 @@
 import type {
+	AnswerMode,
 	AnswerResult,
 	FuizConfig,
 	IdlessFuizConfig,
@@ -47,7 +48,8 @@ type SlideState =
 			media?: Media;
 			answers?: (TextOrMedia | undefined)[];
 			results?: AnswerResult[];
-			answered?: number;
+			answered?: number | number[];
+			answer_mode?: AnswerMode;
 	  }
 	| {
 			TypeAnswer: 'QuestionAnnouncement' | 'AnswersResults';
@@ -169,6 +171,7 @@ export type MultipleChoiceIncomingMessage =
 				answers: Array<ServerPossiblyHidden<TextOrMedia>>;
 				answered_count?: number | null;
 				duration: number;
+				answer_mode?: AnswerMode;
 			};
 	  }
 	| {
@@ -179,6 +182,7 @@ export type MultipleChoiceIncomingMessage =
 				media?: Media | null;
 				answers: Array<TextOrMedia>;
 				results: Array<AnswerResult>;
+				answer_mode?: AnswerMode;
 			};
 	  };
 
