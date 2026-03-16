@@ -41,6 +41,8 @@ export type AnswerResult = {
 
 export type AnswerMode = 'SingleAnswer' | 'MultipleAnswers';
 
+export const DEFAULT_ANSWER_MODE: AnswerMode = 'SingleAnswer';
+
 export type IdlessMultipleChoiceAnswer = {
 	correct: boolean;
 	content: TextOrMedia;
@@ -235,7 +237,7 @@ function mapIdlessMediaSync<T, O>(
 						introduce_question: slide.MultipleChoice.introduce_question,
 						time_limit: slide.MultipleChoice.time_limit,
 						points_awarded: slide.MultipleChoice.points_awarded,
-						answer_mode: slide.MultipleChoice.answer_mode,
+						answer_mode: slide.MultipleChoice.answer_mode ?? DEFAULT_ANSWER_MODE,
 						answers: slide.MultipleChoice.answers
 					}
 				};
