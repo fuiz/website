@@ -447,7 +447,7 @@ export const buttonSymbols = [
 	}
 ] as const;
 
-// must be a subset of https://gitlab.com/fuiz/game/-/raw/main/config.toml
+// must be a subset of https://gitlab.com/fuiz/game-logic/-/raw/main/src/constants.rs
 export const limits = {
 	fuiz: {
 		maxSlidesCount: 500,

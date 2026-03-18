@@ -10,8 +10,8 @@ Host live quizzes freely
 
 This is the code for the website (developed in Svelte). It relies on two other components to function properly:
 
-- Backend game server: Code is under [fuiz/hosted-server](https://gitlab.com/fuiz/hosted-server). The urls to it are defined by: `PUBLIC_BACKEND_URL` and `PUBLIC_WS_URL`. In production, this uses a serverless version [fuiz/cloudflare-serverless](https://gitlab.com/fuiz/cloudflare-serverless) hosted at [api.fuiz.org](https://api.fuiz.org/).
-- Backend image server: Code is under [fuiz/corkboard](https://gitlab.com/fuiz/corkboard). The url to it is defined by `PUBLIC_CORKBOARD_URL`. In production, this uses a similar open source serverless version [fuiz/corkboard-serverless](https://gitlab.com/fuiz/corkboard-serverless) hosted at [corkboard.fuiz.org](https://corkboard.fuiz.org/).
+- Backend game server: Code is under [fuiz/game-server](https://gitlab.com/fuiz/game-server). The urls to it are defined by: `PUBLIC_BACKEND_URL` and `PUBLIC_WS_URL`. In production, this uses a serverless version [fuiz/game-cloudflare](https://gitlab.com/fuiz/game-cloudflare) hosted at [api.fuiz.org](https://api.fuiz.org/).
+- Backend image server: Code is under [fuiz/corkboard-server](https://gitlab.com/fuiz/corkboard-server). The url to it is defined by `PUBLIC_CORKBOARD_URL`. In production, this uses a similar open source serverless version [fuiz/corkboard-cloudflare](https://gitlab.com/fuiz/corkboard-cloudflare) hosted at [corkboard.fuiz.org](https://corkboard.fuiz.org/).
 
 Additionally, the website relies on Cloudflare APIs for viewing and updating the library. If you want to enable these features you need to use [wrangler](https://github.com/cloudflare/workers-sdk).
 
