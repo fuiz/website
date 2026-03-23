@@ -1,4 +1,9 @@
+stages:
+  - lint
+  - build
+
 check-messages:
+  stage: lint
   image: node:lts-alpine
   script:
     - node scripts/check-messages.js
@@ -7,6 +12,7 @@ check-messages:
         - messages/*.json
 
 find-unused-messages:
+  stage: lint
   image: node:lts-alpine
   script:
     - node scripts/find-unused-messages.js
@@ -17,6 +23,7 @@ find-unused-messages:
         - scripts/find-unused-messages.js
 
 find-untranslated:
+  stage: lint
   image: oven/bun:alpine
   script:
     - bun install --frozen-lockfile
@@ -28,6 +35,7 @@ find-untranslated:
         - scripts/find-untranslated.js
 
 lint:
+  stage: lint
   image: oven/bun:alpine
   script:
     - bun install --frozen-lockfile
@@ -36,3 +44,19 @@ lint:
     - changes:
         - src/**/*.{svelte,ts,js}
         - bun.lock
+
+build-image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build --pull -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
