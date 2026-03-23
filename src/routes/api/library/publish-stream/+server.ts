@@ -7,7 +7,7 @@ import type { Ai } from '@cloudflare/workers-types';
 import { json } from '@sveltejs/kit';
 import { v5 as uuidv5 } from 'uuid';
 import { env } from '$env/dynamic/private';
-import { assertUnreachable, stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
+import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
 import { createGitClient } from '$lib/git/factory';
 import type { FullOnlineFuiz, IdlessFullFuizConfig, ReferencingOnlineFuiz } from '$lib/types';
 import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
@@ -132,12 +132,10 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 				const tomlReadyConfig: ReferencingOnlineFuiz = {
 					author: processedConfig.author,
 					language: processedConfig.language,
-					...(processedConfig.subjects &&
-						processedConfig.subjects.length > 0 && { subjects: processedConfig.subjects }),
-					...(processedConfig.grades &&
-						processedConfig.grades.length > 0 && { grades: processedConfig.grades }),
-					...(keywords && keywords.length > 0 && { keywords }),
-					config: tomlifyConfig(processedConfig.config)
+					subjects: processedConfig.subjects,
+					grades: processedConfig.grades,
+					keywords,
+					config: processedConfig.config
 				};
 
 				// Convert to TOML

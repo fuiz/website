@@ -140,66 +140,33 @@ export function getMedia<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): T |
 }
 
 async function mapIdlessMedia<T, O>(
-	slide: GenericIdlessSlide<T>,
-	map: (media: T) => Promise<O>
+	slide: GenericIdlessSlide<T | undefined>,
+	map: (media: T | undefined) => Promise<O>
 ): Promise<GenericIdlessSlide<O>> {
 	if ('MultipleChoice' in slide)
-		return slide.MultipleChoice.media
-			? {
-					MultipleChoice: {
-						...slide.MultipleChoice,
-						media: await map(slide.MultipleChoice.media)
-					}
-				}
-			: {
-					MultipleChoice: {
-						title: slide.MultipleChoice.title,
-						introduce_question: slide.MultipleChoice.introduce_question,
-						time_limit: slide.MultipleChoice.time_limit,
-						points_awarded: slide.MultipleChoice.points_awarded,
-						answer_mode: slide.MultipleChoice.answer_mode,
-						answers: slide.MultipleChoice.answers
-					}
-				};
+		return {
+			MultipleChoice: {
+				...slide.MultipleChoice,
+				media: await map(slide.MultipleChoice.media)
+			}
+		};
 	if ('TypeAnswer' in slide)
-		return slide.TypeAnswer.media
-			? {
-					TypeAnswer: {
-						...slide.TypeAnswer,
-						media: await map(slide.TypeAnswer.media)
-					}
-				}
-			: {
-					TypeAnswer: {
-						title: slide.TypeAnswer.title,
-						introduce_question: slide.TypeAnswer.introduce_question,
-						time_limit: slide.TypeAnswer.time_limit,
-						points_awarded: slide.TypeAnswer.points_awarded,
-						answers: slide.TypeAnswer.answers,
-						case_sensitive: slide.TypeAnswer.case_sensitive
-					}
-				};
+		return {
+			TypeAnswer: {
+				...slide.TypeAnswer,
+				media: await map(slide.TypeAnswer.media)
+			}
+		};
 	if ('Order' in slide)
-		return slide.Order.media
-			? {
-					Order: { ...slide.Order, media: await map(slide.Order.media) }
-				}
-			: {
-					Order: {
-						title: slide.Order.title,
-						introduce_question: slide.Order.introduce_question,
-						time_limit: slide.Order.time_limit,
-						points_awarded: slide.Order.points_awarded,
-						axis_labels: slide.Order.axis_labels,
-						answers: slide.Order.answers
-					}
-				};
+		return {
+			Order: { ...slide.Order, media: await map(slide.Order.media) }
+		};
 	return slide;
 }
 
 export async function mapIdlessSlidesMedia<T, O>(
-	config: GenericIdlessFuizConfig<T>,
-	map: (media: T) => Promise<O>
+	config: GenericIdlessFuizConfig<T | undefined>,
+	map: (media: T | undefined) => Promise<O>
 ): Promise<GenericIdlessFuizConfig<O>> {
 	return {
 		...config,
@@ -220,66 +187,33 @@ export async function mapIdlessSlidesMedia<T, O>(
 }
 
 function mapIdlessMediaSync<T, O>(
-	slide: GenericIdlessSlide<T>,
-	map: (media: T) => O
+	slide: GenericIdlessSlide<T | undefined>,
+	map: (media: T | undefined) => O
 ): GenericIdlessSlide<O> {
 	if ('MultipleChoice' in slide)
-		return slide.MultipleChoice.media
-			? {
-					MultipleChoice: {
-						...slide.MultipleChoice,
-						media: map(slide.MultipleChoice.media)
-					}
-				}
-			: {
-					MultipleChoice: {
-						title: slide.MultipleChoice.title,
-						introduce_question: slide.MultipleChoice.introduce_question,
-						time_limit: slide.MultipleChoice.time_limit,
-						points_awarded: slide.MultipleChoice.points_awarded,
-						answer_mode: slide.MultipleChoice.answer_mode ?? DEFAULT_ANSWER_MODE,
-						answers: slide.MultipleChoice.answers
-					}
-				};
+		return {
+			MultipleChoice: {
+				...slide.MultipleChoice,
+				media: map(slide.MultipleChoice.media)
+			}
+		};
 	if ('TypeAnswer' in slide)
-		return slide.TypeAnswer.media
-			? {
-					TypeAnswer: {
-						...slide.TypeAnswer,
-						media: map(slide.TypeAnswer.media)
-					}
-				}
-			: {
-					TypeAnswer: {
-						title: slide.TypeAnswer.title,
-						introduce_question: slide.TypeAnswer.introduce_question,
-						time_limit: slide.TypeAnswer.time_limit,
-						points_awarded: slide.TypeAnswer.points_awarded,
-						answers: slide.TypeAnswer.answers,
-						case_sensitive: slide.TypeAnswer.case_sensitive
-					}
-				};
+		return {
+			TypeAnswer: {
+				...slide.TypeAnswer,
+				media: map(slide.TypeAnswer.media)
+			}
+		};
 	if ('Order' in slide)
-		return slide.Order.media
-			? {
-					Order: { ...slide.Order, media: map(slide.Order.media) }
-				}
-			: {
-					Order: {
-						title: slide.Order.title,
-						introduce_question: slide.Order.introduce_question,
-						time_limit: slide.Order.time_limit,
-						points_awarded: slide.Order.points_awarded,
-						axis_labels: slide.Order.axis_labels,
-						answers: slide.Order.answers
-					}
-				};
+		return {
+			Order: { ...slide.Order, media: map(slide.Order.media) }
+		};
 	return slide;
 }
 
 export function mapIdlessSlidesMediaSync<T, O>(
-	config: GenericIdlessFuizConfig<T>,
-	map: (media: T) => O
+	config: GenericIdlessFuizConfig<T | undefined>,
+	map: (media: T | undefined) => O
 ): GenericIdlessFuizConfig<O> {
 	return {
 		...config,

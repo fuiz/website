@@ -4,7 +4,7 @@
  */
 
 import type { D1Database, R2Bucket } from '@cloudflare/workers-types';
-import { parse } from '@ltd/j-toml';
+import { parse } from 'smol-toml';
 import type { BaseGitClient } from '$lib/git/base';
 import { createGitClient, getDefaultProvider } from '$lib/git/factory';
 import type { OAuthTokens } from '$lib/git/types';
@@ -49,7 +49,7 @@ async function processFuizConfig(
 	updatedAt?: Date
 ): Promise<void> {
 	// Parse TOML
-	const fuizConfig = parse(configContent, { bigint: false }) as ReferencingOnlineFuiz;
+	const fuizConfig = parse(configContent) as ReferencingOnlineFuiz;
 
 	// Download images from Git and convert to Base64
 	const processedConfig = await fillMediaFromGit(

@@ -21,7 +21,7 @@
 
 	let nameStyle = $state<NameStyle | null>(null),
 		questionsOnPlayersDevices = $state(false),
-		shuffleAnswers = $state(false),
+		shuffleAnswers = $state(true),
 		shuffleSlides = $state(false),
 		leaderboard = $state(true),
 		teams = $state(false),

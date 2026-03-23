@@ -1,5 +1,5 @@
-import { Section, stringify } from '@ltd/j-toml';
 import objectHash from 'object-hash';
+import { stringifyToToml } from './toml';
 import {
 	type IdlessFullFuizConfig,
 	type IdlessLocalReferenceFuizConfig,
@@ -12,34 +12,8 @@ export function assertUnreachable(_: never): never {
 	throw new Error("it's impossible to reach here");
 }
 
-export function tomlifyConfig(
-	config: IdlessLocalReferenceFuizConfig
-): IdlessLocalReferenceFuizConfig {
-	return {
-		title: config.title,
-		slides: config.slides.map((slide) => {
-			switch (true) {
-				case 'MultipleChoice' in slide:
-					return Section({
-						MultipleChoice: Section(slide.MultipleChoice)
-					});
-				case 'TypeAnswer' in slide:
-					return Section({
-						TypeAnswer: Section(slide.TypeAnswer)
-					});
-				case 'Order' in slide:
-					return Section({
-						Order: Section(slide.Order)
-					});
-				default:
-					return assertUnreachable(slide);
-			}
-		})
-	};
-}
-
 export function stringifyToml(obj: IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz): string {
-	return stringify(obj, { newline: '\n', newlineAround: 'section', integer: 1000000 });
+	return stringifyToToml(obj, { newLine: '\n', inlineTableStart: 3 });
 }
 
 const mimeTypeToExtensionMapping: Map<string, string> = new Map([

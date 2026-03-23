@@ -1,9 +1,9 @@
-import { parse } from '@ltd/j-toml';
 import JSZip from 'jszip';
+import { parse } from 'smol-toml';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
 import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/static/public';
-import { assertUnreachable, stringifyToml, tomlifyConfig, urlifyBase64 } from '$lib';
+import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
 import * as m from '$lib/paraglide/messages.js';
 import { localizeHref } from '$lib/paraglide/runtime';
 import BlueberryIcon from '~icons/custom/blueberry';
@@ -63,12 +63,9 @@ export async function downloadFuiz(configJson: IdlessFullFuizConfig) {
 	const [urlified, images] = urlifyBase64(configJson);
 
 	if (images.length > 0) {
-		downloadBlob(
-			[await createZip(stringifyToml(tomlifyConfig(urlified)), images)],
-			configJson.title + '.zip'
-		);
+		downloadBlob([await createZip(stringifyToml(urlified), images)], configJson.title + '.zip');
 	} else {
-		downloadTomlString(stringifyToml(tomlifyConfig(urlified)), urlified.title);
+		downloadTomlString(stringifyToml(urlified), urlified.title);
 	}
 }
 
@@ -111,7 +108,7 @@ export async function loadZip(file: Blob): Promise<IdlessFullFuizConfig | undefi
 	if (!fuiz) return undefined;
 
 	const str = await fuiz.async('string');
-	const detomlified = parse(str, { bigint: false }) as IdlessFuizConfig;
+	const detomlified = parse(str) as IdlessFuizConfig;
 
 	const unurlify = (imageUrl: string): string => {
 		return betterImages.find(({ name }) => name === imageUrl)?.base64 ?? '';
@@ -135,7 +132,7 @@ export async function loadZip(file: Blob): Promise<IdlessFullFuizConfig | undefi
 
 export async function loadSingleToml(file: Blob) {
 	const str = await file.text();
-	const detomlified = parse(str, { bigint: false }) as IdlessFullFuizConfig;
+	const detomlified = parse(str) as IdlessFullFuizConfig;
 
 	return detomlified;
 }
