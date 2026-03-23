@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { PUBLIC_BACKEND_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
@@ -21,7 +21,7 @@
 	async function submit() {
 		sending = true;
 
-		const res = await bring(PUBLIC_BACKEND_URL + '/alive/' + gameCode.toUpperCase(), {
+		const res = await bring(env.PUBLIC_BACKEND_URL + '/alive/' + gameCode.toUpperCase(), {
 			method: 'GET',
 			mode: 'cors'
 		});

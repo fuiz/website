@@ -3,10 +3,10 @@ import * as sitemap from 'super-sitemap';
 
 export const prerender = false;
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ url }) => {
 	const text = await (
 		await sitemap.response({
-			origin: 'https://fuiz.org',
+			origin: url.origin,
 			lang: {
 				default: 'en',
 				alternates: ['ar', 'az', 'de', 'es', 'eu', 'fr', 'it', 'id', 'nl', 'pl', 'zh-cn']

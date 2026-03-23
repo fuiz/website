@@ -57,12 +57,12 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	try {
 		console.log('Manual full sync requested');
 
-		if (!platform?.env.BUCKET || !platform?.env.DATABASE) {
+		if (!platform?.env?.BUCKET || !platform?.env?.DATABASE) {
 			console.error('Missing R2 bucket or D1 database configuration');
 			error(500, 'Server configuration error');
 		}
 
-		await syncAll(platform?.env.BUCKET, platform?.env.DATABASE, env.GIT_BOT_TOKEN);
+		await syncAll(platform.env.BUCKET, platform.env.DATABASE, env.GIT_BOT_TOKEN);
 
 		return json({
 			success: true,

@@ -1,5 +1,5 @@
 <script>
-	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import MediaFallback from './MediaFallback.svelte';
 
 	/** @type {{ media: import('$lib/types').Media, fit: string }} */
@@ -25,7 +25,7 @@
 		style:height="100%"
 		style:width="100%"
 		style:object-fit={fit}
-		src={PUBLIC_CORKBOARD_URL + '/get/' + media.Image.Corkboard.id}
+		src={env.PUBLIC_CORKBOARD_URL + '/get/' + media.Image.Corkboard.id}
 		alt={media.Image.Corkboard.alt}
 	/>
 {:else if 'Url' in media.Image}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import { addIds } from '$lib/clientOnly';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
@@ -68,7 +68,7 @@
 	<meta property="og:title" content={title} />
 	<meta name="description" content={description} />
 	<meta property="og:description" content={description} />
-	<link rel="canonical" href={localizeHref(`${PUBLIC_PLAY_URL}/create`)} />
+	<link rel="canonical" href={localizeHref(`${env.PUBLIC_PLAY_URL}/create`)} />
 </svelte:head>
 
 {#if status === 'loading'}

@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 
 	import { page } from '$app/state';
-	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
@@ -48,7 +48,7 @@
 	<meta property="og:title" content={title} />
 	<meta name="description" content={description} />
 	<meta property="og:description" content={description} />
-	<link rel="canonical" href={localizeHref(`${PUBLIC_PLAY_URL}/publish`)} />
+	<link rel="canonical" href={localizeHref(`${env.PUBLIC_PLAY_URL}/publish`)} />
 </svelte:head>
 
 {#if id}

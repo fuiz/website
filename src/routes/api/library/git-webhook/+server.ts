@@ -182,8 +182,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 
 				await syncSingleFuiz(
 					fuizId,
-					platform?.env.BUCKET,
-					platform?.env.DATABASE,
+					platform?.env?.BUCKET,
+					platform?.env?.DATABASE,
 					commitInfo.lastCommitSha,
 					commitInfo.firstCommitDate,
 					commitInfo.lastCommitDate

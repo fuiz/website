@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import Join from './Join.svelte';
@@ -17,7 +17,7 @@
 	<meta property="og:title" content={title} />
 	<meta name="description" content={description} />
 	<meta property="og:description" content={description} />
-	<link rel="canonical" href={localizeHref(`${PUBLIC_PLAY_URL}/play`)} />
+	<link rel="canonical" href={localizeHref(`${env.PUBLIC_PLAY_URL}/play`)} />
 </svelte:head>
 
 {#if code !== null}

@@ -1,4 +1,4 @@
-import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import type { Locale } from '$lib/paraglide/runtime.js';
 import {
 	getMedia,
@@ -33,7 +33,7 @@ export async function getThumbnail(
 		const formData = new FormData();
 		formData.append('image', blob);
 
-		const thumbnail = await bring(PUBLIC_CORKBOARD_URL + '/thumbnail', {
+		const thumbnail = await bring(env.PUBLIC_CORKBOARD_URL + '/thumbnail', {
 			method: 'POST',
 			body: formData
 		});

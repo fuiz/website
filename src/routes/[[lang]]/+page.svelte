@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import logo from '$lib/assets/same_color_logo.svg';
 	import Footer from '$lib/layout/Footer.svelte';
 	import MainHeader from '$lib/layout/MainHeader.svelte';
@@ -58,7 +58,7 @@
 	<meta property="og:title" content={title} />
 	<meta name="description" content={description} />
 	<meta property="og:description" content={description} />
-	<link rel="canonical" href={PUBLIC_PLAY_URL + localizeHref('/')} />
+	<link rel="canonical" href={env.PUBLIC_PLAY_URL + localizeHref('/')} />
 </svelte:head>
 
 <main>

@@ -1,5 +1,5 @@
 <script>
-	import { PUBLIC_PLAY_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import barish from '$lib/assets/people/Barish.webp';
 	import khaleel from '$lib/assets/people/Khaleel.webp';
 	import sebastian from '$lib/assets/people/Sebastian.webp';
@@ -23,7 +23,7 @@
 	<meta property="og:title" content={title} />
 	<meta name="description" content={description} />
 	<meta property="og:description" content={description} />
-	<link rel="canonical" href={localizeHref(`${PUBLIC_PLAY_URL}/credits`)} />
+	<link rel="canonical" href={localizeHref(`${env.PUBLIC_PLAY_URL}/credits`)} />
 </svelte:head>
 
 <TypicalPage>

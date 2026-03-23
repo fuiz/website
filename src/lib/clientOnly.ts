@@ -2,7 +2,7 @@ import JSZip from 'jszip';
 import { parse } from 'smol-toml';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
-import { PUBLIC_BACKEND_URL, PUBLIC_CORKBOARD_URL, PUBLIC_PLAY_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
 import * as m from '$lib/paraglide/messages.js';
 import { localizeHref } from '$lib/paraglide/runtime';
@@ -145,7 +145,7 @@ export async function shareAndCopyURL(config: IdlessFullFuizConfig) {
 			body: JSON.stringify(config)
 		})
 	).json();
-	navigator.clipboard.writeText(PUBLIC_PLAY_URL + localizeHref('/share') + '/' + id);
+	navigator.clipboard.writeText(env.PUBLIC_PLAY_URL + localizeHref('/share') + '/' + id);
 }
 
 export function removeIds<T>(
@@ -237,7 +237,7 @@ export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig
 }
 
 async function playJsonString(config: string): Promise<undefined | string> {
-	const res = await bring(PUBLIC_BACKEND_URL + '/add', {
+	const res = await bring(env.PUBLIC_BACKEND_URL + '/add', {
 		method: 'POST',
 		mode: 'cors',
 		headers: {
@@ -322,7 +322,7 @@ async function getBackendMedia(
 	const formData = new FormData();
 	formData.append('image', await imageRes.blob());
 
-	const res = await bring(PUBLIC_CORKBOARD_URL + '/upload', {
+	const res = await bring(env.PUBLIC_CORKBOARD_URL + '/upload', {
 		method: 'POST',
 		mode: 'cors',
 		body: formData

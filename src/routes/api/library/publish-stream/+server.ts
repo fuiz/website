@@ -88,13 +88,13 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 	}
 
 	// Retrieve job data from KV
-	const fuizConfig = await platform?.env.PUBLISH_JOBS.get<FullOnlineFuiz>(jobId, 'json');
+	const fuizConfig = await platform?.env?.PUBLISH_JOBS?.get<FullOnlineFuiz>(jobId, 'json');
 	if (!fuizConfig) {
 		return json({ error: 'job_not_found' }, { status: 404 });
 	}
 
 	// Clean up job data
-	await platform?.env.PUBLISH_JOBS.delete(jobId);
+	await platform?.env?.PUBLISH_JOBS?.delete(jobId);
 
 	// Create a readable stream for SSE
 	const stream = new ReadableStream({
@@ -111,7 +111,7 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 			try {
 				// Generate keywords using Cloudflare AI
 				send('progress', { state: 'generating-keywords', message: 'Generating keywords...' });
-				const keywords = platform?.env.AI
+				const keywords = platform?.env?.AI
 					? await extractKeywords(platform.env.AI, fuizConfig.config)
 					: [];
 

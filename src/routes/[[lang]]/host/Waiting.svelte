@@ -1,5 +1,5 @@
 <script>
-	import { PUBLIC_DISPLAY_PLAY_URL, PUBLIC_PLAY_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import bee3 from '$lib/assets/music/bee3.mp3';
 	import PlayersList from '$lib/game/PlayersList.svelte';
 	import QrCode from '$lib/game/QRCode.svelte';
@@ -27,7 +27,7 @@
 	}}*/
 	let { code, players, exact_count, bindableGameInfo = $bindable(), onnext, onlock } = $props();
 
-	let actualUrl = $derived(PUBLIC_PLAY_URL + localizeHref('/play?code=' + code));
+	let actualUrl = $derived(env.PUBLIC_PLAY_URL + localizeHref('/play?code=' + code));
 
 	function copy_url_to_clipboard() {
 		navigator.clipboard.writeText(actualUrl);
@@ -77,7 +77,7 @@
 			<div style:padding="0.4em">
 				<div>{m.join_at()}</div>
 				<div style:font-weight="bold">
-					{PUBLIC_DISPLAY_PLAY_URL}{localizeHref('/play')}
+					{env.PUBLIC_DISPLAY_PLAY_URL}{localizeHref('/play')}
 				</div>
 			</div>
 		</div>

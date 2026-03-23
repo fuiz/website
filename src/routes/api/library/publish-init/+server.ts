@@ -31,7 +31,7 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 		const jobId = crypto.randomUUID();
 
 		// Store job data in KV with 10 minute expiration
-		await platform?.env.PUBLISH_JOBS.put(jobId, JSON.stringify(fuiz), { expirationTtl: 600 });
+		await platform?.env?.PUBLISH_JOBS?.put(jobId, JSON.stringify(fuiz), { expirationTtl: 600 });
 
 		return json({ jobId });
 	} catch (err) {

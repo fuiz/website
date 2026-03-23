@@ -5,7 +5,7 @@ export const load = (async ({ platform }) => {
 	let showLibrary = false;
 
 	// Check if DATABASE and BUCKET are configured
-	if (platform?.env.DATABASE && platform?.env.BUCKET) {
+	if (platform?.env?.DATABASE && platform?.env?.BUCKET) {
 		try {
 			// Check if fuizzes table exists using PRAGMA
 			const tableInfo = await platform.env.DATABASE.prepare('PRAGMA table_info(fuizzes)').all();
@@ -20,9 +20,9 @@ export const load = (async ({ platform }) => {
 	const showPublish =
 		// Platform bindings
 		!!(
-			platform?.env.DATABASE &&
-			platform?.env.BUCKET &&
-			platform?.env.PUBLISH_JOBS &&
+			platform?.env?.DATABASE &&
+			platform?.env?.BUCKET &&
+			platform?.env?.PUBLISH_JOBS &&
 			// Git OAuth credentials
 			env.GITLAB_CLIENT_ID &&
 			env.GITLAB_CLIENT_SECRET &&
@@ -35,7 +35,7 @@ export const load = (async ({ platform }) => {
 		);
 
 	// Check if share functionality is configured (requires MAP KV namespace)
-	const showShare = !!platform?.env.MAP;
+	const showShare = !!platform?.env?.MAP;
 
 	return {
 		showLibrary,

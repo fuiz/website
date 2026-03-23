@@ -1,5 +1,8 @@
-import adapter from '@sveltejs/adapter-cloudflare';
+import { default as cloudflareAdapter } from '@sveltejs/adapter-cloudflare';
+import { default as nodeAdapter } from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+const adapterName = process.env.ADAPTER || 'cloudflare';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -7,14 +10,10 @@ const config = {
 	preprocess: [vitePreprocess()],
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapterName === 'node' ? nodeAdapter() : cloudflareAdapter(),
 
 		paths: {
 			relative: false
-		},
-
-		prerender: {
-			origin: 'https://fuiz.org'
 		}
 	}
 };

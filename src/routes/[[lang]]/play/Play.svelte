@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 	import { browser } from '$app/environment';
-	import { PUBLIC_BACKEND_URL, PUBLIC_WS_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
@@ -44,7 +44,9 @@
 
 	function connectServer(code: string) {
 		let watcherId = (browser && localStorage.getItem(code + '_play')) || undefined;
-		const socket = new WebSocket(PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? 'none'));
+		const socket = new WebSocket(
+			env.PUBLIC_WS_URL + '/watch/' + code + '/' + (watcherId ?? 'none')
+		);
 		let finished = false;
 		setName = undefined;
 
@@ -135,7 +137,7 @@
 				location.assign('/');
 			}
 			if (!(currentState && 'Error' in currentState) && !finished) {
-				const res = await bring(PUBLIC_BACKEND_URL + '/alive/' + code, {
+				const res = await bring(env.PUBLIC_BACKEND_URL + '/alive/' + code, {
 					method: 'GET',
 					mode: 'cors'
 				});

@@ -59,7 +59,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	if (term.length) {
 		const matches = (
 			(
-				await platform?.env.DATABASE.prepare(
+				await platform?.env?.DATABASE?.prepare(
 					`SELECT * FROM fuizzes WHERE (title LIKE ? OR author LIKE ? OR subjects LIKE ? OR keywords LIKE ? OR thumbnail_alt LIKE ?) ${
 						allQueries ? ' AND ' + allQueries : ''
 					} LIMIT 24`
@@ -73,7 +73,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	} else {
 		const matches = (
 			(
-				await platform?.env.DATABASE.prepare(
+				await platform?.env?.DATABASE?.prepare(
 					`SELECT * FROM fuizzes WHERE ${allQueries} LIMIT 24`
 				).all<PublishedFuizDB>()
 			)?.results || []

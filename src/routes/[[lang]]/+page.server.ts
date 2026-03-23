@@ -5,7 +5,7 @@ async function getStatistics(platform: Readonly<App.Platform> | undefined): Prom
 	playersJoined: number | undefined;
 }> {
 	try {
-		const allCounts = (await platform?.env.COUNTER.getAllCounts()) ?? {};
+		const allCounts = (await platform?.env?.COUNTER?.getAllCounts()) ?? {};
 		return {
 			gamesPlayed: allCounts.game_count,
 			playersJoined: allCounts.player_count

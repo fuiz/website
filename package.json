@@ -23,6 +23,7 @@
 		"@iconify-json/material-symbols": "^1.2.63",
 		"@inlang/paraglide-js": "^2.15.1",
 		"@sveltejs/adapter-cloudflare": "^7.2.8",
+		"@sveltejs/adapter-node": "^5.5.4",
 		"@sveltejs/kit": "^2.55.0",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@types/node": "^25.5.0",

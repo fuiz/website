@@ -7,7 +7,7 @@ export const PUT: RequestHandler = async ({ request, platform }) => {
 
 	const id = crypto.randomUUID();
 
-	await platform?.env.MAP.put(id, JSON.stringify(config), {
+	await platform?.env?.MAP?.put(id, JSON.stringify(config), {
 		expirationTtl: 60 * 60 * 24 * 30
 	});
 

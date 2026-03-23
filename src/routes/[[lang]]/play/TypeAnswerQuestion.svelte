@@ -1,5 +1,5 @@
 <script>
-	import { PUBLIC_CORKBOARD_URL } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
@@ -19,7 +19,7 @@
 		<link
 			rel="preload"
 			as="image"
-			href={PUBLIC_CORKBOARD_URL + '/get/' + media.Image.Corkboard.id}
+			href={env.PUBLIC_CORKBOARD_URL + '/get/' + media.Image.Corkboard.id}
 		/>
 	{/if}
 </svelte:head>

@@ -6,7 +6,7 @@
 	import '@fontsource-variable/noto-sans-arabic';
 
 	import { onMount, untrack } from 'svelte';
-	import { navigating } from '$app/state';
+	import { navigating, page } from '$app/state';
 	import Loading from '$lib/feedback/Loading.svelte';
 
 	let { children } = $props();
@@ -54,6 +54,10 @@
 		import('interestfor');
 	});
 </script>
+
+<svelte:head>
+	<meta property="og:url" content={page.url.origin} />
+</svelte:head>
 
 {#if mounting || longNavigating}
 	<Loading />
