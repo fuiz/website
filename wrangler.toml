@@ -13,6 +13,11 @@ GIT_PROVIDER = "gitlab"
 GIT_REPO_OWNER = "fuiz"
 GIT_REPO_NAME = "library"
 GIT_DEFAULT_BRANCH = "main"
+PUBLIC_DISPLAY_PLAY_URL = "fuiz.org"
+PUBLIC_PLAY_URL = "https://fuiz.org"
+PUBLIC_BACKEND_URL = "https://api.fuiz.org"
+PUBLIC_WS_URL = "wss://api.fuiz.org"
+PUBLIC_CORKBOARD_URL = "https://corkboard.fuiz.org"
 
 [ai]
 binding = "AI"
