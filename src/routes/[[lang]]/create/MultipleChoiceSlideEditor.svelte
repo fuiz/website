@@ -8,8 +8,9 @@
 	/** @type {{slide: import('$lib/types').MultipleChoiceSlide;}} */
 	let { slide = $bindable() } = $props();
 
-	if (slide.time_limit < 1000) slide.time_limit *= 1000;
-	if (slide.introduce_question < 1000) slide.introduce_question *= 1000;
+	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
+	if (slide.introduce_question != null && slide.introduce_question < 1000)
+		slide.introduce_question *= 1000;
 </script>
 
 <div

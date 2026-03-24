@@ -107,8 +107,8 @@
 						<QuestionAnswers
 							onanswer={onChooseFavoriteFeature}
 							questionText={m.which_feature()}
-							timeLeft={undefined}
-							timeStarted={undefined}
+							timeLeft={null}
+							timeStarted={null}
 							answers={[
 								m.open_source(),
 								m.beautiful_design(),

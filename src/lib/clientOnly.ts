@@ -256,7 +256,8 @@ async function playJsonString(config: string): Promise<undefined | string> {
 	await goto(resolve(localizeHref('/host?code=' + game_id)));
 }
 
-function fixTime(time: number): number {
+function fixTime(time: number | null | undefined): number | null | undefined {
+	if (time == null) return time;
 	return time <= 1000 ? time * 1000 : time;
 }
 
@@ -453,30 +454,30 @@ export const limits = {
 		multipleChoice: {
 			maxTitleLength: 500,
 			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000],
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
 			pointsAwarded: 1000,
 			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
 			defaultTimeLimit: 30000,
 			maxAnswerCount: 8
 		},
 		typeAnswer: {
 			maxTitleLength: 500,
 			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000],
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
 			pointsAwarded: 1000,
 			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
 			defaultTimeLimit: 60000,
 			maxAnswerCount: 16
 		},
 		order: {
 			maxTitleLength: 500,
 			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000],
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
 			pointsAwarded: 1000,
 			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
 			defaultTimeLimit: 60000,
 			maxAnswerCount: 8
 		},

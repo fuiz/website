@@ -9,7 +9,7 @@
 	 * bindableGameInfo: import('./+page').BindableGameInfo;
 	 * gameInfo: import('./+page').SharedGameInfo;
 	 * questionText: string;
-	 * timeStarted: number;
+	 * timeStarted: number | null;
 	 * media: import('$lib/types').Media | undefined;
 	 * onlock?: (locked: boolean) => void;
 	 * onnext?: () => void;
@@ -63,9 +63,11 @@
 				style:justify-content="center"
 			>
 				<TextBar text={questionText} topShadow={media === undefined} />
+				{#if timeStarted !== null}
 				<div id="progress" style:--duration="{timeStarted}ms">
 					<div id="value"></div>
 				</div>
+				{/if}
 				{#if media}
 					<div style:flex="1" style:position="relative">
 						<MediaContainer {media} fit="contain" />

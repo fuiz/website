@@ -1,7 +1,7 @@
 type TomlPrimitive = string | number | boolean;
 type TomlArray = TomlPrimitive[] | TomlTable[];
 type TomlValue = TomlPrimitive | TomlArray | TomlTable;
-type TomlTable = { [key: string]: TomlValue | undefined };
+type TomlTable = { [key: string]: TomlValue | undefined | null };
 
 type Options = {
 	newLine?: string;
@@ -46,7 +46,7 @@ function formatPrimitive(value: TomlPrimitive): string {
 function formatInlineTable(table: TomlTable, nl: string): string {
 	const parts: string[] = [];
 	for (const [key, value] of Object.entries(table)) {
-		if (value === undefined) continue;
+		if (value === undefined || value === null) continue;
 		parts.push(formatKeyValue(key, formatValueInline(value, nl)));
 	}
 	return `{ ${parts.join(', ')} }`;
@@ -80,7 +80,7 @@ function serializeTable(
 	const tableArrayEntries: [string, TomlTable[]][] = [];
 
 	for (const [key, value] of Object.entries(table)) {
-		if (value === undefined) continue;
+		if (value === undefined || value === null) continue;
 
 		if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
 			primitiveEntries.push([key, value]);

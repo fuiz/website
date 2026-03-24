@@ -17,7 +17,7 @@
 			<div>
 				<SelectTime
 					options={[...limits.fuiz.multipleChoice.allowedIntroduceQuestion]}
-					map={(v) => (parseInt(v) / 1000).toString()}
+					map={(v) => (v === '' ? '∞' : (parseInt(v) / 1000).toString())}
 					bind:selected={activeSlide.introduce_question}
 				>
 					<TimerOutline height="1em" title={m.time_limit()} />
@@ -29,7 +29,7 @@
 			<div>
 				<SelectTime
 					options={[...limits.fuiz.multipleChoice.allowedTimeLimits]}
-					map={(v) => (parseInt(v) / 1000).toString()}
+					map={(v) => (v === '' ? '∞' : (parseInt(v) / 1000).toString())}
 					bind:selected={activeSlide.time_limit}
 				>
 					<TimerOutline height="1em" title={m.time_limit()} />

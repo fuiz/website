@@ -1,7 +1,7 @@
 <script>
 	import FancyButton from './FancyButton.svelte';
 
-	/** @type {{options: string[] | number[];selected: string | number;map?: (a: string) => string;children?: import('svelte').Snippet;}} */
+	/** @type {{options: (string | number | null)[];selected: string | number | null | undefined;map?: (a: string) => string;children?: import('svelte').Snippet;}} */
 	let { options, selected = $bindable(), map = (a) => a, children } = $props();
 
 	/** @type {HTMLDialogElement | undefined} */
@@ -12,7 +12,7 @@
 	<div style:display="flex" style:align-items="center" style:justify-content="center">
 		{@render children?.()}
 		<div style:padding="0 5px" style:text-transform="capitalize">
-			{map(selected.toString())}
+			{map(String(selected ?? ''))}
 		</div>
 	</div>
 </FancyButton>
@@ -29,7 +29,7 @@
 						}}
 					>
 						<div style:padding="0.25em 0.5em" style:text-transform="capitalize">
-							{map(value.toString())}
+							{map(String(value ?? ''))}
 						</div>
 					</FancyButton>
 				</li>

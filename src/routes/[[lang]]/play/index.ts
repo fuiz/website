@@ -159,7 +159,7 @@ export type MultipleChoiceIncomingMessage =
 				count: number;
 				question: string;
 				media?: Media | null;
-				duration: number;
+				duration?: number | null;
 			};
 	  }
 	| {
@@ -170,7 +170,7 @@ export type MultipleChoiceIncomingMessage =
 				media?: Media | null;
 				answers: Array<ServerPossiblyHidden<TextOrMedia>>;
 				answered_count?: number | null;
-				duration: number;
+				duration?: number | null;
 				answer_mode?: AnswerMode;
 			};
 	  }
@@ -193,7 +193,7 @@ export type TypeAnswerIncomingMessage =
 				count: number;
 				question: string;
 				media?: Media | null;
-				duration: number;
+				duration?: number | null;
 				accept_answers: boolean;
 			};
 	  }
@@ -216,7 +216,7 @@ export type OrderSlideIncomingMessage =
 				count: number;
 				question: string;
 				media?: Media | null;
-				duration: number;
+				duration?: number | null;
 			};
 	  }
 	| {
@@ -231,7 +231,7 @@ export type OrderSlideIncomingMessage =
 					to?: string | null;
 				};
 				answered_count?: number | null;
-				duration: number;
+				duration?: number | null;
 			};
 	  }
 	| {

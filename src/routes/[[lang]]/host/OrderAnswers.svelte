@@ -16,8 +16,8 @@
 	 * questionText: string;
 	 * axis_labels: { from: string; to: string };
 	 * answers: string[];
-	 * timeLeft: number | undefined;
-	 * timeStarted: number | undefined;
+	 * timeLeft: number | null;
+	 * timeStarted: number | null;
 	 * answeredCount: number;
 	 * media: import('$lib/types').Media | undefined;
 	 * onlock?: (locked: boolean) => void;
@@ -60,7 +60,7 @@
 						style:z-index="1"
 						style:padding="0.4em"
 					>
-						{#if timeLeft !== undefined && timeStarted !== undefined}
+						{#if timeLeft !== null && timeStarted !== null}
 							<TimeLeft {timeLeft} {timeStarted} />
 						{/if}
 						<AnsweredCount {answeredCount} />

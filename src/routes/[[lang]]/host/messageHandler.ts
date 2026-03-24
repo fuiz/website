@@ -33,8 +33,8 @@ export interface QuestionMessageContext {
 
 export interface QuestionMessageResult {
 	newState?: State;
-	timer?: number;
-	initialTimer?: number;
+	timer?: number | null;
+	initialTimer?: number | null;
 }
 
 /**
@@ -140,8 +140,8 @@ export function handleMultipleChoiceMessage(
 					media: media ?? undefined
 				}
 			},
-			timer: duration,
-			initialTimer: duration
+			timer: duration ?? null,
+			initialTimer: duration ?? null
 		};
 	}
 
@@ -164,8 +164,8 @@ export function handleMultipleChoiceMessage(
 					answered_count: answered_count ?? undefined
 				}
 			},
-			timer: duration,
-			initialTimer: duration
+			timer: duration ?? null,
+			initialTimer: duration ?? null
 		};
 	}
 
@@ -233,8 +233,8 @@ export function handleTypeAnswerMessage(
 					accept_answers
 				}
 			},
-			timer: duration,
-			initialTimer: duration
+			timer: duration ?? null,
+			initialTimer: duration ?? null
 		};
 	}
 
@@ -298,8 +298,8 @@ export function handleOrderMessage(
 					media: media ?? undefined
 				}
 			},
-			timer: duration,
-			initialTimer: duration
+			timer: duration ?? null,
+			initialTimer: duration ?? null
 		};
 	}
 
@@ -322,8 +322,8 @@ export function handleOrderMessage(
 					}
 				}
 			},
-			timer: duration,
-			initialTimer: duration
+			timer: duration ?? null,
+			initialTimer: duration ?? null
 		};
 	}
 

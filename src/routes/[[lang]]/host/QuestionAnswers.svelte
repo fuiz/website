@@ -10,7 +10,7 @@
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{bindableGameInfo: import('./+page').BindableGameInfo, gameInfo: import('./+page').SharedGameInfo, questionText: string, answers: (string | undefined)[], timeLeft: number | undefined, timeStarted: number | undefined, answeredCount: number, media: import('$lib/types').Media | undefined, onlock?: (locked: boolean) => void, onnext?: () => void, onanswer?: (answer: number) => void}}*/
+	/** @type {{bindableGameInfo: import('./+page').BindableGameInfo, gameInfo: import('./+page').SharedGameInfo, questionText: string, answers: (string | undefined)[], timeLeft: number | null, timeStarted: number | null, answeredCount: number, media: import('$lib/types').Media | undefined, onlock?: (locked: boolean) => void, onnext?: () => void, onanswer?: (answer: number) => void}}*/
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
@@ -48,7 +48,7 @@
 						style:z-index="1"
 						style:padding="0.4em"
 					>
-						{#if timeLeft !== undefined && timeStarted !== undefined}
+						{#if timeLeft !== null && timeStarted !== null}
 							<TimeLeft {timeLeft} {timeStarted} />
 						{/if}
 						<AnsweredCount {answeredCount} />

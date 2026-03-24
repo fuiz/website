@@ -55,8 +55,8 @@ export type MultipleChoiceAnswer = IdlessMultipleChoiceAnswer & {
 export type GenericIdlessMultipleChoiceSlide<T> = {
 	title: string;
 	media?: T;
-	introduce_question: number;
-	time_limit: number;
+	introduce_question?: number | null;
+	time_limit?: number | null;
 	points_awarded: number;
 	answer_mode?: AnswerMode;
 
@@ -68,8 +68,8 @@ export type IdlessMultipleChoiceSlide = GenericIdlessMultipleChoiceSlide<Media |
 export type GenericIdlessTypeAnswer<T> = {
 	title: string;
 	media?: T;
-	introduce_question: number;
-	time_limit: number;
+	introduce_question?: number | null;
+	time_limit?: number | null;
 	points_awarded: number;
 	answers: string[];
 	case_sensitive: boolean;
@@ -80,8 +80,8 @@ export type IdlessTypeAnswer = GenericIdlessTypeAnswer<Media | undefined>;
 export type GenericIdlessOrderSlide<T> = {
 	title: string;
 	media?: T;
-	introduce_question: number;
-	time_limit: number;
+	introduce_question?: number | null;
+	time_limit?: number | null;
 	points_awarded: number;
 	axis_labels: {
 		from?: string;

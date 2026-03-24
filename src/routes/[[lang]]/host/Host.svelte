@@ -26,13 +26,15 @@
 
 	let currentState = $state<State>();
 
-	let timer = $state(0);
-	let initialTimer = $state(0);
+	let timer = $state<number | null>(0);
+	let initialTimer = $state<number | null>(0);
 
 	const UPDATE_DURATION = 100;
 
 	setInterval(() => {
-		timer = Math.max(0, timer - UPDATE_DURATION);
+		if (timer !== null) {
+			timer = Math.max(0, timer - UPDATE_DURATION);
+		}
 	}, UPDATE_DURATION);
 
 	let { code }: { code: string } = $props();
