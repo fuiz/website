@@ -1,21 +1,33 @@
 stages:
+  - test
   - lint
   - build
 
+test:
+  stage: test
+  image: oven/bun:alpine
+  script:
+    - bun install --frozen-lockfile
+    - bun run test
+  rules:
+    - changes:
+        - src/**/*.{ts,js}
+        - bun.lock
+
 check-messages:
   stage: lint
-  image: node:lts-alpine
+  image: oven/bun:alpine
   script:
-    - node scripts/check-messages.js
+    - bun scripts/check-messages.js
   rules:
     - changes:
         - messages/*.json
 
 find-unused-messages:
   stage: lint
-  image: node:lts-alpine
+  image: oven/bun:alpine
   script:
-    - node scripts/find-unused-messages.js
+    - bun scripts/find-unused-messages.js
   rules:
     - changes:
         - messages/*.json

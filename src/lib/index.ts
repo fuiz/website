@@ -13,7 +13,8 @@ export function assertUnreachable(_: never): never {
 }
 
 export function stringifyToml(obj: IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz): string {
-	return stringifyToToml(obj, { newLine: '\n', inlineTableStart: 3 });
+	const depth = 'config' in obj ? 4 : 3;
+	return stringifyToToml(obj, { newLine: '\n', inlineTableStart: depth });
 }
 
 const mimeTypeToExtensionMapping: Map<string, string> = new Map([
