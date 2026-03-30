@@ -1,3 +1,4 @@
+import type { BaseDatabase } from '$lib/db/base';
 import type {
 	Ai,
 	D1Database,
@@ -32,6 +33,9 @@ declare global {
 	namespace App {
 		// interface Error {}
 		// interface PageData {}
+		interface Locals {
+			database?: BaseDatabase;
+		}
 		interface Platform {
 			env?: {
 				BUCKET?: R2Bucket;

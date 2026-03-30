@@ -1,13 +1,10 @@
 import { error } from '@sveltejs/kit';
 import { fixPublish } from '$lib/serverOnlyUtils';
-import type { FullOnlineFuiz, PublishedFuizDB } from '$lib/types';
+import type { FullOnlineFuiz } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params, platform }) => {
-	const published: PublishedFuizDB | undefined =
-		(await platform?.env?.DATABASE?.prepare('SELECT * FROM fuizzes WHERE id = ?1')
-			.bind(params.id)
-			.first()) || undefined;
+export const load = (async ({ params, locals, platform }) => {
+	const published = await locals.database?.getById(params.id);
 
 	if (!published) {
 		error(404, 'fuiz was not found');

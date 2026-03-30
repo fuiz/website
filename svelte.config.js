@@ -6,7 +6,6 @@ const adapterName = process.env.ADAPTER || 'cloudflare';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte'],
 	preprocess: [vitePreprocess()],
 
 	kit: {

@@ -3,8 +3,9 @@
  * Syncs fuizzes from Git repository to the database
  */
 
-import type { D1Database, R2Bucket } from '@cloudflare/workers-types';
+import type { R2Bucket } from '@cloudflare/workers-types';
 import { parse } from 'smol-toml';
+import type { BaseDatabase } from '$lib/db/base';
 import type { BaseGitClient } from '$lib/git/base';
 import { createGitClient, getDefaultProvider } from '$lib/git/factory';
 import type { OAuthTokens } from '$lib/git/types';
@@ -15,12 +16,16 @@ import { fillMediaFromGit } from './imageHandler';
 /**
  * Delete a fuiz from database and R2 bucket
  */
-async function deleteFuiz(fuizId: string, bucket?: R2Bucket, database?: D1Database): Promise<void> {
+async function deleteFuiz(
+	fuizId: string,
+	bucket?: R2Bucket,
+	database?: BaseDatabase
+): Promise<void> {
 	console.log(`Deleting fuiz ${fuizId}`);
 
 	// Delete from database
 	try {
-		await database?.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
+		await database?.deleteFuiz(fuizId);
 	} catch (err) {
 		console.error(`Failed to delete ${fuizId} from database:`, err);
 	}
@@ -41,7 +46,7 @@ async function processFuizConfig(
 	configContent: string,
 	client: BaseGitClient,
 	bucket: R2Bucket,
-	database: D1Database,
+	database: BaseDatabase,
 	commitSha?: string,
 	playedCount: number = 0,
 	viewCount: number = 0,
@@ -91,46 +96,24 @@ async function processFuizConfig(
 			: null;
 
 	// Insert into fuizzes table
-	await database
-		.prepare(
-			`INSERT INTO fuizzes (
-				id,
-				storage_id,
-				title,
-				author,
-				language,
-				subjects,
-				grades,
-				keywords,
-				slides_count,
-				thumbnail,
-				thumbnail_alt,
-				git_commit_sha,
-				played_count,
-				view_count,
-				published_at,
-				updated_at
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-		)
-		.bind(
-			fuizId,
-			fuizId,
-			processedConfig.title,
-			fuizConfig.author,
-			fuizConfig.language,
-			subjectsJson,
-			gradesJson,
-			keywordsJson,
-			processedConfig.slides.length,
-			thumbnailData?.thumbnail || null,
-			thumbnailData?.thumbnailAlt || null,
-			commitSha || null,
-			playedCount,
-			viewCount,
-			publishedAt?.toISOString() || new Date().toISOString(),
-			updatedAt?.toISOString() || new Date().toISOString()
-		)
-		.run();
+	await database.insertFuiz({
+		id: fuizId,
+		storage_id: fuizId,
+		title: processedConfig.title,
+		author: fuizConfig.author,
+		language: fuizConfig.language,
+		subjects: subjectsJson,
+		grades: gradesJson,
+		keywords: keywordsJson,
+		slides_count: processedConfig.slides.length,
+		thumbnail: thumbnailData?.thumbnail || null,
+		thumbnail_alt: thumbnailData?.thumbnailAlt || null,
+		git_commit_sha: commitSha || null,
+		played_count: playedCount,
+		view_count: viewCount,
+		published_at: publishedAt?.toISOString() || new Date().toISOString(),
+		updated_at: updatedAt?.toISOString() || new Date().toISOString()
+	});
 }
 
 /**
@@ -139,7 +122,7 @@ async function processFuizConfig(
 export async function syncSingleFuiz(
 	storageId: string,
 	bucket?: R2Bucket,
-	database?: D1Database,
+	database?: BaseDatabase,
 	lastCommitSha?: string,
 	firstCommitDate?: Date,
 	lastCommitDate?: Date
@@ -178,10 +161,7 @@ export async function syncSingleFuiz(
 	}
 
 	// Check if this is an update to an existing fuiz
-	const existing = await database
-		.prepare('SELECT id, played_count, view_count, published_at FROM fuizzes WHERE id = ?')
-		.bind(fuizId)
-		.first<{ id: string; played_count: number; view_count: number; published_at: string }>();
+	const existing = await database.getExistingStats(fuizId);
 
 	let playedCount = 0;
 	let viewCount = 0;
@@ -194,7 +174,7 @@ export async function syncSingleFuiz(
 		publishedAt = new Date(existing.published_at);
 
 		// Delete old entry (we'll insert the new one)
-		await database.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
+		await database.deleteFuiz(fuizId);
 	} else {
 		// New fuiz - use firstCommitDate from GitLab event, or current date as fallback
 		publishedAt = firstCommitDate || new Date();
@@ -225,7 +205,7 @@ export async function syncSingleFuiz(
  */
 export async function syncAll(
 	bucket: R2Bucket,
-	database: D1Database,
+	database: BaseDatabase,
 	botToken?: string
 ): Promise<void> {
 	if (!botToken) {
@@ -261,17 +241,7 @@ export async function syncAll(
 			const commitInfo = await client.getFileCommitInfo(configPath);
 
 			// Check if already exists in fuizzes table with same commit
-			const existing = await database
-				.prepare(
-					'SELECT git_commit_sha, played_count, view_count, published_at FROM fuizzes WHERE id = ?'
-				)
-				.bind(fuizId)
-				.first<{
-					git_commit_sha: string | null;
-					played_count: number;
-					view_count: number;
-					published_at: string;
-				}>();
+			const existing = await database.getExistingStats(fuizId);
 
 			if (existing && existing.git_commit_sha === commitInfo.sha) {
 				console.log(`Fuiz ${fuizId} already up to date (${commitInfo.sha}), skipping`);
@@ -290,7 +260,7 @@ export async function syncAll(
 				publishedAt = new Date(existing.published_at);
 
 				// Delete old entry (we'll insert the new one)
-				await database.prepare('DELETE FROM fuizzes WHERE id = ?').bind(fuizId).run();
+				await database.deleteFuiz(fuizId);
 			} else {
 				console.log(`Processing new fuiz: ${fuizId}`);
 				// New fuiz - use first commit date as published date

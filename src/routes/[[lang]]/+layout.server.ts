@@ -1,17 +1,14 @@
 import { env } from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ platform }) => {
+export const load = (async ({ locals, platform }) => {
 	let showLibrary = false;
 
-	// Check if DATABASE and BUCKET are configured
-	if (platform?.env?.DATABASE && platform?.env?.BUCKET) {
+	// Check if database and BUCKET are configured
+	if (locals.database && platform?.env?.BUCKET) {
 		try {
-			// Check if fuizzes table exists using PRAGMA
-			const tableInfo = await platform.env.DATABASE.prepare('PRAGMA table_info(fuizzes)').all();
-			showLibrary = tableInfo.results.length > 0;
+			showLibrary = await locals.database.tableExists();
 		} catch {
-			// Table doesn't exist or query failed
 			showLibrary = false;
 		}
 	}
@@ -20,7 +17,7 @@ export const load = (async ({ platform }) => {
 	const showPublish =
 		// Platform bindings
 		!!(
-			platform?.env?.DATABASE &&
+			locals.database &&
 			platform?.env?.BUCKET &&
 			platform?.env?.PUBLISH_JOBS &&
 			// Git OAuth credentials

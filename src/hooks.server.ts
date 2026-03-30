@@ -1,8 +1,10 @@
 import type { Handle } from '@sveltejs/kit';
+import { createDatabase } from '$lib/db';
 import { deLocalizeUrl } from '$lib/paraglide/runtime';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
-export const handle: Handle = ({ event, resolve }) => {
+export const handle: Handle = async ({ event, resolve }) => {
+	event.locals.database = await createDatabase(event.platform?.env?.DATABASE);
 	if (!event.route.id?.startsWith('/[[lang]]')) {
 		// If the route is not localized
 		const delocalizedUrl = deLocalizeUrl(event.request.url).pathname;
