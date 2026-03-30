@@ -1,3 +1,4 @@
+import type { BaseBlobStorage } from '$lib/blob/base';
 import type { BaseDatabase } from '$lib/db/base';
 import type {
 	Ai,
@@ -34,6 +35,7 @@ declare global {
 		// interface Error {}
 		// interface PageData {}
 		interface Locals {
+			blobStorage?: BaseBlobStorage;
 			database?: BaseDatabase;
 		}
 		interface Platform {

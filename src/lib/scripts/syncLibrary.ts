@@ -3,8 +3,8 @@
  * Syncs fuizzes from Git repository to the database
  */
 
-import type { R2Bucket } from '@cloudflare/workers-types';
 import { parse } from 'smol-toml';
+import type { BaseBlobStorage } from '$lib/blob/base';
 import type { BaseDatabase } from '$lib/db/base';
 import type { BaseGitClient } from '$lib/git/base';
 import { createGitClient, getDefaultProvider } from '$lib/git/factory';
@@ -18,7 +18,7 @@ import { fillMediaFromGit } from './imageHandler';
  */
 async function deleteFuiz(
 	fuizId: string,
-	bucket?: R2Bucket,
+	bucket?: BaseBlobStorage,
 	database?: BaseDatabase
 ): Promise<void> {
 	console.log(`Deleting fuiz ${fuizId}`);
@@ -45,7 +45,7 @@ async function processFuizConfig(
 	fuizId: string,
 	configContent: string,
 	client: BaseGitClient,
-	bucket: R2Bucket,
+	bucket: BaseBlobStorage,
 	database: BaseDatabase,
 	commitSha?: string,
 	playedCount: number = 0,
@@ -77,11 +77,7 @@ async function processFuizConfig(
 		keywords: fuizConfig.keywords
 	};
 
-	await bucket.put(fuizId, JSON.stringify(fullConfig), {
-		httpMetadata: {
-			contentType: 'application/json'
-		}
-	});
+	await bucket.put(fuizId, JSON.stringify(fullConfig));
 
 	// Prepare subjects, grades, and keywords as JSON arrays
 	const subjectsJson =
@@ -121,7 +117,7 @@ async function processFuizConfig(
  */
 export async function syncSingleFuiz(
 	storageId: string,
-	bucket?: R2Bucket,
+	bucket?: BaseBlobStorage,
 	database?: BaseDatabase,
 	lastCommitSha?: string,
 	firstCommitDate?: Date,
@@ -204,7 +200,7 @@ export async function syncSingleFuiz(
  * Sync all fuizzes from Git repository (manual full sync)
  */
 export async function syncAll(
-	bucket: R2Bucket,
+	bucket: BaseBlobStorage,
 	database: BaseDatabase,
 	botToken?: string
 ): Promise<void> {

@@ -114,7 +114,7 @@ interface GitLabPushEvent {
 	};
 }
 
-export const POST: RequestHandler = async ({ request, locals, platform }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	// Verify webhook secret
 	const token = request.headers.get('X-Gitlab-Token');
 
@@ -182,7 +182,7 @@ export const POST: RequestHandler = async ({ request, locals, platform }) => {
 
 				await syncSingleFuiz(
 					fuizId,
-					platform?.env?.BUCKET,
+					locals.blobStorage,
 					locals.database,
 					commitInfo.lastCommitSha,
 					commitInfo.firstCommitDate,

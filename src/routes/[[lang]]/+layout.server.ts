@@ -4,8 +4,8 @@ import type { LayoutServerLoad } from './$types';
 export const load = (async ({ locals, platform }) => {
 	let showLibrary = false;
 
-	// Check if database and BUCKET are configured
-	if (locals.database && platform?.env?.BUCKET) {
+	// Check if database and blob storage are configured
+	if (locals.database && locals.blobStorage) {
 		try {
 			showLibrary = await locals.database.tableExists();
 		} catch {
@@ -18,7 +18,7 @@ export const load = (async ({ locals, platform }) => {
 		// Platform bindings
 		!!(
 			locals.database &&
-			platform?.env?.BUCKET &&
+			locals.blobStorage &&
 			platform?.env?.PUBLISH_JOBS &&
 			// Git OAuth credentials
 			env.GITLAB_CLIENT_ID &&

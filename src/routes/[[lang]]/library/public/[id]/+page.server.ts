@@ -3,7 +3,7 @@ import { fixPublish } from '$lib/serverOnlyUtils';
 import type { FullOnlineFuiz } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params, locals, platform }) => {
+export const load = (async ({ params, locals }) => {
 	const published = await locals.database?.getById(params.id);
 
 	if (!published) {
@@ -12,7 +12,8 @@ export const load = (async ({ params, locals, platform }) => {
 
 	const fuiz = fixPublish(published);
 
-	const onlineFuiz = await (await platform?.env?.BUCKET?.get(params.id))?.json<FullOnlineFuiz>();
+	const raw = await locals.blobStorage?.get(params.id);
+	const onlineFuiz = raw ? (JSON.parse(raw) as FullOnlineFuiz) : undefined;
 
 	if (!onlineFuiz) {
 		error(500, 'fuiz file not found');
