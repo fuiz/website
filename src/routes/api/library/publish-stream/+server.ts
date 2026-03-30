@@ -15,34 +15,25 @@ import type { RequestHandler } from './$types';
 import type { PublishingState } from './types';
 
 async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
-	const messages: { role: 'system' | 'user'; content: string }[] = [
-		{
-			role: 'system',
-			content:
-				'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever'
-		},
-		{
-			role: 'user',
-			content: config.slides
-				.map((slide) => {
-					switch (true) {
-						case 'TypeAnswer' in slide:
-							return slide.TypeAnswer.title;
-						case 'Order' in slide:
-							return slide.Order.title;
-						case 'MultipleChoice' in slide:
-							return slide.MultipleChoice.title;
-						default:
-							return assertUnreachable(slide);
-					}
-				})
-				.join('\n')
-		}
-	];
+	const input = config.slides
+		.map((slide) => {
+			switch (true) {
+				case 'TypeAnswer' in slide:
+					return slide.TypeAnswer.title;
+				case 'Order' in slide:
+					return slide.Order.title;
+				case 'MultipleChoice' in slide:
+					return slide.MultipleChoice.title;
+				default:
+					return assertUnreachable(slide);
+			}
+		})
+		.join('\n');
 
 	const response = await ai.run('@cf/openai/gpt-oss-20b', {
-		messages,
-		stream: false,
+		instructions:
+			'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever',
+		input,
 		text: {
 			format: {
 				type: 'json_schema',
@@ -57,9 +48,12 @@ async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<st
 		}
 	});
 
-	/** @ts-expect-error Cloudflare AI response is kinda terrible */
-	const choices = response.choices;
-	const content = choices[0].message.content;
+	const content = response.output_text;
+
+	if (!content) {
+		console.error('Invalid keywords AI response:', response);
+		return [];
+	}
 
 	try {
 		return JSON.parse(content);
