@@ -1,21 +1,21 @@
 /**
- * SQLite-backed KV store implementation using better-sqlite3
+ * SQLite-backed KV store implementation using bun:sqlite
  * Expired entries are filtered on read and probabilistically purged on write.
  */
 
-import Database from 'better-sqlite3';
+import { Database, type Statement } from 'bun:sqlite';
 import { BaseKVStore, type KVPutOptions } from './base';
 
 const CLEANUP_PROBABILITY = 0.01;
 const VALID_TABLE_NAME = /^[a-z_][a-z0-9_]*$/;
 
 export class SQLiteKVStore extends BaseKVStore {
-	private db: Database.Database;
+	private db: Database;
 	private sql: {
-		get: Database.Statement;
-		put: Database.Statement;
-		delete: Database.Statement;
-		cleanup: Database.Statement;
+		get: Statement;
+		put: Statement;
+		delete: Statement;
+		cleanup: Statement;
 	};
 
 	constructor(path: string, namespace: string) {
@@ -26,7 +26,7 @@ export class SQLiteKVStore extends BaseKVStore {
 		}
 
 		this.db = new Database(path);
-		this.db.pragma('journal_mode = WAL');
+		this.db.exec('PRAGMA journal_mode = WAL');
 		this.db.exec(
 			`CREATE TABLE IF NOT EXISTS ${namespace} (key TEXT PRIMARY KEY, value TEXT NOT NULL, expires_at INTEGER)`
 		);

@@ -1,8 +1,8 @@
 /**
- * SQLite database implementation using better-sqlite3
+ * SQLite database implementation using bun:sqlite
  */
 
-import Database from 'better-sqlite3';
+import { Database } from 'bun:sqlite';
 import type { PublishedFuizDB } from '$lib/types';
 import {
 	BaseDatabase,
@@ -13,12 +13,12 @@ import {
 import { buildSearchQuery } from './search';
 
 export class SQLiteDatabase extends BaseDatabase {
-	private db: Database.Database;
+	private db: Database;
 
 	constructor(path: string) {
 		super();
 		this.db = new Database(path);
-		this.db.pragma('journal_mode = WAL');
+		this.db.exec('PRAGMA journal_mode = WAL');
 	}
 
 	async tableExists(): Promise<boolean> {
