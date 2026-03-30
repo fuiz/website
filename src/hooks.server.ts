@@ -1,12 +1,18 @@
 import type { Handle } from '@sveltejs/kit';
 import { createBlobStorage } from '$lib/blob/factory';
 import { createDatabase } from '$lib/db';
+import { createKVStore } from '$lib/kv/factory';
 import { deLocalizeUrl } from '$lib/paraglide/runtime';
 import { paraglideMiddleware } from '$lib/paraglide/server';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.database = await createDatabase(event.platform?.env?.DATABASE);
 	event.locals.blobStorage = await createBlobStorage(event.platform?.env?.BUCKET);
+	event.locals.shareStore = await createKVStore(event.platform?.env?.MAP, 'kv_share');
+	event.locals.publishJobsStore = await createKVStore(
+		event.platform?.env?.PUBLISH_JOBS,
+		'kv_publish_jobs'
+	);
 	if (!event.route.id?.startsWith('/[[lang]]')) {
 		// If the route is not localized
 		const delocalizedUrl = deLocalizeUrl(event.request.url).pathname;

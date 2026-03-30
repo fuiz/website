@@ -69,7 +69,11 @@ async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<st
 	}
 }
 
-export const GET: RequestHandler = async ({ url, platform, cookies }) => {
+export const GET: RequestHandler = async ({ url, locals, platform, cookies }) => {
+	if (!locals.publishJobsStore) {
+		return json({ error: 'publish_not_configured' }, { status: 503 });
+	}
+
 	// Check Git authentication
 	const provider = getAuthenticatedProvider(cookies);
 	if (!provider) {
@@ -88,13 +92,13 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 	}
 
 	// Retrieve job data from KV
-	const fuizConfig = await platform?.env?.PUBLISH_JOBS?.get<FullOnlineFuiz>(jobId, 'json');
+	const fuizConfig = await locals.publishJobsStore.get<FullOnlineFuiz>(jobId, 'json');
 	if (!fuizConfig) {
 		return json({ error: 'job_not_found' }, { status: 404 });
 	}
 
 	// Clean up job data
-	await platform?.env?.PUBLISH_JOBS?.delete(jobId);
+	await locals.publishJobsStore.delete(jobId);
 
 	// Create a readable stream for SSE
 	const stream = new ReadableStream({

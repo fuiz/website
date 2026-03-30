@@ -1,13 +1,14 @@
-import type { BaseBlobStorage } from '$lib/blob/base';
-import type { BaseDatabase } from '$lib/db/base';
 import type {
 	Ai,
 	D1Database,
 	KVNamespace,
 	R2Bucket,
-	Service,
-	Rpc
+	Rpc,
+	Service
 } from '@cloudflare/workers-types';
+import type { BaseBlobStorage } from '$lib/blob/base';
+import type { BaseDatabase } from '$lib/db/base';
+import type { BaseKVStore } from '$lib/kv/base';
 
 type CountersObject = {
 	[key: string]: number;
@@ -37,6 +38,8 @@ declare global {
 		interface Locals {
 			blobStorage?: BaseBlobStorage;
 			database?: BaseDatabase;
+			shareStore?: BaseKVStore;
+			publishJobsStore?: BaseKVStore;
 		}
 		interface Platform {
 			env?: {

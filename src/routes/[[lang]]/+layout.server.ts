@@ -1,7 +1,7 @@
 import { env } from '$env/dynamic/private';
 import type { LayoutServerLoad } from './$types';
 
-export const load = (async ({ locals, platform }) => {
+export const load = (async ({ locals }) => {
 	let showLibrary = false;
 
 	// Check if database and blob storage are configured
@@ -19,7 +19,7 @@ export const load = (async ({ locals, platform }) => {
 		!!(
 			locals.database &&
 			locals.blobStorage &&
-			platform?.env?.PUBLISH_JOBS &&
+			locals.publishJobsStore &&
 			// Git OAuth credentials
 			env.GITLAB_CLIENT_ID &&
 			env.GITLAB_CLIENT_SECRET &&
@@ -31,8 +31,8 @@ export const load = (async ({ locals, platform }) => {
 			env.GIT_DEFAULT_BRANCH
 		);
 
-	// Check if share functionality is configured (requires MAP KV namespace)
-	const showShare = !!platform?.env?.MAP;
+	// Check if share functionality is configured
+	const showShare = !!locals.shareStore;
 
 	return {
 		showLibrary,

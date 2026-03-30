@@ -8,7 +8,11 @@ import type { FullOnlineFuiz } from '$lib/types';
 import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request, platform, cookies }) => {
+export const POST: RequestHandler = async ({ request, locals, cookies }) => {
+	if (!locals.publishJobsStore) {
+		return json({ error: 'publish_not_configured' }, { status: 503 });
+	}
+
 	// Check Git authentication
 	const provider = getAuthenticatedProvider(cookies);
 	if (!provider) {
@@ -31,7 +35,7 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 		const jobId = crypto.randomUUID();
 
 		// Store job data in KV with 10 minute expiration
-		await platform?.env?.PUBLISH_JOBS?.put(jobId, JSON.stringify(fuiz), { expirationTtl: 600 });
+		await locals.publishJobsStore.put(jobId, JSON.stringify(fuiz), { expirationTtl: 600 });
 
 		return json({ jobId });
 	} catch (err) {
