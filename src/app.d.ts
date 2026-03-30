@@ -6,6 +6,7 @@ import type {
 	Rpc,
 	Service
 } from '@cloudflare/workers-types';
+import type { BaseAI } from '$lib/ai/base';
 import type { BaseBlobStorage } from '$lib/blob/base';
 import type { BaseDatabase } from '$lib/db/base';
 import type { BaseKVStore } from '$lib/kv/base';
@@ -36,6 +37,7 @@ declare global {
 		// interface Error {}
 		// interface PageData {}
 		interface Locals {
+			ai?: BaseAI;
 			blobStorage?: BaseBlobStorage;
 			database?: BaseDatabase;
 			shareStore?: BaseKVStore;

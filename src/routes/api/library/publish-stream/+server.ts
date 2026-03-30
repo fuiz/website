@@ -3,18 +3,20 @@
  * Sends progress updates as Server-Sent Events
  */
 
-import type { Ai } from '@cloudflare/workers-types';
 import { json } from '@sveltejs/kit';
 import { v5 as uuidv5 } from 'uuid';
+
 import { env } from '$env/dynamic/private';
 import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
+import type { BaseAI } from '$lib/ai/base';
 import { createGitClient } from '$lib/git/factory';
 import type { FullOnlineFuiz, IdlessFullFuizConfig, ReferencingOnlineFuiz } from '$lib/types';
+
 import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 import type { RequestHandler } from './$types';
 import type { PublishingState } from './types';
 
-async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
+async function extractKeywords(ai: BaseAI, config: IdlessFullFuizConfig): Promise<string[]> {
 	const input = config.slides
 		.map((slide) => {
 			switch (true) {
@@ -30,40 +32,33 @@ async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<st
 		})
 		.join('\n');
 
-	const response = await ai.run('@cf/openai/gpt-oss-20b', {
-		instructions:
-			'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever',
-		input,
-		text: {
-			format: {
-				type: 'json_schema',
-				name: 'output',
-				schema: {
-					type: 'array',
-					items: {
-						type: 'string'
-					}
-				}
-			}
-		}
-	});
-
-	const content = response.output_text;
+	const content = await ai.generateKeywords(
+		'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever',
+		input
+	);
 
 	if (!content) {
-		console.error('Invalid keywords AI response:', response);
+		console.error('Invalid keywords AI response');
 		return [];
 	}
 
 	try {
-		return JSON.parse(content);
+		const parsed: unknown = JSON.parse(content);
+		if (
+			!Array.isArray(parsed) ||
+			!parsed.every((item): item is string => typeof item === 'string')
+		) {
+			console.error('Expected JSON array of strings from AI, got:', content);
+			return [];
+		}
+		return parsed;
 	} catch {
 		console.error('Failed to parse keywords AI response:', content);
 		return [];
 	}
 }
 
-export const GET: RequestHandler = async ({ url, locals, platform, cookies }) => {
+export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 	if (!locals.publishJobsStore) {
 		return json({ error: 'publish_not_configured' }, { status: 503 });
 	}
@@ -107,11 +102,9 @@ export const GET: RequestHandler = async ({ url, locals, platform, cookies }) =>
 			}
 
 			try {
-				// Generate keywords using Cloudflare AI
+				// Generate keywords using AI
 				send('progress', { state: 'generating-keywords', message: 'Generating keywords...' });
-				const keywords = platform?.env?.AI
-					? await extractKeywords(platform.env.AI, fuizConfig.config)
-					: [];
+				const keywords = locals.ai ? await extractKeywords(locals.ai, fuizConfig.config) : [];
 
 				// Fork repository
 				send('progress', { state: 'forking', message: 'Forking repository...' });

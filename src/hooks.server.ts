@@ -1,4 +1,5 @@
 import type { Handle } from '@sveltejs/kit';
+import { createAI } from '$lib/ai/factory';
 import { createBlobStorage } from '$lib/blob/factory';
 import { createDatabase } from '$lib/db';
 import { createKVStore } from '$lib/kv/factory';
@@ -8,6 +9,7 @@ import { paraglideMiddleware } from '$lib/paraglide/server';
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.database = await createDatabase(event.platform?.env?.DATABASE);
 	event.locals.blobStorage = await createBlobStorage(event.platform?.env?.BUCKET);
+	event.locals.ai = await createAI(event.platform?.env?.AI);
 	event.locals.shareStore = await createKVStore(event.platform?.env?.MAP, 'kv_share');
 	event.locals.publishJobsStore = await createKVStore(
 		event.platform?.env?.PUBLISH_JOBS,
