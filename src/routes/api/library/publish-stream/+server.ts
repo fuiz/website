@@ -3,73 +3,66 @@
  * Sends progress updates as Server-Sent Events
  */
 
-import type { Ai } from '@cloudflare/workers-types';
 import { json } from '@sveltejs/kit';
 import { v5 as uuidv5 } from 'uuid';
+
 import { env } from '$env/dynamic/private';
 import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
+import type { BaseAI } from '$lib/ai/base';
 import { createGitClient } from '$lib/git/factory';
 import type { FullOnlineFuiz, IdlessFullFuizConfig, ReferencingOnlineFuiz } from '$lib/types';
+
 import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 import type { RequestHandler } from './$types';
 import type { PublishingState } from './types';
 
-async function extractKeywords(ai: Ai, config: IdlessFullFuizConfig): Promise<string[]> {
-	const messages: { role: 'system' | 'user'; content: string }[] = [
-		{
-			role: 'system',
-			content:
-				'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever'
-		},
-		{
-			role: 'user',
-			content: config.slides
-				.map((slide) => {
-					switch (true) {
-						case 'TypeAnswer' in slide:
-							return slide.TypeAnswer.title;
-						case 'Order' in slide:
-							return slide.Order.title;
-						case 'MultipleChoice' in slide:
-							return slide.MultipleChoice.title;
-						default:
-							return assertUnreachable(slide);
-					}
-				})
-				.join('\n')
-		}
-	];
-
-	const response = await ai.run('@cf/openai/gpt-oss-20b', {
-		messages,
-		stream: false,
-		text: {
-			format: {
-				type: 'json_schema',
-				name: 'output',
-				schema: {
-					type: 'array',
-					items: {
-						type: 'string'
-					}
-				}
+async function extractKeywords(ai: BaseAI, config: IdlessFullFuizConfig): Promise<string[]> {
+	const input = config.slides
+		.map((slide) => {
+			switch (true) {
+				case 'TypeAnswer' in slide:
+					return slide.TypeAnswer.title;
+				case 'Order' in slide:
+					return slide.Order.title;
+				case 'MultipleChoice' in slide:
+					return slide.MultipleChoice.title;
+				default:
+					return assertUnreachable(slide);
 			}
-		}
-	});
+		})
+		.join('\n');
 
-	/** @ts-expect-error Cloudflare AI response is kinda terrible */
-	const choices = response.choices;
-	const content = choices[0].message.content;
+	const content = await ai.generateKeywords(
+		'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever',
+		input
+	);
+
+	if (!content) {
+		console.error('Invalid keywords AI response');
+		return [];
+	}
 
 	try {
-		return JSON.parse(content);
+		const parsed: unknown = JSON.parse(content);
+		if (
+			!Array.isArray(parsed) ||
+			!parsed.every((item): item is string => typeof item === 'string')
+		) {
+			console.error('Expected JSON array of strings from AI, got:', content);
+			return [];
+		}
+		return parsed;
 	} catch {
 		console.error('Failed to parse keywords AI response:', content);
 		return [];
 	}
 }
 
-export const GET: RequestHandler = async ({ url, platform, cookies }) => {
+export const GET: RequestHandler = async ({ url, locals, cookies }) => {
+	if (!locals.publishJobsStore) {
+		return json({ error: 'publish_not_configured' }, { status: 503 });
+	}
+
 	// Check Git authentication
 	const provider = getAuthenticatedProvider(cookies);
 	if (!provider) {
@@ -88,13 +81,13 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 	}
 
 	// Retrieve job data from KV
-	const fuizConfig = await platform?.env?.PUBLISH_JOBS?.get<FullOnlineFuiz>(jobId, 'json');
+	const fuizConfig = await locals.publishJobsStore.get<FullOnlineFuiz>(jobId, 'json');
 	if (!fuizConfig) {
 		return json({ error: 'job_not_found' }, { status: 404 });
 	}
 
 	// Clean up job data
-	await platform?.env?.PUBLISH_JOBS?.delete(jobId);
+	await locals.publishJobsStore.delete(jobId);
 
 	// Create a readable stream for SSE
 	const stream = new ReadableStream({
@@ -109,11 +102,9 @@ export const GET: RequestHandler = async ({ url, platform, cookies }) => {
 			}
 
 			try {
-				// Generate keywords using Cloudflare AI
+				// Generate keywords using AI
 				send('progress', { state: 'generating-keywords', message: 'Generating keywords...' });
-				const keywords = platform?.env?.AI
-					? await extractKeywords(platform.env.AI, fuizConfig.config)
-					: [];
+				const keywords = locals.ai ? await extractKeywords(locals.ai, fuizConfig.config) : [];
 
 				// Fork repository
 				send('progress', { state: 'forking', message: 'Forking repository...' });

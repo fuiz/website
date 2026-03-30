@@ -38,7 +38,7 @@ function timingSafeEqualString(a: string, b: string): boolean {
  * curl -X POST https://fuiz.org/api/library/manual-sync \
  *   -H "Authorization: Bearer YOUR_GIT_WEBHOOK_SECRET"
  */
-export const POST: RequestHandler = async ({ request, platform }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	// Verify secret
 	const authHeader = request.headers.get('Authorization');
 
@@ -57,12 +57,12 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	try {
 		console.log('Manual full sync requested');
 
-		if (!platform?.env?.BUCKET || !platform?.env?.DATABASE) {
-			console.error('Missing R2 bucket or D1 database configuration');
+		if (!locals.blobStorage || !locals.database) {
+			console.error('Missing blob storage or database configuration');
 			error(500, 'Server configuration error');
 		}
 
-		await syncAll(platform.env.BUCKET, platform.env.DATABASE, env.GIT_BOT_TOKEN);
+		await syncAll(locals.blobStorage, locals.database, env.GIT_BOT_TOKEN);
 
 		return json({
 			success: true,

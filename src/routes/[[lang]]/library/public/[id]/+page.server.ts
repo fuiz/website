@@ -1,13 +1,10 @@
 import { error } from '@sveltejs/kit';
 import { fixPublish } from '$lib/serverOnlyUtils';
-import type { FullOnlineFuiz, PublishedFuizDB } from '$lib/types';
+import type { FullOnlineFuiz } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params, platform }) => {
-	const published: PublishedFuizDB | undefined =
-		(await platform?.env?.DATABASE?.prepare('SELECT * FROM fuizzes WHERE id = ?1')
-			.bind(params.id)
-			.first()) || undefined;
+export const load = (async ({ params, locals }) => {
+	const published = await locals.database?.getById(params.id);
 
 	if (!published) {
 		error(404, 'fuiz was not found');
@@ -15,7 +12,8 @@ export const load = (async ({ params, platform }) => {
 
 	const fuiz = fixPublish(published);
 
-	const onlineFuiz = await (await platform?.env?.BUCKET?.get(params.id))?.json<FullOnlineFuiz>();
+	const raw = await locals.blobStorage?.get(params.id);
+	const onlineFuiz = raw ? (JSON.parse(raw) as FullOnlineFuiz) : undefined;
 
 	if (!onlineFuiz) {
 		error(500, 'fuiz file not found');

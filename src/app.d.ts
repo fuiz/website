@@ -3,9 +3,13 @@ import type {
 	D1Database,
 	KVNamespace,
 	R2Bucket,
-	Service,
-	Rpc
+	Rpc,
+	Service
 } from '@cloudflare/workers-types';
+import type { BaseAI } from '$lib/ai/base';
+import type { BaseBlobStorage } from '$lib/blob/base';
+import type { BaseDatabase } from '$lib/db/base';
+import type { BaseKVStore } from '$lib/kv/base';
 
 type CountersObject = {
 	[key: string]: number;
@@ -32,6 +36,13 @@ declare global {
 	namespace App {
 		// interface Error {}
 		// interface PageData {}
+		interface Locals {
+			ai?: BaseAI;
+			blobStorage?: BaseBlobStorage;
+			database?: BaseDatabase;
+			shareStore?: BaseKVStore;
+			publishJobsStore?: BaseKVStore;
+		}
 		interface Platform {
 			env?: {
 				BUCKET?: R2Bucket;
