@@ -10,16 +10,27 @@ Host live quizzes freely
 
 This is the code for the website (developed in Svelte). It relies on two other components to function properly:
 
-- Backend game server: Code is under [fuiz/game-server](https://gitlab.com/fuiz/game-server). The urls to it are defined by: `PUBLIC_BACKEND_URL` and `PUBLIC_WS_URL`. In production, this uses a serverless version [fuiz/game-cloudflare](https://gitlab.com/fuiz/game-cloudflare) hosted at [api.fuiz.org](https://api.fuiz.org/).
-- Backend image server: Code is under [fuiz/corkboard-server](https://gitlab.com/fuiz/corkboard-server). The url to it is defined by `PUBLIC_CORKBOARD_URL`. In production, this uses a similar open source serverless version [fuiz/corkboard-cloudflare](https://gitlab.com/fuiz/corkboard-cloudflare) hosted at [corkboard.fuiz.org](https://corkboard.fuiz.org/).
+- Backend game server: Code is under [fuiz/game-backend](https://gitlab.com/fuiz/game-backend) (`game/` directory). The urls to it are defined by `PUBLIC_BACKEND_URL` and `PUBLIC_WS_URL`.
+- Backend image server: Code is under [fuiz/game-backend](https://gitlab.com/fuiz/game-backend) (`corkboard/` directory). The url to it is defined by `PUBLIC_CORKBOARD_URL`.
 
-Additionally, the website relies on Cloudflare APIs for viewing and updating the library. If you want to enable these features you need to use [wrangler](https://github.com/cloudflare/workers-sdk).
+Both have standalone server and Cloudflare Worker implementations. In production, the Cloudflare Workers are hosted at [api.fuiz.org](https://api.fuiz.org/) and [corkboard.fuiz.org](https://corkboard.fuiz.org/).
 
-Due to the nature of fast development, it's not a goal at the moment to make self-hosting as easy as possible. Once things stabilize a bit more we will put an effort towards providing docker images.
+## Self-Hosting
+
+The website can be built with either the Cloudflare or Node adapter (controlled by the `ADAPTER` environment variable, defaults to `cloudflare`). When running outside of Cloudflare, the following services fall back to local alternatives:
+
+| Service             | Cloudflare    | Self-Hosted               |
+| ------------------- | ------------- | ------------------------- |
+| Database            | D1            | SQLite                    |
+| Blob Storage        | R2            | Filesystem                |
+| Key-Value Store     | KV            | SQLite                    |
+| AI (tag derivation) | Cloudflare AI | Any OpenAI-compatible API |
+
+See [fuiz/self-hosted](https://gitlab.com/fuiz/self-hosted) for a ready-to-use Docker Compose setup.
 
 ## Developing
 
-After installing dependancies with `bun install`, start a development server:
+After installing dependencies with `bun install`, start a development server:
 
 ```bash
 bun run dev
@@ -38,7 +49,7 @@ PUBLIC_PLAY_URL="http://localhost:5173"
 PUBLIC_BACKEND_URL="http://localhost:8787"
 # same as above but a websocket url, production: wss://api.fuiz.org
 PUBLIC_WS_URL="ws://localhost:8787"
-# image server url, in pproduction: https://corkboard.fuiz.org
+# image server url, production: https://corkboard.fuiz.org
 PUBLIC_CORKBOARD_URL="http://localhost:43907"
 ```
 
