@@ -7,7 +7,7 @@
 </script>
 
 <main>
-	<MainHeader showLibrary={data.showLibrary} />
+	<MainHeader showLibrary={data.showLibrary} selfHosted={data.selfHosted} />
 	<section>
 		<h1>Privacy Policy</h1>
 		<p>

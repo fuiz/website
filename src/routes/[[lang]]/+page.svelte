@@ -62,7 +62,7 @@
 </svelte:head>
 
 <main>
-	<MainHeader showLibrary={data.showLibrary} />
+	<MainHeader showLibrary={data.showLibrary} selfHosted={data.selfHosted} />
 	<section>
 		<div>
 			<h2>{m.greeting()}<br />{m.create_with()}</h2>
@@ -161,96 +161,98 @@
 			</div>
 		</section>
 	{/if}
-	<section>
-		<div>
-			<AnchorMessage background="#23456740" message={m.fuiz_is_ongoing()} href="#ongoing">
-				{#snippet icon()}<ErrorOutline height="1em" title={m.warning()} />{/snippet}
-			</AnchorMessage>
-		</div>
-	</section>
-	<section>
-		<div class="split">
+	{#if !data.selfHosted}
+		<section>
 			<div>
-				<h2>{m.about_fuiz()}</h2>
-				<p>
-					{m.about_fuiz_desc()}
-				</p>
+				<AnchorMessage background="#23456740" message={m.fuiz_is_ongoing()} href="#ongoing">
+					{#snippet icon()}<ErrorOutline height="1em" title={m.warning()} />{/snippet}
+				</AnchorMessage>
 			</div>
-			<HelpOutline height="7em" width="7em" title={m.about_fuiz()} />
-		</div>
-	</section>
-	<section>
-		<div class="split">
-			<div>
-				<h2>{m.free_of_charge()}</h2>
-				<p>
-					{m.free_of_charge_desc()}
-				</p>
-				<p>
-					{m.number_of_participants()}
-				</p>
+		</section>
+		<section>
+			<div class="split">
+				<div>
+					<h2>{m.about_fuiz()}</h2>
+					<p>
+						{m.about_fuiz_desc()}
+					</p>
+				</div>
+				<HelpOutline height="7em" width="7em" title={m.about_fuiz()} />
 			</div>
-			<MoneyOff height="7em" width="7em" title={m.free_of_charge()} />
-		</div>
-	</section>
-	<section>
-		<div class="split">
-			<div>
-				<h2>{m.well_translated()}</h2>
-				<p>
-					{m.well_translated_desc()}
-				</p>
+		</section>
+		<section>
+			<div class="split">
+				<div>
+					<h2>{m.free_of_charge()}</h2>
+					<p>
+						{m.free_of_charge_desc()}
+					</p>
+					<p>
+						{m.number_of_participants()}
+					</p>
+				</div>
+				<MoneyOff height="7em" width="7em" title={m.free_of_charge()} />
 			</div>
-			<Language height="7em" width="7em" title={m.language()} />
-		</div>
-	</section>
-	<section>
-		<div class="split">
-			<div>
-				<h2>{m.collab_over_comp()}</h2>
-				<p>
-					{m.collab_over_comp_desc()}
-				</p>
+		</section>
+		<section>
+			<div class="split">
+				<div>
+					<h2>{m.well_translated()}</h2>
+					<p>
+						{m.well_translated_desc()}
+					</p>
+				</div>
+				<Language height="7em" width="7em" title={m.language()} />
 			</div>
-			<Diversity2Outline height="7em" width="7em" title={m.collab_over_comp()} />
-		</div>
-	</section>
-	<section>
-		<div class="split">
-			<div>
-				<h2>{m.community_made()}</h2>
-				<p>
-					{m.community_made_desc()}
-				</p>
+		</section>
+		<section>
+			<div class="split">
+				<div>
+					<h2>{m.collab_over_comp()}</h2>
+					<p>
+						{m.collab_over_comp_desc()}
+					</p>
+				</div>
+				<Diversity2Outline height="7em" width="7em" title={m.collab_over_comp()} />
 			</div>
-			<Diversity1 height="7em" width="7em" title={m.community_made()} />
-		</div>
-	</section>
-	<section>
-		<div class="split">
-			<div>
-				<h2>
-					<Anchor href="https://gitlab.com/fuiz">{m.always_open()}</Anchor>
-				</h2>
-				<p>
-					{m.always_open_desc()}
-				</p>
+		</section>
+		<section>
+			<div class="split">
+				<div>
+					<h2>{m.community_made()}</h2>
+					<p>
+						{m.community_made_desc()}
+					</p>
+				</div>
+				<Diversity1 height="7em" width="7em" title={m.community_made()} />
 			</div>
-			<CodeBlocksOutline height="7em" width="7em" title={m.always_open()} />
-		</div>
-	</section>
-	<section id="ongoing">
-		<div class="split">
-			<div>
-				<h2>{m.stay_in_touch()}</h2>
-				<p>
-					<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-					{@html m.stay_in_touch_desc()}
-				</p>
+		</section>
+		<section>
+			<div class="split">
+				<div>
+					<h2>
+						<Anchor href="https://gitlab.com/fuiz">{m.always_open()}</Anchor>
+					</h2>
+					<p>
+						{m.always_open_desc()}
+					</p>
+				</div>
+				<CodeBlocksOutline height="7em" width="7em" title={m.always_open()} />
 			</div>
-			<MailOutline height="7em" width="7em" title={m.stay_in_touch()} />
-		</div>
-	</section>
+		</section>
+		<section id="ongoing">
+			<div class="split">
+				<div>
+					<h2>{m.stay_in_touch()}</h2>
+					<p>
+						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+						{@html m.stay_in_touch_desc()}
+					</p>
+				</div>
+				<MailOutline height="7em" width="7em" title={m.stay_in_touch()} />
+			</div>
+		</section>
+	{/if}
 	<footer>
 		<Footer />
 	</footer>

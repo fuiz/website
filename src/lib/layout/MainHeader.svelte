@@ -11,7 +11,7 @@
 	import StadiaController from '~icons/material-symbols/stadia-controller';
 	import VolunteerActivism from '~icons/material-symbols/volunteer-activism';
 
-	let { showLibrary = false } = $props();
+	let { showLibrary = false, selfHosted = false } = $props();
 </script>
 
 <header>
@@ -43,14 +43,16 @@
 				</FancyAnchorButton>
 			</div>
 		{/if}
-		<div>
-			<FancyAnchorButton href="https://opencollective.com/fuiz">
-				<div class="a">
-					<VolunteerActivism height="1.2em" title={m.donate()} />
-					<div>{m.donate()}</div>
-				</div>
-			</FancyAnchorButton>
-		</div>
+		{#if !selfHosted}
+			<div>
+				<FancyAnchorButton href="https://opencollective.com/fuiz">
+					<div class="a">
+						<VolunteerActivism height="1.2em" title={m.donate()} />
+						<div>{m.donate()}</div>
+					</div>
+				</FancyAnchorButton>
+			</div>
+		{/if}
 		<LanguageSwitcher id="mainheader" />
 		<DarkModeSwitcher />
 	</nav>

@@ -1,7 +1,9 @@
 import { env } from '$env/dynamic/private';
+import { env as publicEnv } from '$env/dynamic/public';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
+	const selfHosted = publicEnv.PUBLIC_SELF_HOSTED === 'true';
 	let showLibrary = false;
 
 	// Check if database and blob storage are configured
@@ -35,6 +37,7 @@ export const load = (async ({ locals }) => {
 	const showShare = !!locals.shareStore;
 
 	return {
+		selfHosted,
 		showLibrary,
 		showPublish,
 		showShare
