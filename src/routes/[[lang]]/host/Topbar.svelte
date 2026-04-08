@@ -32,7 +32,7 @@
 
 <div
 	style:display="flex"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:padding="0.2em"
 	style:line-height="1em"
 	style:align-items="center"

@@ -15,7 +15,7 @@
 	style:overflow="hidden"
 	style:flex-direction="column"
 	style:justify-content="space-between"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 >
 	<div
 		style:padding="0.2em"

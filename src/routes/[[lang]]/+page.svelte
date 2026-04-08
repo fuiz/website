@@ -226,7 +226,7 @@
 
 <style>
 	main {
-		background-color: var(--background-color);
+		background-color: var(--surface);
 		line-height: 1.25;
 	}
 

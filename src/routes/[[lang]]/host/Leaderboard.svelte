@@ -84,7 +84,7 @@
 					>
 						<div
 							style:width="100%"
-							style:background="var(--background-color)"
+							style:background="var(--surface)"
 							style:border="0.15em solid"
 							style:border-radius="0.6em"
 							style:padding="0.15em 0.4em"

@@ -92,12 +92,9 @@
 		--tertiary-container: #e8e0d8;
 		--on-tertiary-container: #2e2a25;
 
-		/* legacy aliases */
-		--background-color: var(--surface);
-		--color: var(--on-surface);
+		/* fixed light/dark values (not theme-responsive) */
 		--palette-light: #fffbf5;
 		--palette-dark: #241f31;
-		--accent-color: var(--primary);
 
 		@media (prefers-color-scheme: dark) {
 			--surface: #241f31;
@@ -106,18 +103,18 @@
 			--on-surface-variant: #c9c4bf;
 			--outline: #938e89;
 
-			--primary: #ffb4ab;
-			--on-primary: #690005;
+			--primary: #d4131b;
+			--on-primary: #ffffff;
 			--primary-container: #930009;
 			--on-primary-container: #ffdad6;
 
-			--secondary: #bec2e8;
-			--on-secondary: #282f54;
+			--secondary: #4a5078;
+			--on-secondary: #ffffff;
 			--secondary-container: #3e4560;
 			--on-secondary-container: #dde1ff;
 
-			--tertiary: #cdc5bc;
-			--on-tertiary: #342f2a;
+			--tertiary: #78736d;
+			--on-tertiary: #ffffff;
 			--tertiary-container: #4b4641;
 			--on-tertiary-container: #e8e0d8;
 		}
@@ -155,18 +152,18 @@
 		--on-surface-variant: #c9c4bf;
 		--outline: #938e89;
 
-		--primary: #ffb4ab;
-		--on-primary: #690005;
+		--primary: #d4131b;
+		--on-primary: #ffffff;
 		--primary-container: #930009;
 		--on-primary-container: #ffdad6;
 
-		--secondary: #bec2e8;
-		--on-secondary: #282f54;
+		--secondary: #4a5078;
+		--on-secondary: #ffffff;
 		--secondary-container: #3e4560;
 		--on-secondary-container: #dde1ff;
 
-		--tertiary: #cdc5bc;
-		--on-tertiary: #342f2a;
+		--tertiary: #78736d;
+		--on-tertiary: #ffffff;
 		--tertiary-container: #4b4641;
 		--on-tertiary-container: #e8e0d8;
 
@@ -185,15 +182,15 @@
 		font-family: 'Atkinson Hyperlegible Next Variable', 'Noto Sans Variable', 'Noto Sans Arabic Variable', 'Atkinson Hyperlegible Next Variable Fallback', sans-serif;
 		--alternative-font: 'Poppins', 'Atkinson Hyperlegible Next Variable', 'Noto Sans Variable', 'Noto Sans Arabic Variable', 'Atkinson Hyperlegible Next Variable Fallback', sans-serif;
 		font-size: 20px;
-		color: var(--color);
+		color: var(--on-surface);
 	}
 
 	:global(html) {
-		background: var(--background-color);
+		background: var(--surface);
 	}
 
 	:global([popover].fuiz-popover) {
-		background-color: var(--background-color);
+		background-color: var(--surface);
 		border: 3px solid;
 		border-radius: 0.7em;
 		padding: 0em 0.4em;

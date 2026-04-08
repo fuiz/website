@@ -21,8 +21,8 @@
 
 <FancyAnchorButtonBase
 	foregroundColor={foregroundColor ?? '#FFFFFF'}
-	backgroundColor={backgroundColor ?? '#D4131B'}
-	backgroundDeepColor={backgroundDeepColor ?? '#A40E13'}
+	backgroundColor={backgroundColor ?? 'var(--primary)'}
+	backgroundDeepColor={backgroundDeepColor ?? 'color-mix(in srgb, var(--primary) 80%, black)'}
 	{href}
 	{download}
 >

@@ -10,7 +10,7 @@
 
 <div style:height="100%" style:position="relat ive">
 	<div
-		style:background-color="var(--background-color)"
+		style:background-color="var(--surface)"
 		style:inset="0"
 		style:position="absolute"
 		style:overflow="hidden"

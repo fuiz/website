@@ -20,8 +20,8 @@
 	style:line-height="1em"
 	style:font-size="inherit"
 	style:font-family="var(--alternative-font)"
-	style:background="var(--color)"
-	style:color="var(--background-color)"
+	style:background="var(--on-surface)"
+	style:color="var(--surface)"
 	style:border="none"
 	style:border-radius="100px"
 >

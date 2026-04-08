@@ -18,7 +18,7 @@
 	style:display="flex"
 	style:flex="1"
 	style:align-items="stretch"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 >
 	<Sidebar bind:slides={config.slides} bind:selectedSlideIndex />
 	<div style:flex="1" style:display="flex" style:flex-direction="column">

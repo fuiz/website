@@ -65,8 +65,8 @@
 	}
 
 	label.selected {
-		background: var(--accent-color);
+		background: var(--primary);
 		color: var(--palette-light);
-		border-color: var(--accent-color);
+		border-color: var(--primary);
 	}
 </style>

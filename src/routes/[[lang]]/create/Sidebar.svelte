@@ -151,7 +151,7 @@
 				popover="auto"
 				bind:this={popoverElement}
 				style:border="4px solid currentColor"
-				style:background="var(--background-color)"
+				style:background="var(--surface)"
 				style:border-radius="1em"
 				style:padding="1em"
 			>

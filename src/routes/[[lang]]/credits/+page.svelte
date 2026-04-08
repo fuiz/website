@@ -180,7 +180,7 @@
 				aspect-ratio: 1;
 				box-sizing: border-box;
 				background: white;
-				border: 0.2em solid var(--accent-color);
+				border: 0.2em solid var(--primary);
 				object-fit: contain;
 				border-radius: 0.5em;
 			}

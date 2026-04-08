@@ -38,7 +38,7 @@
 		>
 			{#each winners as w (w)}
 				<div
-					style:background="var(--background-color)"
+					style:background="var(--surface)"
 					style:border="0.15em solid currentcolor"
 					style:padding="0.15em 0.4em"
 					style:font-weight="bold"

@@ -64,7 +64,7 @@
 <div id="container" bind:this={fullscreenElement} style:height="100%" style:display="flex">
 	<div
 		id="info"
-		style:background="var(--background-color)"
+		style:background="var(--surface)"
 		style:box-shadow="0 2px 2px #00000040, 2px 0 2px #00000040"
 		style:display="flex"
 		style:align-items="start"

@@ -21,13 +21,13 @@
 
 {#each players as [player, selected], index (player)}
 	<button
-		style:background="var(--background-color)"
+		style:background="var(--surface)"
 		style:border="0.15em solid currentColor"
 		style:padding="0.15em 0.4em"
 		style:border-radius="0.6em"
 		style:font-family="inherit"
 		style:font-size="inherit"
-		style:color={selected ? 'var(--accent-color)' : 'inherit'}
+		style:color={selected ? 'var(--primary)' : 'inherit'}
 		style:font-weight="bold"
 		style:transition="color 100ms linear"
 		style:word-break="break-word"
@@ -47,7 +47,7 @@
 {/each}
 {#if players.length < exactCount}
 	<div
-		style:background="var(--background-color)"
+		style:background="var(--surface)"
 		style:padding="0.5em 0.4em"
 		style:border="0.15em solid currentcolor"
 		style:border-radius="0.6em"

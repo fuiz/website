@@ -43,7 +43,7 @@
 
 	[popover] {
 		position: absolute;
-		background: var(--background-color);
+		background: var(--surface);
 		border: 0.1em solid;
 		border-radius: 0.7em;
 		transform-origin: top;

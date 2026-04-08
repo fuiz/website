@@ -16,7 +16,7 @@
 	style:max-height="5em"
 	style:flex-direction="column"
 	style:justify-content="space-between"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 >
 	<div
 		style:padding="0.2em"
@@ -71,7 +71,7 @@
 				{#each slide.answers as answer, i (answer.id)}
 					<div
 						style:background={buttonColors.at(i % buttonColors.length)?.at(0) ??
-							'var(--accent-color)'}
+							'var(--primary)'}
 						style:margin="0.1em"
 						style:border-radius="0.6em"
 						style:height="0.5em"

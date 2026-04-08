@@ -11,7 +11,7 @@
 	style:display="flex"
 	style:gap="0.3em"
 	style:align-items="center"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:border="0.15em solid"
 	style:border-radius="200px"
 	title={m.answered_count()}

@@ -14,7 +14,7 @@
 </script>
 
 <div
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:display="flex"
 	style:line-height="1.5"
 	style:align-items="center"

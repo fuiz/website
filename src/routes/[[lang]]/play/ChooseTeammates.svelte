@@ -61,7 +61,7 @@
 		</NiceBackground>
 	</div>
 	<div
-		style:background="var(--background-color)"
+		style:background="var(--surface)"
 		style:text-align="center"
 		style:padding="5px 0"
 		style:border-top="0.15em solid"
