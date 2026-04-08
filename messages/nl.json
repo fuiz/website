@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz is vertaald in verschillende talen door het werk van vrijwilligers. Als het niet in jouw taal beschikbaar is, is jouw bijdrage welkom!",
 	"free_of_charge": "Gratis",
 	"free_of_charge_desc": "Fuiz wordt gratis aangeboden, zonder dat dit ten koste gaat van je privacy. Als je het project financieel wilt ondersteunen, laat het ons weten.",
-	"number_of_participants": "Fuiz biedt een redelijk goede server met tot 1000 deelnemers tegelijk. Het zal echter het meest betrouwbaar zijn met minder dan 200 deelnemers.",
 	"assign_random": "Teams willekeurig toewijzen",
 	"no_correct": "Geen Juiste Antwoorden",
 	"no_answers": "Geen Antwoorden",
@@ -170,7 +169,6 @@
 	"empty_answer": "Voer antwoord in",
 	"duplicate_answers": "Verwijder dubbele antwoorden",
 	"submit": "Versturen",
-	"fuiz_is_ongoing": "Fuiz is een lopend project. Jouw feedback is belangrijk.",
 	"create": "Maak",
 	"none": "Geen",
 	"donate": "Doneren",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Afbeeldingen en media zijn relevant en correct bronvermeld",
 	"publish_check_relevant": "De quiz is relevant, leerzaam en nuttig voor anderen",
 	"privacy_policy": "Privacybeleid",
+	"terms_of_service": "Servicevoorwaarden",
 	"multiple_answers": "Meerdere antwoorden"
 }

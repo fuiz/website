@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz diterjemahkan ke berbagai bahasa melalui kerja sukarelawan. Jika tidak tersedia dalam bahasa Anda, kontribusi Anda diterima!",
 	"free_of_charge": "Gratis",
 	"free_of_charge_desc": "Fuiz disediakan secara gratis, tanpa mengorbankan privasi Anda. Jika Anda ingin mendukung proyek secara finansial, beri tahu kami.",
-	"number_of_participants": "Fuiz menyediakan server yang cukup mumpuni dengan hingga 1000 peserta secara bersamaan. Namun, itu harus paling dapat diandalkan dengan kurang dari 200 peserta.",
 	"assign_random": "Tetapkan tim secara acak",
 	"no_correct": "Pilih jawaban yang benar",
 	"no_answers": "Tambahkan jawaban",
@@ -170,7 +169,6 @@
 	"empty_answer": "Masukkan jawaban",
 	"duplicate_answers": "Hapus jawaban duplikat",
 	"submit": "Kirim",
-	"fuiz_is_ongoing": "Fuiz adalah proyek yang sedang berlangsung. Umpan balik Anda penting.",
 	"create": "Buat Kuis",
 	"none": "Tidak ada",
 	"donate": "Donasi",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Gambar dan media relevan dan bersumber dengan benar",
 	"publish_check_relevant": "Kuis ini relevan, edukatif, dan bermanfaat bagi orang lain",
 	"privacy_policy": "Kebijakan Privasi",
+	"terms_of_service": "Ketentuan Layanan",
 	"multiple_answers": "Beberapa jawaban"
 }

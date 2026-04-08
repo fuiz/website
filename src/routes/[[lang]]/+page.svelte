@@ -4,16 +4,13 @@
 	import logo from '$lib/assets/same_color_logo.svg';
 	import Footer from '$lib/layout/Footer.svelte';
 	import MainHeader from '$lib/layout/MainHeader.svelte';
-	import Anchor from '$lib/navigation/Anchor.svelte';
-	import AnchorMessage from '$lib/navigation/AnchorMessage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
 	import Diversity1 from '~icons/material-symbols/diversity-1';
 	import Diversity2Outline from '~icons/material-symbols/diversity-2-outline';
-	import ErrorOutline from '~icons/material-symbols/error-outline';
-	import HelpOutline from '~icons/material-symbols/help-outline';
 	import Language from '~icons/material-symbols/language';
 	import MailOutline from '~icons/material-symbols/mail-outline';
 	import MoneyOff from '~icons/material-symbols/money-off';
@@ -66,6 +63,7 @@
 	<section>
 		<div>
 			<h2>{m.greeting()}<br />{m.create_with()}</h2>
+			<p class="subtitle">{m.about_fuiz_desc()}</p>
 			<div class="slide-container">
 				<div class="slide">
 					{#if answered !== undefined}
@@ -163,93 +161,61 @@
 	{/if}
 	{#if !data.selfHosted}
 		<section>
-			<div>
-				<AnchorMessage background="#23456740" message={m.fuiz_is_ongoing()} href="#ongoing">
-					{#snippet icon()}<ErrorOutline height="1em" title={m.warning()} />{/snippet}
-				</AnchorMessage>
+			<div class="features">
+				<div class="feature-card">
+					<MoneyOff height="3em" width="3em" title={m.free_of_charge()} />
+					<h3>{m.free_of_charge()}</h3>
+					<p>{m.free_of_charge_desc()}</p>
+				</div>
+				<div class="feature-card">
+					<Language height="3em" width="3em" title={m.language()} />
+					<h3>{m.well_translated()}</h3>
+					<p>{m.well_translated_desc()}</p>
+				</div>
+				<div class="feature-card">
+					<Diversity2Outline height="3em" width="3em" title={m.collab_over_comp()} />
+					<h3>{m.collab_over_comp()}</h3>
+					<p>{m.collab_over_comp_desc()}</p>
+				</div>
+				<div class="feature-card">
+					<Diversity1 height="3em" width="3em" title={m.community_made()} />
+					<h3>{m.community_made()}</h3>
+					<p>{m.community_made_desc()}</p>
+				</div>
+				<div class="feature-card">
+					<CodeBlocksOutline height="3em" width="3em" title={m.always_open()} />
+					<h3>{m.always_open()}</h3>
+					<p>{m.always_open_desc()}</p>
+				</div>
 			</div>
 		</section>
 		<section>
-			<div class="split">
-				<div>
-					<h2>{m.about_fuiz()}</h2>
-					<p>
-						{m.about_fuiz_desc()}
-					</p>
+			<div class="cta">
+				<MailOutline height="2em" width="2em" title={m.stay_in_touch()} />
+				<h2>{m.stay_in_touch()}</h2>
+				<p>{m.stay_in_touch_subtitle()}</p>
+				<div class="cta-buttons">
+					<div class="cta-button">
+						<FancyAnchorButton
+							href="https://forms.gle/orFqr1wnhm6dv7xY7"
+							backgroundColor="var(--secondary)"
+							backgroundDeepColor="color-mix(in srgb, var(--secondary) 80%, black)"
+							foregroundColor="var(--on-secondary)"
+						>
+							{m.feedback_form()}
+						</FancyAnchorButton>
+					</div>
+					<div class="cta-button">
+						<FancyAnchorButton
+							href="https://join.slack.com/t/fuiz/shared_invite/zt-2enihgtpy-C1KxJ96pEQN707msi~vNRg"
+							backgroundColor="var(--tertiary)"
+							backgroundDeepColor="color-mix(in srgb, var(--tertiary) 80%, black)"
+							foregroundColor="var(--on-tertiary)"
+						>
+							{m.join_slack()}
+						</FancyAnchorButton>
+					</div>
 				</div>
-				<HelpOutline height="7em" width="7em" title={m.about_fuiz()} />
-			</div>
-		</section>
-		<section>
-			<div class="split">
-				<div>
-					<h2>{m.free_of_charge()}</h2>
-					<p>
-						{m.free_of_charge_desc()}
-					</p>
-					<p>
-						{m.number_of_participants()}
-					</p>
-				</div>
-				<MoneyOff height="7em" width="7em" title={m.free_of_charge()} />
-			</div>
-		</section>
-		<section>
-			<div class="split">
-				<div>
-					<h2>{m.well_translated()}</h2>
-					<p>
-						{m.well_translated_desc()}
-					</p>
-				</div>
-				<Language height="7em" width="7em" title={m.language()} />
-			</div>
-		</section>
-		<section>
-			<div class="split">
-				<div>
-					<h2>{m.collab_over_comp()}</h2>
-					<p>
-						{m.collab_over_comp_desc()}
-					</p>
-				</div>
-				<Diversity2Outline height="7em" width="7em" title={m.collab_over_comp()} />
-			</div>
-		</section>
-		<section>
-			<div class="split">
-				<div>
-					<h2>{m.community_made()}</h2>
-					<p>
-						{m.community_made_desc()}
-					</p>
-				</div>
-				<Diversity1 height="7em" width="7em" title={m.community_made()} />
-			</div>
-		</section>
-		<section>
-			<div class="split">
-				<div>
-					<h2>
-						<Anchor href="https://gitlab.com/fuiz">{m.always_open()}</Anchor>
-					</h2>
-					<p>
-						{m.always_open_desc()}
-					</p>
-				</div>
-				<CodeBlocksOutline height="7em" width="7em" title={m.always_open()} />
-			</div>
-		</section>
-		<section id="ongoing">
-			<div class="split">
-				<div>
-					<h2>{m.stay_in_touch()}</h2>
-					<p>
-						<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-						{@html m.stay_in_touch_desc()}
-					</p>
-				</div>
-				<MailOutline height="7em" width="7em" title={m.stay_in_touch()} />
 			</div>
 		</section>
 	{/if}
@@ -266,7 +232,7 @@
 
 	section {
 		& > div {
-			max-width: 45ch;
+			max-width: 70ch;
 			margin: auto;
 		}
 
@@ -282,6 +248,12 @@
 
 	p {
 		margin: 0.5em 0;
+	}
+
+	.subtitle {
+		opacity: 0.8;
+		max-width: 45ch;
+		margin: 0.5em auto 1em;
 	}
 
 	.slide-container {
@@ -307,6 +279,63 @@
 		align-items: center;
 		justify-content: center;
 		gap: 1em;
+	}
+
+	.features {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1em;
+		max-width: 70ch;
+		margin: auto;
+	}
+
+	.feature-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 0.4em;
+		padding: 1.2em 1em;
+		border-radius: 0.8em;
+		background: color-mix(in srgb, currentColor 5%, transparent);
+		flex: 1 1 12em;
+		max-width: 20em;
+	}
+
+	.feature-card h3 {
+		margin: 0;
+		font-family: var(--alternative-font);
+	}
+
+	.feature-card p {
+		margin: 0.2em 0;
+	}
+
+	.cta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.3em;
+		background: color-mix(in srgb, currentColor 5%, transparent);
+		border-radius: 0.8em;
+		padding: 2em 1.5em;
+	}
+
+	.cta p {
+		opacity: 0.8;
+		margin: 0 0 0.5em;
+	}
+
+	.cta-buttons {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.8em;
+	}
+
+	.cta-button {
+		width: 12em;
 	}
 
 	.stat {

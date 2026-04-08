@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz está traducido a varios idiomas a través del trabajo de voluntarios. Si no está disponible en tu idioma, ¡tu contribución es bienvenida!",
 	"free_of_charge": "Gratuito",
 	"free_of_charge_desc": "Fuiz se proporciona de forma gratuita, sin sacrificar tu privacidad. Si deseas apoyar el proyecto financieramente, háznoslo saber.",
-	"number_of_participants": "Fuiz proporciona un servidor bastante capaz con hasta 1000 participantes al mismo tiempo. Sin embargo, debería ser más confiable con menos de 200 participantes.",
 	"assign_random": "Asignar equipos aleatoriamente",
 	"no_correct": "Seleccionar respuesta correcta",
 	"no_answers": "Añadir respuestas",
@@ -170,7 +169,6 @@
 	"empty_answer": "Ingresa respuesta",
 	"duplicate_answers": "Eliminar respuestas duplicadas",
 	"submit": "Enviar",
-	"fuiz_is_ongoing": "Fuiz es un proyecto en curso. Tu opinión es importante.",
 	"create": "Crear",
 	"none": "Ninguno",
 	"donate": "Donar",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Las imágenes y medios son relevantes y tienen fuentes adecuadas",
 	"publish_check_relevant": "El cuestionario es relevante, educativo y útil para otros",
 	"privacy_policy": "Política de Privacidad",
+	"terms_of_service": "Términos de Servicio",
 	"multiple_answers": "Respuestas múltiples"
 }

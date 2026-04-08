@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz est traduit par des volontaires dans de nombreuses langues. Si il n'est pas disponible dans votre langue, les contributions sont les bienvenues !",
 	"free_of_charge": "Gratuit",
 	"free_of_charge_desc": "Fuiz est gratuit, sans aucun sacrifice sur votre vie privée. Contactez-nous pour soutenir le projet financièrement.",
-	"number_of_participants": "Fuiz a un serveur relativement puissant pouvant supporter jusqu'à 1000 participants en même temps. malgré tout, il devrait être plus fiable pour moins de 200 participants.",
 	"assign_random": "Composer les équipes aléatoirement",
 	"no_correct": "Aucune bonne réponse",
 	"no_answers": "Aucune réponse",
@@ -170,7 +169,6 @@
 	"empty_answer": "Entrez une réponse",
 	"duplicate_answers": "Supprimer les réponses en double",
 	"submit": "Envoyer",
-	"fuiz_is_ongoing": "Fuiz est un projet en cours. Vos retours sont importants.",
 	"create": "Créer",
 	"none": "Aucun",
 	"donate": "Donner",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Les images et médias sont pertinents et correctement sourcés",
 	"publish_check_relevant": "Le quiz est pertinent, éducatif et utile aux autres",
 	"privacy_policy": "Politique de Confidentialité",
+	"terms_of_service": "Conditions d'Utilisation",
 	"multiple_answers": "Réponses multiples"
 }

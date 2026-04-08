@@ -31,6 +31,5 @@
 			{ component: DarkModeOutline, alt: m.switch_light() }
 		]}
 		bind:state={theme}
-		size="1em"
 	/>
 {/if}

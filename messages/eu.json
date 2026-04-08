@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz hainbat hizkuntzatan itzultzen da boluntarioen lanari esker. Zure hizkuntzan ez badago, zure ekarpena ongietorria izango da!",
 	"free_of_charge": "Doan",
 	"free_of_charge_desc": "Fuiz doan eskaintzen da, zure pribatutasunaren alde inolako sakrifiziorik gabe. Proiektua finantzalki lagundu nahi baduzu, jakinarazi iezaguzu.",
-	"number_of_participants": "Fuiz-ek zerbitzari nahiko egonkorra eskaintzen du, 1000 partaide arte aldi berean. Hala ere, 200 partaide baino gutxiagorekin fidagarriagoa izango da.",
 	"assign_random": "Taldeak ausaz asignatu",
 	"no_correct": "Hautatu erantzun zuzena",
 	"no_answers": "Gehitu erantzunak",
@@ -170,7 +169,6 @@
 	"empty_answer": "Sartu erantzuna",
 	"duplicate_answers": "Kendu erantzun bikoiztuak",
 	"submit": "Bidali",
-	"fuiz_is_ongoing": "Fuiz proiektu etengabea da. Zure iritzia garrantzitsua da.",
 	"create": "Sortu Quiz-a",
 	"none": "Ezer ez",
 	"donate": "Eman",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Irudiak eta multimedia garrantzitsuak dira eta behar bezala iturriak dituzte",
 	"publish_check_relevant": "Quiz-a garrantzitsua, hezigarria eta besteentzat erabilgarria da",
 	"privacy_policy": "Pribatutasun Politika",
+	"terms_of_service": "Zerbitzu Baldintzak",
 	"multiple_answers": "Erantzun anitz"
 }

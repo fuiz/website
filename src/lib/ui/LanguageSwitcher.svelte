@@ -17,7 +17,7 @@
 
 <div>
 	<IconButton alt={m.language()} popovertarget={id}>
-		<Language height="1em" />
+		<Language />
 	</IconButton>
 
 	<div {id} bind:this={popoverElement} popover="auto" style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>

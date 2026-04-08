@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz könüllü şəxslərin əməyi ilə müxtəlif dillərə tərcümə olunur. Dilinizdə yoxdursa, töhfəniz xoş qarşılanır!",
 	"free_of_charge": "Pulsuz",
 	"free_of_charge_desc": "Fuiz məxfiliyinizdən güzəşt etmədən tam pulsuz təqdim olunur. Layihəni maliyyə baxımından dəstəkləmək istəyirsinizsə, bizə yazın.",
-	"number_of_participants": "Fuiz eyni anda 1000 iştirakçıya qədər xidmət göstərə bilən kifayət qədər güclü server təqdim edir. Bununla belə ən stabil işləmə üçün 200-dən az iştirakçı tövsiyə olunur.",
 	"assign_random": "Komandaları təsadüfi təyin et",
 	"no_correct": "Doğru cavabı seçin",
 	"no_answers": "Cavablar əlavə edin",
@@ -170,7 +169,6 @@
 	"empty_answer": "Cavabı daxil edin",
 	"duplicate_answers": "Təkrar cavabları sil",
 	"submit": "Göndər",
-	"fuiz_is_ongoing": "Fuiz davam edən layihədir. Rəyiniz bizim üçün vacibdir.",
 	"create": "Viktorina yarat",
 	"none": "Heç biri",
 	"donate": "İanə et",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Şəkillər və media uyğundur və düzgün mənbələrdəndir",
 	"publish_check_relevant": "Quiz uyğun, təhsil verici və başqaları üçün faydalıdır",
 	"privacy_policy": "Məxfilik Siyasəti",
+	"terms_of_service": "Xidmət Şərtləri",
 	"multiple_answers": "Çoxlu cavablar"
 }

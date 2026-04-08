@@ -5,7 +5,8 @@
 	let { href, children } = $props();
 </script>
 
-<a href={resolve(href)} target="_blank">
+<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+<a href={href.startsWith('http') ? href : resolve(href)} target="_blank">
 	{@render children?.()}
 </a>
 

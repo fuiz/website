@@ -1,13 +1,20 @@
-<script>
+<script lang="ts">
 	import IconButton from './IconButton.svelte';
 
-	/** @type {{
-	 * 	icons: [{ component: import('svelte').Component, alt: string }, { component: import('svelte').Component, alt: string }],
-	 * 	size: string,
-	 * 	state: boolean,
-	 * 	onchange?: (state: boolean) => void
-	 * }}*/
-	let { icons, size, state = $bindable(), onchange } = $props();
+	let {
+		icons,
+		size = undefined,
+		state = $bindable(),
+		onchange
+	}: {
+		icons: [
+			{ component: import('svelte').Component; alt: string },
+			{ component: import('svelte').Component; alt: string }
+		];
+		size?: string;
+		state: boolean;
+		onchange?: (state: boolean) => void;
+	} = $props();
 
 	let icon = $derived(icons[state ? 1 : 0]);
 </script>

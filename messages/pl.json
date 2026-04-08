@@ -152,7 +152,6 @@
 	"well_translated_desc": "Fuiz został przetłumaczony na wiele języków dzięki pracy wolontariuszy. Jeżeli Twój język nie jest dostępny, Twój wkład jest mile widziany!",
 	"free_of_charge": " Bez opłat",
 	"free_of_charge_desc": "Fuiz jest całkowicie darmowy i to bez kompromisów w postaci utraty prywatności. Jeśli chcesz jednak wesprzeć projekt finansowo, daj nam znać.",
-	"number_of_participants": "Fuiz dostarcza całkiem wydajny serwer pozwalający na grę nawet do 1000 osób jednocześnie. Polecamy jednak utrzymywać liczbę graczy poniżej 200 w celu zapewnienia płynności gry.",
 	"assign_random": "Przypisz drużyny losowo",
 	"no_correct": "Brak poprawnych odpowiedzi",
 	"no_answers": "Brak odpowiedzi",
@@ -170,7 +169,6 @@
 	"empty_answer": "Wprowadź odpowiedź",
 	"duplicate_answers": "Usuń zduplikowane odpowiedzi",
 	"submit": "Wyślij",
-	"fuiz_is_ongoing": "Fuiz jest wciąż rozwijany. Twój wkład jest istotny.",
 	"create": "Stwórz Quiz",
 	"none": "×0",
 	"donate": "Wesprzyj",
@@ -221,5 +219,6 @@
 	"publish_check_media": "Obrazy i media są odpowiednie i prawidłowo oznaczone źródłowo",
 	"publish_check_relevant": "Quiz jest istotny, edukacyjny i przydatny dla innych",
 	"privacy_policy": "Polityka Prywatności",
+	"terms_of_service": "Regulamin",
 	"multiple_answers": "Wiele odpowiedzi"
 }

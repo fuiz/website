@@ -152,7 +152,6 @@
 	"well_translated_desc": "协习通过志愿者的工作被翻译成多种语言。如果您的语言还没有提供，欢迎您来贡献翻译！",
 	"free_of_charge": "完全免费",
 	"free_of_charge_desc": "协习完全免费提供，且不会牺牲您的隐私。如果您想在财务上支持这个项目，请告诉我们。",
-	"number_of_participants": "协习服务器可同时支持多达1000名参与者。但是，建议参与人数保持在200人以下时最为稳定。",
 	"assign_random": "随机分配团队",
 	"no_correct": "请选择正确答案",
 	"no_answers": "请添加答案",
@@ -170,7 +169,6 @@
 	"empty_answer": "请输入答案",
 	"duplicate_answers": "删除重复答案",
 	"submit": "提交",
-	"fuiz_is_ongoing": "协习是一个持续发展的项目。您的反馈对我们很重要。",
 	"create": "创建",
 	"none": "无",
 	"donate": "捐赠",
@@ -221,5 +219,6 @@
 	"publish_check_media": "图片和媒体内容相关且来源正确",
 	"publish_check_relevant": "测验具有相关性、教育性，对他人有用",
 	"privacy_policy": "隐私政策",
+	"terms_of_service": "服务条款",
 	"multiple_answers": "多选"
 }
