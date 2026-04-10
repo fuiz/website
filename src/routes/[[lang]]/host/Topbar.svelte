@@ -30,64 +30,28 @@
 	} = $props();
 </script>
 
-<div
-	style:display="flex"
-	style:background="var(--surface)"
-	style:padding="0.2em"
-	style:line-height="1em"
-	style:align-items="center"
-	style:gap="10px"
-	style:row-gap="20px"
-	style:justify-content="center"
-	style:flex-wrap="wrap"
->
+<div class="topbar">
 	<ExitFuiz />
-	<div
-		style:display="flex"
-		style:padding="0.2em 0.4em"
-		style:gap="2px"
-		style:align-items="center"
-		style:font-family="var(--alternative-font)"
-		style:font-weight="800"
-	>
-		<div style:font-family="var(--alternative-font)">
-			{m.slide_index({
-				index: gameInfo.questionIndex + 1,
-				total: gameInfo.questionTotalCount
-			})}
-		</div>
+	<div class="slide-index">
+		{m.slide_index({
+			index: gameInfo.questionIndex + 1,
+			total: gameInfo.questionTotalCount
+		})}
 	</div>
-	<div
-		style:flex="100"
-		style:justify-content="center"
-		style:display="flex"
-		style:gap="1ch"
-		style:align-items="baseline"
-		style:white-space="nowrap"
-		style:font-family="var(--alternative-font)"
-		style:font-weight="800"
-	>
+	<div class="game-code">
 		{m.game_code_display({
 			code: gameInfo.gameCode
 		})}
 	</div>
-	<div
-		style:flex="1"
-		style:display="flex"
-		style:justify-content="space-between"
-		style:align-items="center"
-		style:gap="0.2em"
-		style:padding="0.2em"
-	>
+	<div class="controls">
 		{#if showSkip}
-			<IconButton alt={m.skip()} onclick={onnext}><SkipNext height="1em" /></IconButton>
+			<IconButton alt={m.skip()} onclick={onnext}><SkipNext /></IconButton>
 		{/if}
 		<StatedIconButton
 			icons={[
 				{ component: LockOpenRightOutline, alt: m.lock_game() },
 				{ component: LockOutline, alt: m.unlock_game() }
 			]}
-			size="1em"
 			bind:state={bindableGameInfo.locked}
 			onchange={onlock}
 		/>
@@ -98,9 +62,61 @@
 				{ component: VolumeOffOutline, alt: m.turn_on_music() },
 				{ component: VolumeUpOutline, alt: m.mute_music() }
 			]}
-			size="1em"
 			bind:state={bindableGameInfo.volumeOn}
 		/>
 		<Fullscreen {fullscreenElement} />
 	</div>
 </div>
+
+<style>
+	.topbar {
+		display: flex;
+		background: var(--surface);
+		padding: 0.2em;
+		line-height: 1em;
+		align-items: center;
+		gap: 10px;
+		row-gap: 10px;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.slide-index {
+		display: flex;
+		padding: 0.2em 0.4em;
+		gap: 2px;
+		align-items: center;
+		font-family: var(--alternative-font);
+		font-weight: 800;
+	}
+
+	.game-code {
+		flex: 100;
+		justify-content: center;
+		display: flex;
+		gap: 1ch;
+		align-items: baseline;
+		white-space: nowrap;
+		font-family: var(--alternative-font);
+		font-weight: 800;
+	}
+
+	.controls {
+		flex: 1;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.2em;
+		padding: 0.2em;
+	}
+
+	@media (max-width: 600px) {
+		.topbar {
+			font-size: 1.25em;
+		}
+
+		.controls {
+			gap: 0.5em;
+		}
+	}
+</style>

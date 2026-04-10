@@ -408,7 +408,7 @@ export const buttonColors = [
 	['hsl(0, 0%, 20%)', 'hsl(0, 0%, 10%)']
 ] as const;
 
-export const medalColors = ['#FEDD1E', '#D0D0D0', '#D7995A'] as const;
+export const medalColors = ['#C8A200', '#A0A0A0', '#B07D3B'] as const;
 
 export const buttonSymbols = [
 	{

@@ -16,7 +16,7 @@
 
 <header>
 	<Header />
-	<nav style:font-size="0.8em">
+	<nav>
 		<div>
 			<FancyAnchorButton href={resolve(localizeHref('/create'))}>
 				<div class="a">

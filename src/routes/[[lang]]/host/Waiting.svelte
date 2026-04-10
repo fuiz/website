@@ -102,7 +102,7 @@
 				style:text-align="start"
 				style:font-family="var(--alternative-font)"
 			>
-				<div style:font-size="1em">{m.game_code()}</div>
+				<div>{m.game_code()}</div>
 				<div style:font-size="3em" style:line-height="1em" style:text-transform="uppercase">
 					{code}
 				</div>
