@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
-	import logo from '$lib/assets/same_color_logo.svg';
+	import logo from '$lib/assets/same_color_logo_padded.svg';
 	import Footer from '$lib/layout/Footer.svelte';
 	import MainHeader from '$lib/layout/MainHeader.svelte';
 	import * as m from '$lib/paraglide/messages.js';
