@@ -15,7 +15,6 @@
 	import PersonOutline from '~icons/material-symbols/person-outline';
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
-	import ExitFuiz from './ExitFuiz.svelte';
 
 	/** @type {{
 	 * code: string;
@@ -61,80 +60,42 @@
 </script>
 
 <Audio audioUrl={bee3} volumeOn={bindableGameInfo.volumeOn} />
-<div id="container" bind:this={fullscreenElement} style:height="100%" style:display="flex">
-	<div
-		id="info"
-		style:background="var(--surface)"
-		style:box-shadow="0 2px 2px #00000040, 2px 0 2px #00000040"
-		style:display="flex"
-		style:align-items="start"
-		style:gap="1em"
-		style:padding="0.6em 0.4em"
-		style:justify-content="space-between"
-	>
-		<div>
-			<ExitFuiz />
-			<div style:padding="0.4em">
-				<div>{m.join_at()}</div>
-				<div style:font-weight="bold">
+<div class="container" bind:this={fullscreenElement}>
+	<div class="info-bar">
+		<div class="info-left">
+			<div class="join-info">
+				{m.join_at()}
+				<span class="join-url">
 					{env.PUBLIC_DISPLAY_PLAY_URL}{localizeHref('/play')}
-				</div>
+				</span>
 			</div>
 		</div>
-		<div
-			style:background="color-mix(in srgb, currentColor 20%, transparent)"
-			style:display="flex"
-			style:align-items="center"
-			style:padding="0.4em"
-			style:gap="0.4em"
-			style:border-radius="0.4em"
-		>
+		<div class="code-block">
 			<button
+				class="code-button"
 				bind:this={copyButton}
 				onclick={() => { copy_url_to_clipboard(); showCopied(); }}
 				interestfor="hover-popover"
-				style:font="inherit"
-				style:color="inherit"
-				style:appearance="none"
-				style:border="none"
-				style:background="none"
-				style:cursor="pointer"
-				style:text-align="start"
-				style:font-family="var(--alternative-font)"
 			>
-				<div>{m.game_code()}</div>
-				<div style:font-size="3em" style:line-height="1em" style:text-transform="uppercase">
-					{code}
-				</div>
+				<div class="code-label">{m.game_code()}</div>
+				<div class="code-value">{code}</div>
 			</button>
 			<div id="hover-popover" popover="hint" class="fuiz-popover">{m.copy_clipboard()}</div>
 			<div bind:this={copiedPopover} popover="manual" class="fuiz-popover">{m.copied()}</div>
-			<QrCode url={actualUrl} smallSize="9em" />
+			<QrCode url={actualUrl} smallSize="min(9em, 25vw)" />
 		</div>
-		<div
-			style:display="flex"
-			style:justify-content="center"
-			style:width="fit-content"
-			style:font-size="1.5em"
-		>
+		<div class="start-button">
 			<FancyButton onclick={onnext}>
-				<div style:padding="0 1em" style:font-family="var(--alternative-font)">{m.start()}</div>
+				<div class="start-label">{m.start()}</div>
 			</FancyButton>
 		</div>
 	</div>
-	<div style:flex="1">
+	<div class="content">
 		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:flex-direction="column"
-				style:gap="0.2em"
-				style:padding="0.2em"
-				style:box-sizing="border-box"
-			>
-				<div style:display="flex" style:gap="0.2em" style:align-items="center">
-					<div style:flex="1" style:display="flex" style:align-items="center">
-						<PersonOutline height="1em" title={m.number_of_players()} />
+			<div class="content-inner">
+				<div class="controls">
+					<div class="player-count">
+						<PersonOutline title={m.number_of_players()} />
 						{exact_count}
 					</div>
 					<StatedIconButton
@@ -142,7 +103,6 @@
 							{ component: LockOpenRightOutline, alt: m.lock_game() },
 							{ component: LockOutline, alt: m.unlock_game() }
 						]}
-						size="1em"
 						bind:state={bindableGameInfo.locked}
 						onchange={onlock}
 					/>
@@ -151,29 +111,12 @@
 							{ component: VolumeOffOutline, alt: m.turn_on_music() },
 							{ component: VolumeUpOutline, alt: m.mute_music() }
 						]}
-						size="1em"
 						bind:state={bindableGameInfo.volumeOn}
 					/>
 					<Fullscreen {fullscreenElement} />
 				</div>
-				<div
-					style:min-height="40vh"
-					style:margin="auto"
-					style:display="flex"
-					style:align-items="center"
-					style:justify-content="center"
-				>
-					<div
-						id="players"
-						style:display="flex"
-						style:justify-content="center"
-						style:align-items="center"
-						style:flex-wrap="wrap"
-						style:max-width="40ch"
-						style:gap="0.2em"
-						style:padding="0.2em"
-						style:overflow="auto"
-					>
+				<div class="players-area">
+					<div class="players">
 						<PlayersList players={players.map((n) => [n, false])} exactCount={exact_count} />
 					</div>
 				</div>
@@ -183,25 +126,148 @@
 </div>
 
 <style>
-	#players {
-		font-size: 1.5em;
-	}
-
-	#container {
+	.container {
+		height: 100%;
+		display: flex;
 		flex-direction: column;
 	}
 
-	#info {
+	.info-bar {
+		background: var(--surface);
+		box-shadow: 0 2px 2px #00000040;
+		display: flex;
+		align-items: center;
+		gap: 1em;
+		padding: 0.6em 0.8em;
+		justify-content: space-between;
 		flex-wrap: wrap;
 	}
 
+	.info-left {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		font-size: 1.5em;
+	}
+
+	.join-info {
+		padding: 0.2em 0.4em;
+	}
+
+	.join-url {
+		font-weight: bold;
+	}
+
+	.code-block {
+		display: flex;
+		align-items: center;
+		padding: 0.4em 0.6em;
+		gap: 0.6em;
+		border-radius: 0.6em;
+		background: var(--surface-variant);
+	}
+
+	.code-button {
+		font: inherit;
+		color: inherit;
+		appearance: none;
+		border: none;
+		background: none;
+		cursor: pointer;
+		text-align: start;
+	}
+
+	.code-label {
+		font-size: 1.3em;
+		font-weight: bold;
+	}
+
+	.code-value {
+		font-size: 4.5em;
+		line-height: 1em;
+		text-transform: uppercase;
+		font-weight: 800;
+		font-family: var(--alternative-font);
+	}
+
+	.start-button {
+		font-size: 1.5em;
+	}
+
+	.start-label {
+		padding: 0 1em;
+		font-family: var(--alternative-font);
+	}
+
+	.content {
+		flex: 1;
+	}
+
+	.content-inner {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2em;
+		padding: 0.4em;
+		box-sizing: border-box;
+	}
+
+	.controls {
+		display: flex;
+		gap: 0.4em;
+		align-items: center;
+	}
+
+	.player-count {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		gap: 0.2em;
+		font-weight: bold;
+	}
+
+	.players-area {
+		min-height: 40vh;
+		margin: auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.players {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		max-width: 50ch;
+		gap: 0.3em;
+		padding: 0.2em;
+		overflow: auto;
+		font-size: 1.5em;
+	}
+
 	@media (max-width: 700px) {
-		#players {
-			font-size: 0.8em;
+		.info-bar {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.5em;
+			padding: 0.4em;
 		}
 
-		#info {
-			flex-direction: column;
+		.code-block {
+			justify-content: space-between;
+		}
+
+		.code-value {
+			font-size: 3em;
+		}
+
+		.start-button {
+			text-align: center;
+		}
+
+		.players {
+			font-size: 1em;
 		}
 	}
 </style>

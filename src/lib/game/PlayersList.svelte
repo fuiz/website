@@ -21,16 +21,8 @@
 
 {#each players as [player, selected], index (player)}
 	<button
-		style:background="var(--surface)"
-		style:border="0.15em solid currentColor"
-		style:padding="0.15em 0.4em"
-		style:border-radius="0.6em"
-		style:font-family="inherit"
-		style:font-size="inherit"
+		class="player"
 		style:color={selected ? 'var(--primary)' : 'inherit'}
-		style:font-weight="bold"
-		style:transition="color 100ms linear"
-		style:word-break="break-word"
 		disabled={!selectable}
 		style:cursor={selectable ? 'pointer' : 'normal'}
 		onclick={() => {
@@ -46,16 +38,24 @@
 	</button>
 {/each}
 {#if players.length < exactCount}
-	<div
-		style:background="var(--surface)"
-		style:padding="0.5em 0.4em"
-		style:border="0.15em solid currentcolor"
-		style:border-radius="0.6em"
-		style:font-weight="bold"
-		style:word-break="break-word"
-	>
+	<div class="player">
 		{m.more({
 			count: players.length - exactCount
 		})}
 	</div>
 {/if}
+
+<style>
+	.player {
+		background: var(--surface-variant);
+		border: none;
+		padding: 0.3em 0.6em;
+		border-radius: 0.6em;
+		font-family: inherit;
+		font-size: inherit;
+		font-weight: bold;
+		word-break: break-word;
+		color: inherit;
+		transition: color 100ms linear;
+	}
+</style>
