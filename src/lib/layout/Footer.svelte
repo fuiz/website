@@ -5,6 +5,7 @@
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import Balance from '~icons/material-symbols/balance';
+	import Description from '~icons/material-symbols/description';
 	import Diversity1 from '~icons/material-symbols/diversity-1';
 	import Policy from '~icons/material-symbols/policy';
 </script>
@@ -13,7 +14,6 @@
 	style:border-top="2px solid #00000080"
 	style:text-align="center"
 	style:width="100%"
-	style:font-size="0.75em"
 	style:box-sizing="border-box"
 	style:padding="8px"
 	style:display="flex"
@@ -39,6 +39,12 @@
 		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
 			<Policy height="1em" title={m.privacy_policy()} />
 			<div>{m.privacy_policy()}</div>
+		</div>
+	</Anchor>
+	<Anchor href={localizeHref('/terms')}>
+		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
+			<Description height="1em" title={m.terms_of_service()} />
+			<div>{m.terms_of_service()}</div>
 		</div>
 	</Anchor>
 	<LanguageSwitcher id="footer" up={true} />

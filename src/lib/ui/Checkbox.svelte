@@ -33,7 +33,7 @@
 		style:height="100%"
 		style:width="auto"
 		style:aspect-ratio="1/1"
-		style:background={color ?? 'var(--accent-color)'}
+		style:background={color ?? 'var(--primary)'}
 		style:transition="background 300ms linear"
 		style:border="0.2em solid currentcolor"
 		style:border-radius="0.5em"

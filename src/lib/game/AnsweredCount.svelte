@@ -11,13 +11,13 @@
 	style:display="flex"
 	style:gap="0.3em"
 	style:align-items="center"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:border="0.15em solid"
 	style:border-radius="200px"
 	title={m.answered_count()}
 >
 	<AssignmentTurnedIn height="1.2em" title={m.answered_count()} />
-	<div style:font-size="1em" style:font-family="var(--alternative-font)">
+	<div style:font-family="var(--alternative-font)">
 		{answeredCount}
 	</div>
 </div>

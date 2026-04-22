@@ -123,7 +123,7 @@
 		aspect-ratio: 1 / 2;
 		border-start-start-radius: 1em;
 		border-end-start-radius: 1em;
-		background: var(--accent-color);
+		background: var(--primary);
 	}
 
 	#end {
@@ -136,7 +136,7 @@
 	}
 
 	#middle-color {
-		background: var(--accent-color);
+		background: var(--primary);
 		transition: width 150ms ease-out;
 		width: 0%;
 		display: flex;

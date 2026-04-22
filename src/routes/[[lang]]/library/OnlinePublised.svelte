@@ -29,7 +29,7 @@
 		border-radius: 0.7em;
 		max-width: 20ch;
 		overflow: hidden;
-		background: var(--background-color);
+		background: var(--surface);
 	}
 
 	.image-container {

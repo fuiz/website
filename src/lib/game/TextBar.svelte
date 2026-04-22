@@ -13,32 +13,63 @@
 	let { text, topShadow = false, showNext = false, heading = false, onnext } = $props();
 </script>
 
-<div
-	style:background="var(--background-color)"
-	style:display="flex"
-	style:line-height="1.5"
-	style:align-items="center"
-	style:justify-content="center"
-	style:padding="0.2em 0.4em"
-	style:border-bottom="0.15em solid currentcolor"
-	style:border-top={topShadow ? '0.15em solid currentcolor' : ''}
-	style:text-align="center"
-	style:z-index="1"
->
-	<div
-		style:flex="1"
-		style:font-size="1.5em"
-		style:font-weight=500
-		style:word-break="break-word"
-		style:font-family={heading ? 'var(--alternative-font)' : 'inherit'}
-	>
+<div class="bar" class:top-shadow={topShadow}>
+	<div class="text" class:heading>
 		{text}
 	</div>
 	{#if showNext}
-		<div style:font-size="1.2em" style:font-family="var(--alternative-font)">
+		<div class="next">
 			<FancyButton onclick={onnext}>
 				<div style:padding="0.2em 0.4em">{m.next()}</div>
 			</FancyButton>
 		</div>
 	{/if}
 </div>
+
+<style>
+	.bar {
+		background: var(--surface);
+		display: flex;
+		line-height: 1.5;
+		align-items: center;
+		justify-content: center;
+		padding: 0.4em 0.6em;
+		border-bottom: 0.15em solid currentcolor;
+		text-align: center;
+		z-index: 1;
+	}
+
+	.bar.top-shadow {
+		border-top: 0.15em solid currentcolor;
+	}
+
+	.text {
+		flex: 1;
+		font-size: 1.8em;
+		font-weight: 500;
+		word-break: break-word;
+	}
+
+	.text.heading {
+		font-family: var(--alternative-font);
+	}
+
+	.next {
+		font-size: 1.2em;
+		font-family: var(--alternative-font);
+	}
+
+	@media (max-width: 600px) {
+		.bar {
+			padding: 0.2em 0.4em;
+		}
+
+		.text {
+			font-size: 1.5em;
+		}
+
+		.next {
+			font-size: 1em;
+		}
+	}
+</style>

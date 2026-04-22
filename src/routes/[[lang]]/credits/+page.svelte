@@ -88,7 +88,7 @@
 					<img src={sebastian} alt={m.person_avatar({ name: 'Sebastian Wich' })} />
 					<div>
 						<AnchorMessage
-							href="https://sebastianwich.com"
+							href="mailto:sebastian@wichematik.education"
 							background="#23456740"
 							message="Sebastian Wich"
 						>
@@ -180,7 +180,7 @@
 				aspect-ratio: 1;
 				box-sizing: border-box;
 				background: white;
-				border: 0.2em solid var(--accent-color);
+				border: 0.2em solid var(--primary);
 				object-fit: contain;
 				border-radius: 0.5em;
 			}

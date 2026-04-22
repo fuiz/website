@@ -120,7 +120,7 @@
 
 <div
 	style:min-height="100dvh"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:display="flex"
 	style:flex-direction="column"
 >

@@ -46,7 +46,7 @@
 		style:font="inherit"
 		style:color="inherit"
 		style:border="none"
-		style:outline={selected ? '3px solid var(--accent-color)' : '1px solid darkgray'}
+		style:outline={selected ? '3px solid var(--primary)' : '1px solid darkgray'}
 		style:border-radius="0.5em"
 		style:overflow="hidden"
 		style:cursor="pointer"

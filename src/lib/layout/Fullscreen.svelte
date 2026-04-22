@@ -29,8 +29,8 @@
 
 <IconButton onclick={toggle} alt={fullscreen ? m.exit_fullscreen() : m.enter_fullscreen()}>
 	{#if fullscreen}
-		<CloseFullscreen height="1em" />
+		<CloseFullscreen />
 	{:else}
-		<OpenInFull height="1em" />
+		<OpenInFull />
 	{/if}
 </IconButton>

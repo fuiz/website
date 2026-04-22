@@ -52,9 +52,9 @@
 
 <style>
 	#container {
-		background: var(--color);
-		color: var(--background-color);
-		border: 0.15em solid var(--color);
+		background: var(--on-surface);
+		color: var(--surface);
+		border: 0.15em solid var(--on-surface);
 	}
 
 	#container.flashing {

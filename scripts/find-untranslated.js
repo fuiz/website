@@ -10,7 +10,7 @@ const root = join(import.meta.dirname, '..');
 const USER_FACING_ATTRS = new Set(['title', 'alt', 'placeholder', 'aria-label']);
 
 // Paths (relative to project root) to skip entirely
-const IGNORED_PATHS = ['src/routes/[[lang]]/privacy'];
+const IGNORED_PATHS = ['src/routes/[[lang]]/privacy', 'src/routes/[[lang]]/terms'];
 
 // Build reverse lookup: lowercase English value -> key(s)
 const en = getTranslations();

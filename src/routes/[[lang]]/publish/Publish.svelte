@@ -164,7 +164,7 @@
 					style:border="0.15em solid currentcolor"
 					style:border-radius="0.7em"
 					style:padding="1.5em"
-					style:background="var(--background-color)"
+					style:background="var(--surface)"
 				>
 					<h2 style:font-family="var(--alternative-font)" style:margin="0 0 0.5em" style:font-size="1.75em">
 						{m.fuiz_submitted()}
@@ -197,7 +197,7 @@
 					style:padding="1em"
 					style:width="100%"
 					style:box-sizing="border-box"
-					style:background="var(--background-color)"
+					style:background="var(--surface)"
 				>
 					<div style:display="flex" style:flex-direction="column" style:gap="0.5em">
 						{#each steps as step, i (step.state)}
@@ -243,7 +243,7 @@
 						style:border="0.15em solid currentcolor"
 						style:border-radius="0.7em"
 						style:text-align="center"
-						style:background="var(--background-color)"
+						style:background="var(--surface)"
 						style:display="flex"
 						style:flex-direction="column"
 						style:gap="0.75em"

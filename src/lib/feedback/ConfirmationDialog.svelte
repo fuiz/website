@@ -57,7 +57,7 @@
 	style:border-radius="0.7em"
 	style:padding="1em"
 	style:max-width="35ch"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:color="inherit"
 >
 	<h2 style:font-family="var(--alternative-font)" style:margin="0 0 0.5em 0" style:font-size="1.25em">
@@ -87,7 +87,7 @@
 		<div style:flex="1">
 			<FancyButton
 				type="button"
-				backgroundColor="var(--background-color)"
+				backgroundColor="var(--surface)"
 				backgroundDeepColor="currentcolor"
 				foregroundColor="currentcolor"
 				onclick={() => dialogElement?.close()}

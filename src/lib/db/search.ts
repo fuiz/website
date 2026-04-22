@@ -8,7 +8,7 @@ export function buildSearchQuery(
 	term: string,
 	filters: SearchFilters,
 	limit: number
-): { sql: string; params: unknown[] } {
+): { sql: string; params: string[] } {
 	const languagesQueries = (filters.languages || [])
 		.map((lang) => `language = '${lang}'`)
 		.join(' OR ');

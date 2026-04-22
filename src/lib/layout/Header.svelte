@@ -7,10 +7,10 @@
 <div style:display="flex" style:justify-content="center">
 	<a
 		href={resolve(localizeHref('/'))}
-		style:height="60px"
+		style:height="40px"
 		style:overflow="hidden"
 		style:color="inherit"
 	>
-		<Logo height={60} />
+		<Logo height={40} />
 	</a>
 </div>

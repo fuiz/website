@@ -86,7 +86,7 @@
 	input:is(:global(:not(:placeholder-shown), :focus, :active)) + label {
 		top: 0;
 		scale: 0.75;
-		background: var(--background-color);
+		background: var(--surface);
 		transform: translateY(-50%);
 	}
 
@@ -98,7 +98,7 @@
 		padding-right: 1.8em;
 
 		& ~ #error {
-			color: var(--accent-color);
+			color: var(--primary);
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -110,7 +110,7 @@
 	}
 
 	input:focus + label {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	input {
@@ -130,6 +130,6 @@
 
 	input:focus {
 		outline: none;
-		border-color: var(--accent-color);
+		border-color: var(--primary);
 	}
 </style>

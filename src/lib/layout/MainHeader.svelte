@@ -16,7 +16,7 @@
 
 <header>
 	<Header />
-	<nav style:font-size="0.8em">
+	<nav>
 		<div>
 			<FancyAnchorButton href={resolve(localizeHref('/create'))}>
 				<div class="a">
@@ -63,7 +63,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding: 0.3em 0.6em;
+		padding: 0.5em 1em;
 
 		@media (max-width: 600px) {
 			flex-direction: column;

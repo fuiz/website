@@ -9,7 +9,7 @@
 <div
 	style:display="flex"
 	style:border-bottom="0.15em solid"
-	style:background="var(--background-color)"
+	style:background="var(--surface)"
 	style:padding="0.2em 0.4em"
 	style:align-items="center"
 	style:box-sizing="border-box"

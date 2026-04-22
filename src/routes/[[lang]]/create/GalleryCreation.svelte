@@ -133,7 +133,7 @@
 				margin-right 150ms ease-out,
 				background 150ms ease-out;
 			outline: none;
-			background: var(--background-color);
+			background: var(--surface);
 
 			flex: 1;
 			z-index: 1;
@@ -178,8 +178,8 @@
 		}
 
 		&:where(:global(:focus-within, :hover)) {
-			background: var(--accent-color);
-			--border-color: var(--accent-color);
+			background: var(--primary);
+			--border-color: var(--primary);
 
 			& .main {
 				margin-right: 1.5em;
@@ -187,7 +187,7 @@
 				&:where(:global(:focus, :hover)) {
 					--trans-color: color-mix(in srgb, currentColor 10%, transparent);
 					background:
-						linear-gradient(var(--trans-color), var(--trans-color)), var(--background-color);
+						linear-gradient(var(--trans-color), var(--trans-color)), var(--surface);
 				}
 			}
 		}
@@ -195,7 +195,7 @@
 
 	@media (hover: none) {
 		.entry {
-			--border-color: var(--accent-color);
+			--border-color: var(--primary);
 		}
 
 		.entry .main {

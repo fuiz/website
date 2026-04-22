@@ -46,7 +46,7 @@
 		left: 0;
 		height: 100%;
 		width: 100%;
-		background-color: color-mix(in srgb, var(--background-color) 80%, transparent);
+		background-color: color-mix(in srgb, var(--surface) 80%, transparent);
 		backdrop-filter: blur(4px);
 
 		display: flex;

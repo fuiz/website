@@ -17,10 +17,10 @@
 
 <div>
 	<IconButton alt={m.language()} popovertarget={id}>
-		<Language height="1em" />
+		<Language style="anchor-name: --lang-{id}" />
 	</IconButton>
 
-	<div {id} bind:this={popoverElement} popover="auto" style:--y={up ? 'calc(-100% - 1.25em)' : '0'}>
+	<div {id} bind:this={popoverElement} popover="auto" class:up style:position-anchor="--lang-{id}">
 		<ul>
 			{#each locales as lang (lang)}
 				<li>
@@ -37,25 +37,29 @@
 </div>
 
 <style>
-	div {
-		position: relative;
-	}
-
 	[popover] {
-		position: absolute;
-		background: var(--background-color);
+		position: fixed;
+		position-area: bottom span-left;
+		background: var(--surface);
 		border: 0.1em solid;
 		border-radius: 0.7em;
-		transform-origin: top;
 		padding: 0;
-		transform: translateX(calc(-100% + 1.25em)) translateY(var(--y));
-		margin: 0.15em 0;
+		margin: 0.15em;
 		color: inherit;
 		inset: unset;
+		position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+	}
+
+	[popover].up {
+		position-area: top span-left;
 	}
 
 	[popover]:dir(rtl) {
-		transform: translateX(calc(100% - 1.25em)) translateY(var(--y));
+		position-area: bottom span-right;
+	}
+
+	[popover]:dir(rtl).up {
+		position-area: top span-right;
 	}
 
 	[popover]::backdrop {

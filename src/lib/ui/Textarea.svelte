@@ -73,12 +73,12 @@
 	textarea:where(:global(:not(:placeholder-shown), :focus, :active)) + label {
 		top: 0;
 		scale: 0.75;
-		background: var(--background-color);
+		background: var(--surface);
 		transform: translateY(-50%);
 	}
 
 	textarea:focus + label {
-		color: var(--accent-color);
+		color: var(--primary);
 	}
 
 	textarea {
@@ -98,6 +98,6 @@
 
 	textarea:focus {
 		outline: none;
-		border-color: var(--accent-color);
+		border-color: var(--primary);
 	}
 </style>

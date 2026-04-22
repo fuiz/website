@@ -25,6 +25,6 @@
 	.fill {
 		height: 100%;
 		border-radius: 0.1em;
-		background-color: var(--accent-color);
+		background-color: var(--primary);
 	}
 </style>

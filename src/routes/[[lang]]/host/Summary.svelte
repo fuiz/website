@@ -111,7 +111,7 @@
 		border: 0.15em solid;
 		padding: 0.15em 0.5em;
 		border-radius: 0.7em;
-		background-color: var(--background-color);
+		background-color: var(--surface);
 		gap: 0.25em;
 	}
 

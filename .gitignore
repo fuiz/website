@@ -24,3 +24,7 @@ vite.config.ts.timestamp-*
 
 # Paraglide
 src/lib/paraglide
+src/paraglide
+
+# Local demo route
+src/routes/\[\[lang\]\]/demo
