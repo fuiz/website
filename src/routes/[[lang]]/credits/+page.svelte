@@ -88,7 +88,7 @@
 					<img src={sebastian} alt={m.person_avatar({ name: 'Sebastian Wich' })} />
 					<div>
 						<AnchorMessage
-							href="https://sebastianwich.com"
+							href="mailto:sebastian@wichematik.education"
 							background="#23456740"
 							message="Sebastian Wich"
 						>
