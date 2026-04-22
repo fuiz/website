@@ -1,1 +1,1 @@
-/// <reference types="bun-types" />
+/// <reference types="@types/bun" />
