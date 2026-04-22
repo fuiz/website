@@ -1,12 +1,12 @@
 <script>
-	import { resolve } from '$app/paths';
+	import { resolveIfInternal } from './resolveIfInternal';
 
 	/** @type {{href: string, children?: import('svelte').Snippet}}*/
 	let { href, children } = $props();
 </script>
 
 <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-<a href={href.startsWith('http') ? href : resolve(href)} target="_blank">
+<a href={resolveIfInternal(href)} target="_blank">
 	{@render children?.()}
 </a>
 

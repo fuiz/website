@@ -1,5 +1,5 @@
 <script>
-	import { resolve } from '$app/paths';
+	import { resolveIfInternal } from './resolveIfInternal';
 
 	/** @type {{
 	 * message: string;
@@ -12,7 +12,8 @@
 </script>
 
 {#if message}
-	<a href={resolve(href)} style:--background={background} style:--color={color}>
+	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+	<a href={resolveIfInternal(href)} style:--background={background} style:--color={color}>
 		{@render icon()}
 		<div style:flex="1" style:text-align="center">
 			{message}

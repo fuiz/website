@@ -65,12 +65,10 @@
 					</div>
 				{/each}
 				{#if displayed.exact_count > displayed.items.length}
-					<div class="more-container">
-						<div class="more">
-							{m.more({
-								count: displayed.exact_count - displayed.items.length
-							})}
-						</div>
+					<div class="more">
+						{m.more({
+							count: displayed.exact_count - displayed.items.length
+						})}
 					</div>
 				{/if}
 			</div>
@@ -96,22 +94,13 @@
 		box-sizing: border-box;
 	}
 
-	.more-container {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		color: white;
-	}
-
 	.more {
-		width: 100%;
-		background: var(--surface);
-		border: 0.15em solid;
+		background: var(--surface-variant);
+		padding: 0.4em 0.8em;
+		font-weight: bold;
 		border-radius: 0.6em;
-		padding: 0.15em 0.4em;
 		box-sizing: border-box;
 		display: flex;
 		justify-content: center;
 	}
-
 </style>

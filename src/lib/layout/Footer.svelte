@@ -14,7 +14,7 @@
 	style:border-top="2px solid #00000080"
 	style:text-align="center"
 	style:width="100%"
-style:box-sizing="border-box"
+	style:box-sizing="border-box"
 	style:padding="8px"
 	style:display="flex"
 	style:align-items="center"

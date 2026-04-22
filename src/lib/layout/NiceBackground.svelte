@@ -8,7 +8,7 @@
 	let { children } = $props();
 </script>
 
-<div style:height="100%" style:position="relat ive">
+<div style:height="100%" style:position="relative">
 	<div
 		style:background-color="var(--surface)"
 		style:inset="0"
