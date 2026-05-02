@@ -48,45 +48,56 @@
 	let fullscreenElement = $state<HTMLElement>();
 </script>
 
-<div
-	bind:this={fullscreenElement}
-	style:height="100%"
-	style:display="flex"
-	style:flex-direction="column"
->
+<div bind:this={fullscreenElement} class="root">
 	<Topbar bind:bindableGameInfo {gameInfo} {fullscreenElement} {onlock} />
-	<TextBar {onnext} text={m.scores()} showNext={true} heading={true} />
-	<div class="background">
+	<div class="background-area">
 		<NiceBackground>
-			<div class="entries">
-				{#each displayed.items as [name, score], index (name)}
-					<div animate:flip={{ duration, delay }} transition:fly={{ duration, delay, y: '200%' }}>
-						<LeaderboardRecord {name} {score} {index} final={displayed_final} {duration} {delay} />
-					</div>
-				{/each}
-				{#if displayed.exact_count > displayed.items.length}
-					<div class="more">
-						{m.more({
-							count: displayed.exact_count - displayed.items.length
-						})}
-					</div>
-				{/if}
+			<div class="layout">
+				<TextBar {onnext} text={m.scores()} showNext={true} heading={true} />
+				<div class="entries">
+					{#each displayed.items as [name, score], index (name)}
+						<div animate:flip={{ duration, delay }} transition:fly={{ duration, delay, y: '200%' }}>
+							<LeaderboardRecord {name} {score} {index} final={displayed_final} {duration} {delay} />
+						</div>
+					{/each}
+					{#if displayed.exact_count > displayed.items.length}
+						<div class="more">
+							{m.more({
+								count: displayed.exact_count - displayed.items.length
+							})}
+						</div>
+					{/if}
+				</div>
 			</div>
 		</NiceBackground>
 	</div>
 </div>
 
 <style>
-	.background {
+	.root {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.background-area {
 		flex: 1;
+		min-height: 0;
+	}
+
+	.layout {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.entries {
-		height: 100%;
-		margin: auto;
+		flex: 1;
+		width: 100%;
+		max-width: 60ch;
+		margin: 0 auto;
 		padding: 1em;
 		font-size: min(2em, 5vw);
-		max-width: 60ch;
 		display: flex;
 		justify-content: center;
 		gap: 0.4em;

@@ -6,7 +6,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
-	import Topbar from './Topbar.svelte';
+	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	let value = $state('');
 
@@ -35,7 +35,7 @@
 					</div>
 				</div>
 			{/if}
-			<TextBar text={questionText} topShadow={(media ?? undefined) !== undefined} />
+			<TextBar text={questionText} />
 			<div
 				style:display="flex"
 				style:padding="0.5em"

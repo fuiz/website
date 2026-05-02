@@ -86,6 +86,7 @@
 	#inner {
 		grid-template-columns: 1fr 1fr;
 		height: 100%;
+		align-content: end;
 		display: grid;
 		gap: 0.2em;
 		padding: 0.2em;

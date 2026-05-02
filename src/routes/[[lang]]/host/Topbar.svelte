@@ -16,7 +16,6 @@
 	 * 	bindableGameInfo: import('./+page').BindableGameInfo;
 	 * 	gameInfo: import('./+page').SharedGameInfo;
 	 * 	fullscreenElement?: HTMLElement | undefined;
-	 * 	showSkip?: boolean;
 	 * 	onnext?: () => void;
 	 * 	onlock?: (locked: boolean) => void;
 	 * }}*/
@@ -24,7 +23,6 @@
 		bindableGameInfo = $bindable(),
 		gameInfo,
 		fullscreenElement = undefined,
-		showSkip = false,
 		onnext,
 		onlock
 	} = $props();
@@ -44,9 +42,7 @@
 		})}
 	</div>
 	<div class="controls">
-		{#if showSkip}
-			<IconButton alt={m.skip()} onclick={onnext}><SkipNext /></IconButton>
-		{/if}
+		<IconButton alt={m.skip()} onclick={onnext}><SkipNext/></IconButton>
 		<StatedIconButton
 			icons={[
 				{ component: LockOpenRightOutline, alt: m.lock_game() },
@@ -72,6 +68,7 @@
 	.topbar {
 		display: flex;
 		background: var(--surface);
+		box-shadow: 0 2px 2px #00000040;
 		padding: 0.2em;
 		line-height: 1em;
 		align-items: center;
@@ -79,6 +76,8 @@
 		row-gap: 10px;
 		justify-content: center;
 		flex-wrap: wrap;
+		position: relative;
+		z-index: 1;
 	}
 
 	.slide-index {

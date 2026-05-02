@@ -4,6 +4,11 @@
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import QuestionAnswers from '$lib/question-types/mcq/host/QuestionAnswers.svelte';
+	import QuestionStatistics from '$lib/question-types/mcq/host/QuestionStatistics.svelte';
+	import OrderAnswers from '$lib/question-types/order/host/OrderAnswers.svelte';
+	import OrderStatistics from '$lib/question-types/order/host/OrderStatistics.svelte';
+	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/TypeAnswerStatistics.svelte';
 	import { bring, zip } from '$lib/util';
 	import type { IncomingMessage, State } from '.';
 	import type { BindableGameInfo } from './+page';
@@ -15,13 +20,8 @@
 		handleTypeAnswerMessage,
 		type QuestionMessageResult
 	} from './messageHandler';
-	import OrderAnswers from './OrderAnswers.svelte';
-	import OrderStatistics from './OrderStatistics.svelte';
 	import Question from './Question.svelte';
-	import QuestionAnswers from './QuestionAnswers.svelte';
-	import QuestionStatistics from './QuestionStatistics.svelte';
 	import Summary from './Summary.svelte';
-	import TypeAnswerStatistics from './TypeAnswerStatistics.svelte';
 	import Waiting from './Waiting.svelte';
 
 	let currentState = $state<State>();

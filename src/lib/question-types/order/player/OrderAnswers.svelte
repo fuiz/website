@@ -9,7 +9,7 @@
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ArrowDownward from '~icons/material-symbols/arrow-downward';
-	import Topbar from './Topbar.svelte';
+	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	/** @type {{
 	 * questionText: string;

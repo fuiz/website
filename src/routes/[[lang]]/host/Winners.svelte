@@ -23,32 +23,61 @@
 	let fullscreenElement = $state<HTMLElement>();
 </script>
 
-<div style:height="100%" bind:this={fullscreenElement}>
-	<NiceBackground>
-		<Topbar bind:bindableGameInfo {gameInfo} {fullscreenElement} onlock={lock} />
-		<TextBar onnext={next} text={m.winners()} showNext={true} heading={true} />
-		<div
-			style:display="flex"
-			style:flex-direction="column"
-			style:max-width="30ch"
-			style:margin="auto"
-			style:text-align="center"
-			style:padding="0.3em"
-			style:gap="0.3em"
-		>
-			{#each winners as w (w)}
-				<div
-					style:background="var(--surface)"
-					style:border="0.15em solid currentcolor"
-					style:padding="0.15em 0.4em"
-					style:font-weight="bold"
-					style:border-radius="0.6em"
-				>
-					<div style:font-size="1.5em">
-						{w}
-					</div>
+<div bind:this={fullscreenElement} class="root">
+	<Topbar bind:bindableGameInfo {gameInfo} {fullscreenElement} onlock={lock} />
+	<div class="background-area">
+		<NiceBackground>
+			<div class="layout">
+				<TextBar onnext={next} text={m.winners()} showNext={true} heading={true} />
+				<div class="winners">
+					{#each winners as w (w)}
+						<div class="winner">
+							<div class="winner-name">{w}</div>
+						</div>
+					{/each}
 				</div>
-			{/each}
-		</div>
-	</NiceBackground>
+			</div>
+		</NiceBackground>
+	</div>
 </div>
+
+<style>
+	.root {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.background-area {
+		flex: 1;
+		min-height: 0;
+	}
+
+	.layout {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.winners {
+		display: flex;
+		flex-direction: column;
+		max-width: 30ch;
+		margin: auto;
+		text-align: center;
+		padding: 0.3em;
+		gap: 0.3em;
+	}
+
+	.winner {
+		background: var(--surface);
+		border: 0.15em solid currentcolor;
+		padding: 0.15em 0.4em;
+		font-weight: bold;
+		border-radius: 0.6em;
+	}
+
+	.winner-name {
+		font-size: 1.5em;
+	}
+</style>

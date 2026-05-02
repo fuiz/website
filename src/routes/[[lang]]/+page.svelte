@@ -6,6 +6,8 @@
 	import MainHeader from '$lib/layout/MainHeader.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import QuestionAnswers from '$lib/question-types/mcq/host/QuestionAnswers.svelte';
+	import QuestionStatistics from '$lib/question-types/mcq/host/QuestionStatistics.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
@@ -14,8 +16,6 @@
 	import Language from '~icons/material-symbols/language';
 	import MailOutline from '~icons/material-symbols/mail-outline';
 	import MoneyOff from '~icons/material-symbols/money-off';
-	import QuestionAnswers from './host/QuestionAnswers.svelte';
-	import QuestionStatistics from './host/QuestionStatistics.svelte';
 
 	let { data = $bindable() } = $props();
 

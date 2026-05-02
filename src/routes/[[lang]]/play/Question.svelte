@@ -35,7 +35,7 @@
 					</div>
 				</div>
 			{/if}
-			<TextBar text={questionText} topShadow={true} />
+			<TextBar text={questionText} />
 		</div>
 	</NiceBackground>
 </div>

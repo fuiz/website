@@ -1,26 +1,29 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 
-	/** @type {{
-	 * text: string;
-	 * topShadow?: boolean;
-	 * showNext?: boolean;
-	 * heading?: boolean;
-	 * onnext?: () => void;
-	}}*/
-	let { text, topShadow = false, showNext = false, heading = false, onnext } = $props();
+	let {
+		text,
+		showNext = false,
+		heading = false,
+		onnext
+	}: {
+		text: string;
+		showNext?: boolean;
+		heading?: boolean;
+		onnext?: () => void;
+	} = $props();
 </script>
 
-<div class="bar" class:top-shadow={topShadow}>
+<div class="bar">
 	<div class="text" class:heading>
 		{text}
 	</div>
 	{#if showNext}
 		<div class="next">
 			<FancyButton onclick={onnext}>
-				<div style:padding="0.2em 0.4em">{m.next()}</div>
+				<div class="next-padding">{m.next()}</div>
 			</FancyButton>
 		</div>
 	{/if}
@@ -28,19 +31,12 @@
 
 <style>
 	.bar {
-		background: var(--surface);
 		display: flex;
 		line-height: 1.5;
 		align-items: center;
 		justify-content: center;
 		padding: 0.4em 0.6em;
-		border-bottom: 0.15em solid currentcolor;
 		text-align: center;
-		z-index: 1;
-	}
-
-	.bar.top-shadow {
-		border-top: 0.15em solid currentcolor;
 	}
 
 	.text {
@@ -57,6 +53,10 @@
 	.next {
 		font-size: 1.2em;
 		font-family: var(--alternative-font);
+	}
+
+	.next-padding {
+		padding: 0.2em 0.4em;
 	}
 
 	@media (max-width: 600px) {

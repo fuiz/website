@@ -7,58 +7,80 @@
 	/** @type {{ timeLeft: number, timeStarted: number }} */
 	let { timeLeft, timeStarted } = $props();
 
-	const size = '1.2em';
+	let maxDigits = $derived(String(Math.ceil(timeStarted / 1000)).length);
 </script>
 
-<div
-	id="container"
-	class={timeLeft <= 5000 ? 'flashing' : ''}
-	style:display="flex"
-	style:padding="0.2em 0.6em"
-	style:gap="0.3em"
-	style:align-items="center"
-	style:font-family="var(--alternative-font)"
-	style:border-radius="200px"
-	style:overflow="hidden"
->
-	<div style:position="relative" style:width={size} style:height={size} style:background="inherit">
-		<div style:position="absolute" style:height="100%" style:overflow="hidden">
-			<Hourglass height={size} title={m.filled_hourglass()} />
+<div class="container" class:flashing={timeLeft <= 5000}>
+	<div class="hourglass">
+		<div class="layer top-filled">
+			<Hourglass height="1.2em" title={m.filled_hourglass()} />
 		</div>
 		<div
-			style:position="absolute"
+			class="layer top-empty"
 			style:height="{(-(timeStarted - timeLeft) / timeStarted) * 30 + 85}%"
-			style:overflow="hidden"
-			style:background="inherit"
 		>
-			<HourglassEmpty height={size} title={m.empty_hourglass()} />
+			<HourglassEmpty height="1.2em" title={m.empty_hourglass()} />
 		</div>
-		<div style:position="absolute" style:height="50%" style:overflow="hidden">
-			<Hourglass height={size} title={m.filled_hourglass()} />
+		<div class="layer bottom-filled">
+			<Hourglass height="1.2em" title={m.filled_hourglass()} />
 		</div>
 		<div
-			style:position="absolute"
+			class="layer bottom-empty"
 			style:height="{((timeStarted - timeLeft) / timeStarted) * 30 + 15}%"
-			style:overflow="hidden"
-			style:background="inherit"
 		>
-			<HourglassEmpty height={size} title={m.empty_hourglass()} />
+			<HourglassEmpty height="1.2em" title={m.empty_hourglass()} />
 		</div>
 	</div>
-	<div>
+	<div class="count" style:min-width="{maxDigits}ch">
 		{Math.ceil(timeLeft / 1000)}
 	</div>
 </div>
 
 <style>
-	#container {
+	.container {
+		display: flex;
+		padding: 0.2em 0.6em;
+		gap: 0.3em;
+		align-items: center;
+		font-family: var(--alternative-font);
+		border-radius: 200px;
+		overflow: hidden;
 		background: var(--on-surface);
 		color: var(--surface);
 		border: 0.15em solid var(--on-surface);
 	}
 
-	#container.flashing {
+	.container.flashing {
 		animation: 500ms steps(1) 0s infinite alternate flash;
+	}
+
+	.hourglass {
+		position: relative;
+		width: 1.2em;
+		height: 1.2em;
+		background: inherit;
+	}
+
+	.layer {
+		position: absolute;
+		overflow: hidden;
+	}
+
+	.top-filled {
+		height: 100%;
+	}
+
+	.top-empty,
+	.bottom-empty {
+		background: inherit;
+	}
+
+	.bottom-filled {
+		height: 50%;
+	}
+
+	.count {
+		text-align: center;
 	}
 
 	@keyframes flash {

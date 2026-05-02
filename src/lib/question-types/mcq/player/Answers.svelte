@@ -7,7 +7,7 @@
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Topbar from './Topbar.svelte';
+	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	/** @type {{questionText: string;name: string;score: number;media: undefined | import('$lib/types').Media;showAnswers: boolean;answers: (import('$lib/types').TextOrMedia | undefined)[];answerMode?: import('$lib/types').AnswerMode;onanswer?: (answer: number) => void;onarrayanswer?: (answers: number[]) => void;}} */
 	let {

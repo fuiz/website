@@ -5,9 +5,11 @@
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import Answers from '$lib/question-types/mcq/player/Answers.svelte';
+	import OrderAnswers from '$lib/question-types/order/player/OrderAnswers.svelte';
+	import TypeAnswerQuestion from '$lib/question-types/type-answer/player/TypeAnswerQuestion.svelte';
 	import { bring, zip } from '$lib/util';
 	import type { IncomingMessage, State } from '.';
-	import Answers from './Answers.svelte';
 	import ChooseName from './ChooseName.svelte';
 	import ChooseTeammates from './ChooseTeammates.svelte';
 	import FindTeam from './FindTeam.svelte';
@@ -18,11 +20,9 @@
 		handleOrderMessage,
 		handleTypeAnswerMessage
 	} from './messageHandler';
-	import OrderAnswers from './OrderAnswers.svelte';
 	import Question from './Question.svelte';
 	import Result from './Result.svelte';
 	import Summary from './Summary.svelte';
-	import TypeAnswerQuestion from './TypeAnswerQuestion.svelte';
 	import WaitingMobile from './WaitingMobile.svelte';
 	import WaitingOthers from './WaitingOthers.svelte';
 
