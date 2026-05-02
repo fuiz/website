@@ -6,7 +6,7 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import FuizIcon from '~icons/custom/icon';
 
-	let exitDialog: ConfirmationDialog | undefined = $state();
+	let exitDialog = $state<ConfirmationDialog>();
 </script>
 
 <button

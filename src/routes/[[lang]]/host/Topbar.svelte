@@ -22,7 +22,7 @@
 	}: {
 		bindableGameInfo: BindableGameInfo;
 		gameInfo: SharedGameInfo;
-		fullscreenElement?: HTMLElement | undefined;
+		fullscreenElement?: HTMLElement;
 		onnext?: () => void;
 		onlock?: (locked: boolean) => void;
 	} = $props();

@@ -23,20 +23,11 @@
 		disabled: boolean;
 		value: string | undefined;
 		textTransform?: string;
-		autocomplete?: FullAutoFill | null | undefined;
-		maxLength?: number | undefined;
-		minLength?: number | undefined;
+		autocomplete?: FullAutoFill | null;
+		maxLength?: number;
+		minLength?: number;
 		showInvalid?: boolean;
-		inputmode?:
-			| 'text'
-			| 'search'
-			| 'none'
-			| 'tel'
-			| 'url'
-			| 'email'
-			| 'numeric'
-			| 'decimal'
-			| undefined;
+		inputmode?: 'text' | 'search' | 'none' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal';
 	} = $props();
 </script>
 

@@ -14,7 +14,7 @@
 		disabled: boolean;
 		value?: string;
 		maxHeight?: string;
-		maxLength?: number | undefined;
+		maxLength?: number;
 	} = $props();
 
 	let editableElement = $state<HTMLTextAreaElement>();

@@ -12,7 +12,7 @@
 		textAlign?: string;
 		lightText?: boolean;
 		padding?: string;
-		maxLength?: number | undefined;
+		maxLength?: number;
 	} = $props();
 
 	let placeholderColor = $derived(lightText ? '#FFFFFF80' : '#00000080');

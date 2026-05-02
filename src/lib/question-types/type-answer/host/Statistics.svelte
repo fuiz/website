@@ -27,8 +27,8 @@
 		answers: string[];
 		caseSensitive: boolean;
 		results: [string, number][];
-		timeLeft?: number | undefined;
-		timeStarted?: number | undefined;
+		timeLeft?: number;
+		timeStarted?: number;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();

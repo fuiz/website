@@ -273,7 +273,7 @@ export type Creation = {
 	title: string;
 	lastEdited: number;
 	slidesCount: number;
-	media?: Media | undefined;
+	media?: Media;
 };
 
 export type NameStyle =

@@ -17,8 +17,8 @@
 		backgroundDeepColor: string;
 		disabled?: boolean;
 		active?: boolean;
-		type?: 'button' | 'submit' | 'reset' | undefined;
-		height?: string | undefined;
+		type?: 'button' | 'submit' | 'reset';
+		height?: string;
 		children?: Snippet;
 		onclick?: () => void;
 	} = $props();

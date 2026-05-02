@@ -7,7 +7,7 @@
 
 	let fullscreen = $state(false);
 
-	let { fullscreenElement = undefined }: { fullscreenElement?: HTMLElement | undefined } = $props();
+	let { fullscreenElement = undefined }: { fullscreenElement?: HTMLElement } = $props();
 
 	onMount(() => {
 		document.addEventListener('fullscreenchange', () => {

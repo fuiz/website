@@ -18,7 +18,7 @@
 		score = undefined
 	}: {
 		name: string;
-		score?: number | undefined;
+		score?: number;
 	} = $props();
 
 	let gameCodeGetter = getContext<(() => string) | undefined>('gameCode');

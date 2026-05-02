@@ -25,7 +25,7 @@
 		questionText: string;
 		timeLeft?: number | null;
 		timeStarted: number | null;
-		answeredCount?: number | undefined;
+		answeredCount?: number;
 		media: Media | undefined;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;

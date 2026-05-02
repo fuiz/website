@@ -14,13 +14,13 @@
 	}: {
 		children: Snippet;
 		alt: string;
-		disabled?: boolean | undefined;
-		padding?: string | undefined;
-		onclick?: (() => void) | undefined;
-		onmouseover?: (() => void) | undefined;
-		onmouseenter?: (() => void) | undefined;
-		onfocus?: (() => void) | undefined;
-		popovertarget?: string | undefined;
+		disabled?: boolean;
+		padding?: string;
+		onclick?: () => void;
+		onmouseover?: () => void;
+		onmouseenter?: () => void;
+		onfocus?: () => void;
+		popovertarget?: string;
 	} = $props();
 </script>
 

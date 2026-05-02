@@ -11,7 +11,7 @@
 		attention = false
 	}: {
 		value: boolean;
-		color?: string | undefined;
+		color?: string;
 		attention?: boolean;
 	} = $props();
 

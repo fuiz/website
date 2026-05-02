@@ -13,13 +13,13 @@
 		onclick = undefined,
 		children
 	}: {
-		foregroundColor?: string | undefined;
-		backgroundColor?: string | undefined;
-		backgroundDeepColor?: string | undefined;
+		foregroundColor?: string;
+		backgroundColor?: string;
+		backgroundDeepColor?: string;
 		disabled?: boolean;
 		active?: boolean;
-		type?: 'button' | 'submit' | 'reset' | undefined;
-		height?: string | undefined;
+		type?: 'button' | 'submit' | 'reset';
+		height?: string;
 		onclick?: () => void;
 		children?: Snippet;
 	} = $props();

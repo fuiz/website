@@ -22,8 +22,8 @@
 		gameInfo: SharedGameInfo;
 		questionText: string;
 		answers: { text: string; count: number; correct: boolean }[];
-		timeLeft?: number | undefined;
-		timeStarted?: number | undefined;
+		timeLeft?: number;
+		timeStarted?: number;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();

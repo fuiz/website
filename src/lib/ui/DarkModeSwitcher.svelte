@@ -5,7 +5,7 @@
 	import DarkModeOutline from '~icons/material-symbols/dark-mode-outline';
 	import LightModeOutline from '~icons/material-symbols/light-mode-outline';
 
-	let { dark = $bindable(undefined) }: { dark?: boolean | undefined } = $props();
+	let { dark = $bindable(undefined) }: { dark?: boolean } = $props();
 
 	function getName(state: boolean): string {
 		return state ? 'dark' : 'light';

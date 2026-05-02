@@ -11,7 +11,7 @@
 	}: {
 		checked: boolean;
 		id: string;
-		stuck?: boolean | undefined;
+		stuck?: boolean;
 		children?: Snippet;
 		onchange?: (boolean: boolean) => void;
 	} = $props();
