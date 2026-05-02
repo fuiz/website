@@ -14,33 +14,63 @@
 	} = $props();
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
+<div class="page">
 	<Topbar {name} />
-	<div style:flex="1">
+	<div class="body">
 		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-			>
-				<div style:display="flex" style:flex-direction="column" style:align-items="center">
-					<div style:font-weight="bold" style:max-width="10ch" style:text-align="center">
-						{m.find_team({ team: teamName })}
-					</div>
+			<div class="center">
+				<div class="prompt">
+					{m.find_team({ team: teamName })}
 				</div>
 			</div>
 		</NiceBackground>
 	</div>
-	<div
-		style:background="var(--surface)"
-		style:text-align="center"
-		style:padding="5px 0"
-		style:border-top="0.15em solid"
-	>
-		<div style:font-weight="bold">{m.game_code()}</div>
-		<div style:font-size="2em" style:font-family="var(--alternative-font)" style:text-transform="uppercase">
-			{gameCode}
-		</div>
+	<div class="code-bar">
+		<div class="code-label">{m.game_code()}</div>
+		<div class="code-value">{gameCode}</div>
 	</div>
 </div>
+
+<style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.body {
+		flex: 1;
+	}
+
+	.center {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.prompt {
+		font-weight: bold;
+		font-family: var(--alternative-font);
+		font-size: 1.75em;
+		max-width: 12ch;
+		text-align: center;
+	}
+
+	.code-bar {
+		background: var(--surface);
+		text-align: center;
+		padding: 5px 0;
+		border-top: 0.15em solid;
+	}
+
+	.code-label {
+		font-weight: bold;
+	}
+
+	.code-value {
+		font-size: 2em;
+		font-family: var(--alternative-font);
+		text-transform: uppercase;
+	}
+</style>

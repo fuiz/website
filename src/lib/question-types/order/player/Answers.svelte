@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { type DragDropState, draggable, droppable } from '@thisux/sveltednd';
 	import { flip } from 'svelte/animate';
-	import { type DndEvent, dndzone } from 'svelte-dnd-action';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
@@ -11,6 +11,8 @@
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
+
+	type Item = { answer: string; id: number };
 
 	let {
 		questionText,
@@ -33,101 +35,102 @@
 	} = $props();
 
 	// svelte-ignore state_referenced_locally
-	let answersIndexed = $state(answers.map((answer, index) => ({ answer, id: index })));
+	let answersIndexed = $state<Item[]>(answers.map((answer, index) => ({ answer, id: index })));
 
-	function handleConsider(e: CustomEvent<DndEvent<{ answer: string; id: number }>>) {
-		answersIndexed = e.detail.items;
+	function moveTo(itemId: number, toIndex: number) {
+		const fromIndex = answersIndexed.findIndex((i) => i.id === itemId);
+		if (fromIndex === -1 || fromIndex === toIndex) return;
+		const next = [...answersIndexed];
+		const [moved] = next.splice(fromIndex, 1);
+		next.splice(toIndex, 0, moved);
+		answersIndexed = next;
 	}
 
-	function handleFinalize(e: CustomEvent<DndEvent<{ answer: string; id: number }>>) {
-		answersIndexed = e.detail.items;
+	function swap(a: number, b: number) {
+		if (a < 0 || b < 0 || a >= answersIndexed.length || b >= answersIndexed.length) return;
+		const next = [...answersIndexed];
+		[next[a], next[b]] = [next[b], next[a]];
+		answersIndexed = next;
+	}
+
+	function handleDragEnter(state: DragDropState<Item>) {
+		const { draggedItem, targetContainer } = state;
+		if (targetContainer === null) return;
+		moveTo(draggedItem.id, parseInt(targetContainer, 10));
+	}
+
+	function handleDrop(state: DragDropState<Item>) {
+		const { draggedItem, targetContainer, dropPosition } = state;
+		if (targetContainer === null) return;
+		let toIndex = parseInt(targetContainer, 10);
+		if (dropPosition === 'after') toIndex++;
+		const fromIndex = answersIndexed.findIndex((i) => i.id === draggedItem.id);
+		const adjusted = fromIndex !== -1 && fromIndex < toIndex ? toIndex - 1 : toIndex;
+		moveTo(draggedItem.id, adjusted);
 	}
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
+<div class="page">
 	<div>
 		<Topbar {name} {score} />
 		{#if showAnswers}
 			<TextBar text={questionText} />
 		{/if}
 	</div>
-	<div style:flex="1">
+	<div class="body">
 		<NiceBackground>
-			<div style:height="100%" style:display="flex" style:flex-direction="column">
+			<div class="stack">
 				{#if media && showAnswers}
-					<div style:height="40dvh">
+					<div class="media">
 						<MediaDisplay {media} fit="contain" />
 					</div>
 				{/if}
-				<div
-					style:display="flex"
-					style:flex-direction="column"
-					style:justify-content="center"
-					style:gap="0.4em"
-					style:padding="1em"
-				>
+				<div class="content">
 					{#if axisLabels.from?.length}
 						<div>{axisLabels.from}</div>
 					{/if}
-					<div style:display="flex" style:justify-content="space-between">
-						<div
-							style:display="flex"
-							style:align-items="center"
-							style:padding="0 0.5em"
-							style:flex-direction="column"
-						>
-							<!-- arrow body -->
-							<div
-								style:width="0.2em"
-								style:height="100%"
-								style:background-color="currentColor"
-								style:box-sizing="border-box"
-							></div>
-							<!-- arrow head -->
-							<div
-								style:width="0"
-								style:height="0"
-								style:border-left="0.6em solid transparent"
-								style:border-right="0.6em solid transparent"
-								style:border-top="0.6em solid currentColor"
-							></div>
+					<div class="row">
+						<div class="arrow">
+							<div class="arrow-body"></div>
+							<div class="arrow-head"></div>
 						</div>
-						<section
-							use:dndzone={{ items: answersIndexed, flipDurationMs: 100, dropTargetStyle: {} }}
-							style:display="flex"
-							style:flex-direction="column"
-							style:gap="0.4em"
-							style:flex="1"
-							onconsider={handleConsider}
-							onfinalize={handleFinalize}
-						>
-							{#each answersIndexed as { answer, id }, actualIndex (id)}
-								<div
-									style:display="flex"
-									style:justify-content="space-between"
-									style:align-items="center"
-									style:gap="0.4em"
-									animate:flip={{ duration: 300 }}
+						<ol class="list">
+							{#each answersIndexed as item, actualIndex (item.id)}
+								<li
+									class="item"
+									animate:flip={{ duration: 200 }}
+									use:draggable={{
+										container: actualIndex.toString(),
+										dragData: item,
+										handle: '.item'
+									}}
+									use:droppable={{
+										container: actualIndex.toString(),
+										direction: 'vertical',
+										callbacks: {
+											onDrop: handleDrop,
+											onDragEnter: handleDragEnter
+										}
+									}}
 								>
-									<div style:flex="1">
-										<TextAnswerButton answerText={answer} index={id} correct={undefined} />
+									<div class="item-answer">
+										<TextAnswerButton
+											answerText={item.answer}
+											index={item.id}
+											correct={undefined}
+										/>
 									</div>
 									{#if actualIndex < answersIndexed.length - 1}
 										<IconButton
 											alt={m.move_down()}
-											onclick={() => {
-												answersIndexed = [
-													...answersIndexed.slice(0, actualIndex),
-													answersIndexed[actualIndex + 1],
-													answersIndexed[actualIndex],
-													...answersIndexed.slice(actualIndex + 2)
-												];
-											}}><ArrowDownward height="1.5em" /></IconButton
+											onclick={() => swap(actualIndex, actualIndex + 1)}
 										>
+											<ArrowDownward height="1.5em" />
+										</IconButton>
 									{/if}
-								</div>
+								</li>
 							{/each}
-						</section>
+						</ol>
 					</div>
 					{#if axisLabels.to?.length}
 						<div>{axisLabels.to}</div>
@@ -144,3 +147,98 @@
 		</NiceBackground>
 	</div>
 </div>
+
+<style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.body {
+		flex: 1;
+		min-height: 0;
+	}
+
+	.stack {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.media {
+		height: 40dvh;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.4em;
+		padding: 1em;
+	}
+
+	.row {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.5em;
+	}
+
+	.arrow {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.arrow-body {
+		width: 0.2em;
+		flex: 1;
+		background-color: currentColor;
+	}
+
+	.arrow-head {
+		width: 0;
+		height: 0;
+		border-left: 0.6em solid transparent;
+		border-right: 0.6em solid transparent;
+		border-top: 0.6em solid currentColor;
+	}
+
+	.list {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.item {
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		cursor: grab;
+		touch-action: none;
+		user-select: none;
+	}
+
+	.item:active {
+		cursor: grabbing;
+	}
+
+	.item-answer {
+		flex: 1;
+	}
+
+	.item:global(.dragging) {
+		opacity: 0.5;
+	}
+
+	.list :global(.drop-before::before),
+	.list :global(.drop-after::after),
+	.list :global(.drop-left::before),
+	.list :global(.drop-right::after) {
+		display: none;
+	}
+</style>

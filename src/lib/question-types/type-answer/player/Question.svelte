@@ -36,34 +36,71 @@
 	{/if}
 </svelte:head>
 
-<div style:display="flex" style:flex-direction="column" style:height="100%">
+<div class="page">
 	<Topbar {name} {score} />
 	<NiceBackground>
-		<div style:height="100%" style:display="flex" style:flex-direction="column">
+		<div class="body">
 			{#if media}
-				<div style:height="40vh" style:padding="0.5em" style:box-sizing="border-box">
-					<div style:position="relative" style:height="100%">
+				<div class="media">
+					<div class="media-inner">
 						<MediaContainer {media} fit="contain" />
 					</div>
 				</div>
 			{/if}
 			<TextBar text={questionText} />
-			<div
-				style:display="flex"
-				style:padding="0.5em"
-				style:flex-direction="column"
-				style:align-items="center"
-				style:width="min(100%, 20ch)"
-				style:margin="auto"
-				style:justify-content="center"
-				style:flex="1"
-				style:box-sizing="border-box"
+			<form
+				onsubmit={(e) => {
+					e.preventDefault();
+					onanswer(value);
+				}}
 			>
 				<Textfield id="answer" placeholder={m.answer_text()} required disabled={false} bind:value />
-				<div style:width="100%">
+				<div class="submit">
 					<FancyButton onclick={() => onanswer(value)}>{m.submit()}</FancyButton>
 				</div>
-			</div>
+			</form>
 		</div>
 	</NiceBackground>
 </div>
+
+<style>
+	.page {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.body {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.media {
+		height: 40vh;
+		padding: 0.5em;
+		box-sizing: border-box;
+	}
+
+	.media-inner {
+		position: relative;
+		height: 100%;
+	}
+
+	form {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 0.75em;
+		width: 300px;
+		max-width: 300px;
+		margin: 0 auto;
+		box-sizing: content-box;
+	}
+
+	.submit {
+		width: 100%;
+	}
+</style>

@@ -23,22 +23,8 @@
 		backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.at(1)}
 		height="100%"
 	>
-		<div
-			style:height="100%"
-			style:width="100%"
-			style:min-height="1.5em"
-			style:display="flex"
-			style:align-items="center"
-			style:justify-content="center"
-		>
-			<div
-				style:aspect-ratio="1"
-				style:max-height="65%"
-				style:max-width="65%"
-				style:display="flex"
-				style:align-items="center"
-				style:height="100%"
-			>
+		<div class="content">
+			<div class="icon">
 				<buttonSymbol.icon title={buttonSymbol.label} height="100%" width="100%" />
 			</div>
 		</div>
@@ -57,7 +43,28 @@
 <style>
 	.wrapper {
 		position: relative;
+		min-height: 0;
+		box-sizing: border-box;
+	}
+
+	.content {
 		height: 100%;
+		width: 100%;
+		min-height: 1.5em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+	}
+
+	.icon {
+		aspect-ratio: 1;
+		max-height: 65%;
+		max-width: 65%;
+		display: flex;
+		align-items: center;
+		height: 100%;
+		box-sizing: border-box;
 	}
 
 	.badge {

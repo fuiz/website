@@ -26,13 +26,8 @@
 </script>
 
 <NiceBackground>
-	<div
-		style:height="100%"
-		style:display="flex"
-		style:flex-direction="column"
-		style:align-items="center"
-	>
-		<header style:margin="0.5em 0">
+	<div class="page">
+		<header>
 			<Header />
 		</header>
 		<form
@@ -51,16 +46,11 @@
 				disabled={sending}
 				bind:value={name}
 			/>
-			<div style:margin="5px 0" style:width="100%">
+			<div class="submit">
 				<FancyButton disabled={sending}>
-					<div
-						style:display="flex"
-						style:align-items="center"
-						style:justify-content="center"
-						style:font-family="var(--alternative-font)"
-					>
+					<div class="submit-label">
 						{#if sending}
-							<div style:height="1em" style:aspect-ratio="1/1" style:margin="0 5px">
+							<div class="loading">
 								<LoadingCircle />
 							</div>
 						{/if}
@@ -74,15 +64,44 @@
 </NiceBackground>
 
 <style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	header {
+		margin: 0.5em 0;
+	}
+
 	form {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		gap: 0.75em;
 		border-radius: 10px;
 		box-sizing: content-box;
 		width: 300px;
 		max-width: 300px;
+	}
+
+	.submit {
+		width: 100%;
+	}
+
+	.submit-label {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--alternative-font);
+	}
+
+	.loading {
+		height: 1em;
+		aspect-ratio: 1 / 1;
+		margin: 0 5px;
 	}
 </style>

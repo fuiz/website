@@ -116,7 +116,7 @@
 	input {
 		background: none;
 		border: 2px solid #a9a8aa;
-		border-radius: 10px;
+		border-radius: 0.7em;
 		width: 100%;
 		color: inherit;
 		box-sizing: border-box;

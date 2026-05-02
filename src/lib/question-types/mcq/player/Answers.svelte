@@ -59,18 +59,18 @@
 	}
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
+<div class="page">
 	<div>
 		<Topbar {name} {score} />
 		{#if showAnswers}
 			<TextBar text={questionText} />
 		{/if}
 	</div>
-	<div style:flex="1">
+	<div class="body">
 		<NiceBackground>
-			<div style:height="100%" style:display="flex" style:flex-direction="column">
+			<div class="stack">
 				{#if media && showAnswers}
-					<div style:height="40dvh">
+					<div class="media">
 						<MediaDisplay {media} fit="contain" />
 					</div>
 				{/if}
@@ -81,7 +81,7 @@
 						onanswer={handleAnswer}
 					/>
 				{:else}
-					<div style:flex="1" style:font-size="1.5em">
+					<div class="answers">
 						<Answers
 							answers={answers.map((t) => ({ text: t?.Text, correct: undefined }))}
 							selected={isMultiSelect ? selectedIndices : undefined}
@@ -90,9 +90,9 @@
 					</div>
 				{/if}
 				{#if isMultiSelect}
-					<div style:padding="0.2em">
+					<div class="submit-row">
 						<FancyButton onclick={submitMultiAnswer} disabled={selectedIndices.size === 0}>
-							<div style:padding="0.2em 0.5em">{m.submit()}</div>
+							<div class="submit-label">{m.submit()}</div>
 						</FancyButton>
 					</div>
 				{/if}
@@ -100,3 +100,41 @@
 		</NiceBackground>
 	</div>
 </div>
+
+<style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.body {
+		flex: 1;
+		min-height: 0;
+	}
+
+	.stack {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.media {
+		height: 40dvh;
+		flex: none;
+	}
+
+	.answers {
+		flex: 1;
+		min-height: 0;
+		font-size: 1.5em;
+	}
+
+	.submit-row {
+		padding: 0.2em;
+	}
+
+	.submit-label {
+		padding: 0.2em 0.5em;
+	}
+</style>

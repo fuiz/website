@@ -16,22 +16,34 @@
 
 {#if message}
 	<div
-		style:width="100%"
-		style:display="flex"
-		style:align-items="center"
+		class="message"
 		style:background
-		style:padding="5px 10px"
-		style:box-sizing="border-box"
-		style:border-radius="5px"
-		style:gap="10px"
 		style:color
-		style:font-weight="bold"
-		style:border="1px solid {color}"
-		style:word-wrap="anywhere"
+		style:border-color={color}
 	>
 		{@render icon()}
-		<div style:flex="1" style:text-align="center">
+		<div class="text">
 			{message}
 		</div>
 	</div>
 {/if}
+
+<style>
+	.message {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		padding: 5px 10px;
+		box-sizing: border-box;
+		border-radius: 0.7em;
+		gap: 10px;
+		font-weight: bold;
+		border: 1px solid;
+		word-wrap: anywhere;
+	}
+
+	.text {
+		flex: 1;
+		text-align: center;
+	}
+</style>

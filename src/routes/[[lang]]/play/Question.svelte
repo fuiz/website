@@ -29,18 +29,13 @@
 	{/if}
 </svelte:head>
 
-<div style:display="flex" style:flex-direction="column" style:height="100%">
+<div class="page">
 	<Topbar {name} {score} />
 	<NiceBackground>
-		<div
-			style:height="100%"
-			style:display="flex"
-			style:flex-direction="column"
-			style:justify-content="start"
-		>
+		<div class="body" class:has-media={media !== undefined}>
 			{#if media}
-				<div style:height="40vh" style:padding="0.5em" style:box-sizing="border-box">
-					<div style:position="relative" style:height="100%">
+				<div class="media">
+					<div class="media-inner">
 						<MediaContainer {media} fit="contain" />
 					</div>
 				</div>
@@ -49,3 +44,33 @@
 		</div>
 	</NiceBackground>
 </div>
+
+<style>
+	.page {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.body {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.body.has-media {
+		justify-content: start;
+	}
+
+	.media {
+		height: 40vh;
+		padding: 0.5em;
+		box-sizing: border-box;
+	}
+
+	.media-inner {
+		position: relative;
+		height: 100%;
+	}
+</style>
