@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import blueberry from '$lib/assets/icons/blueberry.svg';
 	import kiwi from '$lib/assets/icons/kiwi.svg';
 	import orange from '$lib/assets/icons/orange.svg';
 	import strawberry from '$lib/assets/icons/strawberry.svg';
 	import * as m from '$lib/paraglide/messages.js';
 
-	let { children } = $props();
+	let { children }: { children?: Snippet } = $props();
 </script>
 
 <div class="root">

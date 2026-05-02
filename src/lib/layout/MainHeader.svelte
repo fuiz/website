@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import Header from '$lib/layout/Header.svelte';
 	import * as m from '$lib/paraglide/messages.js';

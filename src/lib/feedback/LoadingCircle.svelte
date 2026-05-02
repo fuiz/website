@@ -1,6 +1,5 @@
-<script>
-	/** @type {{ borderWidth?: number }} */
-	let { borderWidth = 4 } = $props();
+<script lang="ts">
+	let { borderWidth = 4 }: { borderWidth?: number } = $props();
 </script>
 
 <div style:--border-width="{borderWidth}px"></div>

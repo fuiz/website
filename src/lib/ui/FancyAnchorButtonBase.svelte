@@ -1,14 +1,21 @@
-<script>
-	/** @type {{
-	 * foregroundColor: string;
-	 * backgroundColor: string;
-	 * backgroundDeepColor: string;
-	 * href: string;
-	 * children?: import('svelte').Snippet;
-	 * download?: any;
-	}}*/
-	let { foregroundColor, backgroundColor, backgroundDeepColor, href, children, download } =
-		$props();
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	let {
+		foregroundColor,
+		backgroundColor,
+		backgroundDeepColor,
+		href,
+		children,
+		download
+	}: {
+		foregroundColor: string;
+		backgroundColor: string;
+		backgroundDeepColor: string;
+		href: string;
+		children?: Snippet;
+		download?: unknown;
+	} = $props();
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->

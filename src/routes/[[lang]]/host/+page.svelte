@@ -1,14 +1,10 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/state';
 	import Create from './Create.svelte';
 	import Host from './Host.svelte';
 	import Options from './Options.svelte';
 
-	/**
-	 * @param {string | null} str
-	 * @returns {number | null}
-	 */
-	function parseIntOrNull(str) {
+	function parseIntOrNull(str: string | null): number | null {
 		if (str === null) {
 			return null;
 		}

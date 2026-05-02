@@ -1,12 +1,16 @@
-<script>
+<script lang="ts">
 	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { OrderSlide } from '$lib/types';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
 	import SportsScore from '~icons/material-symbols/sports-score';
 	import TimerOutline from '~icons/material-symbols/timer-outline';
 
-	/** @type {{activeSlide: import('$lib/types').OrderSlide;}} */
-	let { activeSlide = $bindable() } = $props();
+	let {
+		activeSlide = $bindable()
+	}: {
+		activeSlide: OrderSlide;
+	} = $props();
 </script>
 
 <div id="sidebar-container">

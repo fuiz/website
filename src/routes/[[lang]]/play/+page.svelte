@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/state';
 	import { env } from '$env/dynamic/public';
 	import * as m from '$lib/paraglide/messages.js';

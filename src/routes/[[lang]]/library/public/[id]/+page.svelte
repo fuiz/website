@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { assertUnreachable } from '$lib';
@@ -17,10 +17,7 @@
 
 	let config = $derived(data.config);
 
-	/**
-	 * @returns {Promise<number>}
-	 */
-	async function addToCollection() {
+	async function addToCollection(): Promise<number> {
 		const db = await loadDatabase();
 		const id = await addCreation(
 			{

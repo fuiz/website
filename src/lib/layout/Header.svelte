@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import Logo from '$lib/media/Logo.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime';

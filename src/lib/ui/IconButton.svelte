@@ -1,15 +1,6 @@
-<script>
-	/** @type {{
-	 * children: import('svelte').Snippet,
-	 * alt: string,
-	 * disabled?: boolean | undefined,
-	 * padding?: string | undefined,
-	 * onclick?: (() => void) | undefined,
-	 * onmouseover?: (() => void) | undefined,
-	 * onmouseenter?: (() => void) | undefined,
-	 * onfocus?: (() => void) | undefined,
-	 * popovertarget?: string | undefined
-	}}*/
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	let {
 		children,
 		alt,
@@ -20,6 +11,16 @@
 		onmouseenter,
 		onfocus,
 		popovertarget
+	}: {
+		children: Snippet;
+		alt: string;
+		disabled?: boolean | undefined;
+		padding?: string | undefined;
+		onclick?: (() => void) | undefined;
+		onmouseover?: (() => void) | undefined;
+		onmouseenter?: (() => void) | undefined;
+		onfocus?: (() => void) | undefined;
+		popovertarget?: string | undefined;
 	} = $props();
 </script>
 

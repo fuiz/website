@@ -1,13 +1,21 @@
-<script>
+<script lang="ts">
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { FuizConfig } from '$lib/types';
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
 
-	/** @typedef {{points: number, position: number} | undefined} Score */
+	type Score = { points: number; position: number } | undefined;
 
-	/** @type {{score: Score; points: number[]; config: import('$lib/types').FuizConfig;}} */
-	let { score, points, config } = $props();
+	let {
+		score,
+		points,
+		config
+	}: {
+		score: Score;
+		points: number[];
+		config: FuizConfig;
+	} = $props();
 </script>
 
 <TypicalPage>

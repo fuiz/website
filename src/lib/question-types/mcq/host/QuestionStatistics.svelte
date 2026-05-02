@@ -1,22 +1,13 @@
-<script>
+<script lang="ts">
 	import Answers from '$lib/game/Answers.svelte';
 	import Statistics from '$lib/game/Statistics.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
 	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
 
-	/** @type {{
-	 * bindableGameInfo: import('../../../../routes/[[lang]]/host/+page').BindableGameInfo;
-	 * gameInfo: import('../../../../routes/[[lang]]/host/+page').SharedGameInfo;
-	 * questionText: string;
-	 * answers: { text: string; count: number; correct: boolean }[];
-	 * timeLeft?: number | undefined;
-	 * timeStarted?: number | undefined;
-	 * onlock?: (locked: boolean) => void;
-	 * onnext?: () => void;
-	}}*/
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
@@ -26,10 +17,18 @@
 		timeStarted = undefined,
 		onlock,
 		onnext
+	}: {
+		bindableGameInfo: BindableGameInfo;
+		gameInfo: SharedGameInfo;
+		questionText: string;
+		answers: { text: string; count: number; correct: boolean }[];
+		timeLeft?: number | undefined;
+		timeStarted?: number | undefined;
+		onlock?: (locked: boolean) => void;
+		onnext?: () => void;
 	} = $props();
 
-	/** @type {HTMLElement | undefined} */
-	let fullscreenElement = $state();
+	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <div bind:this={fullscreenElement} class="root">

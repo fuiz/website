@@ -1,24 +1,15 @@
-<script>
+<script lang="ts">
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages';
+	import type { Media } from '$lib/types';
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
+	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
 	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
 
-	/** @type {{
-	 * bindableGameInfo: import('../../../../routes/[[lang]]/host/+page').BindableGameInfo;
-	 * gameInfo: import('../../../../routes/[[lang]]/host/+page').SharedGameInfo;
-	 * questionText: string;
-	 * axis_labels: { from: string; to: string };
-	 * answers: string[];
-	 * results: [number, number];
-	 * media: import('$lib/types').Media | undefined;
-	 * onnext?: () => void;
-	 * onlock?: (locked: boolean) => void;
-	}} */
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
@@ -26,12 +17,22 @@
 		axis_labels,
 		answers,
 		results,
+		media: _media,
 		onnext,
 		onlock
+	}: {
+		bindableGameInfo: BindableGameInfo;
+		gameInfo: SharedGameInfo;
+		questionText: string;
+		axis_labels: { from: string; to: string };
+		answers: string[];
+		results: [number, number];
+		media: Media | undefined;
+		onnext?: () => void;
+		onlock?: (locked: boolean) => void;
 	} = $props();
 
-	/** @type {HTMLElement | undefined} */
-	let fullscreenElement = $state();
+	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <div bind:this={fullscreenElement} class="root">

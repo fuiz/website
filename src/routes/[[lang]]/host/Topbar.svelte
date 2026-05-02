@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
@@ -10,21 +10,21 @@
 	import SkipNext from '~icons/material-symbols/skip-next';
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
+	import type { BindableGameInfo, SharedGameInfo } from './+page';
 	import ExitFuiz from './ExitFuiz.svelte';
 
-	/** @type {{
-	 * 	bindableGameInfo: import('./+page').BindableGameInfo;
-	 * 	gameInfo: import('./+page').SharedGameInfo;
-	 * 	fullscreenElement?: HTMLElement | undefined;
-	 * 	onnext?: () => void;
-	 * 	onlock?: (locked: boolean) => void;
-	 * }}*/
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
 		fullscreenElement = undefined,
 		onnext,
 		onlock
+	}: {
+		bindableGameInfo: BindableGameInfo;
+		gameInfo: SharedGameInfo;
+		fullscreenElement?: HTMLElement | undefined;
+		onnext?: () => void;
+		onlock?: (locked: boolean) => void;
 	} = $props();
 </script>
 

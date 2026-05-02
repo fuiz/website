@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import think from '$lib/assets/music/kevin_macleod_thinking_music.mp3';
 	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
 	import Answers from '$lib/game/Answers.svelte';
@@ -7,9 +7,10 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import type { Media } from '$lib/types';
+	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
 	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
 
-	/** @type {{bindableGameInfo: import('../../../../routes/[[lang]]/host/+page').BindableGameInfo, gameInfo: import('../../../../routes/[[lang]]/host/+page').SharedGameInfo, questionText: string, answers: (string | undefined)[], timeLeft: number | null, timeStarted: number | null, answeredCount: number, media: import('$lib/types').Media | undefined, onlock?: (locked: boolean) => void, onnext?: () => void, onanswer?: (answer: number) => void}}*/
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
@@ -22,10 +23,21 @@
 		onlock,
 		onnext,
 		onanswer
+	}: {
+		bindableGameInfo: BindableGameInfo;
+		gameInfo: SharedGameInfo;
+		questionText: string;
+		answers: (string | undefined)[];
+		timeLeft: number | null;
+		timeStarted: number | null;
+		answeredCount: number;
+		media: Media | undefined;
+		onlock?: (locked: boolean) => void;
+		onnext?: () => void;
+		onanswer?: (answer: number) => void;
 	} = $props();
 
-	/** @type {HTMLElement | undefined} */
-	let fullscreenElement = $state();
+	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <Audio audioUrl={think} volumeOn={bindableGameInfo.volumeOn} />

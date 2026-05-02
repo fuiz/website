@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
 	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { TypeAnswer } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import Textarea from '$lib/ui/Textarea.svelte';
@@ -8,8 +9,11 @@
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import MediaChooser from './MediaChooser.svelte';
 
-	/** @type {{slide: import('$lib/types').TypeAnswer;}} */
-	let { slide = $bindable() } = $props();
+	let {
+		slide = $bindable()
+	}: {
+		slide: TypeAnswer;
+	} = $props();
 
 	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
 </script>

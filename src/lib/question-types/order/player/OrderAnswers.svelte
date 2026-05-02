@@ -1,42 +1,45 @@
-<script>
+<script lang="ts">
 	import { flip } from 'svelte/animate';
-	import { dndzone } from 'svelte-dnd-action';
+	import { type DndEvent, dndzone } from 'svelte-dnd-action';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { Media } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
-	/** @type {{
-	 * questionText: string;
-	 * name: string;
-	 * score: number;
-	 * media: undefined | import('$lib/types').Media;
-	 * axisLabels: { from?: string; to?: string };
-	 * showAnswers: boolean;
-	 * answers: string[];
-	 * onanswer: (answer: string[]) => void;
-	}} */
-	let { questionText, name, score, media, axisLabels, showAnswers, answers, onanswer } = $props();
+	let {
+		questionText,
+		name,
+		score,
+		media,
+		axisLabels,
+		showAnswers,
+		answers,
+		onanswer
+	}: {
+		questionText: string;
+		name: string;
+		score: number;
+		media: undefined | Media;
+		axisLabels: { from?: string; to?: string };
+		showAnswers: boolean;
+		answers: string[];
+		onanswer: (answer: string[]) => void;
+	} = $props();
 
 	// svelte-ignore state_referenced_locally
 	let answersIndexed = $state(answers.map((answer, index) => ({ answer, id: index })));
 
-	/**
-	 * @param {CustomEvent<import('svelte-dnd-action').DndEvent<{ answer: string; id: number }>>} e
-	 */
-	function handleConsider(e) {
+	function handleConsider(e: CustomEvent<DndEvent<{ answer: string; id: number }>>) {
 		answersIndexed = e.detail.items;
 	}
 
-	/**
-	 * @param {CustomEvent<import('svelte-dnd-action').DndEvent<{ answer: string; id: number }>>} e
-	 */
-	function handleFinalize(e) {
+	function handleFinalize(e: CustomEvent<DndEvent<{ answer: string; id: number }>>) {
 		answersIndexed = e.detail.items;
 	}
 </script>

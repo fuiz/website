@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import bee3 from '$lib/assets/music/bee3.mp3';
 	import PlayersList from '$lib/game/PlayersList.svelte';
@@ -15,16 +15,23 @@
 	import PersonOutline from '~icons/material-symbols/person-outline';
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
+	import type { BindableGameInfo } from './+page';
 
-	/** @type {{
-	 * code: string;
-	 * players: string[];
-	 * exact_count: number;
-	 * bindableGameInfo: import('./+page').BindableGameInfo;
-	 * onnext?: () => void;
-	 * onlock?: (locked: boolean) => void;
-	}}*/
-	let { code, players, exact_count, bindableGameInfo = $bindable(), onnext, onlock } = $props();
+	let {
+		code,
+		players,
+		exact_count,
+		bindableGameInfo = $bindable(),
+		onnext,
+		onlock
+	}: {
+		code: string;
+		players: string[];
+		exact_count: number;
+		bindableGameInfo: BindableGameInfo;
+		onnext?: () => void;
+		onlock?: (locked: boolean) => void;
+	} = $props();
 
 	let actualUrl = $derived(env.PUBLIC_PLAY_URL + localizeHref('/play?code=' + code));
 
@@ -32,15 +39,11 @@
 		navigator.clipboard.writeText(actualUrl);
 	}
 
-	/** @type {HTMLElement | undefined} */
-	let fullscreenElement = $state();
+	let fullscreenElement = $state<HTMLElement>();
 
-	/** @type {HTMLDivElement | undefined} */
-	let copiedPopover = $state();
-	/** @type {HTMLButtonElement | undefined} */
-	let copyButton = $state();
-	/** @type {ReturnType<typeof setTimeout> | undefined} */
-	let copiedTimer;
+	let copiedPopover = $state<HTMLDivElement>();
+	let copyButton = $state<HTMLButtonElement>();
+	let copiedTimer: ReturnType<typeof setTimeout> | undefined;
 
 	function showCopied() {
 		try {

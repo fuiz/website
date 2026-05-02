@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 
 	import { page } from '$app/state';
@@ -10,16 +10,13 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import type { Database } from '$lib/storage';
 	import { getAllCreations, getCreation, loadDatabase } from '$lib/storage';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import { toSorted } from '$lib/util';
 	import Publish from './Publish.svelte';
 
-	/**
-	 * @param {string | null} str
-	 * @returns {number | null}
-	 */
-	function parseIntOrNull(str) {
+	function parseIntOrNull(str: string | null): number | null {
 		if (str === null) {
 			return null;
 		}
@@ -34,11 +31,7 @@
 	const title = m.publish_title();
 	const description = m.publish_desc();
 
-	/**
-	 * @param {import('$lib/storage').Database} db
-	 * @param {number} filteredId
-	 */
-	async function joinCreation(db, filteredId) {
+	async function joinCreation(db: Database, filteredId: number) {
 		return { db, creation: await getCreation(filteredId, db) };
 	}
 </script>

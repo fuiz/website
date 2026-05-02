@@ -1,17 +1,29 @@
-<script>
+<script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { Media } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	let value = $state('');
 
-	/** @type {{name: string;score: number;questionText: string;media: import('$lib/types').Media | undefined;onanswer: (answer: string) => void;}} */
-	let { name, score, questionText, media, onanswer } = $props();
+	let {
+		name,
+		score,
+		questionText,
+		media,
+		onanswer
+	}: {
+		name: string;
+		score: number;
+		questionText: string;
+		media: Media | undefined;
+		onanswer: (answer: string) => void;
+	} = $props();
 </script>
 
 <svelte:head>

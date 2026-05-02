@@ -1,6 +1,21 @@
-<script>
-	/** @type {{id: string;value: number;min: number;max: number;children?: import('svelte').Snippet;onchange?: (value: number) => void;}} */
-	let { id, value = $bindable(), min, max, children, onchange } = $props();
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	let {
+		id,
+		value = $bindable(),
+		min,
+		max,
+		children,
+		onchange
+	}: {
+		id: string;
+		value: number;
+		min: number;
+		max: number;
+		children?: Snippet;
+		onchange?: (value: number) => void;
+	} = $props();
 </script>
 
 <div id="group">

@@ -1,32 +1,32 @@
-<script>
+<script lang="ts">
 	import { buttonColors } from '$lib/clientOnly';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { Media } from '$lib/types';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import HelpOutline from '~icons/material-symbols/help-outline';
 
-	/** @type {{media: import('$lib/types').Media | null | undefined;}} */
-	let { media = $bindable() } = $props();
+	let {
+		media = $bindable()
+	}: {
+		media: Media | null | undefined;
+	} = $props();
 
 	let dragOver = $state(false);
 
 	function load_from_input() {
 		const target = document.querySelector('input[type=file]');
 		if (target) {
-			/** @type {HTMLInputElement} */
 			// @ts-expect-error we know it's an HTMLInputElement because of the querySelector
-			const inputImage = target;
+			const inputImage: HTMLInputElement = target;
 			loadFile(inputImage.files?.item(0) ?? undefined);
 		}
 	}
 
-	/**
-	 * @param {File | undefined} file
-	 */
-	function loadFile(file) {
+	function loadFile(file: File | undefined) {
 		dragOver = false;
 		if (file === undefined) {
 			media = undefined;

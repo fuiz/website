@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+	import type { FormEventHandler } from 'svelte/elements';
+
 	let {
 		checked = $bindable(),
 		id,
@@ -9,11 +12,11 @@
 		checked: boolean;
 		id: string;
 		stuck?: boolean | undefined;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 		onchange?: (boolean: boolean) => void;
 	} = $props();
 
-	const onInput: import('svelte/elements').FormEventHandler<HTMLInputElement> = (e) => {
+	const onInput: FormEventHandler<HTMLInputElement> = (e) => {
 		if (stuck === undefined) {
 			/* @ts-expect-error target will be HTMLInputElement, the type system doesn't know */
 			const target: HTMLInputElement | null = e?.target ?? null;

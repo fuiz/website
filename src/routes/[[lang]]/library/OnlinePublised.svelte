@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import { localizeHref } from '$lib/paraglide/runtime.js';
 

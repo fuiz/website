@@ -1,30 +1,9 @@
-<script>
+<script lang="ts">
+	import type { FullAutoFill } from 'svelte/elements';
 	import * as m from '$lib/paraglide/messages.js';
 
 	import ErrorOutline from '~icons/material-symbols/error-outline';
 
-	/** @type {{
-	* id: string;
-	* placeholder: string;
-	* required: boolean;
-	* disabled: boolean;
-	* value: string | undefined;
-	* textTransform?: string;
-	* autocomplete?: import("svelte/elements").FullAutoFill | null | undefined;
-	* maxLength?: number | undefined;
-	* minLength?: number | undefined;
-	* showInvalid?: boolean;
-	* inputmode?:
-	* 	| 'text'
-	* 	| 'search'
-	* 	| 'none'
-	* 	| 'tel'
-	* 	| 'url'
-	* 	| 'email'
-	* 	| 'numeric'
-	* 	| 'decimal'
-	* 	| undefined;
-	}} */
 	let {
 		id,
 		placeholder,
@@ -37,6 +16,27 @@
 		minLength = undefined,
 		showInvalid = true,
 		inputmode = undefined
+	}: {
+		id: string;
+		placeholder: string;
+		required: boolean;
+		disabled: boolean;
+		value: string | undefined;
+		textTransform?: string;
+		autocomplete?: FullAutoFill | null | undefined;
+		maxLength?: number | undefined;
+		minLength?: number | undefined;
+		showInvalid?: boolean;
+		inputmode?:
+			| 'text'
+			| 'search'
+			| 'none'
+			| 'tel'
+			| 'url'
+			| 'email'
+			| 'numeric'
+			| 'decimal'
+			| undefined;
 	} = $props();
 </script>
 

@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 	import { env } from '$env/dynamic/public';
+	import type { Media } from '$lib/types';
 	import MediaFallback from './MediaFallback.svelte';
 
-	/** @type {{ media: import('$lib/types').Media, fit: string }} */
-	let { media, fit } = $props();
+	let { media, fit }: { media: Media; fit: string } = $props();
 </script>
 
 {#if 'Base64' in media.Image}

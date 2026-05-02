@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Anchor from '$lib/navigation/Anchor.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';

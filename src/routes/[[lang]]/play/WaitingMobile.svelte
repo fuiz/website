@@ -1,12 +1,17 @@
-<script>
+<script lang="ts">
 	import waiting_penguin from '$lib/assets/visuals/waiting.svg';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{name: string;gameCode: string;}} */
-	let { name, gameCode } = $props();
+	let {
+		name,
+		gameCode
+	}: {
+		name: string;
+		gameCode: string;
+	} = $props();
 </script>
 
 <div style:height="100%" style:display="flex" style:flex-direction="column">

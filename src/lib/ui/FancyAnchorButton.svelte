@@ -1,14 +1,7 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import FancyAnchorButtonBase from './FancyAnchorButtonBase.svelte';
 
-	/** @type {{
-	 * foregroundColor?: string;
-	 * backgroundColor?: string;
-	 * backgroundDeepColor?: string;
-	 * href: string;
-	 * children?: import('svelte').Snippet;
-	 * download?: any;
-	}}*/
 	let {
 		foregroundColor = undefined,
 		backgroundColor = undefined,
@@ -16,6 +9,13 @@
 		href,
 		download,
 		children
+	}: {
+		foregroundColor?: string;
+		backgroundColor?: string;
+		backgroundDeepColor?: string;
+		href: string;
+		children?: Snippet;
+		download?: unknown;
 	} = $props();
 </script>
 

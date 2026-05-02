@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import barish from '$lib/assets/people/Barish.webp';
 	import khaleel from '$lib/assets/people/Khaleel.webp';

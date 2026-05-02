@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -7,8 +7,7 @@
 
 	let fullscreen = $state(false);
 
-	/** @type {{ fullscreenElement?: HTMLElement | undefined }}*/
-	let { fullscreenElement = undefined } = $props();
+	let { fullscreenElement = undefined }: { fullscreenElement?: HTMLElement | undefined } = $props();
 
 	onMount(() => {
 		document.addEventListener('fullscreenchange', () => {

@@ -1,9 +1,14 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 	import SportsScore from '~icons/material-symbols/sports-score';
 
-	/** @type {{name: string;score?: number | undefined;}} */
-	let { name, score = undefined } = $props();
+	let {
+		name,
+		score = undefined
+	}: {
+		name: string;
+		score?: number | undefined;
+	} = $props();
 </script>
 
 <div

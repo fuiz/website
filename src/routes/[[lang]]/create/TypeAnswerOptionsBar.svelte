@@ -1,13 +1,17 @@
-<script>
+<script lang="ts">
 	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { TypeAnswer } from '$lib/types';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 	import SportsScore from '~icons/material-symbols/sports-score';
 	import TimerOutline from '~icons/material-symbols/timer-outline';
 
-	/** @type {{activeSlide: import('$lib/types').TypeAnswer;}} */
-	let { activeSlide = $bindable() } = $props();
+	let {
+		activeSlide = $bindable()
+	}: {
+		activeSlide: TypeAnswer;
+	} = $props();
 </script>
 
 <div id="sidebar-container">

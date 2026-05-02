@@ -1,25 +1,15 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime.js';
+	import type { Media } from '$lib/types';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import Download from '~icons/material-symbols/download';
 	import Share from '~icons/material-symbols/share';
 	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 
-	/** @type {{
-	 * id: number;
-	 * title: string;
-	 * lastEdited: number;
-	 * slidesCount: number;
-	 * media: import('$lib/types').Media | undefined;
-	 * ondelete: () => void;onplay: () => void;
-	 * ondownload: () => void;
-	 * onshare: (showCopied: () => void) => void;
-	 * showShare?: boolean;
-	 * }} */
 	let {
 		id,
 		title,
@@ -31,18 +21,27 @@
 		ondownload,
 		onshare,
 		showShare
+	}: {
+		id: number;
+		title: string;
+		lastEdited: number;
+		slidesCount: number;
+		media: Media | undefined;
+		ondelete: () => void;
+		onplay: () => void;
+		ondownload: () => void;
+		onshare: (showCopied: () => void) => void;
+		showShare?: boolean;
 	} = $props();
 
-	/** @type {{month: 'short', day: 'numeric'}} */
-	const same_year = { month: 'short', day: 'numeric' };
-	/** @type {{year: 'numeric', month: 'numeric', day: 'numeric'}} */
-	const diff_year = { year: 'numeric', month: 'numeric', day: 'numeric' };
+	const same_year: { month: 'short'; day: 'numeric' } = { month: 'short', day: 'numeric' };
+	const diff_year: { year: 'numeric'; month: 'numeric'; day: 'numeric' } = {
+		year: 'numeric',
+		month: 'numeric',
+		day: 'numeric'
+	};
 
-	/**
-	 * @param {Date} date
-	 * @returns {string}
-	 */
-	function dateToString(date) {
+	function dateToString(date: Date): string {
 		let currentDate = new Date();
 		if (currentDate.getFullYear() === date.getFullYear()) {
 			return date.toLocaleDateString(getLocale(), same_year);
@@ -51,12 +50,9 @@
 		}
 	}
 
-	/** @type {HTMLDivElement | undefined} */
-	let copiedPopover = $state();
-	/** @type {HTMLDivElement | undefined} */
-	let shareWrapper = $state();
-	/** @type {ReturnType<typeof setTimeout> | undefined} */
-	let copiedTimer;
+	let copiedPopover = $state<HTMLDivElement>();
+	let shareWrapper = $state<HTMLDivElement>();
+	let copiedTimer: ReturnType<typeof setTimeout> | undefined;
 
 	function showCopied() {
 		try {

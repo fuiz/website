@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { Confetti } from 'svelte-confetti';
 	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
@@ -6,8 +6,15 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{name: string;score: number;correct: boolean;}} */
-	let { name, score, correct } = $props();
+	let {
+		name,
+		score,
+		correct
+	}: {
+		name: string;
+		score: number;
+		correct: boolean;
+	} = $props();
 </script>
 
 <div style:height="100%" style:display="flex" style:flex-direction="column">

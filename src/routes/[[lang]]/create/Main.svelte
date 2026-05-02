@@ -1,12 +1,16 @@
-<script>
+<script lang="ts">
+	import type { FuizConfig } from '$lib/types';
 	import MultipleChoiceOptionBar from './MultipleChoiceOptionsBar.svelte';
 	import OrderOptionsBar from './OrderOptionsBar.svelte';
 	import Sidebar from './Sidebar.svelte';
 	import SlideEditor from './SlideEditor.svelte';
 	import TypeAnswerOptionsBar from './TypeAnswerOptionsBar.svelte';
 
-	/** @type {{config: import('$lib/types').FuizConfig;}} */
-	let { config = $bindable() } = $props();
+	let {
+		config = $bindable()
+	}: {
+		config: FuizConfig;
+	} = $props();
 
 	let selectedSlideIndex = $state(0);
 

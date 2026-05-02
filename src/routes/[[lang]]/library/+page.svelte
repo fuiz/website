@@ -1,9 +1,13 @@
-<script>
+<script lang="ts">
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
+	import type { PageServerData } from './$types';
 	import Listing from './Listing.svelte';
 
-	/** @type {{data: import('./$types').PageServerData;}} */
-	let { data } = $props();
+	let {
+		data
+	}: {
+		data: PageServerData;
+	} = $props();
 </script>
 
 <TypicalPage>

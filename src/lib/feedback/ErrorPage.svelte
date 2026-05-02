@@ -1,11 +1,10 @@
-<script>
+<script lang="ts">
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import ErrorMessage from './ErrorMessage.svelte';
 
-	/** @type {{ errorMessage: string }}*/
-	let { errorMessage } = $props();
+	let { errorMessage }: { errorMessage: string } = $props();
 </script>
 
 <TypicalPage>

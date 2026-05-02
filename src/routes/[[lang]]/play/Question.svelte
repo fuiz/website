@@ -1,12 +1,22 @@
-<script>
+<script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import type { Media } from '$lib/types';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{name: string;score: number;questionText: string;media: import('$lib/types').Media | undefined;}} */
-	let { name, score, questionText, media } = $props();
+	let {
+		name,
+		score,
+		questionText,
+		media
+	}: {
+		name: string;
+		score: number;
+		questionText: string;
+		media: Media | undefined;
+	} = $props();
 </script>
 
 <svelte:head>

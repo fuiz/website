@@ -1,12 +1,17 @@
-<script>
+<script lang="ts">
 	import answered_penguin from '$lib/assets/visuals/answered_penguin.svg';
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{name: string;score: number;}} */
-	let { name, score } = $props();
+	let {
+		name,
+		score
+	}: {
+		name: string;
+		score: number;
+	} = $props();
 </script>
 
 <div style:height="100%" style:display="flex" style:flex-direction="column">

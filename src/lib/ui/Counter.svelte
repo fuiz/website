@@ -1,6 +1,5 @@
-<script>
-	/** @type {{ value: number; duration: number; delay: number; }}*/
-	let { value, duration, delay } = $props();
+<script lang="ts">
+	let { value, duration, delay }: { value: number; duration: number; delay: number } = $props();
 </script>
 
 <div style:--num={value} style:--duration="{duration}ms" style:--delay="{delay}ms"></div>

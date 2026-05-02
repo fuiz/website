@@ -1,15 +1,19 @@
-<script>
+<script lang="ts">
 	import { flip } from 'svelte/animate';
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	import { buttonColors, limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { MultipleChoiceAnswer } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import VariableAddOutline from '~icons/material-symbols/variable-add-outline';
 	import Answer from './Answer.svelte';
 
-	/** @type {{answers: import('$lib/types').MultipleChoiceAnswer[];}} */
-	let { answers = $bindable() } = $props();
+	let {
+		answers = $bindable()
+	}: {
+		answers: MultipleChoiceAnswer[];
+	} = $props();
 </script>
 
 <div id="grid" style:display="grid" style:gap="0.2em" style:width="100%">

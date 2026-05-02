@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
+	import type { Slide } from '$lib/types';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ContentCopyOutline from '~icons/material-symbols/content-copy-outline';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
@@ -7,8 +8,21 @@
 	import OrderThumbnail from './OrderThumbnail.svelte';
 	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
 
-	/** @type {{slide: import('$lib/types').Slide;index: number;selected: boolean;ondelete: () => void;onduplicate: () => void;onselect: () => void;}} */
-	let { slide, index, selected, ondelete, onduplicate, onselect } = $props();
+	let {
+		slide,
+		index,
+		selected,
+		ondelete,
+		onduplicate,
+		onselect
+	}: {
+		slide: Slide;
+		index: number;
+		selected: boolean;
+		ondelete: () => void;
+		onduplicate: () => void;
+		onselect: () => void;
+	} = $props();
 </script>
 
 <div style:display="flex" style:gap="0.4em" style:box-sizing="border-box">

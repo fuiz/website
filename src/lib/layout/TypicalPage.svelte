@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import Footer from './Footer.svelte';
 	import Header from './Header.svelte';
 	import NiceBackground from './NiceBackground.svelte';
 
-	let { children } = $props();
+	let { children }: { children?: Snippet } = $props();
 </script>
 
 <NiceBackground>

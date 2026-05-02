@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import LoadingCircle from './LoadingCircle.svelte';
 </script>

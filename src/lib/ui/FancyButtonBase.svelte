@@ -1,15 +1,6 @@
-<script>
-	/** @type {{
-	 * foregroundColor: string,
-	 * backgroundColor: string,
-	 * backgroundDeepColor: string,
-	 * disabled?: boolean,
-	 * active?: boolean,
-	 * type?: 'button' | 'submit' | 'reset' | undefined,
-	 * height?: string | undefined,
-	 * children?: import('svelte').Snippet,
-	 * onclick?: () => void
-	 * }} */
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	let {
 		foregroundColor,
 		backgroundColor,
@@ -20,6 +11,16 @@
 		height = undefined,
 		children,
 		onclick
+	}: {
+		foregroundColor: string;
+		backgroundColor: string;
+		backgroundDeepColor: string;
+		disabled?: boolean;
+		active?: boolean;
+		type?: 'button' | 'submit' | 'reset' | undefined;
+		height?: string | undefined;
+		children?: Snippet;
+		onclick?: () => void;
 	} = $props();
 </script>
 

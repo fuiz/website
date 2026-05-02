@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { resolve } from '$app/paths';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { scale } from 'svelte/transition';
 
 	let { checked } = $props();

@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
 	import { tick } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { dndzone } from 'svelte-dnd-action';
+	import { type DndEvent, dndzone } from 'svelte-dnd-action';
 	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { Slide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ChevronLeft from '~icons/material-symbols/chevron-left';
@@ -13,13 +14,15 @@
 	import MagnifyDocked from '~icons/material-symbols/magnify-docked';
 	import Thumbnail from './Thumbnail.svelte';
 
-	/** @type {{slides: import('$lib/types').Slide[];selectedSlideIndex: number;}} */
-	let { slides = $bindable(), selectedSlideIndex = $bindable() } = $props();
+	let {
+		slides = $bindable(),
+		selectedSlideIndex = $bindable()
+	}: {
+		slides: Slide[];
+		selectedSlideIndex: number;
+	} = $props();
 
-	/**
-	 * @param {CustomEvent<import('svelte-dnd-action').DndEvent<import('$lib/types').Slide>>} e
-	 */
-	async function handleConsider(e) {
+	async function handleConsider(e: CustomEvent<DndEvent<Slide>>) {
 		const id = slides.at(selectedSlideIndex)?.id ?? 0;
 		slides = e.detail.items;
 		const newIndex = e.detail.items.findIndex((s) => s.id === id);
@@ -29,10 +32,7 @@
 				: newIndex;
 	}
 
-	/**
-	 * @param {CustomEvent<import('svelte-dnd-action').DndEvent<import('$lib/types').Slide>>} e
-	 */
-	async function handleFinalize(e) {
+	async function handleFinalize(e: CustomEvent<DndEvent<Slide>>) {
 		const id = slides.at(selectedSlideIndex)?.id ?? 0;
 
 		slides = e.detail.items;
@@ -44,23 +44,13 @@
 		}
 	}
 
-	/** @type {HTMLElement | undefined} */
-	let section = $state();
+	let section = $state<HTMLElement>();
 
-	/**
-	 * @param {number} min
-	 * @param {number} value
-	 * @param {number} max
-	 * @returns {number}
-	 */
-	function clamp(min, value, max) {
+	function clamp(min: number, value: number, max: number): number {
 		return Math.min(max, Math.max(value, min));
 	}
 
-	/**
-	 * @param {number} newValue
-	 */
-	async function changeSelected(newValue) {
+	async function changeSelected(newValue: number) {
 		if (!section) return;
 
 		const clamped = Math.min(Math.max(0, newValue), slides.length - 1);
@@ -83,13 +73,9 @@
 		});
 	}
 
-	/** @type {HTMLElement | undefined} */
-	let popoverElement = $state();
+	let popoverElement = $state<HTMLElement>();
 
-	/**
-	 * @param {number} index
-	 */
-	async function onDelete(index) {
+	async function onDelete(index: number) {
 		slides.splice(index, 1);
 		if (index <= selectedSlideIndex) {
 			await changeSelected(selectedSlideIndex - 1);

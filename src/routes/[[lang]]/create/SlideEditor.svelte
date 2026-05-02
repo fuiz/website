@@ -1,13 +1,17 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
+	import type { Slide } from '$lib/types';
 
 	import GhostIcon from '~icons/custom/ghost';
 	import MultipleChoiceSlideEditor from './MultipleChoiceSlideEditor.svelte';
 	import OrderSlideEditor from './OrderSlideEditor.svelte';
 	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';
 
-	/** @type {{slide: import('$lib/types').Slide | undefined;}} */
-	let { slide = $bindable() } = $props();
+	let {
+		slide = $bindable()
+	}: {
+		slide: Slide | undefined;
+	} = $props();
 </script>
 
 {#if slide === undefined}

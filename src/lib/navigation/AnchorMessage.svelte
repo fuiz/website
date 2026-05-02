@@ -1,14 +1,20 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { resolveIfInternal } from './resolveIfInternal';
 
-	/** @type {{
-	 * message: string;
-	 * icon: import('svelte').Snippet;
-	 * background: string;
-	 * color?: string;
-	 * href: string;
-	}}*/
-	let { message, icon, background, color = 'inherit', href } = $props();
+	let {
+		message,
+		icon,
+		background,
+		color = 'inherit',
+		href
+	}: {
+		message: string;
+		icon: Snippet;
+		background: string;
+		color?: string;
+		href: string;
+	} = $props();
 </script>
 
 {#if message}

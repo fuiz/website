@@ -1,8 +1,7 @@
-<script>
+<script lang="ts">
 	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
 
-	/** @type {{ statistics?: { count: number; correct: boolean }[] }}*/
-	let { statistics = [] } = $props();
+	let { statistics = [] }: { statistics?: { count: number; correct: boolean }[] } = $props();
 
 	let maximum = $derived(statistics.reduce((a, b) => (a > b.count ? a : b.count), 0));
 </script>

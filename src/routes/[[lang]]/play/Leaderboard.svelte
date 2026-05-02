@@ -1,12 +1,21 @@
-<script>
+<script lang="ts">
 	import { medalColors } from '$lib/clientOnly';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{name: string;score: number;position: number | undefined;final: boolean;}} */
-	let { name, score, position, final } = $props();
+	let {
+		name,
+		score,
+		position,
+		final
+	}: {
+		name: string;
+		score: number;
+		position: number | undefined;
+		final: boolean;
+	} = $props();
 </script>
 
 <div style:height="100%" style:display="flex" style:flex-direction="column">

@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { resolveIfInternal } from './resolveIfInternal';
 
-	/** @type {{href: string, children?: import('svelte').Snippet}}*/
-	let { href, children } = $props();
+	let { href, children }: { href: string; children?: Snippet } = $props();
 </script>
 
 <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->

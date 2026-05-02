@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
@@ -9,8 +9,15 @@
 	import Textfield from '$lib/ui/Textfield.svelte';
 
 	let placeholder = m.nickname();
-	/** @type {{sending: boolean;errorMessage?: string;setName: (name: string) => void;}} */
-	let { sending, errorMessage = '', setName } = $props();
+	let {
+		sending,
+		errorMessage = '',
+		setName
+	}: {
+		sending: boolean;
+		errorMessage?: string;
+		setName: (name: string) => void;
+	} = $props();
 	let name = $state('');
 
 	function submit() {

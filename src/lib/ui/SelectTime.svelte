@@ -1,11 +1,20 @@
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
 	import FancyButton from './FancyButton.svelte';
 
-	/** @type {{options: (string | number | null)[];selected: string | number | null | undefined;map?: (a: string) => string;children?: import('svelte').Snippet;}} */
-	let { options, selected = $bindable(), map = (a) => a, children } = $props();
+	let {
+		options,
+		selected = $bindable(),
+		map = (a) => a,
+		children
+	}: {
+		options: (string | number | null)[];
+		selected: string | number | null | undefined;
+		map?: (a: string) => string;
+		children?: Snippet;
+	} = $props();
 
-	/** @type {HTMLDialogElement | undefined} */
-	let dialog = $state();
+	let dialog = $state<HTMLDialogElement>();
 </script>
 
 <FancyButton onclick={() => dialog?.showModal()}>

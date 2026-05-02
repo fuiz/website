@@ -1,11 +1,17 @@
-<script>
-	/** @type {{
-	 *  message: string;
-	 *  icon: import('svelte').Snippet;
-	 *  background: string;
-	 *  color: string;
-	}} */
-	let { message, icon, background, color } = $props();
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	let {
+		message,
+		icon,
+		background,
+		color
+	}: {
+		message: string;
+		icon: Snippet;
+		background: string;
+		color: string;
+	} = $props();
 </script>
 
 {#if message}

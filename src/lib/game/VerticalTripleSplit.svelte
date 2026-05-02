@@ -1,6 +1,7 @@
-<script>
-	/** @type {{ top?: import('svelte').Snippet, center?: import('svelte').Snippet, bottom?: import('svelte').Snippet }} */
-	let { top, center, bottom } = $props();
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	let { top, center, bottom }: { top?: Snippet; center?: Snippet; bottom?: Snippet } = $props();
 </script>
 
 <div style:height="100%" style:display="grid" style:grid-template-rows="auto 1fr auto">

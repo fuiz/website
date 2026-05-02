@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { downloadFuiz, limits } from '$lib/clientOnly';
 	import Logo from '$lib/media/Logo.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import type { CreationId, Database } from '$lib/storage';
 	import { getCreation } from '$lib/storage';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
@@ -13,23 +14,27 @@
 	import Share from '~icons/material-symbols/share';
 	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 
-	/** @type {{
-	 * title: string;
-	 * id: number;
-	 * db: import('$lib/storage').Database;
-	 * errorMessage: string | undefined;
-	 * onshare: (showCopied: () => void) => void;
-	 * showPublish?: boolean;
-	 * showShare?: boolean;
-	 * }} */
-	let { title = $bindable(), id, db, errorMessage, onshare, showPublish, showShare } = $props();
+	let {
+		title = $bindable(),
+		id,
+		db,
+		errorMessage,
+		onshare,
+		showPublish,
+		showShare
+	}: {
+		title: string;
+		id: number;
+		db: Database;
+		errorMessage: string | undefined;
+		onshare: (showCopied: () => void) => void;
+		showPublish?: boolean;
+		showShare?: boolean;
+	} = $props();
 
-	/** @type {HTMLDivElement | undefined} */
-	let copiedPopover = $state();
-	/** @type {HTMLDivElement | undefined} */
-	let shareWrapper = $state();
-	/** @type {ReturnType<typeof setTimeout> | undefined} */
-	let copiedTimer;
+	let copiedPopover = $state<HTMLDivElement>();
+	let shareWrapper = $state<HTMLDivElement>();
+	let copiedTimer: ReturnType<typeof setTimeout> | undefined;
 
 	function showCopied() {
 		try {
@@ -47,10 +52,7 @@
 		}, 1500);
 	}
 
-	/**
-	 * @param {import('$lib/storage').CreationId} id
-	 */
-	async function onDownload(id) {
+	async function onDownload(id: CreationId) {
 		const creation = await getCreation(id, db);
 		if (!creation) return;
 		const configJson = creation.config;

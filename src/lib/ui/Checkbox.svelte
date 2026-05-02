@@ -1,16 +1,19 @@
-<script>
+<script lang="ts">
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	import * as m from '$lib/paraglide/messages.js';
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
 
-	/** @type {{
-	 *  value: boolean;
-	 *  color?: string | undefined;
-	 *  attention?: boolean;
-	}} */
-	let { value = $bindable(), color = undefined, attention = false } = $props();
+	let {
+		value = $bindable(),
+		color = undefined,
+		attention = false
+	}: {
+		value: boolean;
+		color?: string | undefined;
+		attention?: boolean;
+	} = $props();
 
 	const duration = 150;
 </script>

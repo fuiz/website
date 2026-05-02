@@ -1,20 +1,17 @@
-<script>
+<script lang="ts">
 	import { browser } from '$app/environment';
 	import * as m from '$lib/paraglide/messages.js';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
 	import DarkModeOutline from '~icons/material-symbols/dark-mode-outline';
 	import LightModeOutline from '~icons/material-symbols/light-mode-outline';
 
-	/**
-	 * @param {boolean} state
-	 * @returns {string}
-	 */
-	function getName(state) {
+	function getName(state: boolean): string {
 		return state ? 'dark' : 'light';
 	}
 
-	/** @type {boolean | undefined} */
-	let theme = $state(browser ? (localStorage.getItem('theme') ?? 'light') === 'dark' : undefined);
+	let theme = $state<boolean | undefined>(
+		browser ? (localStorage.getItem('theme') ?? 'light') === 'dark' : undefined
+	);
 
 	$effect.pre(() => {
 		if (browser && theme !== undefined) {

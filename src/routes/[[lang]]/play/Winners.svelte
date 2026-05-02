@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
@@ -6,8 +6,17 @@
 	import { getLocale } from '$lib/paraglide/runtime.js';
 	import Topbar from './Topbar.svelte';
 
-	/** @type {{name: string;score: number;isWinner: boolean;winners: string[];}} */
-	let { name, score, isWinner, winners } = $props();
+	let {
+		name,
+		score,
+		isWinner,
+		winners
+	}: {
+		name: string;
+		score: number;
+		isWinner: boolean;
+		winners: string[];
+	} = $props();
 
 	const formatter = new Intl.ListFormat(getLocale(), { style: 'long', type: 'conjunction' });
 </script>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { SvelteSet } from 'svelte/reactivity';
 	import Answers from '$lib/game/Answers.svelte';
 	import EmptyAnswers from '$lib/game/EmptyAnswers.svelte';
@@ -6,10 +6,10 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { AnswerMode, Media, TextOrMedia } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
-	/** @type {{questionText: string;name: string;score: number;media: undefined | import('$lib/types').Media;showAnswers: boolean;answers: (import('$lib/types').TextOrMedia | undefined)[];answerMode?: import('$lib/types').AnswerMode;onanswer?: (answer: number) => void;onarrayanswer?: (answers: number[]) => void;}} */
 	let {
 		questionText,
 		name,
@@ -20,16 +20,23 @@
 		answerMode,
 		onanswer,
 		onarrayanswer
+	}: {
+		questionText: string;
+		name: string;
+		score: number;
+		media: undefined | Media;
+		showAnswers: boolean;
+		answers: (TextOrMedia | undefined)[];
+		answerMode?: AnswerMode;
+		onanswer?: (answer: number) => void;
+		onarrayanswer?: (answers: number[]) => void;
 	} = $props();
 
 	let isMultiSelect = $derived(answerMode === 'MultipleAnswers');
 
-	let selectedIndices = new SvelteSet();
+	let selectedIndices = new SvelteSet<number>();
 
-	/**
-	 * @param {number} index
-	 */
-	function toggleIndex(index) {
+	function toggleIndex(index: number) {
 		if (selectedIndices.has(index)) {
 			selectedIndices.delete(index);
 		} else {
@@ -43,10 +50,7 @@
 		}
 	}
 
-	/**
-	 * @param {number} index
-	 */
-	function handleAnswer(index) {
+	function handleAnswer(index: number) {
 		if (isMultiSelect) {
 			toggleIndex(index);
 		} else {

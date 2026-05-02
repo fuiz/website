@@ -1,22 +1,28 @@
-<script>
+<script lang="ts">
 	import { assertUnreachable } from '$lib';
 	import { playBackendReadyIdConfig } from '$lib/clientOnly';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import type { FuizConfig, FuizOptions } from '$lib/types';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
 	import TimerOffOutline from '~icons/material-symbols/timer-off-outline';
 
-	/** @type {{
-	 * stats: [number, number][];
-	 * player_count: number;
-	 * config: import('$lib/types').FuizConfig;
-	 * options: import('$lib/types').FuizOptions;
-	 * results: { [k: string]: number[] };
-	}}*/
-	let { stats, player_count, config, options, results } = $props();
+	let {
+		stats,
+		player_count,
+		config,
+		options,
+		results
+	}: {
+		stats: [number, number][];
+		player_count: number;
+		config: FuizConfig;
+		options: FuizOptions;
+		results: { [k: string]: number[] };
+	} = $props();
 </script>
 
 <TypicalPage>

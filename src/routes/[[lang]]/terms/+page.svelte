@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import Anchor from '$lib/navigation/Anchor.svelte';

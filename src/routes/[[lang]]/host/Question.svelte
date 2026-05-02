@@ -31,7 +31,7 @@
 		onnext?: () => void;
 	} = $props();
 
-	let fullscreenElement = $state<HTMLElement | undefined>();
+	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <svelte:head>

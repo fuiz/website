@@ -1,11 +1,10 @@
-<script>
+<script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 
 	import Hourglass from '~icons/material-symbols/hourglass';
 	import HourglassEmpty from '~icons/material-symbols/hourglass-empty';
 
-	/** @type {{ timeLeft: number, timeStarted: number }} */
-	let { timeLeft, timeStarted } = $props();
+	let { timeLeft, timeStarted }: { timeLeft: number; timeStarted: number } = $props();
 
 	let maxDigits = $derived(String(Math.ceil(timeStarted / 1000)).length);
 </script>

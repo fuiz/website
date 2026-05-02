@@ -1,9 +1,19 @@
-<script>
+<script lang="ts">
+	import type { Media } from '$lib/types';
 	import MediaDisplay from './MediaDisplay.svelte';
 	import MediaFallback from './MediaFallback.svelte';
 
-	/** @type {{ media: import('$lib/types').Media | undefined, align?: string, fit?: string, showFallback?: boolean }} */
-	let { media, align = 'center', fit = 'contain', showFallback = true } = $props();
+	let {
+		media,
+		align = 'center',
+		fit = 'contain',
+		showFallback = true
+	}: {
+		media: Media | undefined;
+		align?: string;
+		fit?: string;
+		showFallback?: boolean;
+	} = $props();
 </script>
 
 <div
