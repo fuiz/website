@@ -6,8 +6,8 @@
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import Answers from '$lib/question-types/mcq/player/Answers.svelte';
-	import OrderAnswers from '$lib/question-types/order/player/OrderAnswers.svelte';
-	import TypeAnswerQuestion from '$lib/question-types/type-answer/player/TypeAnswerQuestion.svelte';
+	import OrderAnswers from '$lib/question-types/order/player/Answers.svelte';
+	import TypeAnswerQuestion from '$lib/question-types/type-answer/player/Question.svelte';
 	import { bring, zip } from '$lib/util';
 	import type { IncomingMessage, State } from '.';
 	import ChooseName from './ChooseName.svelte';

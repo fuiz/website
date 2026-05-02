@@ -6,8 +6,8 @@
 	import MainHeader from '$lib/layout/MainHeader.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import QuestionAnswers from '$lib/question-types/mcq/host/QuestionAnswers.svelte';
-	import QuestionStatistics from '$lib/question-types/mcq/host/QuestionStatistics.svelte';
+	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
+	import QuestionStatistics from '$lib/question-types/mcq/host/Statistics.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';

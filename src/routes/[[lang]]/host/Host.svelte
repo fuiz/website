@@ -4,11 +4,11 @@
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import QuestionAnswers from '$lib/question-types/mcq/host/QuestionAnswers.svelte';
-	import QuestionStatistics from '$lib/question-types/mcq/host/QuestionStatistics.svelte';
-	import OrderAnswers from '$lib/question-types/order/host/OrderAnswers.svelte';
-	import OrderStatistics from '$lib/question-types/order/host/OrderStatistics.svelte';
-	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/TypeAnswerStatistics.svelte';
+	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
+	import QuestionStatistics from '$lib/question-types/mcq/host/Statistics.svelte';
+	import OrderAnswers from '$lib/question-types/order/host/Answers.svelte';
+	import OrderStatistics from '$lib/question-types/order/host/Statistics.svelte';
+	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/Statistics.svelte';
 	import { bring, zip } from '$lib/util';
 	import type { IncomingMessage, State } from '.';
 	import type { BindableGameInfo } from './+page';
