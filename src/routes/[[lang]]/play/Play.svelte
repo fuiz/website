@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { setContext, untrack } from 'svelte';
 	import { browser } from '$app/environment';
 	import { env } from '$env/dynamic/public';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
@@ -33,6 +33,8 @@
 	let points = $state<number>();
 
 	let { code }: { code: string } = $props();
+
+	setContext('gameCode', () => code);
 
 	let leaderboardName = $state('');
 
@@ -273,16 +275,15 @@
 		{@const { sending, error: errorMessage } = game.NameChoose}
 		<ChooseName setName={requestName} {sending} {errorMessage} />
 	{:else if 'WaitingScreen' in game}
-		<WaitingMobile {name} gameCode={code} />
+		<WaitingMobile {name} />
 	{:else if 'Summary' in game}
 		{@const { score, points, config } = game.Summary}
 		<Summary {score} {points} {config} />
 	{:else if 'FindTeam' in game}
-		<FindTeam {name} gameCode={code} teamName={game.FindTeam} />
+		<FindTeam {name} teamName={game.FindTeam} />
 	{:else if 'ChooseTeammates' in game}
 		<ChooseTeammates
 			{name}
-			gameCode={code}
 			max={game.ChooseTeammates.max_selection - 1}
 			available={game.ChooseTeammates.available.filter(([name]) => name !== setName)}
 			onchoose={sendChooseTeammate}

@@ -7,52 +7,28 @@
 
 	let {
 		name,
-		gameCode,
 		available = $bindable(),
 		max,
 		onchoose
 	}: {
 		name: string;
-		gameCode: string;
 		available: [string, boolean][];
 		max: number;
 		onchoose: (players: string[]) => void;
 	} = $props();
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
+<div class="page">
 	<Topbar {name} />
-	<div style:flex="1">
+	<div class="body">
 		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-			>
-				<div
-					style:display="flex"
-					style:flex-direction="column"
-					style:align-items="center"
-					style:text-align="center"
-				>
-					<div
-						style:font-weight="bold"
-						style:font-family="var(--alternative-font)"
-						style:font-size="1.5em"
-						style:max-width="10ch"
-						style:text-align="center"
-					>
+			<div class="center">
+				<div class="content">
+					<div class="title">
 						{m.choose_teammates()}
 					</div>
 					<div>{m.choose_teammates_desc()}</div>
-					<div
-						style:display="flex"
-						style:gap="0.5em"
-						style:flex-wrap="wrap"
-						style:padding="1em"
-						style:justify-content="center"
-					>
+					<div class="list">
 						<PlayersList
 							bind:players={available}
 							exactCount={available.length}
@@ -65,15 +41,46 @@
 			</div>
 		</NiceBackground>
 	</div>
-	<div
-		style:background="var(--surface)"
-		style:text-align="center"
-		style:padding="5px 0"
-		style:border-top="0.15em solid"
-	>
-		<div style:font-weight="bold">{m.game_code()}</div>
-		<div style:font-size="2em" style:font-family="var(--alternative-font)" style:text-transform="uppercase">
-			{gameCode}
-		</div>
-	</div>
 </div>
+
+<style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.body {
+		flex: 1;
+	}
+
+	.center {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.title {
+		font-weight: bold;
+		font-family: var(--alternative-font);
+		font-size: 1.5em;
+		max-width: 10ch;
+		text-align: center;
+	}
+
+	.list {
+		display: flex;
+		gap: 0.5em;
+		flex-wrap: wrap;
+		padding: 1em;
+		justify-content: center;
+	}
+</style>

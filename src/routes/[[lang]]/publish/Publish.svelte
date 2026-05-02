@@ -30,14 +30,15 @@
 	let grades = $state<string[]>([]);
 	let lang = $state<Locale>(getLocale());
 
-	let gitAuthStatus = $state<
-		| { authenticated: boolean; provider: string | null; user?: { username: string; name: string } }
-		| undefined
-	>(undefined);
+	let gitAuthStatus = $state<{
+		authenticated: boolean;
+		provider: string | null;
+		user?: { username: string; name: string };
+	}>();
 
-	let prUrl = $state<string | undefined>(undefined);
+	let prUrl = $state<string>();
 
-	let publishError = $state<string | undefined>(undefined);
+	let publishError = $state<string>();
 
 	let publishingState = $state<PublishingState | null>(null);
 

@@ -50,6 +50,7 @@
 	}
 
 	let answersFiltered = $derived(filterAnswers(answers));
+	let anySelected = $derived((selected?.size ?? 0) > 0);
 </script>
 
 <div id="container">
@@ -60,6 +61,7 @@
 				answerText={answer.text}
 				correct={answer.correct}
 				selected={selected?.has(answer.index)}
+				dimmed={anySelected && !selected?.has(answer.index)}
 				onclick={() => {
 					if (onanswer) onanswer(answer.index);
 				}}
@@ -85,12 +87,12 @@
 
 	#inner {
 		grid-template-columns: 1fr 1fr;
-		grid-auto-rows: 1fr;
 		height: 100%;
 		display: grid;
 		gap: 0.2em;
 		padding: 0.2em;
 		box-sizing: border-box;
+		align-content: end;
 	}
 
 	@container (width <= 40ch) {

@@ -2,6 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
+	import Modal from './Modal.svelte';
 
 	let {
 		title,
@@ -27,49 +28,40 @@
 
 	let allChecked = $derived(checked.every(Boolean));
 
-	let dialogElement = $state<HTMLDialogElement>();
+	let modal = $state<Modal>();
 
 	/**
 	 * Opens the dialog
 	 */
 	export function open() {
 		checked = checklist.map(() => false);
-		dialogElement?.showModal();
+		modal?.open();
 	}
 
 	/**
 	 * Closes the dialog
 	 */
 	export function close() {
-		dialogElement?.close();
+		modal?.close();
 	}
 
 	function handleConfirm() {
-		dialogElement?.close();
+		modal?.close();
 		onConfirm();
 	}
 </script>
 
-<dialog
-	bind:this={dialogElement}
-	closedby="any"
-	style:border="0.15em solid currentcolor"
-	style:border-radius="0.7em"
-	style:padding="1em"
-	style:max-width="35ch"
-	style:background="var(--surface)"
-	style:color="inherit"
->
-	<h2 style:font-family="var(--alternative-font)" style:margin="0 0 0.5em 0" style:font-size="1.25em">
+<Modal bind:this={modal}>
+	<h2 class="title">
 		{title}
 	</h2>
 	{#if message.length > 0}
-		<p style:margin="0 0 1em 0" style:line-height="1.4">
+		<p class="message">
 			{message}
 		</p>
 	{/if}
 	{#if checklist.length > 0}
-		<div style:display="flex" style:flex-direction="column" style:gap="0.5em" style:margin="0 0 1em 0">
+		<div class="checklist">
 			{#each checklist as item, i (i)}
 				<button class="checklist-item" onclick={() => (checked[i] = !checked[i])}>
 					<RegularCheckbox checked={checked[i]} />
@@ -78,26 +70,21 @@
 			{/each}
 		</div>
 	{/if}
-	<div
-		style:display="flex"
-		style:gap="0.5em"
-		style:justify-content="flex-end"
-		style:flex-wrap="wrap"
-	>
-		<div style:flex="1">
+	<div class="actions">
+		<div class="action">
 			<FancyButton
 				type="button"
 				backgroundColor="var(--surface)"
 				backgroundDeepColor="currentcolor"
 				foregroundColor="currentcolor"
-				onclick={() => dialogElement?.close()}
+				onclick={close}
 			>
-				<div style:padding="0.25em 1em" style:white-space="nowrap">
+				<div class="action-label">
 					{cancelText}
 				</div>
 			</FancyButton>
 		</div>
-		<div style:flex="1">
+		<div class="action">
 			<FancyButton
 				type="button"
 				onclick={handleConfirm}
@@ -105,17 +92,31 @@
 				backgroundColor={confirmButtonColor}
 				backgroundDeepColor={confirmButtonDeepColor}
 			>
-				<div style:padding="0.25em 1em" style:white-space="nowrap">
+				<div class="action-label">
 					{confirmText}
 				</div>
 			</FancyButton>
 		</div>
 	</div>
-</dialog>
+</Modal>
 
 <style>
-	dialog::backdrop {
-		background-color: rgba(0, 0, 0, 0.5);
+	.title {
+		font-family: var(--alternative-font);
+		margin: 0 0 0.5em 0;
+		font-size: 1.25em;
+	}
+
+	.message {
+		margin: 0 0 1em 0;
+		line-height: 1.4;
+	}
+
+	.checklist {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		margin: 0 0 1em 0;
 	}
 
 	.checklist-item {
@@ -130,5 +131,21 @@
 		font: inherit;
 		color: inherit;
 		text-align: start;
+	}
+
+	.actions {
+		display: flex;
+		gap: 0.5em;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+	}
+
+	.action {
+		flex: 1;
+	}
+
+	.action-label {
+		padding: 0.25em 1em;
+		white-space: nowrap;
 	}
 </style>

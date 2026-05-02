@@ -19,7 +19,7 @@
 
 	let searchTerm = $state('');
 
-	let results = $state<Promise<PublishedFuiz[] | undefined> | undefined>(undefined);
+	let results = $state<Promise<PublishedFuiz[] | undefined>>();
 
 	const search = debounce(() => {
 		results = fetch('library/search', {

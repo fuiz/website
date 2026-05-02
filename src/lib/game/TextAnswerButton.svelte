@@ -10,19 +10,22 @@
 		answerText,
 		correct,
 		selected = false,
+		dimmed = false,
 		onclick
 	}: {
 		index: number;
 		answerText: string;
 		correct: boolean | undefined;
 		selected?: boolean;
+		dimmed?: boolean;
 		onclick?: () => void;
 	} = $props();
 
 	let buttonSymbol = $derived(buttonSymbols[index % buttonSymbols.length]);
+	let opacity = $derived(correct === false || dimmed ? '50%' : '100%');
 </script>
 
-<div style:opacity={correct === false ? '50%' : '100%'}>
+<div style:opacity>
 	<FancyButton
 		{onclick}
 		backgroundColor={buttonColors.at(index % buttonColors.length)?.at(0)}

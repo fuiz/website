@@ -5,11 +5,9 @@
 
 	let {
 		name,
-		gameCode,
 		teamName
 	}: {
 		name: string;
-		gameCode: string;
 		teamName: string;
 	} = $props();
 </script>
@@ -24,10 +22,6 @@
 				</div>
 			</div>
 		</NiceBackground>
-	</div>
-	<div class="code-bar">
-		<div class="code-label">{m.game_code()}</div>
-		<div class="code-value">{gameCode}</div>
 	</div>
 </div>
 
@@ -55,22 +49,5 @@
 		font-size: 1.75em;
 		max-width: 12ch;
 		text-align: center;
-	}
-
-	.code-bar {
-		background: var(--surface);
-		text-align: center;
-		padding: 5px 0;
-		border-top: 0.15em solid;
-	}
-
-	.code-label {
-		font-weight: bold;
-	}
-
-	.code-value {
-		font-size: 2em;
-		font-family: var(--alternative-font);
-		text-transform: uppercase;
 	}
 </style>

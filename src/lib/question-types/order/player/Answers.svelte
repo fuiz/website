@@ -171,9 +171,11 @@
 	}
 
 	.content {
+		flex: 1;
+		min-height: 0;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: end;
 		gap: 0.4em;
 		padding: 1em;
 	}

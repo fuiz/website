@@ -24,7 +24,7 @@
 
 	const fields = ['open', 'design', 'lightweight', 'privacy'] as const;
 
-	let answered = $state<(typeof fields)[number] | undefined>(undefined);
+	let answered = $state<(typeof fields)[number]>();
 
 	onMount(() => {
 		let answeredStored = localStorage.getItem('answered');

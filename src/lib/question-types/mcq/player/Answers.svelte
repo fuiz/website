@@ -60,15 +60,13 @@
 </script>
 
 <div class="page">
-	<div>
-		<Topbar {name} {score} />
-		{#if showAnswers}
-			<TextBar text={questionText} />
-		{/if}
-	</div>
+	<Topbar {name} {score} />
 	<div class="body">
 		<NiceBackground>
 			<div class="stack">
+				{#if showAnswers}
+					<TextBar text={questionText} />
+				{/if}
 				{#if media && showAnswers}
 					<div class="media">
 						<MediaDisplay {media} fit="contain" />
@@ -127,7 +125,7 @@
 	.answers {
 		flex: 1;
 		min-height: 0;
-		font-size: 1.5em;
+		font-size: 1.1em;
 	}
 
 	.submit-row {
