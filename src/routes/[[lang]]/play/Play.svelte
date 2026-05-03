@@ -6,6 +6,7 @@
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import Answers from '$lib/question-types/mcq/player/Answers.svelte';
+	import { isMcqAnswerCorrect } from '$lib/question-types/mcq/shared/correctness';
 	import OrderAnswers from '$lib/question-types/order/player/Answers.svelte';
 	import TypeAnswerQuestion from '$lib/question-types/type-answer/player/Question.svelte';
 	import { bring, zip } from '$lib/util';
@@ -312,18 +313,7 @@
 				<WaitingOthers {name} {score} />
 			{/if}
 		{:else if kind === 'AnswersResults'}
-			<Result
-				{name}
-				{score}
-				correct={answered === undefined
-					? false
-					: Array.isArray(answered)
-						? (results !== undefined &&
-								answered.every((i) => results.at(i)?.correct) &&
-								results.every((r, i) => !r.correct || answered.includes(i))) ||
-							false
-						: results?.at(answered)?.correct || false}
-			/>
+			<Result {name} {score} correct={isMcqAnswerCorrect(answered, results, answer_mode)} />
 		{/if}
 	{:else if 'Score' in slide}
 		{@const { points, position } = slide.Score}
