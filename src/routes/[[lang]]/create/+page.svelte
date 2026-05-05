@@ -9,15 +9,23 @@
 	import {
 		type Database,
 		type ExportedFuiz,
-		getAllCreations,
 		getCreation,
-		loadDatabase
+		getLocalCreations,
+		loadDatabase,
+		syncRemote
 	} from '$lib/storage';
 	import type { Base64Media, Creation, GenericFuizConfig } from '$lib/types';
 	import Editor from './Editor.svelte';
 	import Gallery from './Gallery.svelte';
 
 	let { data } = $props();
+
+	type GalleryStatus = {
+		creations: Creation[];
+		pendingCreations?: Creation[];
+		syncing: boolean;
+		db: Database;
+	};
 
 	let status = $state<
 		| 'loading'
@@ -31,10 +39,29 @@
 					  };
 				db: Database;
 		  }
-		| { creations: Creation[]; db: Database }
+		| GalleryStatus
 	>('loading');
 
+	let pendingSync: { cancelled: boolean } | undefined;
+
+	function creationsEqual(a: Creation[], b: Creation[]): boolean {
+		if (a.length !== b.length) return false;
+		const byId = new Map(a.map((c) => [c.id, c]));
+		return b.every((c) => {
+			const o = byId.get(c.id);
+			return (
+				!!o &&
+				o.lastEdited === c.lastEdited &&
+				o.title === c.title &&
+				o.slidesCount === c.slidesCount
+			);
+		});
+	}
+
 	async function getStatus(idParam: string | null) {
+		if (pendingSync) pendingSync.cancelled = true;
+		pendingSync = undefined;
+
 		const db = await loadDatabase();
 		if (idParam) {
 			const id = parseInt(idParam, 10);
@@ -48,8 +75,36 @@
 				? { creation: { id, exportedFuiz, config }, db }
 				: { creation: 'failure', db };
 		} else {
-			const creations = await getAllCreations(db);
-			status = { creations, db };
+			const creations = await getLocalCreations(db);
+			status = {
+				creations,
+				syncing: !!db.remote,
+				db
+			};
+			if (db.remote) {
+				const flag = { cancelled: false };
+				pendingSync = flag;
+				syncInBackground(db, flag);
+			}
+		}
+	}
+
+	function isGallery(s: typeof status): s is GalleryStatus {
+		return s !== 'loading' && 'creations' in s;
+	}
+
+	async function syncInBackground(db: Database, flag: { cancelled: boolean }) {
+		try {
+			await syncRemote(db);
+			if (flag.cancelled || !isGallery(status)) return;
+			const fresh = await getLocalCreations(db);
+			if (flag.cancelled || !isGallery(status)) return;
+			if (!creationsEqual(status.creations, fresh)) {
+				status.pendingCreations = fresh;
+			}
+			status.syncing = false;
+		} catch {
+			if (!flag.cancelled && isGallery(status)) status.syncing = false;
 		}
 	}
 
@@ -74,7 +129,13 @@
 {#if status === 'loading'}
 	<Loading />
 {:else if 'creations' in status}
-	<Gallery creations={status.creations} db={status.db} showShare={data.showShare} />
+	<Gallery
+		bind:creations={status.creations}
+		bind:pendingCreations={status.pendingCreations}
+		syncing={status.syncing}
+		db={status.db}
+		showShare={data.showShare}
+	/>
 {:else if status.creation === 'failure'}
 	<ErrorPage errorMessage={m.missing_fuiz()} />
 {:else}

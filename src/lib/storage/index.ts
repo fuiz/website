@@ -213,16 +213,14 @@ export async function loadDatabase(): Promise<Database> {
 	};
 }
 
-async function sync(database: Database) {
+export async function syncRemote(database: Database): Promise<void> {
 	await database.remote?.sync(
 		database.local,
 		(await getAllCreationsLocal(database.local)).map(([k, v]) => [parseInt(k.toString(), 10), v])
 	);
 }
 
-export async function getAllCreations(database: Database): Promise<Creation[]> {
-	await sync(database);
-
+export async function getLocalCreations(database: Database): Promise<Creation[]> {
 	const internals = await getAllCreationsLocal(database.local);
 
 	return await Promise.all(
@@ -237,6 +235,11 @@ export async function getAllCreations(database: Database): Promise<Creation[]> {
 			};
 		})
 	);
+}
+
+export async function getAllCreations(database: Database): Promise<Creation[]> {
+	await syncRemote(database);
+	return await getLocalCreations(database);
 }
 
 export async function getCreation(

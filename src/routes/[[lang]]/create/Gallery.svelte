@@ -26,19 +26,31 @@
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import BackupOutline from '~icons/material-symbols/backup-outline';
 	import CloudDoneOutline from '~icons/material-symbols/cloud-done-outline';
+	import CloudSyncOutline from '~icons/material-symbols/cloud-sync-outline';
 	import FolderOpenOutline from '~icons/material-symbols/folder-open-outline';
 	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
+	import Refresh from '~icons/material-symbols/refresh';
 	import GalleryCreation from './GalleryCreation.svelte';
 
 	let {
 		creations = $bindable(),
+		pendingCreations = $bindable(),
+		syncing = false,
 		db,
 		showShare
 	}: {
 		creations: Creation[];
+		pendingCreations?: Creation[];
+		syncing?: boolean;
 		db: Database;
 		showShare?: boolean;
 	} = $props();
+
+	function applyPending() {
+		if (!pendingCreations) return;
+		creations = pendingCreations;
+		pendingCreations = undefined;
+	}
 
 	let sortedCreations = $derived(toSorted(creations, (a, b) => b.lastEdited - a.lastEdited));
 
@@ -75,6 +87,8 @@
 
 	let deleteDialog = $state<ConfirmationDialog>();
 	let selectedToDeletion = $state(0);
+
+	let logoutDialog = $state<ConfirmationDialog>();
 
 	let fileInput = $state<HTMLInputElement>();
 
@@ -186,11 +200,22 @@
 					<IconButton alt={m.open_file()} onclick={() => fileInput?.click()}>
 						<FolderOpenOutline />
 					</IconButton>
+					{#if pendingCreations}
+						<IconButton alt={m.refresh_creations()} onclick={applyPending}>
+							<Refresh />
+						</IconButton>
+					{/if}
 					{#each db.availableProviders as { provider } (provider.name)}
 						{#if db.remote?.name === provider.name}
-							<IconButton alt={m.log_out()} onclick={() => db.remote?.logout()}>
-								<CloudDoneOutline />
-							</IconButton>
+							{#if syncing}
+								<IconButton alt={m.syncing()} disabled>
+									<span class="syncing-icon"><CloudSyncOutline /></span>
+								</IconButton>
+							{:else}
+								<IconButton alt={m.log_out()} onclick={() => logoutDialog?.open()}>
+									<CloudDoneOutline />
+								</IconButton>
+							{/if}
 						{:else}
 							<IconButton
 								alt={m.backup_to({ provider: provider.displayName })}
@@ -265,6 +290,21 @@
 		flex-wrap: wrap;
 	}
 
+	.syncing-icon {
+		display: inline-flex;
+		animation: pulse 1.4s ease-in-out infinite;
+	}
+
+	@keyframes pulse {
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.4;
+		}
+	}
+
 	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(18ch, 1fr));
@@ -309,4 +349,12 @@
 	message=""
 	confirmText={m.delete_confirm()}
 	onConfirm={() => deleteSlide(selectedToDeletion)}
+/>
+
+<ConfirmationDialog
+	bind:this={logoutDialog}
+	title={m.log_out_confirm_title()}
+	message={m.log_out_confirm_message()}
+	confirmText={m.log_out()}
+	onConfirm={() => db.remote?.logout()}
 />
