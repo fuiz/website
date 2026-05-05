@@ -22,12 +22,11 @@
 		getCreation
 	} from '$lib/storage';
 	import { type Creation, getMedia, type Media } from '$lib/types';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import IconButton from '$lib/ui/IconButton.svelte';
 	import { isNotUndefined, toSorted } from '$lib/util';
-	import GhostIcon from '~icons/custom/ghost';
-	import FileOpenOutline from '~icons/material-symbols/file-open-outline';
-	import Login from '~icons/material-symbols/login';
-	import Logout from '~icons/material-symbols/logout';
+	import BackupOutline from '~icons/material-symbols/backup-outline';
+	import CloudDoneOutline from '~icons/material-symbols/cloud-done-outline';
+	import FolderOpenOutline from '~icons/material-symbols/folder-open-outline';
 	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
 	import GalleryCreation from './GalleryCreation.svelte';
 
@@ -166,116 +165,46 @@
 </script>
 
 <TypicalPage>
-	<div
-		style:display="flex"
-		style:justify-content="center"
-		style:gap="0.5em"
-		style:flex-wrap="wrap"
-		style:padding="0 0.5em"
-	>
-		<div>
-			<FancyButton onclick={newCreation}>
-				<div
-					style:display="flex"
-					style:align-items="center"
-					style:font-family="var(--alternative-font)"
-					style:gap="0.2em"
-					style:padding="0.15em 0.25em"
-					style:justify-content="center"
-				>
-					<NoteAddOutline height="1.25em" title={m.start_blank()} />
-					<div>{m.start_blank()}</div>
+	<input
+		bind:this={fileInput}
+		style:display="none"
+		type="file"
+		id="config"
+		accept="application/toml, .toml, application/x-zip, .zip"
+		name="config"
+		multiple
+		onchange={() => loadFromInput()}
+	/>
+	<div class="recent-wrapper">
+		<div class="recent">
+			<div class="recent-header">
+				<h2>{m.recent_fuizzes()}</h2>
+				<div class="actions">
+					<IconButton alt={m.start_blank()} onclick={newCreation}>
+						<NoteAddOutline />
+					</IconButton>
+					<IconButton alt={m.open_file()} onclick={() => fileInput?.click()}>
+						<FolderOpenOutline />
+					</IconButton>
+					{#each db.availableProviders as { provider } (provider.name)}
+						{#if db.remote?.name === provider.name}
+							<IconButton alt={m.log_out()} onclick={() => db.remote?.logout()}>
+								<CloudDoneOutline />
+							</IconButton>
+						{:else}
+							<IconButton
+								alt={m.backup_to({ provider: provider.displayName })}
+								onclick={() =>
+									provider.login(window.location.pathname + window.location.search)}
+							>
+								<BackupOutline />
+							</IconButton>
+						{/if}
+					{/each}
 				</div>
-			</FancyButton>
-		</div>
-		<div>
-			<input
-				bind:this={fileInput}
-				style:display="none"
-				type="file"
-				id="config"
-				accept="application/toml, .toml, application/x-zip, .zip"
-				name="config"
-				multiple
-				onchange={() => loadFromInput()}
-			/>
-			<FancyButton onclick={() => fileInput?.click()}>
-				<div
-					style:display="flex"
-					style:align-items="center"
-					style:font-family="var(--alternative-font)"
-					style:gap="0.2em"
-					style:padding="0.15em 0.25em"
-					style:justify-content="center"
-				>
-					<FileOpenOutline height="1.25em" title={m.open_file()} />
-					<div>{m.open_file()}</div>
-				</div>
-			</FancyButton>
-		</div>
-		{#each db.availableProviders as { provider } (provider.name)}
-			{#if db.remote?.name === provider.name}
-				<div>
-					<FancyButton onclick={() => db.remote?.logout()}>
-						<div
-							style:display="flex"
-							style:align-items="center"
-							style:font-family="var(--alternative-font)"
-							style:gap="0.2em"
-							style:padding="0.15em 0.25em"
-							style:justify-content="center"
-						>
-							<Logout height="1.25em" title={m.log_out()} />
-							<div>{m.log_out()}</div>
-						</div>
-					</FancyButton>
-				</div>
-			{:else}
-				<div>
-					<FancyButton
-						onclick={() => provider.login(window.location.pathname + window.location.search)}
-					>
-						<div
-							style:display="flex"
-							style:align-items="center"
-							style:font-family="var(--alternative-font)"
-							style:gap="0.2em"
-							style:padding="0.15em 0.25em"
-							style:justify-content="center"
-						>
-							<Login height="1.25em" title={m.backup_to({ provider: provider.displayName })} />
-							<div>{m.backup_to({ provider: provider.displayName })}</div>
-						</div>
-					</FancyButton>
-				</div>
-			{/if}
-		{/each}
-	</div>
-	<div style:margin="0 0.4em">
-		<div
-			style:max-width="60ch"
-			style:padding="0.5em"
-			style:box-sizing="border-box"
-			style:margin="1em auto"
-			style:background="color-mix(in srgb, currentColor 20%, transparent)"
-			style:border="0.1em solid color-mix(in srgb, currentColor 80%, transparent)"
-			style:border-radius="0.7em"
-		>
-			<h2
-				style:font-family="var(--alternative-font)"
-				style:line-height="1"
-				style:margin="0 0 0.2em"
-				style:border-bottom="0.05em solid color-mix(in srgb, currentColor 80%, transparent)"
-			>
-				{m.recent_fuizzes()}
-			</h2>
+			</div>
 			{#if sortedCreations.length}
-				<div
-					style:display="grid"
-					style:grid-template-columns="repeat(auto-fit, minmax(12ch, 1fr))"
-					style:grid-auto-rows="1fr"
-					style:grid-gap="0.4em"
-				>
+				<div class="grid">
 					{#each sortedCreations as { id, title, lastEdited, slidesCount, media } (id)}
 						<GalleryCreation
 							{id}
@@ -295,19 +224,84 @@
 					{/each}
 				</div>
 			{:else}
-				<div
-					style:display="flex"
-					style:flex-direction="column"
-					style:align-items="center"
-					style:opacity="0.3"
-				>
-					<GhostIcon height="min(20vh, 60vw)" width="min(20vh, 60vw)" title={m.nothing()} />
-					{m.nothing()}
-				</div>
+				<button class="empty" onclick={newCreation}>
+					<NoteAddOutline height="min(10vh, 30vw)" width="min(10vh, 30vw)" />
+					<span>{m.start_blank()}</span>
+				</button>
 			{/if}
 		</div>
 	</div>
 </TypicalPage>
+
+<style>
+	.recent-wrapper {
+		margin: 0 0.4em;
+	}
+
+	.recent {
+		max-width: 90ch;
+		box-sizing: border-box;
+		margin: 1em auto;
+	}
+
+	.recent-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5em;
+		margin: 0 0 0.4em;
+	}
+
+	.recent-header h2 {
+		font-family: var(--alternative-font);
+		line-height: 1;
+		margin: 0;
+		opacity: 0.7;
+	}
+
+	.actions {
+		display: flex;
+		gap: 0.4em;
+		flex-wrap: wrap;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(18ch, 1fr));
+		grid-auto-rows: 1fr;
+		grid-gap: 0.5em;
+	}
+
+	.empty {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4em;
+		width: 100%;
+		padding: 2em 1em;
+		box-sizing: border-box;
+		font-family: var(--alternative-font);
+		font-size: 1.1em;
+		color: inherit;
+		background: none;
+		border: 0.15em dashed color-mix(in srgb, currentColor 30%, transparent);
+		border-radius: 0.7em;
+		cursor: pointer;
+		opacity: 0.6;
+		transition:
+			opacity 150ms ease-out,
+			border-color 150ms ease-out,
+			background 150ms ease-out;
+	}
+
+	.empty:where(:hover, :focus-visible) {
+		opacity: 1;
+		border-color: var(--primary);
+		background: color-mix(in srgb, var(--primary) 8%, transparent);
+		outline: none;
+	}
+</style>
 
 <ConfirmationDialog
 	bind:this={deleteDialog}

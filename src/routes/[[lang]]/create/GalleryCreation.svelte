@@ -107,14 +107,14 @@
 
 <style>
 	.entry {
-		--border-color: #a0a0a0;
+		--border-color: color-mix(in srgb, currentColor 25%, transparent);
 		background: var(--border-color);
 
 		display: flex;
-		max-height: 15ch;
+		max-height: 22ch;
 		aspect-ratio: 6 / 5;
-		border: 0.15em solid var(--border-color);
-		border-radius: 0.7em;
+		border: 1px solid var(--border-color);
+		border-radius: 0.6em;
 		position: relative;
 		overflow: hidden;
 		left: 50%;
@@ -122,7 +122,7 @@
 
 		transition:
 			background 150ms ease-out,
-			border 150ms ease-out;
+			border-color 150ms ease-out;
 
 		& .main {
 			transition:
@@ -143,9 +143,6 @@
 			& .media {
 				width: 100%;
 				flex: 1;
-				border-bottom: 0.15em solid var(--border-color);
-
-				transition: border-color 150ms ease-out;
 				position: relative;
 			}
 

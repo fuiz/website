@@ -1,15 +1,27 @@
 <script lang="ts">
+	import logo from '$lib/assets/same_color_logo.svg';
 	import * as m from '$lib/paraglide/messages.js';
-	import ImageOutline from '~icons/material-symbols/image-outline';
 </script>
 
-<div
-	style:height="100%"
-	style:width="100%"
-	style:display="flex"
-	style:align-items="center"
-	style:justify-content="center"
-	style:opacity="0.4"
->
-	<ImageOutline height="50%" title={m.fallback()} />
+<div class="fallback">
+	<img src={logo} alt={m.fallback()} />
 </div>
+
+<style>
+	.fallback {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0.25;
+		padding: 25%;
+		box-sizing: border-box;
+	}
+
+	.fallback img {
+		max-height: 100%;
+		max-width: 100%;
+		object-fit: contain;
+	}
+</style>
