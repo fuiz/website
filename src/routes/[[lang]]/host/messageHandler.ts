@@ -54,6 +54,51 @@ export function handleGameMessage(
 		};
 	}
 
+	if ('PlayerJoined' in game) {
+		// Append to the host-side player list. Falls back to a fresh single-item
+		// list if the event arrived before the initial WaitingScreen sync.
+		const previous =
+			context.currentState &&
+			'Game' in context.currentState &&
+			'WaitingScreen' in context.currentState.Game
+				? context.currentState.Game.WaitingScreen
+				: { items: [], exact_count: 0 };
+		return {
+			newState: {
+				Game: {
+					WaitingScreen: {
+						items: [...previous.items, game.PlayerJoined],
+						exact_count: previous.exact_count + 1
+					}
+				}
+			}
+		};
+	}
+
+	if ('PlayerLeft' in game) {
+		const previous =
+			context.currentState &&
+			'Game' in context.currentState &&
+			'WaitingScreen' in context.currentState.Game
+				? context.currentState.Game.WaitingScreen
+				: { items: [], exact_count: 0 };
+		const idx = previous.items.indexOf(game.PlayerLeft);
+		const items =
+			idx >= 0
+				? [...previous.items.slice(0, idx), ...previous.items.slice(idx + 1)]
+				: previous.items;
+		return {
+			newState: {
+				Game: {
+					WaitingScreen: {
+						items,
+						exact_count: Math.max(0, previous.exact_count - 1)
+					}
+				}
+			}
+		};
+	}
+
 	if ('TeamDisplay' in game) {
 		return {
 			newState: {

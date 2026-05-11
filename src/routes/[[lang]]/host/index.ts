@@ -85,7 +85,16 @@ export type GameIncomingMessage =
 			IdAssign: string;
 	  }
 	| {
+			// Sent only on host state sync — `items` is the full player list,
+			// `exact_count` is the current player count. Per-join/leave updates
+			// arrive as `PlayerJoined` / `PlayerLeft` events instead.
 			WaitingScreen: TruncatedList<string>;
+	  }
+	| {
+			PlayerJoined: string;
+	  }
+	| {
+			PlayerLeft: string;
 	  }
 	| {
 			TeamDisplay: TruncatedList<string>;
