@@ -199,7 +199,7 @@
 						<div id="button">
 							{#if loading}
 								<div style:height="1em" style:width="1em">
-									<LoadingCircle borderWidth={7} />
+									<LoadingCircle borderWidth={3} />
 								</div>
 							{/if}
 							{m.start()}
