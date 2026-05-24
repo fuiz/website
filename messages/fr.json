@@ -202,6 +202,8 @@
 	"refresh_creations": "Actualiser",
 	"choose_teammates": "Choisissez vos Coéquipiers",
 	"choose_teammates_desc": "et dites-leur de vous choisir !",
+	"type_teammate_name": "Saisissez le nom d'un coéquipier",
+	"remove_teammate": "Retirer {name}",
 	"find_team": "Trouvez {team} !",
 	"medal": "médaille",
 	"move_down": "Déplacer vers le bas",

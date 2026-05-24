@@ -202,6 +202,8 @@
 	"refresh_creations": "刷新",
 	"choose_teammates": "选择你的队友",
 	"choose_teammates_desc": "并告诉他们选择你！",
+	"type_teammate_name": "输入队友的名字",
+	"remove_teammate": "移除{name}",
 	"find_team": "找到{team}！",
 	"medal": "奖牌",
 	"move_down": "向下移动",

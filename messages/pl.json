@@ -202,6 +202,8 @@
 	"refresh_creations": "Odśwież",
 	"choose_teammates": "Wybierz swoich Współgraczy",
 	"choose_teammates_desc": "i powiedz im, żeby wybrali ciebie!",
+	"type_teammate_name": "Wpisz imię współgracza",
+	"remove_teammate": "Usuń {name}",
 	"find_team": "Znajdź {team}!",
 	"medal": "medal",
 	"move_down": "Przesuń w dół",

@@ -202,6 +202,8 @@
 	"refresh_creations": "Segarkan",
 	"choose_teammates": "Pilih Rekan Tim Anda",
 	"choose_teammates_desc": "dan beritahu mereka untuk memilih Anda!",
+	"type_teammate_name": "Ketik nama rekan tim",
+	"remove_teammate": "Hapus {name}",
 	"find_team": "Temukan {team}!",
 	"medal": "medali",
 	"move_down": "Pindah ke bawah",

@@ -202,6 +202,8 @@
 	"refresh_creations": "Eguneratu",
 	"choose_teammates": "Aukeratu zure Taldekideak",
 	"choose_teammates_desc": "eta esan iezaiezu zu aukeratzeko!",
+	"type_teammate_name": "Idatzi taldekide baten izena",
+	"remove_teammate": "Kendu {name}",
 	"find_team": "Aurkitu {team}!",
 	"medal": "domina",
 	"move_down": "Mugitu behera",

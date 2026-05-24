@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
 	import { grades } from '$lib/types';
+	import Chip from '$lib/ui/Chip.svelte';
 
 	let { tags = $bindable() }: { tags: string[] } = $props();
 
@@ -15,10 +16,15 @@
 	<legend>{m.grade()}</legend>
 	<div class="chips">
 		{#each selectedOptions as [option, selected], index (option)}
-			<label class:selected>
-				<input type="checkbox" bind:checked={selectedOptions[index][1]} />
+			<Chip
+				size="sm"
+				{selected}
+				onclick={() => {
+					selectedOptions[index][1] = !selected;
+				}}
+			>
 				{option}
-			</label>
+			</Chip>
 		{/each}
 	</div>
 </fieldset>
@@ -41,32 +47,5 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.25em;
-	}
-
-	input {
-		display: none;
-	}
-
-	label {
-		border: 0.1em solid color-mix(in srgb, currentColor 40%, transparent);
-		border-radius: 2em;
-		padding: 0.1em 0.5em;
-		font-size: 0.65em;
-		cursor: pointer;
-		transition:
-			background 200ms ease,
-			color 200ms ease,
-			border-color 200ms ease;
-		user-select: none;
-	}
-
-	label:hover {
-		background: color-mix(in srgb, currentColor 10%, transparent);
-	}
-
-	label.selected {
-		background: var(--primary);
-		color: var(--palette-light);
-		border-color: var(--primary);
 	}
 </style>

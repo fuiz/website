@@ -202,6 +202,8 @@
 	"refresh_creations": "Vernieuwen",
 	"choose_teammates": "Kies je Teamgenoten",
 	"choose_teammates_desc": "en zeg hen om jou te kiezen!",
+	"type_teammate_name": "Typ de naam van een teamgenoot",
+	"remove_teammate": "{name} verwijderen",
 	"find_team": "Vind {team}!",
 	"medal": "medaille",
 	"move_down": "Naar beneden verplaatsen",

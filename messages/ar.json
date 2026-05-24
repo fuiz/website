@@ -202,6 +202,8 @@
 	"refresh_creations": "تحديث",
 	"choose_teammates": "اختر زملاءك في الفريق",
 	"choose_teammates_desc": "وأخبرهم أن يختاروك!",
+	"type_teammate_name": "اكتب اسم زميل في الفريق",
+	"remove_teammate": "إزالة {name}",
 	"find_team": "ابحث عن {team}!",
 	"medal": "ميدالية",
 	"move_down": "تحريك لأسفل",

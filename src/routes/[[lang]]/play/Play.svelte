@@ -261,8 +261,12 @@
 		sendEvent(JSON.stringify({ Player: { StringArrayAnswer: texts } }));
 	}
 
-	function sendChooseTeammate(names: string[]) {
-		sendEvent(JSON.stringify({ Player: { ChooseTeammates: names } }));
+	function sendSearchTeammate(query: string) {
+		sendEvent(JSON.stringify({ Player: { SearchTeammate: query } }));
+	}
+
+	function sendDeselectTeammate(name: string) {
+		sendEvent(JSON.stringify({ Player: { DeselectTeammate: name } }));
 	}
 </script>
 
@@ -282,12 +286,14 @@
 		<Summary {score} {points} {config} />
 	{:else if 'FindTeam' in game}
 		<FindTeam {name} teamName={game.FindTeam} />
-	{:else if 'ChooseTeammates' in game}
+	{:else if 'TeammatePicker' in game}
 		<ChooseTeammates
 			{name}
-			max={game.ChooseTeammates.max_selection - 1}
-			available={game.ChooseTeammates.available.filter(([name]) => name !== setName)}
-			onchoose={sendChooseTeammate}
+			selected={game.TeammatePicker.selected}
+			suggestions={game.TeammatePicker.suggestions}
+			max_selection={game.TeammatePicker.max_selection}
+			onsearch={sendSearchTeammate}
+			ondeselect={sendDeselectTeammate}
 		/>
 	{/if}
 {:else if 'Slide' in currentState}

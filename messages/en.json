@@ -202,6 +202,8 @@
 	"refresh_creations": "Refresh",
 	"choose_teammates": "Choose Your Teammates",
 	"choose_teammates_desc": "and tell them to choose you!",
+	"type_teammate_name": "Type a teammate's name",
+	"remove_teammate": "Remove {name}",
 	"find_team": "Find {team}!",
 	"medal": "medal",
 	"move_down": "Move down",

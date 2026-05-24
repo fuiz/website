@@ -18,9 +18,10 @@ type GameState =
 			FindTeam: string;
 	  }
 	| {
-			ChooseTeammates: {
+			TeammatePicker: {
 				max_selection: number;
-				available: [string, boolean][];
+				selected: string[];
+				suggestions: string[];
 			};
 	  }
 	| {
@@ -109,9 +110,24 @@ export type GameIncomingMessage =
 			FindTeam: string;
 	  }
 	| {
-			ChooseTeammates: {
+			TeammatePicker: {
 				max_selection: number;
-				available: [string, boolean][];
+				selected: string[];
+			};
+	  }
+	| {
+			TeammateSelected: {
+				name: string;
+			};
+	  }
+	| {
+			TeammateSuggestions: {
+				suggestions: string[];
+			};
+	  }
+	| {
+			TeammateDeselected: {
+				name: string;
 			};
 	  }
 	| {

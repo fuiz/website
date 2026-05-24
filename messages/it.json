@@ -202,6 +202,8 @@
 	"refresh_creations": "Aggiorna",
 	"choose_teammates": "Scegli i tuoi Compagni di Squadra",
 	"choose_teammates_desc": "e digli di scegliere te!",
+	"type_teammate_name": "Digita il nome di un compagno di squadra",
+	"remove_teammate": "Rimuovi {name}",
 	"find_team": "Trova {team}!",
 	"medal": "medaglia",
 	"move_down": "Sposta in basso",

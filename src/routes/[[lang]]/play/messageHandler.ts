@@ -171,17 +171,80 @@ export function handleGameMessage(
 		};
 	}
 
-	if ('ChooseTeammates' in game) {
+	if ('TeammatePicker' in game) {
 		return {
 			newState: {
 				Game: {
-					ChooseTeammates: game.ChooseTeammates
+					TeammatePicker: {
+						...game.TeammatePicker,
+						suggestions: []
+					}
+				}
+			}
+		};
+	}
+
+	if ('TeammateSelected' in game) {
+		const current = pickerState(context.currentState);
+		if (current === undefined) return {};
+		const name = game.TeammateSelected.name;
+		const selected = current.selected.includes(name)
+			? current.selected
+			: [...current.selected, name];
+		return {
+			newState: {
+				Game: {
+					TeammatePicker: {
+						...current,
+						selected,
+						suggestions: []
+					}
+				}
+			}
+		};
+	}
+
+	if ('TeammateSuggestions' in game) {
+		const current = pickerState(context.currentState);
+		if (current === undefined) return {};
+		return {
+			newState: {
+				Game: {
+					TeammatePicker: {
+						...current,
+						suggestions: game.TeammateSuggestions.suggestions
+					}
+				}
+			}
+		};
+	}
+
+	if ('TeammateDeselected' in game) {
+		const current = pickerState(context.currentState);
+		if (current === undefined) return {};
+		const name = game.TeammateDeselected.name;
+		return {
+			newState: {
+				Game: {
+					TeammatePicker: {
+						...current,
+						selected: current.selected.filter((n) => n !== name)
+					}
 				}
 			}
 		};
 	}
 
 	return {};
+}
+
+function pickerState(
+	state: State | undefined
+): { max_selection: number; selected: string[]; suggestions: string[] } | undefined {
+	if (state && 'Game' in state && 'TeammatePicker' in state.Game) {
+		return state.Game.TeammatePicker;
+	}
+	return undefined;
 }
 
 /**

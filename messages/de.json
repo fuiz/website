@@ -202,6 +202,8 @@
 	"refresh_creations": "Aktualisieren",
 	"choose_teammates": "Wähle deine Teammitglieder",
 	"choose_teammates_desc": "und sage ihnen, dass sie dich wählen sollen!",
+	"type_teammate_name": "Namen eines Teammitglieds eingeben",
+	"remove_teammate": "{name} entfernen",
 	"find_team": "Finde {team}!",
 	"medal": "Medaille",
 	"move_down": "Nach unten verschieben",

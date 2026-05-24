@@ -202,6 +202,8 @@
 	"refresh_creations": "Yenilə",
 	"choose_teammates": "Komanda Yoldaşlarınızı Seçin",
 	"choose_teammates_desc": "və onlara sizi seçmələrini deyin!",
+	"type_teammate_name": "Komanda yoldaşının adını yazın",
+	"remove_teammate": "{name} silin",
 	"find_team": "{team}-ı tap!",
 	"medal": "medal",
 	"move_down": "Aşağı köçür",
