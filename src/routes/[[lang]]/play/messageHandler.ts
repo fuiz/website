@@ -79,6 +79,16 @@ export function handleGameMessage(
 		};
 	}
 
+	if (game === 'Kicked') {
+		return {
+			newState: {
+				Error: m.you_were_kicked()
+			},
+			shouldMarkFinished: true,
+			shouldCloseSocket: true
+		};
+	}
+
 	if ('NameAssign' in game) {
 		return {
 			newState: undefined,

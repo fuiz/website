@@ -74,6 +74,8 @@
 	"skip": "Salta",
 	"lock_game": "Blocca gioco",
 	"unlock_game": "Sblocca gioco",
+	"remove_player": "Rimuovi {name}",
+	"you_were_kicked": "Sei stato rimosso dal quiz",
 	"turn_on_music": "Attiva musica",
 	"mute_music": "Disattiva musica",
 	"copy_clipboard": "Copia negli appunti",

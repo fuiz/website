@@ -141,6 +141,7 @@ export type GameIncomingMessage =
 			};
 	  }
 	| 'NameChoose'
+	| 'Kicked'
 	| {
 			NameAssign: string;
 	  }

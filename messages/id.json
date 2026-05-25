@@ -74,6 +74,8 @@
 	"skip": "Lewati",
 	"lock_game": "Kunci Bergabung",
 	"unlock_game": "Izinkan Bergabung",
+	"remove_player": "Keluarkan {name}",
+	"you_were_kicked": "Anda dikeluarkan dari kuis",
 	"turn_on_music": "Nyalakan Musik",
 	"mute_music": "Matikan Musik",
 	"copy_clipboard": "Salin Kode",

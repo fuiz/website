@@ -74,6 +74,8 @@
 	"skip": "تخطي",
 	"lock_game": "قفل اللعبة",
 	"unlock_game": "فتح اللعبة",
+	"remove_player": "إزالة {name}",
+	"you_were_kicked": "تم إخراجك من الاختبار",
 	"turn_on_music": "تشغيل الموسيقى",
 	"mute_music": "كتم الموسيقى",
 	"copy_clipboard": "نسخ إلى الحافظة",

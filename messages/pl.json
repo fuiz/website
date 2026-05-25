@@ -74,6 +74,8 @@
 	"skip": "Pomiń",
 	"lock_game": "Zablokuj grę",
 	"unlock_game": "Odblokuj grę",
+	"remove_player": "Usuń {name}",
+	"you_were_kicked": "Zostałeś usunięty z quizu",
 	"turn_on_music": "Włącz muzykę",
 	"mute_music": "Wycisz muzykę",
 	"copy_clipboard": "Skopiuj",

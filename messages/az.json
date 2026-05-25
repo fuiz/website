@@ -74,6 +74,8 @@
 	"skip": "Keç",
 	"lock_game": "Qoşulmanı bağla",
 	"unlock_game": "Qoşulmaya icazə ver",
+	"remove_player": "{name} oyunçusunu çıxar",
+	"you_were_kicked": "Siz quizdən çıxarıldınız",
 	"turn_on_music": "Musiqini aç",
 	"mute_music": "Musiqini susdur",
 	"copy_clipboard": "Kodu kopyala",

@@ -74,6 +74,8 @@
 	"skip": "Saltar",
 	"lock_game": "Bloquear Juego",
 	"unlock_game": "Desbloquear Juego",
+	"remove_player": "Eliminar a {name}",
+	"you_were_kicked": "Has sido expulsado del cuestionario",
 	"turn_on_music": "Encender Música",
 	"mute_music": "Silenciar Música",
 	"copy_clipboard": "Copiar al Portapapeles",

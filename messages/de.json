@@ -74,6 +74,8 @@
 	"skip": "Überspringen",
 	"lock_game": "Spiel sperren",
 	"unlock_game": "Spiel entsperren",
+	"remove_player": "{name} entfernen",
+	"you_were_kicked": "Du wurdest aus dem Quiz entfernt",
 	"turn_on_music": "Musik einschalten",
 	"mute_music": "Musik ausschalten",
 	"copy_clipboard": "In die Zwischenablage kopieren",

@@ -176,6 +176,10 @@
 		sendEvent(JSON.stringify({ Host: { Lock: e } }));
 	}
 
+	function onkick(name: string) {
+		sendEvent(JSON.stringify({ Host: { Kick: name } }));
+	}
+
 	const HOST_NEXT = JSON.stringify({ Host: 'Next' });
 
 	onMount(() => {
@@ -203,6 +207,7 @@
 		<Waiting
 			{onnext}
 			{onlock}
+			{onkick}
 			{code}
 			players={currentState.Game.WaitingScreen.items}
 			exact_count={currentState.Game.WaitingScreen.exact_count}

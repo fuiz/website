@@ -74,6 +74,8 @@
 	"skip": "Passer",
 	"lock_game": "Verrouiller la partie",
 	"unlock_game": "Déverrouiller la partie",
+	"remove_player": "Retirer {name}",
+	"you_were_kicked": "Vous avez été retiré du quiz",
 	"turn_on_music": "Activer la musique",
 	"mute_music": "Désactiver la musique",
 	"copy_clipboard": "Copier dans le presse-papier",

@@ -74,6 +74,8 @@
 	"skip": "Sakatu",
 	"lock_game": "Itxi Bat egitea",
 	"unlock_game": "Utzi Bat egitea",
+	"remove_player": "Kendu {name}",
+	"you_were_kicked": "Galdetegitik kanporatu zaituzte",
 	"turn_on_music": "Gaitu Musika",
 	"mute_music": "Isildu Musika",
 	"copy_clipboard": "Kopiatu Kodea",

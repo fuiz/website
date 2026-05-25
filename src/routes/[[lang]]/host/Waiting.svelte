@@ -23,7 +23,8 @@
 		exact_count,
 		bindableGameInfo = $bindable(),
 		onnext,
-		onlock
+		onlock,
+		onkick
 	}: {
 		code: string;
 		players: string[];
@@ -31,6 +32,7 @@
 		bindableGameInfo: BindableGameInfo;
 		onnext?: () => void;
 		onlock?: (locked: boolean) => void;
+		onkick?: (name: string) => void;
 	} = $props();
 
 	let actualUrl = $derived(env.PUBLIC_PLAY_URL + localizeHref('/play?code=' + code));
@@ -120,7 +122,11 @@
 				</div>
 				<div class="players-area">
 					<div class="players">
-						<PlayersList players={players.map((n) => [n, false])} exactCount={exact_count} />
+						<PlayersList
+							players={players.map((n) => [n, false])}
+							exactCount={exact_count}
+							{onkick}
+						/>
 					</div>
 				</div>
 			</div>

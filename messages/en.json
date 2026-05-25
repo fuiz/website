@@ -74,6 +74,8 @@
 	"skip": "Skip",
 	"lock_game": "Lock Join",
 	"unlock_game": "Allow Join",
+	"remove_player": "Remove {name}",
+	"you_were_kicked": "You were removed from the quiz",
 	"turn_on_music": "Turn on Music",
 	"mute_music": "Mute Music",
 	"copy_clipboard": "Copy Code",

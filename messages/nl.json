@@ -74,6 +74,8 @@
 	"skip": "Overslaan",
 	"lock_game": "Spel Vergrendelen",
 	"unlock_game": "Spel Ontgrendelen",
+	"remove_player": "{name} verwijderen",
+	"you_were_kicked": "Je bent uit de quiz verwijderd",
 	"turn_on_music": "Zet Muziek Aan",
 	"mute_music": "Dempen",
 	"copy_clipboard": "Kopiëren naar Klembord",

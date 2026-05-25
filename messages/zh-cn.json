@@ -74,6 +74,8 @@
 	"skip": "跳过",
 	"lock_game": "锁定游戏",
 	"unlock_game": "解锁游戏",
+	"remove_player": "移除 {name}",
+	"you_were_kicked": "你已被移出测验",
 	"turn_on_music": "打开音乐",
 	"mute_music": "关闭音乐",
 	"copy_clipboard": "复制到剪贴板",
