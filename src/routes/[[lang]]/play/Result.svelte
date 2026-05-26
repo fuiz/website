@@ -9,11 +9,13 @@
 	let {
 		name,
 		score,
-		correct
+		correct,
+		partial
 	}: {
 		name: string;
 		score: number;
 		correct: boolean;
+		partial?: { picks: number; total: number };
 	} = $props();
 </script>
 
@@ -24,6 +26,8 @@
 	>
 		{#if correct}
 			{m.thats_correct()}
+		{:else if partial}
+			{m.partial_correct({ picks: partial.picks, total: partial.total })}
 		{:else}
 			{m.try_again()}
 		{/if}

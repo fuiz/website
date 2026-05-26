@@ -109,6 +109,7 @@
 	"penguin_crossmark": "pinguino che tiene una croce",
 	"thats_correct": "Esatto!",
 	"try_again": "Riprova la prossima volta!",
+	"partial_correct": "{picks} su {total} corrette",
 	"placed_summary": "Ti sei piazzato #{position} con {points} punti",
 	"not_on_leaderboard": "Non ci sei nella classifica",
 	"correct_answers": "Risposte corrette:",

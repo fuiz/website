@@ -109,6 +109,7 @@
 	"penguin_crossmark": "penguin memegang tanda silang",
 	"thats_correct": "Benar",
 	"try_again": "Salah",
+	"partial_correct": "{picks} dari {total} benar",
 	"placed_summary": "Posisi: #{position}, Poin: {points}",
 	"not_on_leaderboard": "Tidak ada peringkat",
 	"correct_answers": "Jawaban yang Benar:",

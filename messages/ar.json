@@ -109,6 +109,7 @@
 	"penguin_crossmark": "بطريق يحمل علامة خطأ",
 	"thats_correct": "إجابة صحيحة!",
 	"try_again": "حاول مرة أخرى!",
+	"partial_correct": "{picks} من {total} صحيحة",
 	"placed_summary": "حصلت على المركز #{position} برصيد {points} نقطة",
 	"not_on_leaderboard": "لست في قائمة المتصدرين",
 	"correct_answers": "الإجابات الصحيحة:",

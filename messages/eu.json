@@ -109,6 +109,7 @@
 	"penguin_crossmark": "pingüino bat kross markoa dutenarekin",
 	"thats_correct": "Egokia",
 	"try_again": "Okerrra",
+	"partial_correct": "{total}-tik {picks} zuzen",
 	"placed_summary": "Postua: #{position}, Puntuak: {points}",
 	"not_on_leaderboard": "Ez dago sailkapenean",
 	"correct_answers": "Erantzun Egokia:",

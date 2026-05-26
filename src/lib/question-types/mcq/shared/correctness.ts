@@ -32,3 +32,13 @@ export function isMcqAnswerCorrect(
 			return isMultipleAnswersCorrect(answered, results);
 	}
 }
+
+export function getMultipleAnswersBreakdown(
+	answered: number | number[] | undefined,
+	results: AnswerResult[] | undefined
+): { correctPicks: number; totalCorrect: number } | null {
+	if (answered === undefined || results === undefined || !Array.isArray(answered)) return null;
+	const totalCorrect = results.filter((r) => r.correct).length;
+	const correctPicks = answered.filter((index) => results.at(index)?.correct).length;
+	return { correctPicks, totalCorrect };
+}

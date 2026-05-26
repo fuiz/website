@@ -109,6 +109,7 @@
 	"penguin_crossmark": "Pinguin mit einem Kreuzzeichen",
 	"thats_correct": "Das ist richtig!",
 	"try_again": "Versuchen Sie es das nächste Mal!",
+	"partial_correct": "{picks} von {total} richtig",
 	"placed_summary": "Du bist #{position} mit {points} Punkten",
 	"not_on_leaderboard": "Du bist nicht in der Bestenliste ",
 	"correct_answers": "Richtige Antworten:",

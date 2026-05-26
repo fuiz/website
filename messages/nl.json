@@ -109,6 +109,7 @@
 	"penguin_crossmark": "pinguïn die een rood bord met een kruis vasthoudt",
 	"thats_correct": "Dat klopt!",
 	"try_again": "Probeer het volgende keer weer!",
+	"partial_correct": "{picks} van de {total} goed",
 	"placed_summary": "Je bent #{position} geworden met {points} punten",
 	"not_on_leaderboard": "Je staat niet op het scorebord",
 	"correct_answers": "Juiste Antwoorden:",

@@ -109,6 +109,7 @@
 	"penguin_crossmark": "iks işarəsi tutan pinqvin",
 	"thats_correct": "Doğrudur",
 	"try_again": "Səhvdir",
+	"partial_correct": "{total}-dən {picks} doğru",
 	"placed_summary": "Mövqe: #{position}, Bal: {points}",
 	"not_on_leaderboard": "Liderlər siyahısında deyil",
 	"correct_answers": "Doğru cavab:",

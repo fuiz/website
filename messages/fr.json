@@ -109,6 +109,7 @@
 	"penguin_crossmark": "un pingouin tenant une marque x",
 	"thats_correct": "C'est exact !",
 	"try_again": "Réessaie la prochaine fois !",
+	"partial_correct": "{picks} sur {total} correctes",
 	"placed_summary": "Vous êtes #{position} avec {points} points",
 	"not_on_leaderboard": "Vous n'êtes pas dans le classement",
 	"correct_answers": "Bonnes réponses :",

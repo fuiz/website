@@ -109,6 +109,7 @@
 	"penguin_crossmark": "pingwin trzymający znak złej odpowiedzi",
 	"thats_correct": "Poprawna odpowiedź!",
 	"try_again": "Otóż nie tym razem!",
+	"partial_correct": "{picks} z {total} poprawnych",
 	"placed_summary": "Zajęte miejsce: #{position} z liczbą {points} punktów",
 	"not_on_leaderboard": "Nie ma Cię na tablicy wyników",
 	"correct_answers": "Poprawna odpowiedź:",

@@ -109,6 +109,7 @@
 	"penguin_crossmark": "拿着叉的企鹅",
 	"thats_correct": "正确！",
 	"try_again": "下次再试一次！",
+	"partial_correct": "答对 {picks}/{total}",
 	"placed_summary": "你是第#{position}名 得分{points}",
 	"not_on_leaderboard": "您不在排行榜上",
 	"correct_answers": "正确答案:",
