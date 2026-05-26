@@ -6,9 +6,9 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import Topbar from '$lib/question-types/player/Topbar.svelte';
 	import type { AnswerMode, Media, TextOrMedia } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	let {
 		questionText,

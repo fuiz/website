@@ -4,7 +4,7 @@
 	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from './Topbar.svelte';
+	import Topbar from '$lib/question-types/player/Topbar.svelte';
 
 	let {
 		name,

@@ -6,11 +6,11 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import Topbar from '$lib/question-types/player/Topbar.svelte';
 	import type { Media } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ArrowDownward from '~icons/material-symbols/arrow-downward';
-	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	type Item = { answer: string; id: number };
 

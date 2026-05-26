@@ -3,8 +3,8 @@
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import Topbar from '$lib/question-types/player/Topbar.svelte';
 	import type { Media } from '$lib/types';
-	import Topbar from './Topbar.svelte';
 
 	let {
 		name,

@@ -4,10 +4,10 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import Topbar from '$lib/question-types/player/Topbar.svelte';
 	import type { Media } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
-	import Topbar from '../../../../routes/[[lang]]/play/Topbar.svelte';
 
 	let value = $state('');
 

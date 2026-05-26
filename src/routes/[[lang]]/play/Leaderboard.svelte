@@ -2,8 +2,8 @@
 	import { medalColors } from '$lib/clientOnly';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import Topbar from '$lib/question-types/player/Topbar.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
-	import Topbar from './Topbar.svelte';
 
 	let {
 		name,
