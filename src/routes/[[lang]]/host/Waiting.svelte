@@ -8,6 +8,7 @@
 	import Audio from '$lib/media/Audio.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import type { BindableGameInfo } from '$lib/question-types/host/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
 	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
@@ -15,7 +16,6 @@
 	import PersonOutline from '~icons/material-symbols/person-outline';
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
-	import type { BindableGameInfo } from './+page';
 
 	let {
 		code,

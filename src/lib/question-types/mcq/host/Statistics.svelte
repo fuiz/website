@@ -1,12 +1,11 @@
 <script lang="ts">
 	import Answers from '$lib/game/Answers.svelte';
 	import Statistics from '$lib/game/Statistics.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
-	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
-	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
+	import StatisticsLayout from '$lib/question-types/host/StatisticsLayout.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
+	import type { Media } from '$lib/types';
 
 	let {
 		bindableGameInfo = $bindable(),
@@ -15,6 +14,7 @@
 		answers,
 		timeLeft = undefined,
 		timeStarted = undefined,
+		media,
 		onlock,
 		onnext
 	}: {
@@ -24,65 +24,33 @@
 		answers: { text: string; count: number; correct: boolean }[];
 		timeLeft?: number;
 		timeStarted?: number;
+		media?: Media | undefined;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
-<div bind:this={fullscreenElement} class="root">
-	<Topbar bind:bindableGameInfo {gameInfo} {fullscreenElement} {onlock} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<TextBar {onnext} text={questionText} showNext={true} />
-				<div class="body">
-					<VerticalSplit>
-						{#snippet top()}
-							{#if timeLeft !== undefined && timeStarted !== undefined}
-								<TimeLeft {timeLeft} {timeStarted} />
-							{/if}
-							<Statistics
-								statistics={answers.map(({ count, correct }) => {
-									return { count, correct };
-								})}
-							/>
-						{/snippet}
-						{#snippet bottom()}
-							<div class="answers-large">
-								<Answers {answers} />
-							</div>
-						{/snippet}
-					</VerticalSplit>
-				</div>
+<StatisticsLayout bind:bindableGameInfo {gameInfo} {questionText} {media} {onnext} {onlock}>
+	<VerticalSplit>
+		{#snippet top()}
+			{#if timeLeft !== undefined && timeStarted !== undefined}
+				<TimeLeft {timeLeft} {timeStarted} />
+			{/if}
+			<Statistics
+				statistics={answers.map(({ count, correct }) => {
+					return { count, correct };
+				})}
+			/>
+		{/snippet}
+		{#snippet bottom()}
+			<div class="answers-large">
+				<Answers {answers} />
 			</div>
-		</NiceBackground>
-	</div>
-</div>
+		{/snippet}
+	</VerticalSplit>
+</StatisticsLayout>
 
 <style>
-	.root {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
-		flex: 1;
-		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-	}
-
 	.answers-large {
 		font-size: 1.5em;
 	}

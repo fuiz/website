@@ -1,14 +1,12 @@
 <script lang="ts">
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages';
+	import StatisticsLayout from '$lib/question-types/host/StatisticsLayout.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
-	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
-	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
 
 	let {
 		bindableGameInfo = $bindable(),
@@ -17,7 +15,7 @@
 		axis_labels,
 		answers,
 		results,
-		media: _media,
+		media,
 		onnext,
 		onlock
 	}: {
@@ -31,80 +29,47 @@
 		onnext?: () => void;
 		onlock?: (locked: boolean) => void;
 	} = $props();
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
-<div bind:this={fullscreenElement} class="root">
-	<Topbar bind:bindableGameInfo {gameInfo} {onlock} {fullscreenElement} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<TextBar text={questionText} showNext={true} {onnext} />
-				<div class="body">
-					<VerticalSplit>
-						{#snippet top()}
-							<div class="score-row">
-								<div class="score">
-									{results[0]}
-									<Check height="1.25em" title={m.correct()} />
-								</div>
-								<div class="score">
-									{results[1]}
-									<Close height="1.25em" title={m.wrong()} />
-								</div>
-							</div>
-						{/snippet}
-						{#snippet bottom()}
-							<div class="answer-area">
-								{#if axis_labels.from}
-									<div class="axis-label">{axis_labels.from}</div>
-								{/if}
-								<div class="answer-row">
-									<div class="arrow">
-										<div class="arrow-body"></div>
-										<div class="arrow-head"></div>
-									</div>
-									<div class="answer-list">
-										{#each answers as answer, index (index)}
-											<TextAnswerButton answerText={answer} {index} correct={undefined} />
-										{/each}
-									</div>
-								</div>
-								{#if axis_labels.to}
-									<div class="axis-label">{axis_labels.to}</div>
-								{/if}
-							</div>
-						{/snippet}
-					</VerticalSplit>
+<StatisticsLayout bind:bindableGameInfo {gameInfo} {questionText} {media} {onnext} {onlock}>
+	<VerticalSplit>
+		{#snippet top()}
+			<div class="score-row">
+				<div class="score">
+					{results[0]}
+					<Check height="1.25em" title={m.correct()} />
+				</div>
+				<div class="score">
+					{results[1]}
+					<Close height="1.25em" title={m.wrong()} />
 				</div>
 			</div>
-		</NiceBackground>
-	</div>
-</div>
+		{/snippet}
+		{#snippet bottom()}
+			<div class="answer-area">
+				{#if axis_labels.from}
+					<div class="axis-label">{axis_labels.from}</div>
+				{/if}
+				<div class="answer-row">
+					<div class="arrow">
+						<div class="arrow-body"></div>
+						<div class="arrow-head"></div>
+					</div>
+					<div class="answer-list">
+						{#each answers as answer, index (index)}
+							<TextAnswerButton answerText={answer} {index} correct={undefined} />
+						{/each}
+					</div>
+				</div>
+				{#if axis_labels.to}
+					<div class="axis-label">{axis_labels.to}</div>
+				{/if}
+			</div>
+		{/snippet}
+	</VerticalSplit>
+</StatisticsLayout>
 
 <style>
-	.root {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
-		flex: 1;
-		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-	}
-
 	.score-row {
 		display: flex;
 		justify-content: center;

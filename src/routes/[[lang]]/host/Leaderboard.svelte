@@ -6,8 +6,12 @@
 	import TextBar from '$lib/game/TextBar.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { BindableGameInfo, SharedGameInfo, TruncatedList } from './+page';
-	import Topbar from './Topbar.svelte';
+	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import type {
+		BindableGameInfo,
+		SharedGameInfo,
+		TruncatedList
+	} from '$lib/question-types/host/types';
 
 	let {
 		bindableGameInfo = $bindable(),

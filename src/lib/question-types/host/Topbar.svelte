@@ -10,21 +10,23 @@
 	import SkipNext from '~icons/material-symbols/skip-next';
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
-	import type { BindableGameInfo, SharedGameInfo } from './+page';
 	import ExitFuiz from './ExitFuiz.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from './types';
 
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
 		fullscreenElement = undefined,
 		onnext,
-		onlock
+		onlock,
+		extraControls
 	}: {
 		bindableGameInfo: BindableGameInfo;
 		gameInfo: SharedGameInfo;
 		fullscreenElement?: HTMLElement;
 		onnext?: () => void;
 		onlock?: (locked: boolean) => void;
+		extraControls?: import('svelte').Snippet;
 	} = $props();
 </script>
 
@@ -43,6 +45,9 @@
 	</div>
 	<div class="controls">
 		<IconButton alt={m.skip()} onclick={onnext}><SkipNext/></IconButton>
+		{#if extraControls}
+			{@render extraControls()}
+		{/if}
 		<StatedIconButton
 			icons={[
 				{ component: LockOpenRightOutline, alt: m.lock_game() },

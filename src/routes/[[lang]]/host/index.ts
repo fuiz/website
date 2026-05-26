@@ -1,3 +1,4 @@
+import type { TruncatedList } from '$lib/question-types/host/types';
 import type {
 	AnswerMode,
 	AnswerResult,
@@ -8,7 +9,6 @@ import type {
 	ServerPossiblyHidden,
 	TextOrMedia
 } from '$lib/types';
-import type { TruncatedList } from './+page';
 
 type GameState =
 	| {

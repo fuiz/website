@@ -3,8 +3,8 @@
 
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { BindableGameInfo, SharedGameInfo } from './+page';
-	import Topbar from './Topbar.svelte';
+	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 
 	let {
 		bindableGameInfo = $bindable(),

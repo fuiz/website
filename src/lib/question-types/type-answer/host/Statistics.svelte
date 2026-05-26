@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { buttonColors } from '$lib/clientOnly';
-	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import StatisticsLayout from '$lib/question-types/host/StatisticsLayout.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
+	import type { Media } from '$lib/types';
 	import { toSorted } from '$lib/util';
 	import Check from '~icons/custom/check';
-	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
-	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
 
 	let {
 		bindableGameInfo = $bindable(),
@@ -18,6 +17,7 @@
 		results,
 		timeLeft = undefined,
 		timeStarted = undefined,
+		media = undefined,
 		onlock = undefined,
 		onnext = undefined
 	}: {
@@ -29,6 +29,7 @@
 		results: [string, number][];
 		timeLeft?: number;
 		timeStarted?: number;
+		media?: Media | undefined;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();
@@ -60,72 +61,44 @@
 	let isCorrect = $derived((text: string): boolean =>
 		answers.some((answer) => matches(answer, text, caseSensitive))
 	);
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
-<div bind:this={fullscreenElement} class="root">
-	<Topbar bind:bindableGameInfo {gameInfo} {fullscreenElement} {onlock} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<TextBar {onnext} text={questionText} showNext={true} />
-				<div class="body">
-					{#if timeLeft !== undefined && timeStarted !== undefined}
-						<TimeLeft {timeLeft} {timeStarted} />
-					{/if}
-					<div class="answers-center">
-						<div class="answers-grid">
-							{#each allAnswers as [text, count] (text)}
-								{@const correct = isCorrect(text)}
-								<div class="label" class:faded={!correct}>
-									{#if correct}
-										<Check height="1em" title={m.correct()} />
-									{/if}
-									{text}
-								</div>
-								<div class="bar-row" class:faded={!correct}>
-									<div class="track">
-										<div
-											class="bar"
-											style:background={buttonColors[0][0]}
-											style:border="0.15em solid {buttonColors[0][1]}"
-											style:width="{(count / maxCount) * 100}%"
-										>
-											<span class="bar-count">{count}</span>
-										</div>
-									</div>
-								</div>
-							{/each}
+<StatisticsLayout bind:bindableGameInfo {gameInfo} {questionText} {media} {onnext} {onlock}>
+	<div class="content">
+		{#if timeLeft !== undefined && timeStarted !== undefined}
+			<TimeLeft {timeLeft} {timeStarted} />
+		{/if}
+		<div class="answers-center">
+			<div class="answers-grid">
+				{#each allAnswers as [text, count] (text)}
+					{@const correct = isCorrect(text)}
+					<div class="label" class:faded={!correct}>
+						{#if correct}
+							<Check height="1em" title={m.correct()} />
+						{/if}
+						{text}
+					</div>
+					<div class="bar-row" class:faded={!correct}>
+						<div class="track">
+							<div
+								class="bar"
+								style:background={buttonColors[0][0]}
+								style:border="0.15em solid {buttonColors[0][1]}"
+								style:width="{(count / maxCount) * 100}%"
+							>
+								<span class="bar-count">{count}</span>
+							</div>
 						</div>
 					</div>
-				</div>
+				{/each}
 			</div>
-		</NiceBackground>
+		</div>
 	</div>
-</div>
+</StatisticsLayout>
 
 <style>
-	.root {
+	.content {
 		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
-		flex: 1;
-		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-		min-height: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

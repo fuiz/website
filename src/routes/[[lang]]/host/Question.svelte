@@ -5,9 +5,9 @@
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
-	import type { BindableGameInfo, SharedGameInfo } from './+page';
-	import Topbar from './Topbar.svelte';
 
 	let {
 		bindableGameInfo = $bindable(),

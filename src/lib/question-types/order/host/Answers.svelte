@@ -7,9 +7,9 @@
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
-	import type { BindableGameInfo, SharedGameInfo } from '../../../../routes/[[lang]]/host/+page';
-	import Topbar from '../../../../routes/[[lang]]/host/Topbar.svelte';
 
 	let {
 		bindableGameInfo = $bindable(),
