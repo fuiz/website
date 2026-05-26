@@ -1,7 +1,6 @@
 <script lang="ts">
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import Chip from '$lib/ui/Chip.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
@@ -42,92 +41,68 @@
 	});
 </script>
 
-<div class="page">
-	<Topbar {name} />
-	<div class="body">
-		<NiceBackground>
-			<div class="center">
-				<div class="content">
-					<div class="title">
-						{m.choose_teammates()}
-					</div>
-					<div>{m.choose_teammates_desc()}</div>
+<PlayerLayout {name} centered>
+	<div class="content">
+		<div class="title">
+			{m.choose_teammates()}
+		</div>
+		<div>{m.choose_teammates_desc()}</div>
 
-					{#if selected.length > 0}
-						<div class="chips">
-							{#each selected as teammate (teammate)}
-								<Chip
-									selected
-									removable
-									ariaLabel={m.remove_teammate({ name: teammate })}
-									onclick={() => ondeselect(teammate)}
-								>
-									{teammate}
-								</Chip>
-							{/each}
-						</div>
-					{/if}
-
-					{#if selected.length < max_selection}
-						<form
-							class="search-form"
-							onsubmit={(e) => {
-								e.preventDefault();
-								submitSearch();
-							}}
-						>
-							<Textfield
-								id="teammate-search"
-								placeholder={m.type_teammate_name()}
-								autocomplete="off"
-								required={false}
-								showInvalid={false}
-								disabled={false}
-								bind:value={query}
-							/>
-							<FancyButton type="submit" disabled={query.trim().length === 0}>
-								{m.search()}
-							</FancyButton>
-						</form>
-
-						{#if suggestions.length > 0}
-							<div class="suggestions">
-								{#each suggestions as suggestion (suggestion)}
-									<button
-										class="suggestion"
-										type="button"
-										onclick={() => pickSuggestion(suggestion)}
-									>
-										{suggestion}
-									</button>
-								{/each}
-							</div>
-						{/if}
-					{/if}
-				</div>
+		{#if selected.length > 0}
+			<div class="chips">
+				{#each selected as teammate (teammate)}
+					<Chip
+						selected
+						removable
+						ariaLabel={m.remove_teammate({ name: teammate })}
+						onclick={() => ondeselect(teammate)}
+					>
+						{teammate}
+					</Chip>
+				{/each}
 			</div>
-		</NiceBackground>
+		{/if}
+
+		{#if selected.length < max_selection}
+			<form
+				class="search-form"
+				onsubmit={(e) => {
+					e.preventDefault();
+					submitSearch();
+				}}
+			>
+				<Textfield
+					id="teammate-search"
+					placeholder={m.type_teammate_name()}
+					autocomplete="off"
+					required={false}
+					showInvalid={false}
+					disabled={false}
+					bind:value={query}
+				/>
+				<FancyButton type="submit" disabled={query.trim().length === 0}>
+					{m.search()}
+				</FancyButton>
+			</form>
+
+			{#if suggestions.length > 0}
+				<div class="suggestions">
+					{#each suggestions as suggestion (suggestion)}
+						<button
+							class="suggestion"
+							type="button"
+							onclick={() => pickSuggestion(suggestion)}
+						>
+							{suggestion}
+						</button>
+					{/each}
+				</div>
+			{/if}
+		{/if}
 	</div>
-</div>
+</PlayerLayout>
 
 <style>
-	.page {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-	}
-
-	.center {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
 	.content {
 		display: flex;
 		flex-direction: column;

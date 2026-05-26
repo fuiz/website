@@ -4,9 +4,8 @@
 	import { fly } from 'svelte/transition';
 	import LeaderboardRecord from '$lib/game/LeaderboardRecord.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
 	import type {
 		BindableGameInfo,
 		SharedGameInfo,
@@ -48,53 +47,27 @@
 		await new Promise((r) => requestAnimationFrame(r));
 		displayed_final = final;
 	});
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
-<div bind:this={fullscreenElement} class="root">
-	<Topbar bind:bindableGameInfo {gameInfo} {fullscreenElement} {onlock} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<TextBar {onnext} text={m.scores()} showNext={true} heading={true} />
-				<div class="entries">
-					{#each displayed.items as [name, score], index (name)}
-						<div animate:flip={{ duration, delay }} transition:fly={{ duration, delay, y: '200%' }}>
-							<LeaderboardRecord {name} {score} {index} final={displayed_final} {duration} {delay} />
-						</div>
-					{/each}
-					{#if displayed.exact_count > displayed.items.length}
-						<div class="more">
-							{m.more({
-								count: displayed.exact_count - displayed.items.length
-							})}
-						</div>
-					{/if}
-				</div>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock}>
+	<TextBar {onnext} text={m.scores()} showNext={true} heading={true} />
+	<div class="entries">
+		{#each displayed.items as [name, score], index (name)}
+			<div animate:flip={{ duration, delay }} transition:fly={{ duration, delay, y: '200%' }}>
+				<LeaderboardRecord {name} {score} {index} final={displayed_final} {duration} {delay} />
 			</div>
-		</NiceBackground>
+		{/each}
+		{#if displayed.exact_count > displayed.items.length}
+			<div class="more">
+				{m.more({
+					count: displayed.exact_count - displayed.items.length
+				})}
+			</div>
+		{/if}
 	</div>
-</div>
+</HostLayout>
 
 <style>
-	.root {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
-		flex: 1;
-		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.entries {
 		flex: 1;
 		width: 100%;

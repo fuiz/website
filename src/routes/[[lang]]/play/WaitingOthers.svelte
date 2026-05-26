@@ -1,9 +1,7 @@
 <script lang="ts">
 	import answered_penguin from '$lib/assets/visuals/answered_penguin.svg';
-
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
 	let {
 		name,
@@ -14,23 +12,29 @@
 	} = $props();
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
-	<Topbar {name} {score} />
-	<div style:flex="1">
-		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-			>
-				<div style:display="flex" style:flex-direction="column" style:align-items="center">
-					<img style:width="10em" src={answered_penguin} alt={m.two_penguins()} />
-					<div style:font-weight="bold" style:max-width="10ch" style:text-align="center">
-						{m.waiting_players()}
-					</div>
-				</div>
-			</div>
-		</NiceBackground>
+<PlayerLayout {name} {score} centered>
+	<div class="content">
+		<img class="penguin" src={answered_penguin} alt={m.two_penguins()} />
+		<div class="caption">
+			{m.waiting_players()}
+		</div>
 	</div>
-</div>
+</PlayerLayout>
+
+<style>
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.penguin {
+		width: 10em;
+	}
+
+	.caption {
+		font-weight: bold;
+		max-width: 10ch;
+		text-align: center;
+	}
+</style>

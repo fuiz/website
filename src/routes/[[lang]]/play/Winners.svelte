@@ -1,10 +1,9 @@
 <script lang="ts">
 	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale } from '$lib/paraglide/runtime.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
 	let {
 		name,
@@ -21,42 +20,44 @@
 	const formatter = new Intl.ListFormat(getLocale(), { style: 'long', type: 'conjunction' });
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
-	<Topbar {name} {score} />
-	<div style:flex="1">
-		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-			>
-				<div
-					style:display="flex"
-					style:flex-direction="column"
-					style:padding="0.4em"
-					style:align-items="center"
-				>
-					<img
-						style:width="10em"
-						src={isWinner ? correct_penguin : wrong_penguin}
-						alt={isWinner ? m.penguin_checkmark() : m.penguin_crossmark()}
-					/>
-					<div style:font-weight="bold" style:max-width="20ch" style:text-align="center">
-						{#if isWinner}
-							{m.congrats()}
-							{m.list_won({
-								winners: formatter.format(['You'].concat(winners.filter((x) => x !== name)))
-							})}
-						{:else}
-							{m.try_again()}
-							{m.list_won({
-								winners: formatter.format(winners)
-							})}
-						{/if}
-					</div>
-				</div>
-			</div>
-		</NiceBackground>
+<PlayerLayout {name} {score} centered>
+	<div class="card">
+		<img
+			class="penguin"
+			src={isWinner ? correct_penguin : wrong_penguin}
+			alt={isWinner ? m.penguin_checkmark() : m.penguin_crossmark()}
+		/>
+		<div class="caption">
+			{#if isWinner}
+				{m.congrats()}
+				{m.list_won({
+					winners: formatter.format(['You'].concat(winners.filter((x) => x !== name)))
+				})}
+			{:else}
+				{m.try_again()}
+				{m.list_won({
+					winners: formatter.format(winners)
+				})}
+			{/if}
+		</div>
 	</div>
-</div>
+</PlayerLayout>
+
+<style>
+	.card {
+		display: flex;
+		flex-direction: column;
+		padding: 0.4em;
+		align-items: center;
+	}
+
+	.penguin {
+		width: 10em;
+	}
+
+	.caption {
+		font-weight: bold;
+		max-width: 20ch;
+		text-align: center;
+	}
+</style>

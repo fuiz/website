@@ -1,7 +1,6 @@
 <script lang="ts">
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
 	let {
 		name,
@@ -12,37 +11,13 @@
 	} = $props();
 </script>
 
-<div class="page">
-	<Topbar {name} />
-	<div class="body">
-		<NiceBackground>
-			<div class="center">
-				<div class="prompt">
-					{m.find_team({ team: teamName })}
-				</div>
-			</div>
-		</NiceBackground>
+<PlayerLayout {name} centered>
+	<div class="prompt">
+		{m.find_team({ team: teamName })}
 	</div>
-</div>
+</PlayerLayout>
 
 <style>
-	.page {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-	}
-
-	.center {
-		height: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
 	.prompt {
 		font-weight: bold;
 		font-family: var(--alternative-font);

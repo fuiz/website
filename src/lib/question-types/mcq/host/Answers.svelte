@@ -4,10 +4,9 @@
 	import Answers from '$lib/game/Answers.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
 	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
 
@@ -36,68 +35,42 @@
 		onnext?: () => void;
 		onanswer?: (answer: number) => void;
 	} = $props();
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <Audio audioUrl={think} volumeOn={bindableGameInfo.volumeOn} />
-<div bind:this={fullscreenElement} class="root">
-	<Topbar bind:bindableGameInfo {gameInfo} {onlock} {onnext} {fullscreenElement} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<div class="header">
-					<div class="control">
-						{#if timeLeft !== null && timeStarted !== null}
-							<TimeLeft {timeLeft} {timeStarted} />
-						{/if}
-					</div>
-					<div class="text-slot">
-						<TextBar text={questionText} />
-					</div>
-					<div class="control">
-						<AnsweredCount {answeredCount} />
-					</div>
-				</div>
-				<div class="body">
-					{#if media}
-						<div class="media-area">
-							<MediaContainer {media} showFallback={false} />
-						</div>
-					{/if}
-					<div class="answers-large">
-						<Answers
-							{onanswer}
-							answers={answers.map((a) => {
-								if (a === undefined) return { text: '?', correct: undefined };
-								return { text: a, correct: undefined };
-							})}
-						/>
-					</div>
-				</div>
-			</div>
-		</NiceBackground>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
+	<div class="header">
+		<div class="control">
+			{#if timeLeft !== null && timeStarted !== null}
+				<TimeLeft {timeLeft} {timeStarted} />
+			{/if}
+		</div>
+		<div class="text-slot">
+			<TextBar text={questionText} />
+		</div>
+		<div class="control">
+			<AnsweredCount {answeredCount} />
+		</div>
 	</div>
-</div>
+	<div class="body">
+		{#if media}
+			<div class="media-area">
+				<MediaContainer {media} showFallback={false} />
+			</div>
+		{/if}
+		<div class="answers-large">
+			<Answers
+				{onanswer}
+				answers={answers.map((a) => {
+					if (a === undefined) return { text: '?', correct: undefined };
+					return { text: a, correct: undefined };
+				})}
+			/>
+		</div>
+	</div>
+</HostLayout>
 
 <style>
-	.root {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
-		flex: 1;
-		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.body {
 		flex: 1;
 		min-height: 0;

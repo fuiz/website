@@ -4,10 +4,9 @@
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
 	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
 
@@ -36,78 +35,52 @@
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <Audio audioUrl={think} volumeOn={bindableGameInfo.volumeOn} />
-<div bind:this={fullscreenElement} class="root">
-	<Topbar bind:bindableGameInfo {gameInfo} {onlock} {onnext} {fullscreenElement} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<div class="header">
-					<div class="control">
-						{#if timeLeft !== null && timeStarted !== null}
-							<TimeLeft {timeLeft} {timeStarted} />
-						{/if}
-					</div>
-					<div class="text-slot">
-						<TextBar text={questionText} />
-					</div>
-					<div class="control">
-						<AnsweredCount {answeredCount} />
-					</div>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
+	<div class="header">
+		<div class="control">
+			{#if timeLeft !== null && timeStarted !== null}
+				<TimeLeft {timeLeft} {timeStarted} />
+			{/if}
+		</div>
+		<div class="text-slot">
+			<TextBar text={questionText} />
+		</div>
+		<div class="control">
+			<AnsweredCount {answeredCount} />
+		</div>
+	</div>
+	<div class="body">
+		{#if media}
+			<div class="media-area">
+				<MediaContainer {media} showFallback={false} />
+			</div>
+		{/if}
+		<div class="answer-area">
+			{#if axis_labels.from.length}
+				<div class="axis-label">{axis_labels.from}</div>
+			{/if}
+			<div class="answer-row">
+				<div class="arrow">
+					<div class="arrow-body"></div>
+					<div class="arrow-head"></div>
 				</div>
-				<div class="body">
-					{#if media}
-						<div class="media-area">
-							<MediaContainer {media} showFallback={false} />
-						</div>
-					{/if}
-					<div class="answer-area">
-						{#if axis_labels.from.length}
-							<div class="axis-label">{axis_labels.from}</div>
-						{/if}
-						<div class="answer-row">
-							<div class="arrow">
-								<div class="arrow-body"></div>
-								<div class="arrow-head"></div>
-							</div>
-							<div class="answer-list">
-								{#each answers as answer, index (index)}
-									<TextAnswerButton answerText={answer} {index} correct={undefined} />
-								{/each}
-							</div>
-						</div>
-						{#if axis_labels.to.length}
-							<div class="axis-label">{axis_labels.to}</div>
-						{/if}
-					</div>
+				<div class="answer-list">
+					{#each answers as answer, index (index)}
+						<TextAnswerButton answerText={answer} {index} correct={undefined} />
+					{/each}
 				</div>
 			</div>
-		</NiceBackground>
+			{#if axis_labels.to.length}
+				<div class="axis-label">{axis_labels.to}</div>
+			{/if}
+		</div>
 	</div>
-</div>
+</HostLayout>
 
 <style>
-	.root {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
-		flex: 1;
-		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
 	.body {
 		flex: 1;
 		min-height: 0;

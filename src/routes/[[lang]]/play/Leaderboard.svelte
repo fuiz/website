@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { medalColors } from '$lib/clientOnly';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 
 	let {
@@ -18,76 +17,72 @@
 	} = $props();
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
-	<Topbar {name} {score} />
-	<div style:flex="1">
-		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-			>
-				<div
-					style:display="flex"
-					style:gap="10px"
-					style:flex-direction="column"
-					style:align-items="center"
-				>
-					{#if position !== undefined}
-						{#if position < 3}
-							<div
-								style:height="100%"
-								style:width="100%"
-								style:display="flex"
-								style:flex-direction="column"
-								style:align-items="center"
-								style:justify-content="center"
-								style:background="var(--palette-dark)"
-								style:border="0.15em solid"
-								style:border-radius="0.7em"
-								style:padding="0.5em"
-								style:font-family="var(--alternative-font)"
-								style:box-sizing="border-box"
-							>
-								<div style:color={medalColors[position]}>
-									<WorkspacePremiumOutline height="200px" width="200px" title={m.medal()} />
-								</div>
-								<div style:color={medalColors[position]}>
-									{#if position === 0}
-										{m.first()}
-									{:else if position === 1}
-										{m.second()}
-									{:else}
-										{m.third()}
-									{/if}
-								</div>
-							</div>
-							{#if final}
-								{m.great_job()}
-							{:else}
-								{m.keep_it_up()}
-							{/if}
+<PlayerLayout {name} {score} centered>
+	<div class="stack">
+		{#if position !== undefined}
+			{#if position < 3}
+				<div class="medal">
+					<div style:color={medalColors[position]}>
+						<WorkspacePremiumOutline height="200px" width="200px" title={m.medal()} />
+					</div>
+					<div style:color={medalColors[position]}>
+						{#if position === 0}
+							{m.first()}
+						{:else if position === 1}
+							{m.second()}
 						{:else}
-							<div
-								style:display="flex"
-								style:flex-direction="column"
-								style:align-items="center"
-								style:font-size="3em"
-							>
-								#{position + 1}
-							</div>
-							{#if final}
-								{m.not_bad()}
-							{:else}
-								{m.catch_up()}
-							{/if}
+							{m.third()}
 						{/if}
-					{:else}
-						{m.not_there()}
-					{/if}
+					</div>
 				</div>
-			</div>
-		</NiceBackground>
+				{#if final}
+					{m.great_job()}
+				{:else}
+					{m.keep_it_up()}
+				{/if}
+			{:else}
+				<div class="rank">
+					#{position + 1}
+				</div>
+				{#if final}
+					{m.not_bad()}
+				{:else}
+					{m.catch_up()}
+				{/if}
+			{/if}
+		{:else}
+			{m.not_there()}
+		{/if}
 	</div>
-</div>
+</PlayerLayout>
+
+<style>
+	.stack {
+		display: flex;
+		gap: 10px;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.medal {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background: var(--palette-dark);
+		border: 0.15em solid;
+		border-radius: 0.7em;
+		padding: 0.5em;
+		font-family: var(--alternative-font);
+		box-sizing: border-box;
+	}
+
+	.rank {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-size: 3em;
+	}
+</style>

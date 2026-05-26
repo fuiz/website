@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
 
 	let {
@@ -29,37 +28,28 @@
 	{/if}
 </svelte:head>
 
-<div class="page">
-	<Topbar {name} {score} />
-	<NiceBackground>
-		<div class="body" class:has-media={media !== undefined}>
-			{#if media}
-				<div class="media">
-					<div class="media-inner">
-						<MediaContainer {media} fit="contain" />
-					</div>
+<PlayerLayout {name} {score}>
+	<div class="content" class:has-media={media !== undefined}>
+		{#if media}
+			<div class="media">
+				<div class="media-inner">
+					<MediaContainer {media} fit="contain" />
 				</div>
-			{/if}
-			<TextBar text={questionText} />
-		</div>
-	</NiceBackground>
-</div>
+			</div>
+		{/if}
+		<TextBar text={questionText} />
+	</div>
+</PlayerLayout>
 
 <style>
-	.page {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-	}
-
-	.body {
+	.content {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 	}
 
-	.body.has-media {
+	.content.has-media {
 		justify-content: start;
 	}
 

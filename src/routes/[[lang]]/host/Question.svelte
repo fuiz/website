@@ -3,9 +3,8 @@
 	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import Topbar from '$lib/question-types/host/Topbar.svelte';
+	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
 	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
 
@@ -30,8 +29,6 @@
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();
-
-	let fullscreenElement = $state<HTMLElement>();
 </script>
 
 <svelte:head>
@@ -44,55 +41,40 @@
 	{/if}
 </svelte:head>
 
-<div bind:this={fullscreenElement} class="root">
-	<Topbar {onlock} {onnext} {fullscreenElement} bind:bindableGameInfo {gameInfo} />
-	<div class="background-area">
-		<NiceBackground>
-			<div class="layout">
-				<div class="header">
-					<div class="control">
-						{#if timeLeft !== null && timeStarted !== null}
-							<TimeLeft {timeLeft} {timeStarted} />
-						{/if}
-					</div>
-					<div class="text-slot">
-						<TextBar text={questionText} />
-					</div>
-					<div class="control">
-						{#if answeredCount !== undefined}
-							<AnsweredCount {answeredCount} />
-						{/if}
-					</div>
-				</div>
-				{#if timeStarted !== null && timeLeft === null}
-					<div class="progress" style:--duration="{timeStarted}ms">
-						<div class="progress-value"></div>
-					</div>
-				{/if}
-				{#if media}
-					<div class="media">
-						<MediaContainer {media} fit="contain" />
-					</div>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
+	<div class="content">
+		<div class="header">
+			<div class="control">
+				{#if timeLeft !== null && timeStarted !== null}
+					<TimeLeft {timeLeft} {timeStarted} />
 				{/if}
 			</div>
-		</NiceBackground>
+			<div class="text-slot">
+				<TextBar text={questionText} />
+			</div>
+			<div class="control">
+				{#if answeredCount !== undefined}
+					<AnsweredCount {answeredCount} />
+				{/if}
+			</div>
+		</div>
+		{#if timeStarted !== null && timeLeft === null}
+			<div class="progress" style:--duration="{timeStarted}ms">
+				<div class="progress-value"></div>
+			</div>
+		{/if}
+		{#if media}
+			<div class="media">
+				<MediaContainer {media} fit="contain" />
+			</div>
+		{/if}
 	</div>
-</div>
+</HostLayout>
 
 <style>
-	.root {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.background-area {
+	.content {
 		flex: 1;
 		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
