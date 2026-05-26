@@ -1,5 +1,6 @@
 <script lang="ts">
 	import answered_penguin from '$lib/assets/visuals/answered_penguin.svg';
+	import IllustratedMessage from '$lib/feedback/IllustratedMessage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
@@ -13,28 +14,7 @@
 </script>
 
 <PlayerLayout {name} {score} centered>
-	<div class="content">
-		<img class="penguin" src={answered_penguin} alt={m.two_penguins()} />
-		<div class="caption">
-			{m.waiting_players()}
-		</div>
-	</div>
+	<IllustratedMessage src={answered_penguin} alt={m.two_penguins()}>
+		{m.waiting_players()}
+	</IllustratedMessage>
 </PlayerLayout>
-
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.penguin {
-		width: 10em;
-	}
-
-	.caption {
-		font-weight: bold;
-		max-width: 10ch;
-		text-align: center;
-	}
-</style>

@@ -2,6 +2,7 @@
 	import { Confetti } from 'svelte-confetti';
 	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
 	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
+	import IllustratedMessage from '$lib/feedback/IllustratedMessage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
@@ -17,20 +18,16 @@
 </script>
 
 <PlayerLayout {name} {score} centered>
-	<div class="card">
-		<img
-			class="penguin"
-			src={correct ? correct_penguin : wrong_penguin}
-			alt={correct ? m.penguin_checkmark() : m.penguin_crossmark()}
-		/>
-		<div class="caption">
-			{#if correct}
-				{m.thats_correct()}
-			{:else}
-				{m.try_again()}
-			{/if}
-		</div>
-	</div>
+	<IllustratedMessage
+		src={correct ? correct_penguin : wrong_penguin}
+		alt={correct ? m.penguin_checkmark() : m.penguin_crossmark()}
+	>
+		{#if correct}
+			{m.thats_correct()}
+		{:else}
+			{m.try_again()}
+		{/if}
+	</IllustratedMessage>
 	{#if correct}
 		<div class="confetti">
 			<Confetti
@@ -49,22 +46,6 @@
 </PlayerLayout>
 
 <style>
-	.card {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.penguin {
-		width: 10em;
-	}
-
-	.caption {
-		font-weight: bold;
-		max-width: 10ch;
-		text-align: center;
-	}
-
 	.confetti {
 		position: fixed;
 		top: 0;
