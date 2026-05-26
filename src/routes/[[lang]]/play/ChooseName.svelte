@@ -51,7 +51,7 @@
 					<div class="submit-label">
 						{#if sending}
 							<div class="loading">
-								<LoadingCircle />
+								<LoadingCircle borderWidth={3} />
 							</div>
 						{/if}
 						{m.lets_start()}
@@ -100,7 +100,7 @@
 	}
 
 	.loading {
-		height: 1em;
+		height: 0.8em;
 		aspect-ratio: 1 / 1;
 		margin: 0 5px;
 	}
