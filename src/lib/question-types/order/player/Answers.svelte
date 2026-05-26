@@ -3,10 +3,9 @@
 	import { flip } from 'svelte/animate';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -70,96 +69,80 @@
 	}
 </script>
 
-<div class="page">
-	<div>
-		<Topbar {name} {score} />
+<PlayerLayout {name} {score}>
+	{#snippet belowTopbar()}
 		{#if showAnswers}
 			<TextBar text={questionText} />
 		{/if}
-	</div>
-	<div class="body">
-		<NiceBackground>
-			<div class="stack">
-				{#if media && showAnswers}
-					<div class="media">
-						<MediaDisplay {media} fit="contain" />
-					</div>
-				{/if}
-				<div class="content">
-					{#if axisLabels.from?.length}
-						<div>{axisLabels.from}</div>
-					{/if}
-					<div class="row">
-						<div class="arrow">
-							<div class="arrow-body"></div>
-							<div class="arrow-head"></div>
-						</div>
-						<ol class="list">
-							{#each answersIndexed as item, actualIndex (item.id)}
-								<li
-									class="item"
-									animate:flip={{ duration: 200 }}
-									use:draggable={{
-										container: actualIndex.toString(),
-										dragData: item,
-										handle: '.item'
-									}}
-									use:droppable={{
-										container: actualIndex.toString(),
-										direction: 'vertical',
-										callbacks: {
-											onDrop: handleDrop,
-											onDragEnter: handleDragEnter
-										}
-									}}
-								>
-									<div class="item-answer">
-										<TextAnswerButton
-											answerText={item.answer}
-											index={item.id}
-											correct={undefined}
-										/>
-									</div>
-									{#if actualIndex < answersIndexed.length - 1}
-										<IconButton
-											alt={m.move_down()}
-											onclick={() => swap(actualIndex, actualIndex + 1)}
-										>
-											<ArrowDownward height="1.5em" />
-										</IconButton>
-									{/if}
-								</li>
-							{/each}
-						</ol>
-					</div>
-					{#if axisLabels.to?.length}
-						<div>{axisLabels.to}</div>
-					{/if}
-					<FancyButton
-						onclick={() => {
-							onanswer(answersIndexed.map(({ answer }) => answer));
-						}}
-					>
-						{m.submit()}
-					</FancyButton>
-				</div>
+	{/snippet}
+	<div class="stack">
+		{#if media && showAnswers}
+			<div class="media">
+				<MediaDisplay {media} fit="contain" />
 			</div>
-		</NiceBackground>
+		{/if}
+		<div class="content">
+			{#if axisLabels.from?.length}
+				<div>{axisLabels.from}</div>
+			{/if}
+			<div class="row">
+				<div class="arrow">
+					<div class="arrow-body"></div>
+					<div class="arrow-head"></div>
+				</div>
+				<ol class="list">
+					{#each answersIndexed as item, actualIndex (item.id)}
+						<li
+							class="item"
+							animate:flip={{ duration: 200 }}
+							use:draggable={{
+								container: actualIndex.toString(),
+								dragData: item,
+								handle: '.item'
+							}}
+							use:droppable={{
+								container: actualIndex.toString(),
+								direction: 'vertical',
+								callbacks: {
+									onDrop: handleDrop,
+									onDragEnter: handleDragEnter
+								}
+							}}
+						>
+							<div class="item-answer">
+								<TextAnswerButton
+									answerText={item.answer}
+									index={item.id}
+									correct={undefined}
+								/>
+							</div>
+							{#if actualIndex < answersIndexed.length - 1}
+								<IconButton
+									alt={m.move_down()}
+									onclick={() => swap(actualIndex, actualIndex + 1)}
+								>
+									<ArrowDownward height="1.5em" />
+								</IconButton>
+							{/if}
+						</li>
+					{/each}
+				</ol>
+			</div>
+			{#if axisLabels.to?.length}
+				<div>{axisLabels.to}</div>
+			{/if}
+			<FancyButton
+				onclick={() => {
+					onanswer(answersIndexed.map(({ answer }) => answer));
+				}}
+			>
+				{m.submit()}
+			</FancyButton>
+		</div>
 	</div>
-</div>
+</PlayerLayout>
 
 <style>
-	.page {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-		min-height: 0;
-	}
-
 	.stack {
 		height: 100%;
 		display: flex;

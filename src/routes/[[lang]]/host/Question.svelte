@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
-	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
-	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
+	import QuestionHeader from '$lib/question-types/host/QuestionHeader.svelte';
 	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
 
@@ -43,21 +41,7 @@
 
 <HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
 	<div class="content">
-		<div class="header">
-			<div class="control">
-				{#if timeLeft !== null && timeStarted !== null}
-					<TimeLeft {timeLeft} {timeStarted} />
-				{/if}
-			</div>
-			<div class="text-slot">
-				<TextBar text={questionText} />
-			</div>
-			<div class="control">
-				{#if answeredCount !== undefined}
-					<AnsweredCount {answeredCount} />
-				{/if}
-			</div>
-		</div>
+		<QuestionHeader {questionText} {timeLeft} {timeStarted} {answeredCount} />
 		{#if timeStarted !== null && timeLeft === null}
 			<div class="progress" style:--duration="{timeStarted}ms">
 				<div class="progress-value"></div>
@@ -78,21 +62,6 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-	}
-
-	.header {
-		display: flex;
-		align-items: center;
-		padding: 0 0.4em;
-	}
-
-	.text-slot {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.control {
-		z-index: 1;
 	}
 
 	.media {

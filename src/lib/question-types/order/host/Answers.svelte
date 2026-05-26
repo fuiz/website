@@ -1,12 +1,6 @@
 <script lang="ts">
-	import think from '$lib/assets/music/kevin_macleod_thinking_music.mp3';
-	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
-	import TextBar from '$lib/game/TextBar.svelte';
-	import TimeLeft from '$lib/game/TimeLeft.svelte';
-	import Audio from '$lib/media/Audio.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
-	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
+	import AnswersLayout from '$lib/question-types/host/AnswersLayout.svelte';
 	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 	import type { Media } from '$lib/types';
 
@@ -37,82 +31,39 @@
 	} = $props();
 </script>
 
-<Audio audioUrl={think} volumeOn={bindableGameInfo.volumeOn} />
-<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
-	<div class="header">
-		<div class="control">
-			{#if timeLeft !== null && timeStarted !== null}
-				<TimeLeft {timeLeft} {timeStarted} />
-			{/if}
-		</div>
-		<div class="text-slot">
-			<TextBar text={questionText} />
-		</div>
-		<div class="control">
-			<AnsweredCount {answeredCount} />
-		</div>
-	</div>
-	<div class="body">
-		{#if media}
-			<div class="media-area">
-				<MediaContainer {media} showFallback={false} />
-			</div>
+<AnswersLayout
+	bind:bindableGameInfo
+	{gameInfo}
+	{questionText}
+	{timeLeft}
+	{timeStarted}
+	{answeredCount}
+	{media}
+	{onlock}
+	{onnext}
+>
+	<div class="answer-area">
+		{#if axis_labels.from.length}
+			<div class="axis-label">{axis_labels.from}</div>
 		{/if}
-		<div class="answer-area">
-			{#if axis_labels.from.length}
-				<div class="axis-label">{axis_labels.from}</div>
-			{/if}
-			<div class="answer-row">
-				<div class="arrow">
-					<div class="arrow-body"></div>
-					<div class="arrow-head"></div>
-				</div>
-				<div class="answer-list">
-					{#each answers as answer, index (index)}
-						<TextAnswerButton answerText={answer} {index} correct={undefined} />
-					{/each}
-				</div>
+		<div class="answer-row">
+			<div class="arrow">
+				<div class="arrow-body"></div>
+				<div class="arrow-head"></div>
 			</div>
-			{#if axis_labels.to.length}
-				<div class="axis-label">{axis_labels.to}</div>
-			{/if}
+			<div class="answer-list">
+				{#each answers as answer, index (index)}
+					<TextAnswerButton answerText={answer} {index} correct={undefined} />
+				{/each}
+			</div>
 		</div>
+		{#if axis_labels.to.length}
+			<div class="axis-label">{axis_labels.to}</div>
+		{/if}
 	</div>
-</HostLayout>
+</AnswersLayout>
 
 <style>
-	.body {
-		flex: 1;
-		min-height: 0;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-	}
-
-	.header {
-		display: flex;
-		align-items: center;
-		padding: 0 0.4em;
-	}
-
-	.text-slot {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.control {
-		z-index: 1;
-	}
-
-	.media-area {
-		flex: 1;
-		min-height: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-	}
-
 	.answer-area {
 		display: flex;
 		flex-direction: column;

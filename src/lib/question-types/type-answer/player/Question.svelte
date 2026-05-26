@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
@@ -36,41 +35,32 @@
 	{/if}
 </svelte:head>
 
-<div class="page">
-	<Topbar {name} {score} />
-	<NiceBackground>
-		<div class="body">
-			{#if media}
-				<div class="media">
-					<div class="media-inner">
-						<MediaContainer {media} fit="contain" />
-					</div>
+<PlayerLayout {name} {score}>
+	<div class="content">
+		{#if media}
+			<div class="media">
+				<div class="media-inner">
+					<MediaContainer {media} fit="contain" />
 				</div>
-			{/if}
-			<TextBar text={questionText} />
-			<form
-				onsubmit={(e) => {
-					e.preventDefault();
-					onanswer(value);
-				}}
-			>
-				<Textfield id="answer" placeholder={m.answer_text()} required disabled={false} bind:value />
-				<div class="submit">
-					<FancyButton onclick={() => onanswer(value)}>{m.submit()}</FancyButton>
-				</div>
-			</form>
-		</div>
-	</NiceBackground>
-</div>
+			</div>
+		{/if}
+		<TextBar text={questionText} />
+		<form
+			onsubmit={(e) => {
+				e.preventDefault();
+				onanswer(value);
+			}}
+		>
+			<Textfield id="answer" placeholder={m.answer_text()} required disabled={false} bind:value />
+			<div class="submit">
+				<FancyButton onclick={() => onanswer(value)}>{m.submit()}</FancyButton>
+			</div>
+		</form>
+	</div>
+</PlayerLayout>
 
 <style>
-	.page {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-	}
-
-	.body {
+	.content {
 		height: 100%;
 		display: flex;
 		flex-direction: column;

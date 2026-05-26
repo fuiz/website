@@ -3,10 +3,9 @@
 	import Answers from '$lib/game/Answers.svelte';
 	import EmptyAnswers from '$lib/game/EmptyAnswers.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import Topbar from '$lib/question-types/player/Topbar.svelte';
+	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { AnswerMode, Media, TextOrMedia } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 
@@ -59,58 +58,42 @@
 	}
 </script>
 
-<div class="page">
-	<Topbar {name} {score} />
-	<div class="body">
-		<NiceBackground>
-			<div class="stack">
-				{#if showAnswers}
-					<TextBar text={questionText} />
-				{/if}
-				{#if media && showAnswers}
-					<div class="media">
-						<MediaDisplay {media} fit="contain" />
-					</div>
-				{/if}
-				{#if !showAnswers}
-					<EmptyAnswers
-						indices={[...new Array(answers.length).keys()]}
-						selected={isMultiSelect ? selectedIndices : undefined}
-						onanswer={handleAnswer}
-					/>
-				{:else}
-					<div class="answers">
-						<Answers
-							answers={answers.map((t) => ({ text: t?.Text, correct: undefined }))}
-							selected={isMultiSelect ? selectedIndices : undefined}
-							onanswer={handleAnswer}
-						/>
-					</div>
-				{/if}
-				{#if isMultiSelect}
-					<div class="submit-row">
-						<FancyButton onclick={submitMultiAnswer} disabled={selectedIndices.size === 0}>
-							<div class="submit-label">{m.submit()}</div>
-						</FancyButton>
-					</div>
-				{/if}
+<PlayerLayout {name} {score}>
+	<div class="stack">
+		{#if showAnswers}
+			<TextBar text={questionText} />
+		{/if}
+		{#if media && showAnswers}
+			<div class="media">
+				<MediaDisplay {media} fit="contain" />
 			</div>
-		</NiceBackground>
+		{/if}
+		{#if !showAnswers}
+			<EmptyAnswers
+				indices={[...new Array(answers.length).keys()]}
+				selected={isMultiSelect ? selectedIndices : undefined}
+				onanswer={handleAnswer}
+			/>
+		{:else}
+			<div class="answers">
+				<Answers
+					answers={answers.map((t) => ({ text: t?.Text, correct: undefined }))}
+					selected={isMultiSelect ? selectedIndices : undefined}
+					onanswer={handleAnswer}
+				/>
+			</div>
+		{/if}
+		{#if isMultiSelect}
+			<div class="submit-row">
+				<FancyButton onclick={submitMultiAnswer} disabled={selectedIndices.size === 0}>
+					<div class="submit-label">{m.submit()}</div>
+				</FancyButton>
+			</div>
+		{/if}
 	</div>
-</div>
+</PlayerLayout>
 
 <style>
-	.page {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.body {
-		flex: 1;
-		min-height: 0;
-	}
-
 	.stack {
 		height: 100%;
 		display: flex;

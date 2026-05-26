@@ -6,17 +6,20 @@
 		name,
 		score = undefined,
 		centered = false,
+		belowTopbar,
 		children
 	}: {
 		name: string;
 		score?: number;
 		centered?: boolean;
+		belowTopbar?: import('svelte').Snippet;
 		children: import('svelte').Snippet;
 	} = $props();
 </script>
 
 <div class="page">
 	<Topbar {name} {score} />
+	{@render belowTopbar?.()}
 	<div class="body">
 		<NiceBackground>
 			{#if centered}
@@ -39,6 +42,7 @@
 
 	.body {
 		flex: 1;
+		min-height: 0;
 	}
 
 	.center {
