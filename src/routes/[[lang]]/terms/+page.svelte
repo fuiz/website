@@ -16,7 +16,7 @@
 <TypicalPage>
 	<article>
 		<h1>Terms of Service</h1>
-		<p class="updated">Last updated: April 6, 2026</p>
+		<p class="updated">Last updated: May 25, 2026</p>
 
 		<p>
 			These Terms of Service ("Terms") govern your use of Fuiz (<Anchor href="https://fuiz.org"
