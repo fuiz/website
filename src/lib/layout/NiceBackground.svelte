@@ -48,7 +48,7 @@
 	.pattern {
 		display: flex;
 		flex-wrap: wrap;
-		opacity: 8%;
+		opacity: 4%;
 		height: 100%;
 		width: 100%;
 	}

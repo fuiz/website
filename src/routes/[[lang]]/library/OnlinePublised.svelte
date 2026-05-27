@@ -5,61 +5,71 @@
 	let { data } = $props();
 </script>
 
-<a class="container" href={resolve(localizeHref(`/library/public/${data.storage_id}`))}>
-	<div class="image-container">
+<a class="tile" href={resolve(localizeHref(`/library/public/${data.storage_id}`))}>
+	<div class="media">
 		{#if data.thumbnail}
 			<img src={data.thumbnail} alt={data.thumbnail_alt} />
 		{/if}
 	</div>
 	<div class="info" title={data.title}>
-		<div class="title">
-			{data.title}
-		</div>
-		<div class="little">
-			{data.author}
-		</div>
+		<div class="title">{data.title}</div>
+		<div class="author">{data.author}</div>
 	</div>
 </a>
 
 <style>
-	.container {
+	.tile {
+		--border-color: color-mix(in srgb, currentColor 20%, transparent);
+		display: flex;
+		flex-direction: column;
+		background: var(--surface);
+		border: 1px solid var(--border-color);
+		border-radius: 0.7em;
+		overflow: hidden;
 		color: inherit;
 		text-decoration: none;
-		border: 0.15em solid;
-		border-radius: 0.7em;
-		max-width: 20ch;
-		overflow: hidden;
-		background: var(--surface);
+		aspect-ratio: 6 / 5;
+		width: 100%;
+		max-width: 24ch;
+		margin: 0 auto;
+		transition:
+			border-color 150ms ease-out,
+			background 150ms ease-out;
 	}
 
-	.image-container {
-		height: 8em;
+	.tile:where(:hover, :focus-visible) {
+		--border-color: var(--primary);
+		outline: none;
+	}
+
+	.media {
 		flex: 1;
-		overflow: hidden;
 		display: flex;
-		border-bottom: 0.15em solid;
+		overflow: hidden;
+		background: color-mix(in srgb, currentColor 5%, transparent);
 	}
 
 	img {
 		width: 100%;
-		height: auto;
-		flex: 1;
-		object-fit: contain;
+		height: 100%;
+		object-fit: cover;
 	}
 
 	.info {
-		padding: 0.25em;
-		font-size: 0.8em;
+		padding: 0.4em 0.5em;
+		font-size: 0.85em;
 	}
 
 	.title {
+		font-weight: 600;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.little {
-		font-size: 0.6em;
-		margin: 0.25em 0;
+	.author {
+		font-size: 0.85em;
+		opacity: 0.7;
+		margin-top: 0.1em;
 	}
 </style>

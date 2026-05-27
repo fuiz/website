@@ -87,7 +87,7 @@
 
 	.slide-index {
 		display: flex;
-		padding: 0.2em 0.4em;
+		padding: 0.3em 0.4em;
 		gap: 2px;
 		align-items: center;
 		font-family: var(--alternative-font);

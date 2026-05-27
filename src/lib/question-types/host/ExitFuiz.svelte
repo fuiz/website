@@ -9,22 +9,7 @@
 	let exitDialog = $state<ConfirmationDialog>();
 </script>
 
-<button
-	onclick={() => exitDialog?.open()}
-	style:cursor="pointer"
-	style:appearance="none"
-	style:display="flex"
-	style:padding="0.2em 0.4em"
-	style:gap="2px"
-	style:align-items="center"
-	style:line-height="1em"
-	style:font-size="inherit"
-	style:font-family="var(--alternative-font)"
-	style:background="var(--on-surface)"
-	style:color="var(--surface)"
-	style:border="none"
-	style:border-radius="100px"
->
+<button class="exit-fuiz" onclick={() => exitDialog?.open()}>
 	<FuizIcon height="1em" width="1em" title={m.exit()} />
 	<!-- i18n-ignore -->
 	<div>fuiz</div>
@@ -37,3 +22,21 @@
 	confirmText={m.end()}
 	onConfirm={() => goto(resolve(localizeHref('/create')))}
 />
+
+<style>
+	.exit-fuiz {
+		cursor: pointer;
+		appearance: none;
+		display: flex;
+		padding: 0.3em 0.4em;
+		gap: 2px;
+		align-items: center;
+		line-height: 1em;
+		font-size: inherit;
+		font-family: var(--alternative-font);
+		background: var(--on-surface);
+		color: var(--surface);
+		border: none;
+		border-radius: 100px;
+	}
+</style>

@@ -8,19 +8,11 @@
 </script>
 
 <NiceBackground>
-	<div
-		style:height="100%"
-		style:display="flex"
-		style:flex-direction="column"
-		style:padding="0.5em 0.5em 0"
-		style:gap="0.5em"
-		style:align-items="center"
-		style:box-sizing="border-box"
-	>
+	<div class="page">
 		<header>
 			<Header />
 		</header>
-		<section style:flex="1" style:width="100%">
+		<section>
 			{@render children?.()}
 		</section>
 		<footer>
@@ -28,3 +20,28 @@
 		</footer>
 	</div>
 </NiceBackground>
+
+<style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		padding: 0.5em 0 0;
+		gap: 0.5em;
+		box-sizing: border-box;
+	}
+
+	header {
+		display: flex;
+		justify-content: center;
+	}
+
+	section {
+		flex: 1;
+		width: 100%;
+	}
+
+	footer {
+		width: 100%;
+	}
+</style>

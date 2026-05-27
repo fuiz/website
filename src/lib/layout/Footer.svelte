@@ -10,39 +10,28 @@
 	import Policy from '~icons/material-symbols/policy';
 </script>
 
-<div
-	style:border-top="2px solid #00000080"
-	style:text-align="center"
-	style:width="100%"
-	style:box-sizing="border-box"
-	style:padding="8px"
-	style:display="flex"
-	style:align-items="center"
-	style:gap="10px"
-	style:justify-content="center"
-	style:flex-wrap="wrap"
->
+<div class="footer">
 	<Anchor href={localizeHref('/credits')}>
-		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
+		<div class="link">
 			<Diversity1 height="1em" title={m.community()} />
 			<div>{m.community()}</div>
 		</div>
 	</Anchor>
 	<Anchor href="https://gitlab.com/fuiz/website">
-		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
+		<div class="link">
 			<Balance height="1em" title={m.open_source()} />
 			<!-- i18n-ignore -->
 			<div>GNU AGPLv3</div>
 		</div>
 	</Anchor>
 	<Anchor href={localizeHref('/privacy')}>
-		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
+		<div class="link">
 			<Policy height="1em" title={m.privacy_policy()} />
 			<div>{m.privacy_policy()}</div>
 		</div>
 	</Anchor>
 	<Anchor href={localizeHref('/terms')}>
-		<div style:display="inline-flex" style:align-items="center" style:gap="0.2em">
+		<div class="link">
 			<Description height="1em" title={m.terms_of_service()} />
 			<div>{m.terms_of_service()}</div>
 		</div>
@@ -50,3 +39,24 @@
 	<LanguageSwitcher id="footer" up={true} />
 	<DarkModeSwitcher />
 </div>
+
+<style>
+	.footer {
+		border-top: 1px solid #00000080;
+		text-align: center;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 8px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2em;
+	}
+</style>

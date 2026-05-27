@@ -5,76 +5,33 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import { getAllCreations, loadDatabase } from '$lib/storage';
-	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
-	import { toSorted } from '$lib/util';
+	import CreationsPicker from '$lib/ui/CreationsPicker.svelte';
 </script>
 
 {#await loadDatabase().then((db) => getAllCreations(db))}
 	<Loading />
 {:then creations}
-	{@const sortedCreations = toSorted(creations, (a, b) => -b.lastEdited - a.lastEdited)}
 	<TypicalPage>
-		<div style:max-width="25ch" style:margin="auto">
+		<div class="wrapper">
 			{#if creations.length > 0}
 				<h2>{m.choose_local()}</h2>
-				<ul id="creations-list">
-					{#each sortedCreations as { title, id, slidesCount }, index (id)}
-						<li class="creation">
-							<a href={resolve(localizeHref(`/host?id=${id}`))}>{title} · {m.slides_count({ count: slidesCount })}</a>
-						</li>
-						{#if index + 1 != creations.length}
-							<hr />
-						{/if}
-					{/each}
-				</ul>
-			{:else}
-				<div>
-					<FancyAnchorButton href={resolve(localizeHref('/create'))}>
-						<div class="create">{m.create()}</div>
-					</FancyAnchorButton>
-				</div>
 			{/if}
+			<CreationsPicker {creations} href={(id) => resolve(localizeHref(`/host?id=${id}`))} />
 		</div>
 	</TypicalPage>
 {/await}
 
 <style>
-	#creations-list {
-		display: flex;
-		flex-direction: column;
-		border: 0.2em solid;
-		border-radius: 0.5em;
-		padding: 0;
-		margin: 0;
-	}
-
-	.creation {
-		display: flex;
-	}
-
-	hr {
-		appearance: none;
-		width: 100%;
-		color: inherit;
-		border-top: 0.2em solid;
-		margin: 0;
+	.wrapper {
+		max-width: 90ch;
+		margin: 1em auto;
+		padding: 0 0.4em;
 	}
 
 	h2 {
-		margin: 0 0 0.5em;
-		font-size: 1.25em;
-	}
-
-	.creation a {
-		flex: 1;
-		text-decoration: inherit;
-		color: inherit;
-		padding: 0.4em;
-		margin: 0;
-	}
-
-	.create {
 		font-family: var(--alternative-font);
-		text-align: center;
+		line-height: 1;
+		margin: 0 0 0.4em;
+		opacity: 0.7;
 	}
 </style>
