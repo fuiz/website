@@ -232,5 +232,7 @@
 	"publish_check_relevant": "Kuis ini relevan, edukatif, dan bermanfaat bagi orang lain",
 	"privacy_policy": "Kebijakan Privasi",
 	"terms_of_service": "Ketentuan Layanan",
-	"multiple_answers": "Beberapa jawaban"
+	"multiple_answers": "Beberapa jawaban",
+	"show_answers": "Tampilkan jawaban",
+	"hide_answers": "Sembunyikan jawaban"
 }

@@ -232,5 +232,7 @@
 	"publish_check_relevant": "Quiz jest istotny, edukacyjny i przydatny dla innych",
 	"privacy_policy": "Polityka Prywatności",
 	"terms_of_service": "Regulamin",
-	"multiple_answers": "Wiele odpowiedzi"
+	"multiple_answers": "Wiele odpowiedzi",
+	"show_answers": "Pokaż odpowiedzi",
+	"hide_answers": "Ukryj odpowiedzi"
 }

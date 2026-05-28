@@ -232,5 +232,7 @@
 	"publish_check_relevant": "الاختبار ذو صلة وتعليمي ومفيد للآخرين",
 	"privacy_policy": "سياسة الخصوصية",
 	"terms_of_service": "شروط الخدمة",
-	"multiple_answers": "إجابات متعددة"
+	"multiple_answers": "إجابات متعددة",
+	"show_answers": "إظهار الإجابات",
+	"hide_answers": "إخفاء الإجابات"
 }

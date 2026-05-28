@@ -232,5 +232,7 @@
 	"publish_check_relevant": "Quiz uyğun, təhsil verici və başqaları üçün faydalıdır",
 	"privacy_policy": "Məxfilik Siyasəti",
 	"terms_of_service": "Xidmət Şərtləri",
-	"multiple_answers": "Çoxlu cavablar"
+	"multiple_answers": "Çoxlu cavablar",
+	"show_answers": "Cavabları göstər",
+	"hide_answers": "Cavabları gizlət"
 }

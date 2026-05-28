@@ -232,5 +232,7 @@
 	"publish_check_relevant": "El cuestionario es relevante, educativo y útil para otros",
 	"privacy_policy": "Política de Privacidad",
 	"terms_of_service": "Términos de Servicio",
-	"multiple_answers": "Respuestas múltiples"
+	"multiple_answers": "Respuestas múltiples",
+	"show_answers": "Mostrar respuestas",
+	"hide_answers": "Ocultar respuestas"
 }

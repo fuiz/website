@@ -232,5 +232,7 @@
 	"publish_check_relevant": "测验具有相关性、教育性，对他人有用",
 	"privacy_policy": "隐私政策",
 	"terms_of_service": "服务条款",
-	"multiple_answers": "多选"
+	"multiple_answers": "多选",
+	"show_answers": "显示答案",
+	"hide_answers": "隐藏答案"
 }

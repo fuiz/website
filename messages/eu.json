@@ -232,5 +232,7 @@
 	"publish_check_relevant": "Quiz-a garrantzitsua, hezigarria eta besteentzat erabilgarria da",
 	"privacy_policy": "Pribatutasun Politika",
 	"terms_of_service": "Zerbitzu Baldintzak",
-	"multiple_answers": "Erantzun anitz"
+	"multiple_answers": "Erantzun anitz",
+	"show_answers": "Erakutsi erantzunak",
+	"hide_answers": "Ezkutatu erantzunak"
 }
