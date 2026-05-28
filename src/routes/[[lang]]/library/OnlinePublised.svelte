@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import MediaFallback from '$lib/media/MediaFallback.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime.js';
 
 	let { data } = $props();
@@ -9,6 +10,8 @@
 	<div class="media">
 		{#if data.thumbnail}
 			<img src={data.thumbnail} alt={data.thumbnail_alt} />
+		{:else}
+			<MediaFallback />
 		{/if}
 	</div>
 	<div class="info" title={data.title}>
@@ -29,9 +32,6 @@
 		color: inherit;
 		text-decoration: none;
 		aspect-ratio: 6 / 5;
-		width: 100%;
-		max-width: 24ch;
-		margin: 0 auto;
 		transition:
 			border-color 150ms ease-out,
 			background 150ms ease-out;

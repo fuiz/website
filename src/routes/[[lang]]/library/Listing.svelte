@@ -67,6 +67,7 @@
 
 	$effect(() => {
 		if (searchCriteria > 0) {
+			results = new Promise(() => {});
 			untrack(search);
 		} else {
 			results = undefined;
@@ -355,7 +356,7 @@
 
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(16ch, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(18ch, 100%), 1fr));
 		grid-auto-rows: min-content;
 		gap: 0.6em;
 	}
@@ -373,5 +374,16 @@
 	.spinner {
 		height: 1.5em;
 		width: 1.5em;
+	}
+
+	@media (max-width: 40em) {
+		.main-view {
+			flex-direction: column;
+		}
+
+		.filters {
+			width: 100%;
+			position: static;
+		}
 	}
 </style>
