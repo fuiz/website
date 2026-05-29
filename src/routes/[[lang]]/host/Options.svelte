@@ -9,9 +9,18 @@
 	import { type CreationId, getCreation, loadDatabase } from '$lib/storage';
 	import type { GenericIdlessFuizConfig, GenericIdlessSlide, NameStyle } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Radio from '$lib/ui/Radio.svelte';
-	import Slider from '$lib/ui/Slider.svelte';
+	import Stepper from '$lib/ui/Stepper.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
+	import CasinoOutline from '~icons/material-symbols/casino-outline';
+	import Gavel from '~icons/material-symbols/gavel';
+	import GroupsOutline from '~icons/material-symbols/groups-outline';
+	import LeaderboardOutline from '~icons/material-symbols/leaderboard-outline';
+	import PersonAddOutline from '~icons/material-symbols/person-add-outline';
+	import PhoneAndroidOutline from '~icons/material-symbols/phone-android-outline';
+	import ShortText from '~icons/material-symbols/short-text';
+	import Shuffle from '~icons/material-symbols/shuffle';
+	import SwapVert from '~icons/material-symbols/swap-vert';
+	import TheaterComedyOutline from '~icons/material-symbols/theater-comedy-outline';
 
 	let { id }: { id: CreationId } = $props();
 
@@ -26,12 +35,20 @@
 		leaderboard = $state(true),
 		teams = $state(false),
 		teamSize = $state(4),
-		assignRandom = $state(false);
+		assignRandom = $state(false),
+		censorNames = $state(true);
 
-	const randomNameOptions = [
-		{ value: 'Pet', label: m.petnames() },
-		{ value: 'Roman', label: m.romannames() }
-	];
+	type StyleKey = 'Pet' | 'Roman';
+	const styleKinds: StyleKey[] = ['Pet', 'Roman'];
+
+	function styleLabel(k: StyleKey): string {
+		return k === 'Pet' ? m.petnames() : m.romannames();
+	}
+
+	function exampleFor(k: StyleKey, len: 2 | 3): string {
+		if (k === 'Pet') return len === 2 ? 'Swift Fox' : 'Quietly Swift Fox';
+		return len === 2 ? 'Marcus Aurelius' : 'Marcus Aurelius Cato';
+	}
 
 	// https://stackoverflow.com/a/2450976
 	function shuffleArray<T>(array: T[]): T[] {
@@ -98,6 +115,7 @@
 						random_names: nameStyle,
 						show_answers: questionsOnPlayersDevices || teams,
 						no_leaderboard: !leaderboard,
+						profanity: censorNames ? 'Censor' : 'Allow',
 						...(teams && { teams: { size: teamSize, assign_random: assignRandom } })
 					}).then((err) => {
 						loading = false;
@@ -108,93 +126,115 @@
 				}}
 			>
 				<h2>{m.options()}</h2>
-				<div id="options">
-					<div class="switch">
-						<Switch id="teams" bind:checked={teams}>{m.teams()}</Switch>
-					</div>
-					{#if teams}
-						<hr />
-						<Slider id="team_size" bind:value={teamSize} min={2} max={5}
-							>{m.optimal_team_size()}</Slider
-						>
-						<hr />
-						<div class="switch">
-							<Switch id="assign_random" bind:checked={assignRandom}>
-								{m.assign_random()}
-							</Switch>
-						</div>
-					{/if}
-					<hr />
-					<div class="switch">
-						<Switch
-							id="players"
-							bind:checked={questionsOnPlayersDevices}
-							stuck={teams ? true : undefined}
-						>
-							{m.questions_on_players_devices()}
-						</Switch>
-					</div>
-					<hr />
-					<div class="switch">
+
+				<div class="section">
+					<div class="section-label">{m.section_players()}</div>
+					<div class="card">
 						<Switch
 							id="random"
 							checked={false}
 							onchange={(checked) => {
 								if (checked) {
-									nameStyle = {
-										Petname: 2
-									};
+									nameStyle = { Petname: 2 };
 								} else {
 									nameStyle = null;
 								}
 							}}
 						>
+							<TheaterComedyOutline height="1.2em" width="1.2em" />
 							{m.randomized_names()}
 						</Switch>
-					</div>
-					{#if nameStyle !== null}
-						<Radio
-							options={randomNameOptions}
-							label="Name Type"
-							value={'Roman' in nameStyle ? 'Roman' : 'Pet'}
-							onchange={(value) => {
-								if (nameStyle !== null) {
-									const currentValue = 'Roman' in nameStyle ? nameStyle.Roman : nameStyle.Petname;
-									nameStyle =
-										value === 'Roman' ? { Roman: currentValue } : { Petname: currentValue };
-								}
-							}}
-						/>
-						<Slider
-							id="team_size"
-							value={'Roman' in nameStyle ? nameStyle.Roman : nameStyle.Petname}
-							onchange={(value) => {
-								if (nameStyle !== null && (value == 2 || value == 3)) {
-									nameStyle = 'Roman' in nameStyle ? { Roman: value } : { Petname: value };
-								}
-							}}
-							min={2}
-							max={3}
-						>
-							{m.random_name_length()}
-						</Slider>
-					{/if}
-					<hr />
-					<div class="switch">
-						<Switch id="shuffle_slides" bind:checked={shuffleSlides}>{m.shuffle_slides()}</Switch>
-					</div>
-					<hr />
-					<div class="switch">
-						<Switch id="shuffle_answers" bind:checked={shuffleAnswers}>{m.shuffle_answers()}</Switch
-						>
-					</div>
-					<hr />
-					<div class="switch">
-						<Switch id="leaderboard" bind:checked={leaderboard}>{m.leaderboard()}</Switch>
+						{#if nameStyle !== null}
+							{@const len = 'Roman' in nameStyle ? nameStyle.Roman : nameStyle.Petname}
+							{@const currentKind: StyleKey = 'Roman' in nameStyle ? 'Roman' : 'Pet'}
+							<div class="style-grid">
+								{#each styleKinds as k (k)}
+									<button
+										type="button"
+										class="style-card"
+										class:selected={currentKind === k}
+										onclick={() =>
+											(nameStyle = k === 'Roman' ? { Roman: len } : { Petname: len })}
+									>
+										<div class="style-title">{styleLabel(k)}</div>
+										<div class="style-hint">{exampleFor(k, len)}</div>
+									</button>
+								{/each}
+							</div>
+							<Stepper
+								value={len}
+								onchange={(v) => {
+									if (nameStyle !== null && (v === 2 || v === 3))
+										nameStyle = 'Roman' in nameStyle ? { Roman: v } : { Petname: v };
+								}}
+								min={2}
+								max={3}
+							>
+								<ShortText height="1.2em" width="1.2em" />
+								{m.random_name_length()}
+							</Stepper>
+						{/if}
+						<Switch id="censor" bind:checked={censorNames}>
+							<Gavel height="1.2em" width="1.2em" />
+							{m.censor_names()}
+						</Switch>
 					</div>
 				</div>
+
+				<div class="section">
+					<div class="section-label">{m.section_teams()}</div>
+					<div class="card">
+						<Switch id="teams" bind:checked={teams}>
+							<GroupsOutline height="1.2em" width="1.2em" />
+							{m.teams()}
+						</Switch>
+						{#if teams}
+							<Stepper bind:value={teamSize} min={2} max={5}>
+								<PersonAddOutline height="1.2em" width="1.2em" />
+								{m.optimal_team_size()}
+							</Stepper>
+							<Switch id="assign_random" bind:checked={assignRandom}>
+								<CasinoOutline height="1.2em" width="1.2em" />
+								{m.assign_random()}
+							</Switch>
+						{/if}
+					</div>
+				</div>
+
+				<div class="section">
+					<div class="section-label">{m.section_display()}</div>
+					<div class="card">
+						<Switch
+							id="players"
+							bind:checked={questionsOnPlayersDevices}
+							stuck={teams ? true : undefined}
+						>
+							<PhoneAndroidOutline height="1.2em" width="1.2em" />
+							{m.questions_on_players_devices()}
+						</Switch>
+						<Switch id="leaderboard" bind:checked={leaderboard}>
+							<LeaderboardOutline height="1.2em" width="1.2em" />
+							{m.leaderboard()}
+						</Switch>
+					</div>
+				</div>
+
+				<div class="section">
+					<div class="section-label">{m.section_randomization()}</div>
+					<div class="card">
+						<Switch id="shuffle_slides" bind:checked={shuffleSlides}>
+							<Shuffle height="1.2em" width="1.2em" />
+							{m.shuffle_slides()}
+						</Switch>
+						<Switch id="shuffle_answers" bind:checked={shuffleAnswers}>
+							<SwapVert height="1.2em" width="1.2em" />
+							{m.shuffle_answers()}
+						</Switch>
+					</div>
+				</div>
+
 				<ErrorMessage {errorMessage} />
-				<div>
+				<div class="start-row">
 					<FancyButton disabled={loading}>
 						<div id="button">
 							{#if loading}
@@ -215,39 +255,92 @@
 	form {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		max-width: 25ch;
+		max-width: min(36ch, 90vw);
 		gap: 1em;
 		padding: 0.5em;
 		box-sizing: border-box;
-		margin: auto;
-	}
-
-	#options {
-		display: flex;
-		flex-direction: column;
-		border: 0.1em solid;
-		gap: 0.5em;
-		border-radius: 1em;
-		padding: 0.5em;
-	}
-
-	hr {
-		width: 100%;
-		color: inherit;
-		margin: 0;
+		margin: 0 auto;
 	}
 
 	h2 {
 		margin: 0;
+		text-align: center;
+	}
+
+	.section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2em;
+	}
+
+	.section-label {
+		padding: 0 0.3em;
+		font-size: 0.75em;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		opacity: 0.7;
+		font-family: var(--alternative-font);
+		font-weight: 800;
+	}
+
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6em;
+		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border-radius: 0.7em;
+		background: var(--surface);
+		padding: 0.6em 0.7em;
+	}
+
+	.start-row {
+		display: flex;
+		justify-content: center;
 	}
 
 	#button {
 		padding: 0.1em 0.5em;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		gap: 0.5em;
 		font-family: var(--alternative-font);
+	}
+
+	.style-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5em;
+	}
+
+	.style-card {
+		appearance: none;
+		font: inherit;
+		color: inherit;
+		text-align: start;
+		cursor: pointer;
+		padding: 0.6em 0.7em;
+		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border-radius: 0.6em;
+		background: var(--surface);
+		transition: border-color 150ms, background 150ms;
+	}
+
+	.style-card.selected {
+		border-color: var(--primary);
+		background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+	}
+
+	.style-title {
+		font-family: var(--alternative-font);
+		font-weight: 800;
+		font-size: 1em;
+	}
+
+	.style-hint {
+		font-size: 0.75em;
+		opacity: 0.5;
+		font-style: italic;
+		margin-top: 0.15em;
 	}
 </style>

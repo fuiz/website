@@ -288,6 +288,7 @@ export type FuizOptions = {
 	random_names: NameStyle | null;
 	show_answers: boolean;
 	no_leaderboard: boolean;
+	profanity?: 'Censor' | 'Allow';
 	teams?: {
 		size: number;
 		assign_random: boolean;
