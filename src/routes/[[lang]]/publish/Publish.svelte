@@ -3,14 +3,14 @@
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import { getLocale, type Locale, locales } from '$lib/paraglide/runtime.js';
+	import { getLocale } from '$lib/paraglide/runtime.js';
 	import { type ExportedFuiz } from '$lib/storage';
 	import { type FullOnlineFuiz, type GenericIdlessSlide, getMedia, type Media } from '$lib/types';
+	import ContentLanguageSelect from '$lib/ui/ContentLanguageSelect.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import SelectTime from '$lib/ui/SelectTime.svelte';
+	import PreviewCard from '$lib/ui/PreviewCard.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import Language from '~icons/material-symbols/language';
 	import type { PublishingState } from '../../api/library/publish-stream/types';
@@ -28,7 +28,7 @@
 	let author = $state('');
 	let subjects = $state<string[]>([]);
 	let grades = $state<string[]>([]);
-	let lang = $state<Locale>(getLocale());
+	let lang = $state<string>(getLocale());
 
 	let gitAuthStatus = $state<{
 		authenticated: boolean;
@@ -67,14 +67,6 @@
 				console.error('Failed to check Git auth status:', err);
 			});
 	});
-
-	function map(lang: string): string {
-		return (
-			new Intl.DisplayNames([lang], {
-				type: 'language'
-			}).of(lang) || lang
-		);
-	}
 
 	let media = $derived<Media | undefined>(
 		creation.config.slides.reduce(
@@ -152,55 +144,26 @@
 </script>
 
 <TypicalPage>
-	<section style:max-width="40ch" style:margin="auto">
+	<section class="page">
 		{#if prUrl}
-			<div
-				style:display="flex"
-				style:flex-direction="column"
-				style:gap="1em"
-				style:padding="2em 1em"
-				style:text-align="center"
-			>
-				<div
-					style:border="0.15em solid currentcolor"
-					style:border-radius="0.7em"
-					style:padding="1.5em"
-					style:background="var(--surface)"
-				>
-					<h2 style:font-family="var(--alternative-font)" style:margin="0 0 0.5em" style:font-size="1.75em">
-						{m.fuiz_submitted()}
-					</h2>
-					<p style:margin="0 0 1em 0" style:line-height="1.4">
-						{m.fuiz_submitted_desc()}
-					</p>
+			<div class="result">
+				<div class="result-card">
+					<h2 class="result-title">{m.fuiz_submitted()}</h2>
+					<p class="result-desc">{m.fuiz_submitted_desc()}</p>
 					{#if prUrl}
 						<div>
 							<FancyAnchorButton href={prUrl}>
-								<div style:padding="0.5em 1em" style:font-family="var(--alternative-font)">{m.view_on_gitlab()}</div>
+								<div class="btn-label">{m.view_on_gitlab()}</div>
 							</FancyAnchorButton>
 						</div>
 					{/if}
 				</div>
 			</div>
 		{:else if publishingState}
-			<div
-				style:display="flex"
-				style:flex-direction="column"
-				style:justify-content="center"
-				style:align-items="center"
-				style:gap="1em"
-				style:padding="2em 1em"
-			>
-				<h2 style:font-family="var(--alternative-font)" style:margin="0" style:font-size="1.5em">{m.publishing()}</h2>
-				<div
-					style:border="0.15em solid currentcolor"
-					style:border-radius="0.7em"
-					style:padding="1em"
-					style:width="100%"
-					style:box-sizing="border-box"
-					style:background="var(--surface)"
-				>
-					<div style:display="flex" style:flex-direction="column" style:gap="0.5em">
+			<div class="progress">
+				<h2 class="progress-title">{m.publishing()}</h2>
+				<div class="progress-card">
+					<div class="steps">
 						{#each steps as step, i (step.state)}
 							<div
 								class="step"
@@ -212,7 +175,7 @@
 								class:step-active={publishingState === step.state}
 							>
 								{#if publishingState === step.state}
-									<div style:width="1em" style:height="1em" style:display="inline-block">
+									<div class="step-spinner">
 										<LoadingCircle borderWidth={5} />
 									</div>
 								{/if}
@@ -224,44 +187,25 @@
 			</div>
 		{:else}
 			<form
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:flex-direction="column"
-				style:gap="0.5em"
+				class="form"
 				onsubmit={(e) => {
 					e.preventDefault();
 					warningDialog?.open();
 				}}
 			>
 				{#if publishError}
-					<p style:color="red">{publishError}</p>
+					<p class="error">{publishError}</p>
 				{/if}
 
 				{#if gitAuthStatus && !gitAuthStatus.authenticated}
-					<div
-						style:padding="1em"
-						style:border="0.15em solid currentcolor"
-						style:border-radius="0.7em"
-						style:text-align="center"
-						style:background="var(--surface)"
-						style:display="flex"
-						style:flex-direction="column"
-						style:gap="0.75em"
-						style:align-items="center"
-					>
-						<div style:display="flex" style:flex-direction="column" style:gap="0.3em">
-							<p style:margin="0" style:font-family="var(--alternative-font)" style:font-weight="500">
-								{m.login_required()}
-							</p>
-							<p style:margin="0" style:font-size="0.9em" style:opacity="0.8">
-								{m.login_required_desc()}
-							</p>
+					<div class="auth-card">
+						<div class="auth-copy">
+							<p class="auth-title">{m.login_required()}</p>
+							<p class="auth-desc">{m.login_required_desc()}</p>
 						</div>
 						<a
+							class="auth-link"
 							href={resolve(`/api/git/login?provider=gitlab&return=/publish?id=${id}`)}
-							style:display="inline-block"
-							style:text-decoration="none"
 						>
 							<FancyButton
 								type="button"
@@ -269,41 +213,13 @@
 								backgroundDeepColor="#E24329"
 								foregroundColor="#FFFFFF"
 							>
-								<div
-									style:font-family="var(--alternative-font)"
-									style:display="flex"
-									style:align-items="center"
-									style:padding="0 0.5em"
-								>
-									{m.connect_gitlab()}
-								</div>
+								<div class="auth-btn">{m.connect_gitlab()}</div>
 							</FancyButton>
 						</a>
 					</div>
 				{/if}
-				<div
-					style:border="0.15em solid"
-					style:border-radius="0.5em"
-					style:overflow="hidden"
-					style:width="fit-content"
-					style:margin="auto"
-				>
-					<div
-						style:aspect-ratio="3 / 2"
-						style:height="10em"
-						style:width="auto"
-						style:margin="auto"
-						style:position="relative"
-					>
-						<MediaContainer {media} fit="cover" />
-					</div>
-					<div
-						style:padding="0.15em 0.3em"
-						style:word-break="break-word"
-						style:border-top="0.15em solid"
-					>
-						{creation.config.title}
-					</div>
+				<div class="preview-wrap">
+					<PreviewCard {media} title={creation.config.title} aspectRatio="3 / 2" />
 				</div>
 				<Textfield
 					id="author"
@@ -313,18 +229,18 @@
 					showInvalid={false}
 					bind:value={author}
 				/>
+				<div class="lang-group">
+					<div class="lang-label">
+						<Language height="1.1em" width="1.1em" />
+						<span>{m.language()}</span>
+					</div>
+					<ContentLanguageSelect bind:value={lang} id="publish-language" />
+				</div>
 				<Subject bind:tags={subjects} />
 				<Grade bind:tags={grades} />
 				<div>
-					<SelectTime options={[...locales]} bind:selected={lang} {map}>
-						<Language height="1em" title={m.language()} />
-					</SelectTime>
-				</div>
-				<div>
-					<FancyButton disabled={!gitAuthStatus || !gitAuthStatus.authenticated}
-						><div style:font-family="var(--alternative-font)">
-							{m.request_publish()}
-						</div>
+					<FancyButton disabled={!gitAuthStatus || !gitAuthStatus.authenticated}>
+						<div class="btn-label">{m.request_publish()}</div>
 					</FancyButton>
 				</div>
 			</form>
@@ -353,6 +269,74 @@
 		margin: 0;
 	}
 
+	.page {
+		max-width: 40ch;
+		margin: auto;
+	}
+
+	.btn-label {
+		padding: 0.5em 1em;
+		font-family: var(--alternative-font);
+	}
+
+	/* ---- Submitted state ---- */
+	.result {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		padding: 2em 1em;
+		text-align: center;
+	}
+
+	.result-card {
+		border: 0.15em solid currentcolor;
+		border-radius: 0.7em;
+		padding: 1.5em;
+		background: var(--surface);
+	}
+
+	.result-title {
+		font-family: var(--alternative-font);
+		margin: 0 0 0.5em;
+		font-size: 1.75em;
+	}
+
+	.result-desc {
+		margin: 0 0 1em;
+		line-height: 1.4;
+	}
+
+	/* ---- Publishing state ---- */
+	.progress {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
+		padding: 2em 1em;
+	}
+
+	.progress-title {
+		font-family: var(--alternative-font);
+		margin: 0;
+		font-size: 1.5em;
+	}
+
+	.progress-card {
+		border: 0.15em solid currentcolor;
+		border-radius: 0.7em;
+		padding: 1em;
+		width: 100%;
+		box-sizing: border-box;
+		background: var(--surface);
+	}
+
+	.steps {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+
 	.step {
 		display: flex;
 		align-items: center;
@@ -365,5 +349,85 @@
 
 	.step-active {
 		font-weight: bold;
+	}
+
+	.step-spinner {
+		width: 1em;
+		height: 1em;
+		display: inline-block;
+	}
+
+	/* ---- Form ---- */
+	.form {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	.error {
+		color: red;
+	}
+
+	.auth-card {
+		padding: 1em;
+		border: 0.15em solid currentcolor;
+		border-radius: 0.7em;
+		text-align: center;
+		background: var(--surface);
+		display: flex;
+		flex-direction: column;
+		gap: 0.75em;
+		align-items: center;
+	}
+
+	.auth-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3em;
+	}
+
+	.auth-title {
+		font-family: var(--alternative-font);
+		font-weight: 500;
+	}
+
+	.auth-desc {
+		font-size: 0.9em;
+		opacity: 0.8;
+	}
+
+	.auth-link {
+		display: inline-block;
+		text-decoration: none;
+	}
+
+	.auth-btn {
+		font-family: var(--alternative-font);
+		display: flex;
+		align-items: center;
+		padding: 0 0.5em;
+	}
+
+	.preview-wrap {
+		width: 15em;
+		margin: 0 auto;
+	}
+
+	.lang-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
+	}
+
+	.lang-label {
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		font-size: 0.85em;
+		font-weight: 700;
+		opacity: 0.8;
+		padding-inline: 0.3em;
 	}
 </style>

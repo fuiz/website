@@ -89,7 +89,6 @@
 	"copied": "Kopyalandı",
 	"join_at": "Buradan qoşul:",
 	"game_code": "Oyun kodu",
-	"winners": "Qaliblər",
 	"play_title": "Viktorinaya qoşul",
 	"play_desc": "Qoşulmaq üçün oyun kodunu daxil edin",
 	"nickname": "Ad",
@@ -115,7 +114,6 @@
 	"thats_correct": "Doğrudur",
 	"try_again": "Səhvdir",
 	"partial_correct": "{total}-dən {picks} doğru",
-	"placed_summary": "Mövqe: #{position}, Bal: {points}",
 	"not_on_leaderboard": "Liderlər siyahısında deyil",
 	"correct_answers": "Doğru cavab:",
 	"penguin_waiting": "avtobus dayanacağında gözləyən pinqvin",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Xidmət Şərtləri",
 	"multiple_answers": "Çoxlu cavablar",
 	"show_answers": "Cavabları göstər",
-	"hide_answers": "Cavabları gizlət"
+	"hide_answers": "Cavabları gizlət",
+	"no_language_matches": "\"{query}\" üçün uyğun dil tapılmadı",
+	"decrease": "Azalt",
+	"increase": "Artır"
 }

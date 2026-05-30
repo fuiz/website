@@ -46,10 +46,11 @@
 		overflow: hidden;
 		background: var(--on-surface);
 		color: var(--surface);
-		border: 0.15em solid var(--on-surface);
+		border: 1px solid var(--on-surface);
 	}
 
 	.container.flashing {
+		border-color: var(--primary);
 		animation: 500ms steps(1) 0s infinite alternate flash;
 	}
 
@@ -84,13 +85,13 @@
 
 	@keyframes flash {
 		0% {
-			background: var(--palette-dark);
-			color: var(--palette-light);
+			background: var(--primary);
+			color: var(--on-primary);
 		}
 
 		50% {
-			background: var(--palette-light);
-			color: var(--palette-dark);
+			background: var(--surface);
+			color: var(--primary);
 		}
 	}
 </style>

@@ -89,7 +89,6 @@
 	"copied": "تم النسخ!",
 	"join_at": "انضم في",
 	"game_code": "رمز اللعبة",
-	"winners": "الفائزون",
 	"play_title": "انضم إلى لعبة",
 	"play_desc": "انضم إلى لعبة جارية عن طريق إدخال رمز اللعبة",
 	"nickname": "الاسم المستعار",
@@ -115,7 +114,6 @@
 	"thats_correct": "إجابة صحيحة!",
 	"try_again": "حاول مرة أخرى!",
 	"partial_correct": "{picks} من {total} صحيحة",
-	"placed_summary": "حصلت على المركز #{position} برصيد {points} نقطة",
 	"not_on_leaderboard": "لست في قائمة المتصدرين",
 	"correct_answers": "الإجابات الصحيحة:",
 	"penguin_waiting": "بطريق ينتظر في محطة الحافلات",
@@ -239,5 +237,8 @@
 	"terms_of_service": "شروط الخدمة",
 	"multiple_answers": "إجابات متعددة",
 	"show_answers": "إظهار الإجابات",
-	"hide_answers": "إخفاء الإجابات"
+	"hide_answers": "إخفاء الإجابات",
+	"no_language_matches": "لا توجد لغة تطابق \"{query}\"",
+	"decrease": "إنقاص",
+	"increase": "زيادة"
 }

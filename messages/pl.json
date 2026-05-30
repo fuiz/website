@@ -89,7 +89,6 @@
 	"copied": "Skopiowano!",
 	"join_at": "Dołącz do",
 	"game_code": "Kod gry",
-	"winners": "Zwycięzcy",
 	"play_title": "Dołącz do gry",
 	"play_desc": "Dołącz do trwającej gry i podaj kod",
 	"nickname": "Nick",
@@ -115,7 +114,6 @@
 	"thats_correct": "Poprawna odpowiedź!",
 	"try_again": "Otóż nie tym razem!",
 	"partial_correct": "{picks} z {total} poprawnych",
-	"placed_summary": "Zajęte miejsce: #{position} z liczbą {points} punktów",
 	"not_on_leaderboard": "Nie ma Cię na tablicy wyników",
 	"correct_answers": "Poprawna odpowiedź:",
 	"penguin_waiting": "pingwin czeka na przystanku autobusowym",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Regulamin",
 	"multiple_answers": "Wiele odpowiedzi",
 	"show_answers": "Pokaż odpowiedzi",
-	"hide_answers": "Ukryj odpowiedzi"
+	"hide_answers": "Ukryj odpowiedzi",
+	"no_language_matches": "Brak języka pasującego do „{query}\"",
+	"decrease": "Zmniejsz",
+	"increase": "Zwiększ"
 }

@@ -9,27 +9,20 @@
 <div class="stats">
 	{#each statistics as { count, correct }, index (index)}
 		{@const buttonSymbol = buttonSymbols[index % buttonColors.length]}
-		<div class="bar-stack" class:faded={!correct}>
-			<div
-				class="symbol"
-				style:background={buttonColors.at(index % buttonColors.length)?.at(0)}
-				style:border="0.15em solid {buttonColors.at(index % buttonColors.length)?.at(1)}"
-			>
+		{@const colors = buttonColors.at(index % buttonColors.length)}
+		<div
+			class="bar-stack"
+			class:faded={!correct}
+			style:--color={colors?.at(0)}
+			style:--color-dark={colors?.at(1)}
+			style:--height-pct={maximum === 0 ? 0 : count / maximum}
+		>
+			<div class="symbol">
 				<buttonSymbol.icon title={buttonSymbol.label} height="1em" width="1em" />
 			</div>
 			<div class="bar-fill">
-				<div
-					class="bar"
-					style:background={buttonColors.at(index % buttonColors.length)?.at(0)}
-					style:border="0.15em solid {buttonColors.at(index % buttonColors.length)?.at(1)}"
-					style:height="max(1em, calc((100% - 2em) * {maximum === 0 ? 0 : count / maximum}))"
-				></div>
-				<div
-					class="count"
-					style:color={buttonColors.at(index % buttonColors.length)?.at(0)}
-				>
-					{count}
-				</div>
+				<div class="bar"></div>
+				<div class="count">{count}</div>
 			</div>
 		</div>
 	{/each}
@@ -63,6 +56,8 @@
 		border-radius: 0.7em;
 		color: var(--palette-light);
 		padding: 0.3em 0.8em;
+		background: var(--color);
+		border: 0.15em solid var(--color-dark);
 	}
 
 	.bar-fill {
@@ -73,11 +68,15 @@
 
 	.bar {
 		border-radius: 0.7em;
+		background: var(--color);
+		border: 0.15em solid var(--color-dark);
+		height: max(1em, calc((100% - 2em) * var(--height-pct)));
 	}
 
 	.count {
 		display: flex;
 		justify-content: center;
 		font-family: var(--alternative-font);
+		color: var(--color);
 	}
 </style>

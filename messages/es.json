@@ -89,7 +89,6 @@
 	"copied": "¡Copiado!",
 	"join_at": "Únete en",
 	"game_code": "Código del Juego",
-	"winners": "Ganadores",
 	"play_title": "Unirse a un Juego",
 	"play_desc": "Unirse a un juego actual e ingresar el código del juego",
 	"nickname": "Usuario",
@@ -115,7 +114,6 @@
 	"thats_correct": "¡Eso es correcto!",
 	"try_again": "¡Vuelve a intentarlo!",
 	"partial_correct": "{picks} de {total} correctas",
-	"placed_summary": "Quedaste #{position} con {points} puntos",
 	"not_on_leaderboard": "No ubicaste en el leaderboard",
 	"correct_answers": "Respuestas correctas:",
 	"penguin_waiting": "pingüino esperando en una parada de bus",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Términos de Servicio",
 	"multiple_answers": "Respuestas múltiples",
 	"show_answers": "Mostrar respuestas",
-	"hide_answers": "Ocultar respuestas"
+	"hide_answers": "Ocultar respuestas",
+	"no_language_matches": "Ningún idioma coincide con \"{query}\"",
+	"decrease": "Disminuir",
+	"increase": "Aumentar"
 }

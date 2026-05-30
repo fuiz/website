@@ -89,7 +89,6 @@
 	"copied": "Kopiatu",
 	"join_at": "Bat egin",
 	"game_code": "Joko Kodea",
-	"winners": "Irabazleak",
 	"play_title": "Bat egin Quizarekin",
 	"play_desc": "Sartu jokoaren kodea bat egiteko",
 	"nickname": "Izena",
@@ -115,7 +114,6 @@
 	"thats_correct": "Egokia",
 	"try_again": "Okerrra",
 	"partial_correct": "{total}-tik {picks} zuzen",
-	"placed_summary": "Postua: #{position}, Puntuak: {points}",
 	"not_on_leaderboard": "Ez dago sailkapenean",
 	"correct_answers": "Erantzun Egokia:",
 	"penguin_waiting": "pingüino bat autobusean itxaroten",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Zerbitzu Baldintzak",
 	"multiple_answers": "Erantzun anitz",
 	"show_answers": "Erakutsi erantzunak",
-	"hide_answers": "Ezkutatu erantzunak"
+	"hide_answers": "Ezkutatu erantzunak",
+	"no_language_matches": "Ez dago \"{query}\"-rekin bat datorren hizkuntzarik",
+	"decrease": "Gutxitu",
+	"increase": "Handitu"
 }

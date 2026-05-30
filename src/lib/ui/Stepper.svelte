@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import * as m from '$lib/paraglide/messages.js';
 
 	let {
 		value = $bindable(),
@@ -27,14 +28,14 @@
 		<button
 			type="button"
 			disabled={value <= min}
-			aria-label="Decrease"
+			aria-label={m.decrease()}
 			onclick={() => set(value - 1)}>−</button
 		>
 		<span class="value">{value}</span>
 		<button
 			type="button"
 			disabled={value >= max}
-			aria-label="Increase"
+			aria-label={m.increase()}
 			onclick={() => set(value + 1)}>+</button
 		>
 	</div>

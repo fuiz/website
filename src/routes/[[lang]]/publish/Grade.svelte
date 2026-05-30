@@ -2,6 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { grades } from '$lib/types';
 	import Chip from '$lib/ui/Chip.svelte';
+	import SchoolOutline from '~icons/material-symbols/school-outline';
 
 	let { tags = $bindable() }: { tags: string[] } = $props();
 
@@ -12,8 +13,11 @@
 	});
 </script>
 
-<fieldset>
-	<legend>{m.grade()}</legend>
+<div class="group">
+	<div class="label">
+		<SchoolOutline height="1.1em" width="1.1em" />
+		<span>{m.grade()}</span>
+	</div>
 	<div class="chips">
 		{#each selectedOptions as [option, selected], index (option)}
 			<Chip
@@ -27,25 +31,28 @@
 			</Chip>
 		{/each}
 	</div>
-</fieldset>
+</div>
 
 <style>
-	fieldset {
-		border: 2px solid #a9a8aa;
-		border-radius: 10px;
-		padding: 0.3em 0.4em;
-		margin: 0;
+	.group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
 	}
 
-	legend {
-		color: color-mix(in srgb, currentColor 50%, transparent);
-		padding: 0 0.25em;
-		font-size: 0.75em;
+	.label {
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
+		font-size: 0.85em;
+		font-weight: 700;
+		opacity: 0.8;
+		padding-inline: 0.3em;
 	}
 
 	.chips {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.25em;
+		gap: 0.4em;
 	}
 </style>

@@ -79,7 +79,7 @@
 							{correct}/{player_count}
 						</span>
 					</div>
-					<div class="card" {title}>{title}</div>
+					<div class="card">{title}</div>
 				</div>
 			{/each}
 		</div>
@@ -163,8 +163,6 @@
 		background: var(--surface);
 		padding: 0.5em 0.7em;
 		font-weight: 600;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		overflow-wrap: anywhere;
 	}
 </style>

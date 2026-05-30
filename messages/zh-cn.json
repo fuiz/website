@@ -89,7 +89,6 @@
 	"copied": "已复制！",
 	"join_at": "加入问答",
 	"game_code": "问答代码",
-	"winners": "获胜者",
 	"play_title": "加入问答",
 	"play_desc": "加入当前问答并输入问答代码",
 	"nickname": "昵称",
@@ -115,7 +114,6 @@
 	"thats_correct": "正确！",
 	"try_again": "下次再试一次！",
 	"partial_correct": "答对 {picks}/{total}",
-	"placed_summary": "你是第#{position}名 得分{points}",
 	"not_on_leaderboard": "您不在排行榜上",
 	"correct_answers": "正确答案:",
 	"penguin_waiting": "在公交站等待的企鹅",
@@ -239,5 +237,8 @@
 	"terms_of_service": "服务条款",
 	"multiple_answers": "多选",
 	"show_answers": "显示答案",
-	"hide_answers": "隐藏答案"
+	"hide_answers": "隐藏答案",
+	"no_language_matches": "没有匹配 \"{query}\" 的语言",
+	"decrease": "减少",
+	"increase": "增加"
 }

@@ -89,7 +89,6 @@
 	"copied": "Disalin",
 	"join_at": "Bergabung di",
 	"game_code": "Kode Permainan",
-	"winners": "Pemenang",
 	"play_title": "Bergabung dengan Kuis",
 	"play_desc": "Masukkan kode permainan untuk bergabung",
 	"nickname": "Nama",
@@ -115,7 +114,6 @@
 	"thats_correct": "Benar",
 	"try_again": "Salah",
 	"partial_correct": "{picks} dari {total} benar",
-	"placed_summary": "Posisi: #{position}, Poin: {points}",
 	"not_on_leaderboard": "Tidak ada peringkat",
 	"correct_answers": "Jawaban yang Benar:",
 	"penguin_waiting": "penguin menunggu di halte bus",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Ketentuan Layanan",
 	"multiple_answers": "Beberapa jawaban",
 	"show_answers": "Tampilkan jawaban",
-	"hide_answers": "Sembunyikan jawaban"
+	"hide_answers": "Sembunyikan jawaban",
+	"no_language_matches": "Tidak ada bahasa yang cocok dengan \"{query}\"",
+	"decrease": "Kurangi",
+	"increase": "Tambah"
 }

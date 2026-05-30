@@ -89,7 +89,6 @@
 	"copied": "Copié !",
 	"join_at": "Rejoindre via",
 	"game_code": "Code de partie",
-	"winners": "Gagnants",
 	"play_title": "Rejoindre une partie",
 	"play_desc": "Rejoindre une partie en cours et entrez le code",
 	"nickname": "Surnom",
@@ -115,7 +114,6 @@
 	"thats_correct": "C'est exact !",
 	"try_again": "Réessaie la prochaine fois !",
 	"partial_correct": "{picks} sur {total} correctes",
-	"placed_summary": "Vous êtes #{position} avec {points} points",
 	"not_on_leaderboard": "Vous n'êtes pas dans le classement",
 	"correct_answers": "Bonnes réponses :",
 	"penguin_waiting": "un pingouin attendant à un arrêt de bus",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Conditions d'Utilisation",
 	"multiple_answers": "Réponses multiples",
 	"show_answers": "Afficher les réponses",
-	"hide_answers": "Masquer les réponses"
+	"hide_answers": "Masquer les réponses",
+	"no_language_matches": "Aucune langue ne correspond à « {query} »",
+	"decrease": "Diminuer",
+	"increase": "Augmenter"
 }

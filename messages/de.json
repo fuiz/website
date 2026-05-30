@@ -89,7 +89,6 @@
 	"copied": "Kopiert!",
 	"join_at": "Beitreten unter",
 	"game_code": "Spiel-Pin",
-	"winners": "Gewinner",
 	"play_title": "Spiel beitreten",
 	"play_desc": "An einem laufenden Spiel teilnehmen und den Spielcode eingeben",
 	"nickname": "Nickname",
@@ -115,7 +114,6 @@
 	"thats_correct": "Das ist richtig!",
 	"try_again": "Versuchen Sie es das nächste Mal!",
 	"partial_correct": "{picks} von {total} richtig",
-	"placed_summary": "Du bist #{position} mit {points} Punkten",
 	"not_on_leaderboard": "Du bist nicht in der Bestenliste ",
 	"correct_answers": "Richtige Antworten:",
 	"penguin_waiting": "Pinguin an einer Bushaltestelle",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Nutzungsbedingungen",
 	"multiple_answers": "Mehrere Antworten",
 	"show_answers": "Antworten anzeigen",
-	"hide_answers": "Antworten ausblenden"
+	"hide_answers": "Antworten ausblenden",
+	"no_language_matches": "Keine Sprache passt zu „{query}\"",
+	"decrease": "Verringern",
+	"increase": "Erhöhen"
 }

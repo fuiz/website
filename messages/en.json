@@ -89,7 +89,6 @@
 	"copied": "Copied",
 	"join_at": "Join at",
 	"game_code": "Game Code",
-	"winners": "Winners",
 	"play_title": "Join Quiz",
 	"play_desc": "Enter game code to join",
 	"nickname": "Name",
@@ -115,7 +114,6 @@
 	"thats_correct": "Correct",
 	"try_again": "Incorrect",
 	"partial_correct": "{picks} of {total} correct",
-	"placed_summary": "Position: #{position}, Points: {points}",
 	"not_on_leaderboard": "Not ranked",
 	"correct_answers": "Correct Answer:",
 	"penguin_waiting": "penguin waiting on a bus stop",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Terms of Service",
 	"multiple_answers": "Multiple answers",
 	"show_answers": "Show answers",
-	"hide_answers": "Hide answers"
+	"hide_answers": "Hide answers",
+	"no_language_matches": "No language matches \"{query}\"",
+	"decrease": "Decrease",
+	"increase": "Increase"
 }

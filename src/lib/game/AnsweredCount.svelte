@@ -1,23 +1,30 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
-	import AssignmentTurnedIn from '~icons/material-symbols/assignment-turned-in';
+	import GroupsOutline from '~icons/material-symbols/groups-outline';
 
 	let { answeredCount }: { answeredCount: number } = $props();
 </script>
 
-<div
-	style:z-index="1"
-	style:padding="0.2em 0.6em"
-	style:display="flex"
-	style:gap="0.3em"
-	style:align-items="center"
-	style:background="var(--surface)"
-	style:border="0.15em solid"
-	style:border-radius="200px"
-	title={m.answered_count()}
->
-	<AssignmentTurnedIn height="1.2em" title={m.answered_count()} />
-	<div style:font-family="var(--alternative-font)">
-		{answeredCount}
-	</div>
+<div class="container" title={m.answered_count()}>
+	<GroupsOutline height="1.2em" title={m.answered_count()} />
+	<div class="count">{answeredCount}</div>
 </div>
+
+<style>
+	.container {
+		display: flex;
+		align-items: center;
+		gap: 0.3em;
+		padding: 0.2em 0.6em;
+		background: var(--surface);
+		color: var(--on-surface);
+		border: 1px solid var(--outline);
+		border-radius: 200px;
+		font-family: var(--alternative-font);
+	}
+
+	.count {
+		min-width: 2ch;
+		text-align: center;
+	}
+</style>

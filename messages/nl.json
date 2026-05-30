@@ -89,7 +89,6 @@
 	"copied": "Gekopieerd!",
 	"join_at": "Doe mee op",
 	"game_code": "Spelcode",
-	"winners": "Winnaars",
 	"play_title": "Doe mee aan een Spel",
 	"play_desc": "Doe mee aan een lopend spel en voer de spelcode in",
 	"nickname": "Nickname",
@@ -115,7 +114,6 @@
 	"thats_correct": "Dat klopt!",
 	"try_again": "Probeer het volgende keer weer!",
 	"partial_correct": "{picks} van de {total} goed",
-	"placed_summary": "Je bent #{position} geworden met {points} punten",
 	"not_on_leaderboard": "Je staat niet op het scorebord",
 	"correct_answers": "Juiste Antwoorden:",
 	"penguin_waiting": "pinguïn wachtend op een bushalte",
@@ -239,5 +237,8 @@
 	"terms_of_service": "Servicevoorwaarden",
 	"multiple_answers": "Meerdere antwoorden",
 	"show_answers": "Toon antwoorden",
-	"hide_answers": "Verberg antwoorden"
+	"hide_answers": "Verberg antwoorden",
+	"no_language_matches": "Geen taal komt overeen met \"{query}\"",
+	"decrease": "Verlagen",
+	"increase": "Verhogen"
 }
