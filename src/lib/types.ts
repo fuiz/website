@@ -1,5 +1,3 @@
-import type { Locale } from '$lib/paraglide/runtime.js';
-
 export type Base64Media = {
 	Image: {
 		Base64: {
@@ -352,7 +350,7 @@ export type PublishedFuiz = Modify<
 		subjects: string[];
 		grades: string[];
 		published_at: Date;
-		language: Locale;
+		language: string;
 	}
 >;
 

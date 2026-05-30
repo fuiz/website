@@ -98,7 +98,7 @@ export const CONTENT_LANGUAGES = [
 	'zh-cn',
 	'zh-tw',
 	'zu'
-];
+] as const;
 
 export function nativeLanguageName(code: string): string {
 	try {

@@ -11,5 +11,8 @@
 </script>
 
 <TypicalPage>
-	<Listing recentlyPublished={data.recentlyPublished} />
+	<Listing
+		recentlyPublished={data.recentlyPublished}
+		availableLanguages={data.availableLanguages}
+	/>
 </TypicalPage>

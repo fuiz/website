@@ -3,7 +3,6 @@
  * Provides a high-level interface for fuiz library database operations
  */
 
-import type { Locale } from '$lib/paraglide/runtime';
 import type { PublishedFuizDB } from '$lib/types';
 
 type Grade = typeof import('$lib/types').grades[number];
@@ -37,7 +36,7 @@ export type FuizExistingStats = {
 };
 
 export type SearchFilters = {
-	languages?: Locale[];
+	languages?: string[];
 	subjects?: Subject[];
 	grades?: Grade[];
 };
@@ -47,6 +46,7 @@ export abstract class BaseDatabase {
 	abstract getRecentlyPublished(limit: number): Promise<PublishedFuizDB[]>;
 	abstract getById(id: string): Promise<PublishedFuizDB | null>;
 	abstract search(term: string, filters: SearchFilters, limit: number): Promise<PublishedFuizDB[]>;
+	abstract getDistinctLanguages(): Promise<string[]>;
 	abstract getExistingStats(id: string): Promise<FuizExistingStats | null>;
 	abstract insertFuiz(data: FuizInsertData): Promise<void>;
 	abstract deleteFuiz(id: string): Promise<void>;

@@ -55,6 +55,15 @@ export class D1DatabaseAdapter extends BaseDatabase {
 		return result.results;
 	}
 
+	async getDistinctLanguages(): Promise<string[]> {
+		const result = await this.db
+			.prepare(
+				"SELECT DISTINCT language FROM fuizzes WHERE language IS NOT NULL AND language <> '' ORDER BY language"
+			)
+			.all<{ language: string }>();
+		return result.results.map((r) => r.language);
+	}
+
 	async getExistingStats(id: string): Promise<FuizExistingStats | null> {
 		return (
 			(await this.db

@@ -2,11 +2,13 @@ import { fixPublish } from '$lib/serverOnlyUtils';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
-	const recentlyPublished = ((await locals.database?.getRecentlyPublished(24)) || []).map(
-		fixPublish
-	);
+	const [rawPublished, availableLanguages] = await Promise.all([
+		locals.database?.getRecentlyPublished(24) ?? [],
+		locals.database?.getDistinctLanguages() ?? []
+	]);
 
 	return {
-		recentlyPublished
+		recentlyPublished: rawPublished.map(fixPublish),
+		availableLanguages
 	};
 }) satisfies PageServerLoad;

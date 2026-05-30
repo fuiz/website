@@ -1,5 +1,4 @@
 import { env } from '$env/dynamic/public';
-import type { Locale } from '$lib/paraglide/runtime.js';
 import {
 	getMedia,
 	type IdlessFullFuizConfig,
@@ -58,7 +57,6 @@ export function fixPublish(p: PublishedFuizDB): PublishedFuiz {
 		thumbnail: p.thumbnail ? encodeAsDataURL(p.thumbnail) : null,
 		subjects: p.subjects ? JSON.parse(p.subjects) : [],
 		grades: p.grades ? JSON.parse(p.grades) : [],
-		published_at: new Date(p.published_at),
-		language: p.language as Locale
+		published_at: new Date(p.published_at)
 	};
 }

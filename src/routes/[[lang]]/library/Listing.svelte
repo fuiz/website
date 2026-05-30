@@ -1,21 +1,26 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
+	import { SvelteSet } from 'svelte/reactivity';
+	import { localizedLanguageName, nativeLanguageName } from '$lib/contentLanguages';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import { locales } from '$lib/paraglide/runtime';
+	import { getLocale } from '$lib/paraglide/runtime';
 	import type { PublishedFuiz } from '$lib/types';
 	import { grades, subjects } from '$lib/types';
-	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
+	import Chip from '$lib/ui/Chip.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import { debounce } from '$lib/util';
 	import GhostIcon from '~icons/custom/ghost';
 	import ChevronRight from '~icons/material-symbols/chevron-right';
+	import Search from '~icons/material-symbols/search';
 	import OnlinePublised from './OnlinePublised.svelte';
 
 	let {
-		recentlyPublished
+		recentlyPublished,
+		availableLanguages
 	}: {
 		recentlyPublished: PublishedFuiz[];
+		availableLanguages: string[];
 	} = $props();
 
 	let searchTerm = $state('');
@@ -41,13 +46,29 @@
 
 	let gradesSelected = $state(grades.map((grade) => ({ name: grade, selected: false })));
 
-	let languagesSelected = $state(
-		locales.map((language) => ({
-			name: language,
-			display: new Intl.DisplayNames([language], { type: 'language' }).of(language),
-			selected: false
+	let selectedLanguages = new SvelteSet<string>();
+	let langQuery = $state('');
+
+	let languageEntries = $derived(
+		availableLanguages.map((code) => ({
+			code,
+			label: localizedLanguageName(code, getLocale()),
+			native: nativeLanguageName(code)
 		}))
 	);
+
+	let filteredLanguages = $derived.by(() => {
+		const q = langQuery.toLowerCase().trim();
+		const matches = q
+			? languageEntries.filter(
+					(l) =>
+						l.label.toLowerCase().includes(q) ||
+						l.native.toLowerCase().includes(q) ||
+						l.code.toLowerCase().includes(q)
+				)
+			: languageEntries;
+		return [...matches].sort((a, b) => a.label.localeCompare(b.label));
+	});
 
 	let subjectsList = $derived(
 		subjectsSelected.filter((subject) => subject.selected).map((subject) => subject.name)
@@ -55,15 +76,21 @@
 	let gradesList = $derived(
 		gradesSelected.filter((grade) => grade.selected).map((grade) => grade.name)
 	);
-	let languagesList = $derived(
-		languagesSelected.filter((language) => language.selected).map((language) => language.name)
-	);
+	let languagesList = $derived([...selectedLanguages]);
 
 	let searchCriteria = $derived(
 		subjectsList.length + gradesList.length + languagesList.length + searchTerm.length
 	);
 
 	let isSearching = $derived(searchCriteria > 0);
+
+	function toggleLanguage(code: string) {
+		if (selectedLanguages.has(code)) {
+			selectedLanguages.delete(code);
+		} else {
+			selectedLanguages.add(code);
+		}
+	}
 
 	$effect(() => {
 		if (searchCriteria > 0) {
@@ -100,13 +127,15 @@
 						<span class="badge">{gradesList.length}</span>
 					{/if}
 				</summary>
-				<div class="checkbox-list">
-					{#each gradesSelected as grade (grade.name)}
-						<label class:selected={grade.selected}>
-							<input type="checkbox" bind:checked={grade.selected} class="visually-hidden" />
-							<RegularCheckbox checked={grade.selected} />
-							<span>{grade.name}</span>
-						</label>
+				<div class="chip-filter">
+					{#each gradesSelected as grade, i (grade.name)}
+						<Chip
+							size="sm"
+							selected={grade.selected}
+							onclick={() => (gradesSelected[i].selected = !grade.selected)}
+						>
+							{grade.name}
+						</Chip>
 					{/each}
 				</div>
 			</details>
@@ -118,13 +147,15 @@
 						<span class="badge">{subjectsList.length}</span>
 					{/if}
 				</summary>
-				<div class="checkbox-list">
-					{#each subjectsSelected as subject (subject.name)}
-						<label class:selected={subject.selected}>
-							<input type="checkbox" bind:checked={subject.selected} class="visually-hidden" />
-							<RegularCheckbox checked={subject.selected} />
-							<span>{subject.name}</span>
-						</label>
+				<div class="chip-filter">
+					{#each subjectsSelected as subject, i (subject.name)}
+						<Chip
+							size="sm"
+							selected={subject.selected}
+							onclick={() => (subjectsSelected[i].selected = !subject.selected)}
+						>
+							{subject.name}
+						</Chip>
 					{/each}
 				</div>
 			</details>
@@ -136,14 +167,37 @@
 						<span class="badge">{languagesList.length}</span>
 					{/if}
 				</summary>
-				<div class="checkbox-list">
-					{#each languagesSelected as language (language.name)}
-						<label class:selected={language.selected}>
-							<input type="checkbox" bind:checked={language.selected} class="visually-hidden" />
-							<RegularCheckbox checked={language.selected} />
-							<span>{language.display}</span>
-						</label>
-					{/each}
+				<div class="lang-filter">
+					{#if availableLanguages.length === 0}
+						<div class="lang-empty">{m.nothing()}</div>
+					{:else}
+						{#if availableLanguages.length > 8}
+							<div class="lang-search">
+								<Search height="1em" width="1em" />
+								<input
+									type="text"
+									placeholder={m.search()}
+									bind:value={langQuery}
+									autocomplete="off"
+								/>
+							</div>
+						{/if}
+						<div class="lang-chips">
+							{#each filteredLanguages as { code, label } (code)}
+								<Chip
+									size="sm"
+									selected={selectedLanguages.has(code)}
+									onclick={() => toggleLanguage(code)}
+								>
+									{label}
+								</Chip>
+							{:else}
+								<div class="lang-empty">
+									{m.no_language_matches({ query: langQuery })}
+								</div>
+							{/each}
+						</div>
+					{/if}
 				</div>
 			</details>
 		</aside>
@@ -235,7 +289,7 @@
 		flex-direction: column;
 		gap: 0.4em;
 		line-height: 1.25;
-		width: 16ch;
+		width: 22ch;
 		position: sticky;
 		top: 0.5em;
 	}
@@ -295,42 +349,54 @@
 		font-weight: 700;
 	}
 
-	.checkbox-list {
+	.chip-filter {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3em;
+		padding: 0.4em;
+	}
+
+	.lang-filter {
 		display: flex;
 		flex-direction: column;
-		font-size: 0.9em;
-		padding: 0.25em 0.4em 0.5em;
+		gap: 0.4em;
+		padding: 0.4em;
 	}
 
-	.checkbox-list label {
+	.lang-search {
 		display: flex;
 		align-items: center;
-		gap: 0.45em;
-		cursor: pointer;
-		padding: 0.3em 0.4em;
+		gap: 0.35em;
+		padding: 0.3em 0.5em;
+		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
 		border-radius: 0.4em;
-		transition: background 120ms ease-out;
+		color: color-mix(in srgb, var(--on-surface) 60%, transparent);
 	}
 
-	.checkbox-list label:hover {
-		background: color-mix(in srgb, var(--on-surface) 6%, transparent);
-	}
-
-	.checkbox-list label.selected {
-		color: var(--primary);
-		font-weight: 600;
-	}
-
-	.visually-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
+	.lang-search input {
+		appearance: none;
+		flex: 1;
+		font: inherit;
+		font-size: 0.85em;
+		color: inherit;
+		background: transparent;
+		border: none;
+		outline: none;
 		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
+		min-width: 0;
+	}
+
+	.lang-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3em;
+	}
+
+	.lang-empty {
+		font-size: 0.8em;
+		opacity: 0.6;
+		text-align: center;
+		padding: 0.4em;
 	}
 
 	.results {

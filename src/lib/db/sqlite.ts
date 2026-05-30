@@ -47,6 +47,15 @@ export class SQLiteDatabase extends BaseDatabase {
 		return this.db.prepare(sql).all(...params) as PublishedFuizDB[];
 	}
 
+	async getDistinctLanguages(): Promise<string[]> {
+		const rows = this.db
+			.prepare(
+				"SELECT DISTINCT language FROM fuizzes WHERE language IS NOT NULL AND language <> '' ORDER BY language"
+			)
+			.all() as { language: string }[];
+		return rows.map((r) => r.language);
+	}
+
 	async getExistingStats(id: string): Promise<FuizExistingStats | null> {
 		return (
 			(this.db

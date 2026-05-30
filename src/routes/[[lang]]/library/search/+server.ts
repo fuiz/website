@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
-import type { Locale } from '$lib/paraglide/runtime';
-import { locales } from '$lib/paraglide/runtime';
+import { CONTENT_LANGUAGES } from '$lib/contentLanguages';
 import { fixPublish } from '$lib/serverOnlyUtils';
 import { grades as allGrades, subjects as allSubjects } from '$lib/types';
 import { isNotNull } from '$lib/util';
@@ -36,9 +35,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		(await locals.database?.search(
 			term,
 			{
-				languages: languages
-					.map<Locale | null>((lang) => restrict(lang, locales))
-					.filter(isNotNull),
+				languages: languages.map((lang) => restrict(lang, CONTENT_LANGUAGES)).filter(isNotNull),
 				subjects: subjects.map((s) => restrict(s, allSubjects)).filter(isNotNull),
 				grades: grades.map((g) => restrict(g, allGrades)).filter(isNotNull)
 			},
