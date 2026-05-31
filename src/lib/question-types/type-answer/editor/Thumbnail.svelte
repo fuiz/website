@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { buttonColors } from '$lib/clientOnly';
-	import * as m from '$lib/paraglide/messages.js';
 	import ThumbnailLayout from '$lib/question-types/editor/ThumbnailLayout.svelte';
+	import { lintTypeAnswer } from '$lib/question-types/lint';
+	import { lintIssueMessage } from '$lib/question-types/lintMessages';
 	import type { TypeAnswer } from '$lib/types';
 
 	let {
@@ -10,13 +11,7 @@
 		slide: TypeAnswer;
 	} = $props();
 
-	let warning = $derived.by(() => {
-		if (!slide.answers.length) return m.no_answers();
-		if (slide.answers.some((a) => !a.text.length)) return m.empty_answer();
-		if (new Set(slide.answers.map((a) => a.text)).size !== slide.answers.length)
-			return m.duplicate_answers();
-		return undefined;
-	});
+	let warning = $derived(lintIssueMessage(lintTypeAnswer(slide)));
 </script>
 
 <ThumbnailLayout title={slide.title} media={slide.media} {warning}>

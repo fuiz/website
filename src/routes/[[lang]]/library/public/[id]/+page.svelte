@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { assertUnreachable } from '$lib';
 	import { buttonColors } from '$lib/clientOnly';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import { getImageInfo } from '$lib/media/imageInfo';
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
+	import AnswersPreview from '$lib/question-types/preview/AnswersPreview.svelte';
 	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
+	import { getMedia, getTitle } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
-	import Check from '~icons/custom/check';
 	import ImageOutline from '~icons/material-symbols/image-outline';
 	import VisibilityOff from '~icons/material-symbols/visibility-off-outline';
 	import Visibility from '~icons/material-symbols/visibility-outline';
@@ -104,30 +104,8 @@
 			</div>
 			<div class="slides-grid">
 				{#each config.slides as slide, index (index)}
-					{@const title = ((slide) => {
-						switch (true) {
-							case 'MultipleChoice' in slide:
-								return slide.MultipleChoice.title;
-							case 'TypeAnswer' in slide:
-								return slide.TypeAnswer.title;
-							case 'Order' in slide:
-								return slide.Order.title;
-							default:
-								return assertUnreachable(slide);
-						}
-					})(slide)}
-					{@const media = ((slide) => {
-						switch (true) {
-							case 'MultipleChoice' in slide:
-								return slide.MultipleChoice.media;
-							case 'TypeAnswer' in slide:
-								return slide.TypeAnswer.media;
-							case 'Order' in slide:
-								return slide.Order.media;
-							default:
-								return assertUnreachable(slide);
-						}
-					})(slide)}
+					{@const title = getTitle(slide)}
+					{@const media = getMedia(slide)}
 					<div class="slide-card">
 						<div class="slide-title">
 							<TextBar text={title} />
@@ -141,62 +119,7 @@
 							{/if}
 						</div>
 
-						{#if 'TypeAnswer' in slide}
-							<div class="slide-typeanswer">
-								{#if showAnswers}
-									<span class="typeanswer-text"
-										>{slide.TypeAnswer.answers.join(' · ')}</span
-									>
-								{/if}
-							</div>
-						{:else if 'Order' in slide}
-							<div class="slide-order">
-								{#if slide.Order.axis_labels.from}
-									<div class="axis-label">{slide.Order.axis_labels.from}</div>
-								{/if}
-								{#each slide.Order.answers as answer, answerIndex (answerIndex)}
-									{@const color = buttonColors.at(answerIndex % buttonColors.length)}
-									<div
-										class="bar"
-										style:--bar-bg={color?.[0]}
-										style:--bar-border={color?.[1]}
-									>
-										<span class="bar-num">{answerIndex + 1}</span>
-										{#if showAnswers}
-											<span class="bar-text">{answer}</span>
-										{/if}
-									</div>
-								{/each}
-								{#if slide.Order.axis_labels.to}
-									<div class="axis-label">{slide.Order.axis_labels.to}</div>
-								{/if}
-							</div>
-						{:else}
-							{@const correctSet = showAnswers
-								? new Set(
-										slide.MultipleChoice.answers.flatMap((a, i) => (a.correct ? [i] : []))
-									)
-								: undefined}
-							<div class="slide-answers" class:revealed={showAnswers}>
-								{#each slide.MultipleChoice.answers as answer, answerIndex (answerIndex)}
-									{@const color = buttonColors.at(answerIndex % buttonColors.length)}
-									<div
-										class="bar"
-										style:--bar-bg={color?.[0]}
-										style:--bar-border={color?.[1]}
-									>
-										{#if correctSet?.has(answerIndex)}
-											<span class="bar-check"
-												><Check height="0.9em" width="0.9em" title={m.correct()} /></span
-											>
-										{/if}
-										{#if showAnswers}
-											<span class="bar-text">{answer.content.Text}</span>
-										{/if}
-									</div>
-								{/each}
-							</div>
-						{/if}
+						<AnswersPreview {slide} {showAnswers} />
 					</div>
 				{/each}
 			</div>
@@ -326,37 +249,6 @@
 		border-radius: 0.4em;
 	}
 
-	.slide-answers,
-	.slide-order {
-		flex-shrink: 0;
-		display: grid;
-		gap: 0.3em;
-		padding: 0.4em;
-		font-size: 0.85em;
-	}
-
-	.slide-answers {
-		grid-template-columns: 1fr 1fr;
-	}
-
-	.slide-answers.revealed,
-	.slide-order {
-		grid-template-columns: 1fr;
-	}
-
-	.bar {
-		min-height: 1.2em;
-		padding: 0.15em 0.4em;
-		border-radius: 0.4em;
-		border: 1px solid var(--bar-border);
-		background-color: var(--bar-bg);
-		color: #ffffff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.3em;
-	}
-
 	.image-fallback {
 		width: 100%;
 		display: flex;
@@ -366,51 +258,6 @@
 
 	.cta-label {
 		font-family: var(--alternative-font);
-	}
-
-	.bar-check {
-		display: inline-flex;
-		flex-shrink: 0;
-	}
-
-	.bar-num {
-		font-weight: 700;
-		flex-shrink: 0;
-		font-family: var(--alternative-font);
-	}
-
-	.axis-label {
-		text-align: center;
-		font-size: 0.85em;
-		opacity: 0.6;
-		font-style: italic;
-	}
-
-	.bar-text {
-		flex: 1;
-		min-width: 0;
-		text-align: center;
-		word-break: break-word;
-		line-height: 1.2;
-	}
-
-	.slide-typeanswer {
-		flex-shrink: 0;
-		margin: 0.4em;
-		padding: 0.4em 0.6em;
-		border: 1px dashed color-mix(in srgb, var(--on-surface) 30%, transparent);
-		border-radius: 0.5em;
-		min-height: 1.5em;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0.85em;
-	}
-
-	.typeanswer-text {
-		opacity: 0.85;
-		text-align: center;
-		word-break: break-word;
 	}
 
 	#page {

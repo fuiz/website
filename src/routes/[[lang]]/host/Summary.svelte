@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { assertUnreachable } from '$lib';
 	import { playBackendReadyIdConfig } from '$lib/clientOnly';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { FuizConfig, FuizOptions } from '$lib/types';
+	import { type FuizConfig, type FuizOptions, getTitle } from '$lib/types';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Download from '~icons/material-symbols/download';
@@ -57,18 +56,7 @@
 			{#each config.slides as slide, index (slide.id)}
 				{@const [correct, wrong] = stats.at(index) || [0, 0]}
 				{@const unanswered = Math.max(0, player_count - correct - wrong)}
-				{@const title = ((slide) => {
-					switch (true) {
-						case 'MultipleChoice' in slide:
-							return slide.MultipleChoice.title;
-						case 'Order' in slide:
-							return slide.Order.title;
-						case 'TypeAnswer' in slide:
-							return slide.TypeAnswer.title;
-						default:
-							return assertUnreachable(slide);
-					}
-				})(slide)}
+				{@const title = getTitle(slide)}
 				<div class="line">
 					<div class="label">
 						<span class="num">{m.question_text()} {index + 1}</span>

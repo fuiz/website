@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { assertUnreachable } from '$lib';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { FuizConfig, Slide } from '$lib/types';
+	import CorrectAnswers from '$lib/question-types/preview/CorrectAnswers.svelte';
+	import { type FuizConfig, getTitle } from '$lib/types';
 	import MilitaryTech from '~icons/material-symbols/military-tech';
 
 	type Score = { points: number; position: number } | undefined;
@@ -16,19 +16,6 @@
 		points: number[];
 		config: FuizConfig;
 	} = $props();
-
-	function getTitle(slide: Slide): string {
-		switch (true) {
-			case 'MultipleChoice' in slide:
-				return slide.MultipleChoice.title;
-			case 'Order' in slide:
-				return slide.Order.title;
-			case 'TypeAnswer' in slide:
-				return slide.TypeAnswer.title;
-			default:
-				return assertUnreachable(slide);
-		}
-	}
 </script>
 
 <TypicalPage>
@@ -64,32 +51,7 @@
 						<div class="title">{title}</div>
 						<div class="answers">
 							<div class="answers-label">{m.correct_answers()}</div>
-							{#if 'TypeAnswer' in slide}
-								<ul>
-									{#each slide.TypeAnswer.answers as answer (answer.id)}
-										<li>{answer.text}</li>
-									{/each}
-								</ul>
-							{:else if 'Order' in slide}
-								{@const { from, to } = slide.Order.axis_labels}
-								{#if from}
-									<div class="axis-label">{from}</div>
-								{/if}
-								<ol>
-									{#each slide.Order.answers as answer (answer.id)}
-										<li>{answer.text}</li>
-									{/each}
-								</ol>
-								{#if to}
-									<div class="axis-label">{to}</div>
-								{/if}
-							{:else}
-								<ul>
-									{#each slide.MultipleChoice.answers.filter((a) => a.correct) as answer (answer.id)}
-										<li>{answer.content.Text}</li>
-									{/each}
-								</ul>
-							{/if}
+							<CorrectAnswers {slide} />
 						</div>
 					</div>
 				</div>
@@ -238,18 +200,4 @@
 		margin-bottom: 0.2em;
 	}
 
-	ul,
-	ol {
-		display: flex;
-		flex-direction: column;
-		margin: 0;
-		padding-inline-start: 1.4em;
-		font-size: 0.95em;
-	}
-
-	.axis-label {
-		font-size: 0.85em;
-		font-style: italic;
-		opacity: 0.7;
-	}
 </style>

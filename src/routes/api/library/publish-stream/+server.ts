@@ -7,30 +7,22 @@ import { json } from '@sveltejs/kit';
 import { v5 as uuidv5 } from 'uuid';
 
 import { env } from '$env/dynamic/private';
-import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
+import { stringifyToml, urlifyBase64 } from '$lib';
 import type { BaseAI } from '$lib/ai/base';
 import { createGitClient } from '$lib/git/factory';
-import type { FullOnlineFuiz, IdlessFullFuizConfig, ReferencingOnlineFuiz } from '$lib/types';
+import {
+	type FullOnlineFuiz,
+	getTitle,
+	type IdlessFullFuizConfig,
+	type ReferencingOnlineFuiz
+} from '$lib/types';
 
 import { getAuthenticatedProvider, getTokens } from '../../git/gitUtil';
 import type { RequestHandler } from './$types';
 import type { PublishingState } from './types';
 
 async function extractKeywords(ai: BaseAI, config: IdlessFullFuizConfig): Promise<string[]> {
-	const input = config.slides
-		.map((slide) => {
-			switch (true) {
-				case 'TypeAnswer' in slide:
-					return slide.TypeAnswer.title;
-				case 'Order' in slide:
-					return slide.Order.title;
-				case 'MultipleChoice' in slide:
-					return slide.MultipleChoice.title;
-				default:
-					return assertUnreachable(slide);
-			}
-		})
-		.join('\n');
+	const input = config.slides.map(getTitle).join('\n');
 
 	const content = await ai.generateKeywords(
 		'Give sixteen keywords of the following user content to aid users find it while searching, as a JSON array no other system text ever',

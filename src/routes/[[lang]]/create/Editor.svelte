@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 
-	import { assertUnreachable } from '$lib';
 	import { fixTimes, removeIds, shareAndCopyURL } from '$lib/clientOnly';
-	import * as m from '$lib/paraglide/messages.js';
+	import { lintConfig } from '$lib/question-types/lint';
+	import { lintIssueTopbarMessage } from '$lib/question-types/lintMessages';
 	import { type Database, type ExportedFuiz, updateCreation } from '$lib/storage';
 	import type { Base64Media, GenericFuizConfig } from '$lib/types';
 	import { debounce } from '$lib/util';
@@ -47,70 +47,7 @@
 		untrack(() => updateStorage());
 	});
 
-	let no_answer = $derived(
-		config.slides.filter((s) => {
-			switch (true) {
-				case 'MultipleChoice' in s:
-					return s.MultipleChoice.answers.length === 0;
-				case 'TypeAnswer' in s:
-					return s.TypeAnswer.answers.length === 0;
-				case 'Order' in s:
-					return s.Order.answers.length === 0;
-				default:
-					return assertUnreachable(s);
-			}
-		}).length > 0
-	);
-
-	let no_correct_answer = $derived(
-		config.slides.filter((s) => {
-			switch (true) {
-				case 'MultipleChoice' in s:
-					return s.MultipleChoice.answers.filter((s) => s.correct).length === 0;
-				case 'TypeAnswer' in s:
-					return false;
-				case 'Order' in s:
-					return false;
-				default:
-					return assertUnreachable(s);
-			}
-		}).length > 0
-	);
-
-	let empty_answer = $derived(
-		config.slides.filter((s) => {
-			switch (true) {
-				case 'MultipleChoice' in s:
-					return s.MultipleChoice.answers.some((a) => !a.content.Text.length);
-				case 'TypeAnswer' in s:
-					return s.TypeAnswer.answers.some((a) => !a.text.length);
-				case 'Order' in s:
-					return s.Order.answers.some((a) => !a.text.length);
-				default:
-					return assertUnreachable(s);
-			}
-		}).length > 0
-	);
-
-	let duplicate_answers = $derived(
-		config.slides.filter((s) => {
-			switch (true) {
-				case 'MultipleChoice' in s:
-					return (
-						new Set(s.MultipleChoice.answers.map((a) => a.content.Text)).size !==
-						s.MultipleChoice.answers.length
-					);
-				case 'TypeAnswer' in s:
-					return (
-						new Set(s.TypeAnswer.answers.map((a) => a.text)).size !== s.TypeAnswer.answers.length
-					);
-				case 'Order' in s:
-					return new Set(s.Order.answers.map((a) => a.text)).size !== s.Order.answers.length;
-				default:
-					return assertUnreachable(s);
-			}
-		}).length > 0
-	);
+	let errorMessage = $derived(lintIssueTopbarMessage(lintConfig(config)));
 
 	async function onShare(showCopied: () => void) {
 		await shareAndCopyURL(removeIds(config));
@@ -126,15 +63,7 @@
 		{showPublish}
 		{showShare}
 		onshare={onShare}
-		errorMessage={no_answer
-			? m.missing_answers()
-			: no_correct_answer
-				? m.missing_correct()
-				: empty_answer
-					? m.empty_answer()
-					: duplicate_answers
-						? m.duplicate_answers()
-						: undefined}
+		{errorMessage}
 	/>
 	<Main bind:config />
 </div>
