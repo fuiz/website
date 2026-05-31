@@ -1,6 +1,5 @@
-import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { parse } from 'svelte/compiler';
 import { walk } from 'zimmerframe';
 import { getTranslations } from './message-utils.js';
@@ -9,8 +8,14 @@ const root = join(import.meta.dirname, '..');
 
 const USER_FACING_ATTRS = new Set(['title', 'alt', 'placeholder', 'aria-label']);
 
-// Paths (relative to project root) to skip entirely
-const IGNORED_PATHS = ['src/routes/[[lang]]/privacy', 'src/routes/[[lang]]/terms'];
+// Paths (relative to project root) to skip entirely.
+const IGNORED_PATHS = [
+	'src/routes/[[lang]]/privacy',
+	'src/routes/[[lang]]/terms',
+	'src/routes/[[lang]]/demo',
+	'src/lib/paraglide',
+	'src/paraglide'
+];
 
 // Build reverse lookup: lowercase English value -> key(s)
 const en = getTranslations();
@@ -24,15 +29,20 @@ for (const [key, value] of Object.entries(en)) {
 	}
 }
 
-// Collect tracked .svelte files via `git ls-files`. This skips anything
-// listed in .gitignore (e.g. src/lib/paraglide, the demo route) without
-// having to maintain a parallel ignore list here.
 function collectFiles() {
-	const out = execSync('git ls-files -z -- "src/*.svelte"', { cwd: root }).toString('utf8');
-	return out
-		.split('\0')
-		.filter(Boolean)
-		.map((rel) => resolve(root, rel));
+	const out = [];
+	function walkDir(dir) {
+		for (const entry of readdirSync(dir, { withFileTypes: true })) {
+			const full = join(dir, entry.name);
+			if (entry.isDirectory()) {
+				walkDir(full);
+			} else if (entry.isFile() && entry.name.endsWith('.svelte')) {
+				out.push(full);
+			}
+		}
+	}
+	walkDir(join(root, 'src'));
+	return out;
 }
 
 function isNonTrivialText(text) {
