@@ -222,7 +222,6 @@
 	"fuiz_submitted": "تم تقديم الفويز!",
 	"fuiz_submitted_desc": "تم تقديم الفويز للمراجعة. سيتم نشره بمجرد مراجعة طلب الدمج والموافقة عليه من قبل المشرفين.",
 	"view_on_gitlab": "عرض على GitLab",
-	"publishing": "جارٍ النشر...",
 	"login_required": "تسجيل الدخول مطلوب",
 	"login_required_desc": "تحتاج إلى المصادقة مع GitLab لنشر الفويزات",
 	"connect_gitlab": "ربط حساب GitLab",

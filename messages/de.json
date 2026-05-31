@@ -222,7 +222,6 @@
 	"fuiz_submitted": "Fuiz eingereicht!",
 	"fuiz_submitted_desc": "Dein Fuiz wurde zur Überprüfung eingereicht. Es wird veröffentlicht, sobald der Merge-Request überprüft und zusammengeführt wurde.",
 	"view_on_gitlab": "Auf GitLab ansehen",
-	"publishing": "Wird veröffentlicht...",
 	"login_required": "Anmeldung erforderlich",
 	"login_required_desc": "Du musst dich bei GitLab authentifizieren, um Fuizze zu veröffentlichen",
 	"connect_gitlab": "GitLab-Konto verbinden",

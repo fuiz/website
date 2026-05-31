@@ -222,7 +222,6 @@
 	"fuiz_submitted": "Fuiz Terkirim!",
 	"fuiz_submitted_desc": "Fuiz Anda telah dikirim untuk ditinjau. Fuiz akan dipublikasikan setelah permintaan penggabungan ditinjau dan disetujui oleh pengelola.",
 	"view_on_gitlab": "Lihat di GitLab",
-	"publishing": "Menerbitkan...",
 	"login_required": "Login Diperlukan",
 	"login_required_desc": "Anda perlu mengautentikasi dengan GitLab untuk menerbitkan fuiz",
 	"connect_gitlab": "Hubungkan Akun GitLab",

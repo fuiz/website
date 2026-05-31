@@ -222,7 +222,6 @@
 	"fuiz_submitted": "Fuiz Soumis !",
 	"fuiz_submitted_desc": "Votre fuiz a été soumis pour examen. Il sera publié une fois la demande de fusion examinée et approuvée par les modérateurs.",
 	"view_on_gitlab": "Voir sur GitLab",
-	"publishing": "Publication en cours...",
 	"login_required": "Connexion Requise",
 	"login_required_desc": "Vous devez vous authentifier avec GitLab pour publier des fuizzes",
 	"connect_gitlab": "Connecter le Compte GitLab",

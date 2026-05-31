@@ -222,7 +222,6 @@
 	"fuiz_submitted": "Fuiz Submitted!",
 	"fuiz_submitted_desc": "Your fuiz has been submitted for review. It will be published once the pull request is reviewed and merged by maintainers.",
 	"view_on_gitlab": "View on GitLab",
-	"publishing": "Publishing...",
 	"login_required": "Login Required",
 	"login_required_desc": "You need to authenticate with GitLab to publish fuizzes",
 	"connect_gitlab": "Connect GitLab Account",

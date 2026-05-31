@@ -222,7 +222,6 @@
 	"fuiz_submitted": "Fuiz Göndərildi!",
 	"fuiz_submitted_desc": "Fuiziniz nəzərdən keçirilmək üçün göndərildi. Birləşdirmə sorğusu nəzərdən keçirildikdən və birləşdirildikdən sonra dərc olunacaq.",
 	"view_on_gitlab": "GitLab-da bax",
-	"publishing": "Dərc olunur...",
 	"login_required": "Giriş Tələb Olunur",
 	"login_required_desc": "Fuizləri dərc etmək üçün GitLab ilə autentifikasiya lazımdır",
 	"connect_gitlab": "GitLab Hesabını Bağla",
