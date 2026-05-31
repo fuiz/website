@@ -99,7 +99,7 @@
 						onshare(showCopied);
 					}}><Share height="1em" /></IconButton
 				>
-				<div bind:this={copiedPopover} popover="manual" class="fuiz-popover" style:position-area="left">{m.copied()}</div>
+				<div bind:this={copiedPopover} popover="manual" class="fuiz-popover copied-popover">{m.copied()}</div>
 			</div>
 		{/if}
 	</div>
@@ -184,6 +184,10 @@
 				}
 			}
 		}
+	}
+
+	.copied-popover {
+		position-area: left;
 	}
 
 	@media (hover: none) {

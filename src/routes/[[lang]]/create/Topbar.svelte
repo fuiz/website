@@ -62,6 +62,7 @@
 </script>
 
 <header class="topbar">
+	<!-- i18n-ignore -->
 	<a class="brand" href={resolve(localizeHref('/create'))} title="Fuiz">
 		<Logo height={36} />
 	</a>

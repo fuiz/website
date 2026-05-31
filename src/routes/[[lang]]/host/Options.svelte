@@ -238,7 +238,7 @@
 					<FancyButton disabled={loading}>
 						<div id="button">
 							{#if loading}
-								<div style:height="1em" style:width="1em">
+								<div class="spinner">
 									<LoadingCircle borderWidth={3} />
 								</div>
 							{/if}
@@ -305,6 +305,11 @@
 		justify-content: center;
 		gap: 0.5em;
 		font-family: var(--alternative-font);
+	}
+
+	.spinner {
+		height: 1em;
+		width: 1em;
 	}
 
 	.style-grid {

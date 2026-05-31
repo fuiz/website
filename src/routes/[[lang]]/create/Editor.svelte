@@ -118,12 +118,7 @@
 	}
 </script>
 
-<div
-	style:min-height="100dvh"
-	style:background="var(--surface)"
-	style:display="flex"
-	style:flex-direction="column"
->
+<div class="root">
 	<Topbar
 		bind:title={config.title}
 		{id}
@@ -143,3 +138,12 @@
 	/>
 	<Main bind:config />
 </div>
+
+<style>
+	.root {
+		min-height: 100dvh;
+		background: var(--surface);
+		display: flex;
+		flex-direction: column;
+	}
+</style>

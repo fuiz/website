@@ -57,12 +57,7 @@
 					{#if fuiz.thumbnail}
 						<img src={fuiz.thumbnail} alt={fuiz.thumbnail_alt} />
 					{:else}
-						<div
-							style:width="100%"
-							style:display="flex"
-							style:align-items="center"
-							style:justify-content="center"
-						>
+						<div class="image-fallback">
 							<ImageOutline height="2em" width="2em" title={m.fallback()} />
 						</div>
 					{/if}
@@ -82,14 +77,14 @@
 				</div>
 			</div>
 			<FancyButton onclick={onImport}>
-				<div style:font-family="var(--alternative-font)">{m.import_fuiz()}</div>
+				<div class="cta-label">{m.import_fuiz()}</div>
 			</FancyButton>
 			<FancyButton
 				onclick={onStart}
 				backgroundColor={buttonColors[1][0]}
 				backgroundDeepColor={buttonColors[1][1]}
 			>
-				<div style:font-family="var(--alternative-font)">{m.host()}</div>
+				<div class="cta-label">{m.host()}</div>
 			</FancyButton>
 		</div>
 		<div class="slides-pane">
@@ -163,8 +158,8 @@
 									{@const color = buttonColors.at(answerIndex % buttonColors.length)}
 									<div
 										class="bar"
-										style:background-color={color?.[0]}
-										style:border-color={color?.[1]}
+										style:--bar-bg={color?.[0]}
+										style:--bar-border={color?.[1]}
 									>
 										<span class="bar-num">{answerIndex + 1}</span>
 										{#if showAnswers}
@@ -187,8 +182,8 @@
 									{@const color = buttonColors.at(answerIndex % buttonColors.length)}
 									<div
 										class="bar"
-										style:background-color={color?.[0]}
-										style:border-color={color?.[1]}
+										style:--bar-bg={color?.[0]}
+										style:--bar-border={color?.[1]}
 									>
 										{#if correctSet?.has(answerIndex)}
 											<span class="bar-check"
@@ -353,12 +348,24 @@
 		min-height: 1.2em;
 		padding: 0.15em 0.4em;
 		border-radius: 0.4em;
-		border: 1px solid;
+		border: 1px solid var(--bar-border);
+		background-color: var(--bar-bg);
 		color: #ffffff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.3em;
+	}
+
+	.image-fallback {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.cta-label {
+		font-family: var(--alternative-font);
 	}
 
 	.bar-check {

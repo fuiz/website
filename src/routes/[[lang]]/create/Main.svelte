@@ -17,15 +17,9 @@
 	let activeSlide = $derived(config.slides.at(selectedSlideIndex));
 </script>
 
-<div
-	id="editor"
-	style:display="flex"
-	style:flex="1"
-	style:align-items="stretch"
-	style:background="var(--surface)"
->
+<div id="editor">
 	<Sidebar bind:slides={config.slides} bind:selectedSlideIndex />
-	<div style:flex="1" style:display="flex" style:flex-direction="column">
+	<div class="editor-main">
 		<SlideEditor bind:slide={config.slides[selectedSlideIndex]} />
 	</div>
 	{#if activeSlide}
@@ -41,7 +35,17 @@
 
 <style>
 	#editor {
+		display: flex;
+		flex: 1;
 		flex-direction: row;
+		align-items: stretch;
+		background: var(--surface);
+	}
+
+	.editor-main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	@media only screen and (max-width: 900px) {
