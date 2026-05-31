@@ -235,6 +235,8 @@
 	"privacy_policy": "Polityka Prywatności",
 	"terms_of_service": "Regulamin",
 	"multiple_answers": "Wiele odpowiedzi",
+	"single_answer": "Jedna odpowiedź",
+	"answer_mode": "Tryb odpowiedzi",
 	"show_answers": "Pokaż odpowiedzi",
 	"hide_answers": "Ukryj odpowiedzi",
 	"no_language_matches": "Brak języka pasującego do „{query}\"",

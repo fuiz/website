@@ -235,6 +235,8 @@
 	"privacy_policy": "隐私政策",
 	"terms_of_service": "服务条款",
 	"multiple_answers": "多选",
+	"single_answer": "单选",
+	"answer_mode": "答题模式",
 	"show_answers": "显示答案",
 	"hide_answers": "隐藏答案",
 	"no_language_matches": "没有匹配 \"{query}\" 的语言",

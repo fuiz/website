@@ -235,6 +235,8 @@
 	"privacy_policy": "Məxfilik Siyasəti",
 	"terms_of_service": "Xidmət Şərtləri",
 	"multiple_answers": "Çoxlu cavablar",
+	"single_answer": "Tək cavab",
+	"answer_mode": "Cavab rejimi",
 	"show_answers": "Cavabları göstər",
 	"hide_answers": "Cavabları gizlət",
 	"no_language_matches": "\"{query}\" üçün uyğun dil tapılmadı",

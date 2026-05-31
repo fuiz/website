@@ -235,6 +235,8 @@
 	"privacy_policy": "Privacy Policy",
 	"terms_of_service": "Terms of Service",
 	"multiple_answers": "Multiple answers",
+	"single_answer": "Single answer",
+	"answer_mode": "Answer mode",
 	"show_answers": "Show answers",
 	"hide_answers": "Hide answers",
 	"no_language_matches": "No language matches \"{query}\"",

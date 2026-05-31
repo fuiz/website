@@ -235,6 +235,8 @@
 	"privacy_policy": "Datenschutzrichtlinie",
 	"terms_of_service": "Nutzungsbedingungen",
 	"multiple_answers": "Mehrere Antworten",
+	"single_answer": "Eine Antwort",
+	"answer_mode": "Antwortmodus",
 	"show_answers": "Antworten anzeigen",
 	"hide_answers": "Antworten ausblenden",
 	"no_language_matches": "Keine Sprache passt zu „{query}\"",

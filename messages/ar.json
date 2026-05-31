@@ -235,6 +235,8 @@
 	"privacy_policy": "سياسة الخصوصية",
 	"terms_of_service": "شروط الخدمة",
 	"multiple_answers": "إجابات متعددة",
+	"single_answer": "إجابة واحدة",
+	"answer_mode": "نمط الإجابة",
 	"show_answers": "إظهار الإجابات",
 	"hide_answers": "إخفاء الإجابات",
 	"no_language_matches": "لا توجد لغة تطابق \"{query}\"",

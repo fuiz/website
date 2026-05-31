@@ -235,6 +235,8 @@
 	"privacy_policy": "Kebijakan Privasi",
 	"terms_of_service": "Ketentuan Layanan",
 	"multiple_answers": "Beberapa jawaban",
+	"single_answer": "Satu jawaban",
+	"answer_mode": "Mode jawaban",
 	"show_answers": "Tampilkan jawaban",
 	"hide_answers": "Sembunyikan jawaban",
 	"no_language_matches": "Tidak ada bahasa yang cocok dengan \"{query}\"",

@@ -235,6 +235,8 @@
 	"privacy_policy": "Pribatutasun Politika",
 	"terms_of_service": "Zerbitzu Baldintzak",
 	"multiple_answers": "Erantzun anitz",
+	"single_answer": "Erantzun bakarra",
+	"answer_mode": "Erantzun modua",
 	"show_answers": "Erakutsi erantzunak",
 	"hide_answers": "Ezkutatu erantzunak",
 	"no_language_matches": "Ez dago \"{query}\"-rekin bat datorren hizkuntzarik",

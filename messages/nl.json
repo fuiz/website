@@ -235,6 +235,8 @@
 	"privacy_policy": "Privacybeleid",
 	"terms_of_service": "Servicevoorwaarden",
 	"multiple_answers": "Meerdere antwoorden",
+	"single_answer": "Eén antwoord",
+	"answer_mode": "Antwoordmodus",
 	"show_answers": "Toon antwoorden",
 	"hide_answers": "Verberg antwoorden",
 	"no_language_matches": "Geen taal komt overeen met \"{query}\"",
