@@ -7,12 +7,13 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import type { CreationId, Database } from '$lib/storage';
 	import { getCreation } from '$lib/storage';
+	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import Download from '~icons/material-symbols/download';
-	import Globe from '~icons/material-symbols/globe';
+	import LiveTv from '~icons/material-symbols/live-tv-outline';
+	import Publish from '~icons/material-symbols/publish';
 	import Share from '~icons/material-symbols/share';
-	import SlideshowOutlineSharp from '~icons/material-symbols/slideshow-outline-sharp';
 
 	let {
 		title = $bindable(),
@@ -60,89 +61,125 @@
 	}
 </script>
 
-<div
-	style:display="flex"
-	style:flex-wrap="wrap"
-	style:gap="20px"
-	style:box-shadow="0 2px 2px #00000040"
-	style:padding="10px"
-	style:z-index="1"
-	style:align-items="center"
-	style:justify-content="center"
->
-	<a
-		href={resolve(localizeHref('/create'))}
-		style:height="65px"
-		style:margin="0 5px"
-		style:overflow="hidden"
-		style:color="inherit"
-	>
-		<Logo height={65} />
+<header class="topbar">
+	<a class="brand" href={resolve(localizeHref('/create'))} title="Fuiz">
+		<Logo height={36} />
 	</a>
-	<div
-		style:flex="1"
-		style:display="flex"
-		style:gap="10px"
-		style:flex-wrap="wrap"
-		style:justify-content="center"
-	>
-		<div
-			style:flex="1"
-			style:display="flex"
-			style:align-items="center"
-			style:gap="10px"
-			style:justify-content="center"
-			style:font-size="24px"
-			style:min-width="15ch"
-		>
-			<Textfield
-				bind:value={title}
-				placeholder={m.fuiz_title()}
-				required={false}
-				id="title"
-				disabled={false}
-				maxLength={limits.fuiz.maxTitleLength}
-			/>
-		</div>
-		<div style:display="flex" style:align-items="center" style:gap="0.2em" style:padding="0.2em">
-			{#if showPublish}
-				<IconButton
-					alt={m.publish_title()}
-					onclick={() => goto(resolve(localizeHref('/publish?id=' + id)))}
-				>
-					<Globe height="1em" />
-				</IconButton>
-			{/if}
-			{#if showShare}
-				<div bind:this={shareWrapper}>
-					<IconButton
-						alt={m.share()}
-						onclick={() => {
-							onshare(showCopied);
-						}}
-					>
-						<Share height="1em" />
-					</IconButton>
-					<div bind:this={copiedPopover} popover="manual" class="fuiz-popover" style:position-area="bottom">{m.copied()}</div>
-				</div>
-			{/if}
-			<IconButton alt={m.download()} onclick={() => onDownload(id)}>
-				<Download height="1em" />
-			</IconButton>
-			<div
-				interestfor="error-popover"
+
+	<div class="title-wrap">
+		<Textfield
+			bind:value={title}
+			placeholder={m.fuiz_title()}
+			required={false}
+			id="title"
+			disabled={false}
+			maxLength={limits.fuiz.maxTitleLength}
+		/>
+	</div>
+
+	<div class="actions">
+		{#if showPublish}
+			<IconButton
+				alt={m.publish_title()}
+				padding="0.4em"
+				onclick={() => goto(resolve(localizeHref('/publish?id=' + id)))}
 			>
+				<Publish height="1.1em" />
+			</IconButton>
+		{/if}
+		{#if showShare}
+			<div bind:this={shareWrapper}>
 				<IconButton
-					alt={m.host()}
-					disabled={errorMessage != undefined}
-					onclick={() => goto(resolve(localizeHref('/host?id=' + id)))}
+					alt={m.share()}
+					padding="0.4em"
+					onclick={() => {
+						onshare(showCopied);
+					}}
 				>
-					<SlideshowOutlineSharp height="1em" />
+					<Share height="1.1em" />
 				</IconButton>
-				{#if errorMessage}
-					<div id="error-popover" popover="hint" class="fuiz-popover" style:position-area="bottom">{errorMessage}</div>
-				{/if}
+				<div bind:this={copiedPopover} popover="manual" class="fuiz-popover">
+					{m.copied()}
+				</div>
 			</div>
+		{/if}
+		<IconButton alt={m.download()} padding="0.4em" onclick={() => onDownload(id)}>
+			<Download height="1.1em" />
+		</IconButton>
+		<div class="host-wrap" interestfor="error-popover">
+			<FancyButton
+				disabled={errorMessage != undefined}
+				onclick={() => goto(resolve(localizeHref('/host?id=' + id)))}
+			>
+				<div class="host-label">
+					<LiveTv height="1.1em" />
+					<span>{m.host()}</span>
+				</div>
+			</FancyButton>
+			{#if errorMessage}
+				<div id="error-popover" popover="hint" class="fuiz-popover">{errorMessage}</div>
+			{/if}
 		</div>
 	</div>
-</div>
+</header>
+
+<style>
+	.topbar {
+		display: flex;
+		align-items: center;
+		gap: 0.7em;
+		padding: 0.4em 0.7em;
+		background: var(--surface);
+		border-bottom: 1px solid var(--outline);
+		z-index: 1;
+	}
+
+	.brand {
+		display: inline-flex;
+		color: inherit;
+		text-decoration: none;
+		flex-shrink: 0;
+	}
+
+	.title-wrap {
+		flex: 1;
+		max-width: 28ch;
+		min-width: 12ch;
+		margin: 0 auto;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 0.15em;
+		flex-shrink: 0;
+	}
+
+	.host-wrap {
+		display: inline-block;
+		margin-inline-start: 0.3em;
+	}
+
+	.host-label {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3em;
+		padding: 0 0.6em;
+		font-family: var(--alternative-font);
+		white-space: nowrap;
+	}
+
+	@media (max-width: 40em) {
+		.topbar {
+			flex-wrap: wrap;
+			justify-content: space-between;
+			gap: 0.5em;
+		}
+
+		.title-wrap {
+			order: 3;
+			flex-basis: 100%;
+			max-width: none;
+		}
+	}
+</style>

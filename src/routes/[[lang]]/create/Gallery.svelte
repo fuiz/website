@@ -91,26 +91,46 @@
 	let logoutDialog = $state<ConfirmationDialog>();
 
 	let fileInput = $state<HTMLInputElement>();
+	let dragDepth = $state(0);
 
 	function loadFromInput() {
-		const target = document.querySelector('input[type=file]');
-		if (!target) {
-			return;
-		}
-		// @ts-expect-error we know it's an HTMLInputElement because of the querySelector
-		const inputImage: HTMLInputElement = target;
-		const filesList = inputImage.files;
-		if (!filesList) {
-			return;
-		}
-		const files = [];
-		for (let i = 0; i < filesList.length; i += 1) {
-			const file = filesList.item(i);
-			if (file) {
-				files.push(file);
-			}
+		if (!fileInput?.files) return;
+		const files: File[] = [];
+		for (let i = 0; i < fileInput.files.length; i++) {
+			const f = fileInput.files.item(i);
+			if (f) files.push(f);
 		}
 		loadFile(files);
+	}
+
+	function isImportableFile(f: File) {
+		return f.name.endsWith('.toml') || f.name.endsWith('.zip');
+	}
+
+	function onDragEnter(e: DragEvent) {
+		if (!e.dataTransfer?.types.includes('Files')) return;
+		e.preventDefault();
+		dragDepth++;
+	}
+
+	function onDragLeave(e: DragEvent) {
+		if (!e.dataTransfer?.types.includes('Files')) return;
+		e.preventDefault();
+		dragDepth = Math.max(0, dragDepth - 1);
+	}
+
+	function onDragOver(e: DragEvent) {
+		if (!e.dataTransfer?.types.includes('Files')) return;
+		e.preventDefault();
+		if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+	}
+
+	function onDrop(e: DragEvent) {
+		if (!e.dataTransfer?.types.includes('Files')) return;
+		e.preventDefault();
+		dragDepth = 0;
+		const files = Array.from(e.dataTransfer.files).filter(isImportableFile);
+		if (files.length) loadFile(files);
 	}
 
 	async function loadFile(files: File[]) {
@@ -181,16 +201,29 @@
 <TypicalPage>
 	<input
 		bind:this={fileInput}
-		style:display="none"
+		class="hidden-input"
 		type="file"
 		id="config"
 		accept="application/toml, .toml, application/x-zip, .zip"
 		name="config"
 		multiple
-		onchange={() => loadFromInput()}
+		onchange={loadFromInput}
 	/>
-	<div class="recent-wrapper">
-		<div class="recent">
+	<div
+		class="page"
+		class:dragging={dragDepth > 0}
+		ondragenter={onDragEnter}
+		ondragleave={onDragLeave}
+		ondragover={onDragOver}
+		ondrop={onDrop}
+		role="presentation"
+	>
+		<header class="hero">
+			<h1>{m.create_title()}</h1>
+			<p class="tagline">{m.create_desc()}</p>
+		</header>
+
+		<section class="recent">
 			<div class="recent-header">
 				<h2>{m.recent_fuizzes()}</h2>
 				<div class="actions">
@@ -219,8 +252,7 @@
 						{:else}
 							<IconButton
 								alt={m.backup_to({ provider: provider.displayName })}
-								onclick={() =>
-									provider.login(window.location.pathname + window.location.search)}
+								onclick={() => provider.login(window.location.pathname + window.location.search)}
 							>
 								<BackupOutline />
 							</IconButton>
@@ -254,19 +286,66 @@
 					<span>{m.start_blank()}</span>
 				</button>
 			{/if}
-		</div>
+		</section>
 	</div>
 </TypicalPage>
 
+<ConfirmationDialog
+	bind:this={deleteDialog}
+	title={m.delete_forever()}
+	message=""
+	confirmText={m.delete_confirm()}
+	onConfirm={() => deleteSlide(selectedToDeletion)}
+/>
+
+<ConfirmationDialog
+	bind:this={logoutDialog}
+	title={m.log_out_confirm_title()}
+	message={m.log_out_confirm_message()}
+	confirmText={m.log_out()}
+	onConfirm={() => db.remote?.logout()}
+/>
+
 <style>
-	.recent-wrapper {
-		margin: 0 0.4em;
+	.hidden-input {
+		display: none;
+	}
+
+	.page {
+		position: relative;
+		max-width: 90ch;
+		margin: 0 auto;
+		padding: 0 0.6em 2em;
+	}
+
+	.hero {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5em;
+		padding: 2em 0 1.5em;
+		text-align: center;
+	}
+
+	.hero h1 {
+		margin: 0;
+		font-family: var(--alternative-font);
+		font-size: clamp(2em, 5vw, 2.75em);
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+	}
+
+	.tagline {
+		margin: 0;
+		max-width: 50ch;
+		opacity: 0.75;
+		line-height: 1.4;
 	}
 
 	.recent {
-		max-width: 90ch;
-		box-sizing: border-box;
-		margin: 1em auto;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6em;
 	}
 
 	.recent-header {
@@ -274,14 +353,15 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 0.5em;
-		margin: 0 0 0.4em;
 	}
 
 	.recent-header h2 {
 		font-family: var(--alternative-font);
-		line-height: 1;
+		font-size: 1em;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
 		margin: 0;
-		opacity: 0.7;
+		opacity: 0.65;
 	}
 
 	.actions {
@@ -309,7 +389,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(18ch, 1fr));
 		grid-auto-rows: 1fr;
-		grid-gap: 0.5em;
+		gap: 0.5em;
 	}
 
 	.empty {
@@ -322,13 +402,13 @@
 		padding: 2em 1em;
 		box-sizing: border-box;
 		font-family: var(--alternative-font);
-		font-size: 1.1em;
+		font-size: 1.05em;
 		color: inherit;
 		background: none;
-		border: 0.15em dashed color-mix(in srgb, currentColor 30%, transparent);
+		border: 2px dashed var(--outline);
 		border-radius: 0.7em;
 		cursor: pointer;
-		opacity: 0.6;
+		opacity: 0.7;
 		transition:
 			opacity 150ms ease-out,
 			border-color 150ms ease-out,
@@ -341,20 +421,21 @@
 		background: color-mix(in srgb, var(--primary) 8%, transparent);
 		outline: none;
 	}
+
+	.page.dragging .empty {
+		opacity: 1;
+		border-color: var(--primary);
+		background: color-mix(in srgb, var(--primary) 10%, transparent);
+	}
+
+	.page.dragging::after {
+		content: '';
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		background: color-mix(in srgb, var(--primary) 8%, transparent);
+		border: 0.3em dashed var(--primary);
+		border-radius: 0.4em;
+		z-index: 1000;
+	}
 </style>
-
-<ConfirmationDialog
-	bind:this={deleteDialog}
-	title={m.delete_forever()}
-	message=""
-	confirmText={m.delete_confirm()}
-	onConfirm={() => deleteSlide(selectedToDeletion)}
-/>
-
-<ConfirmationDialog
-	bind:this={logoutDialog}
-	title={m.log_out_confirm_title()}
-	message={m.log_out_confirm_message()}
-	confirmText={m.log_out()}
-	onConfirm={() => db.remote?.logout()}
-/>
