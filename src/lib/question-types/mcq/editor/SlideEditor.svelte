@@ -2,6 +2,7 @@
 	import { limits } from '$lib/clientOnly';
 	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import SlideEditorLayout from '$lib/question-types/editor/SlideEditorLayout.svelte';
 	import type { MultipleChoiceSlide } from '$lib/types';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import Answers from './Answers.svelte';
@@ -17,44 +18,20 @@
 		slide.introduce_question *= 1000;
 </script>
 
-<div
-	style:flex="1"
-	style:display="flex"
-	style:flex-direction="column"
-	style:gap="0.2em"
-	style:padding="0.6em 0.4em 0.4em"
-	style:align-items="center"
-	style:justify-content="space-between"
->
-	<div
-		style:display="flex"
-		style:flex-wrap="wrap-reverse"
-		style:width="100%"
-		style:justify-content="center"
-		style:align-items="end"
-		style:max-width="30ch"
-		style:gap="0.2em"
-	>
-		<div style:display="flex" style:align-items="center" style:justify-content="center">
-			<MediaChooser bind:media={slide.media} />
-		</div>
-		<div
-			style:max-width="25ch"
-			style:flex="1"
-			style:min-width="fit-content"
-			style:padding-top="0.5em"
-			style:overflow="auto"
-		>
-			<Textarea
-				bind:value={slide.title}
-				placeholder={m.question_text()}
-				id="question_title"
-				required={false}
-				disabled={false}
-				maxHeight="4em"
-				maxLength={limits.fuiz.multipleChoice.maxTitleLength}
-			/>
-		</div>
-	</div>
+<SlideEditorLayout>
+	{#snippet media()}
+		<MediaChooser bind:media={slide.media} />
+	{/snippet}
+	{#snippet title()}
+		<Textarea
+			bind:value={slide.title}
+			placeholder={m.question_text()}
+			id="question_title"
+			required={false}
+			disabled={false}
+			maxHeight="4em"
+			maxLength={limits.fuiz.multipleChoice.maxTitleLength}
+		/>
+	{/snippet}
 	<Answers bind:answers={slide.answers} />
-</div>
+</SlideEditorLayout>

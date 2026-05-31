@@ -235,7 +235,7 @@
 
 <style>
 	#sidebar {
-		width: 8em;
+		width: 12em;
 		border-inline-end: 1px solid var(--outline);
 		display: flex;
 		flex-direction: column;
@@ -354,8 +354,6 @@
 
 		.switched {
 			flex-direction: row;
-			width: unset;
-			height: unset;
 		}
 
 		.would-be-hidden {

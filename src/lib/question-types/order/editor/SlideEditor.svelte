@@ -2,6 +2,7 @@
 	import { buttonColors, limits } from '$lib/clientOnly';
 	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import SlideEditorLayout from '$lib/question-types/editor/SlideEditorLayout.svelte';
 	import type { OrderSlide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -21,53 +22,22 @@
 	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
 </script>
 
-<div
-	style:flex="1"
-	style:display="flex"
-	style:flex-direction="column"
-	style:gap="0.2em"
-	style:padding="0.6em 0.4em 0.4em"
-	style:align-items="center"
-	style:justify-content="space-between"
->
-	<div
-		style:display="flex"
-		style:flex-wrap="wrap-reverse"
-		style:width="100%"
-		style:justify-content="center"
-		style:align-items="end"
-		style:max-width="30ch"
-		style:gap="0.2em"
-	>
-		<div style:display="flex" style:align-items="center" style:justify-content="center">
-			<MediaChooser bind:media={slide.media} />
-		</div>
-		<div
-			style:max-width="25ch"
-			style:flex="1"
-			style:min-width="fit-content"
-			style:padding-top="0.5em"
-			style:overflow="auto"
-		>
-			<Textarea
-				bind:value={slide.title}
-				placeholder={m.question_text()}
-				id="question_title"
-				required={false}
-				disabled={false}
-				maxHeight="4em"
-				maxLength={limits.fuiz.typeAnswer.maxTitleLength}
-			/>
-		</div>
-	</div>
-	<div
-		style:display="flex"
-		style:flex-direction="column"
-		style:gap="0.5em"
-		style:margin="0.5em 0"
-		style:max-width="30ch"
-		style:width="100%"
-	>
+<SlideEditorLayout>
+	{#snippet media()}
+		<MediaChooser bind:media={slide.media} />
+	{/snippet}
+	{#snippet title()}
+		<Textarea
+			bind:value={slide.title}
+			placeholder={m.question_text()}
+			id="question_title"
+			required={false}
+			disabled={false}
+			maxHeight="4em"
+			maxLength={limits.fuiz.typeAnswer.maxTitleLength}
+		/>
+	{/snippet}
+	<div class="answers">
 		<Textfield
 			id="from"
 			placeholder={m.from()}
@@ -76,7 +46,7 @@
 			bind:value={slide.axis_labels.from}
 		/>
 		{#each slide.answers as answer, index (answer.id)}
-			<div style:display="flex" style:gap="0.5em" style:align-items="center">
+			<div class="answer-row">
 				{#if index < slide.answers.length - 1}
 					<IconButton
 						alt={m.move_down()}
@@ -86,15 +56,19 @@
 								slide.answers[index] = slide.answers[index + 1];
 								slide.answers[index + 1] = temp;
 							}
-						}}><ArrowDownward height="1.25em" /></IconButton
+						}}
 					>
+						<ArrowDownward height="1.25em" />
+					</IconButton>
 				{:else if slide.answers.length < limits.fuiz.order.maxAnswerCount}
 					<IconButton
 						alt={m.add_answer()}
 						onclick={() => {
 							slide.answers = [...slide.answers, { text: '', id: Date.now() }];
-						}}><Add height="1.25em" /></IconButton
+						}}
 					>
+						<Add height="1.25em" />
+					</IconButton>
 				{/if}
 				<FancyButton
 					backgroundColor={buttonColors.at(index % buttonColors.length)?.[0]}
@@ -113,8 +87,10 @@
 					alt={m.delete_answer()}
 					onclick={() => {
 						slide.answers = slide.answers.filter((a) => a.id !== answer.id);
-					}}><DeleteOutline height="1.25em" /></IconButton
+					}}
 				>
+					<DeleteOutline height="1.25em" />
+				</IconButton>
 			</div>
 		{/each}
 		{#if slide.answers.length === 0}
@@ -123,7 +99,7 @@
 					slide.answers = [...slide.answers, { text: '', id: Date.now() }];
 				}}
 			>
-				<div style:padding="0.2em 0.6em">{m.add_answer()}</div>
+				<div class="add-label">{m.add_answer()}</div>
 			</FancyButton>
 		{/if}
 
@@ -135,4 +111,25 @@
 			bind:value={slide.axis_labels.to}
 		/>
 	</div>
-</div>
+</SlideEditorLayout>
+
+<style>
+	.answers {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+		margin: 0.5em 0;
+		max-width: 30ch;
+		width: 100%;
+	}
+
+	.answer-row {
+		display: flex;
+		gap: 0.5em;
+		align-items: center;
+	}
+
+	.add-label {
+		padding: 0.2em 0.6em;
+	}
+</style>

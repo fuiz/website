@@ -48,9 +48,9 @@
 </script>
 
 {#if !media}
-	<div style:display="flex" style:justify-content="center">
+	<div class="empty-wrap">
 		<input
-			style:display="none"
+			class="file-input"
 			type="file"
 			name="image_input"
 			accept="image/png, image/jpeg, image/gif, image/webp"
@@ -58,12 +58,7 @@
 			onchange={load_from_input}
 		/>
 		<button
-			style:appearance="none"
-			style:color="inherit"
-			style:border="none"
-			style:padding="none"
-			style:font="inherit"
-			style:background="none"
+			class="upload-button"
 			ondragover={(e) => {
 				e.preventDefault();
 				dragOver = true;
@@ -83,30 +78,8 @@
 				}
 			}}
 		>
-			<div
-				style:aspect-ratio="1"
-				style:width="2em"
-				style:background={dragOver ? buttonColors[0][0] : 'transparent'}
-				style:border="0.1em dashed {dragOver ? '#fff' : 'currentcolor'}"
-				style:border-radius="0.2em"
-				style:padding="0.2em"
-				style:box-sizing="border-box"
-				style:display="flex"
-				style:flex-direction="column"
-				style:align-items="center"
-				style:gap="0.4em"
-				style:transition="background 200ms"
-				style:color={dragOver ? '' : 'color-mix(in srgb, currentColor 50%, transparent)'}
-			>
-				<label
-					for="image_input"
-					style:flex="1"
-					style:display="flex"
-					style:flex-direction="column"
-					style:align-items="center"
-					style:cursor="pointer"
-					style:justify-content="center"
-				>
+			<div class="dropzone" class:drag-over={dragOver} style:--drag-bg={buttonColors[0][0]}>
+				<label class="upload-label" for="image_input">
 					<AddPhotoAlternateOutline height="1em" title={m.open_image()} />
 				</label>
 			</div>
@@ -114,52 +87,24 @@
 	</div>
 {:else if 'Image' in media}
 	{#if 'Base64' in media.Image}
-		<div
-			style:display="flex"
-			style:flex-direction="column"
-			style:border="0.15em solid #00000040"
-			style:flex="1"
-			style:border-radius="0.7em"
-			style:gap="0.4em"
-			style:padding="0.3em"
-			style:box-sizing="border-box"
-			style:max-width="40ch"
-			style:min-width="15ch"
-			style:margin="auto"
-		>
-			<div style:display="flex" style:align-items="center">
-				<div style:flex="1" style:text-align="center" style:font-family="var(--alternative-font)">
-					{m.local_image()}
-				</div>
+		<div class="image-card">
+			<div class="image-header">
+				<div class="image-title">{m.local_image()}</div>
 				<IconButton
 					alt={m.remove()}
 					onclick={() => {
 						media = undefined;
-					}}><DeleteOutline height="1.2em" /></IconButton
+					}}
 				>
+					<DeleteOutline height="1.2em" />
+				</IconButton>
 			</div>
-			<div
-				style:flex-direction="column"
-				style:align-items="stretch"
-				style:display="flex"
-				style:gap="0.4em"
-			>
-				<div
-					style:width="100%"
-					style:height="100%"
-					style:max-width="10em"
-					style:min-width="5em"
-					style:position="relative"
-					style:max-height="10em"
-					style:display="flex"
-					style:flex-direction="column"
-					style:overflow="auto"
-					style:margin="auto"
-				>
+			<div class="image-body">
+				<div class="image-preview">
 					<MediaDisplay {media} fit="contain" />
 				</div>
-				<div style:display="flex" style:align-items="center" style:gap="10px">
-					<div style:flex="1">
+				<div class="alt-row">
+					<div class="alt-input">
 						<Textarea
 							id="alt"
 							required={false}
@@ -170,10 +115,7 @@
 						/>
 					</div>
 					<div>
-						<IconButton
-							alt={m.image_alt()}
-							popovertarget="alt-help-popover"
-						>
+						<IconButton alt={m.image_alt()} popovertarget="alt-help-popover">
 							<HelpOutline height="1.2em" />
 						</IconButton>
 						<div id="alt-help-popover" popover class="fuiz-popover">{m.image_alt_desc()}</div>
@@ -183,3 +125,112 @@
 		</div>
 	{/if}
 {/if}
+
+<style>
+	.empty-wrap {
+		display: flex;
+		justify-content: center;
+	}
+
+	.file-input {
+		display: none;
+	}
+
+	.upload-button {
+		appearance: none;
+		color: inherit;
+		border: none;
+		padding: 0;
+		font: inherit;
+		background: none;
+	}
+
+	.dropzone {
+		aspect-ratio: 1;
+		width: 2em;
+		background: transparent;
+		border: 1px dashed var(--outline);
+		border-radius: 0.2em;
+		padding: 0.2em;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.4em;
+		color: color-mix(in srgb, currentColor 50%, transparent);
+		transition:
+			background 200ms,
+			border-color 200ms,
+			color 200ms;
+	}
+
+	.dropzone.drag-over {
+		background: var(--drag-bg);
+		border-color: #fff;
+		color: inherit;
+	}
+
+	.upload-label {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		cursor: pointer;
+		justify-content: center;
+	}
+
+	.image-card {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--outline);
+		flex: 1;
+		border-radius: 0.7em;
+		gap: 0.4em;
+		padding: 0.3em;
+		box-sizing: border-box;
+		max-width: 40ch;
+		min-width: 15ch;
+		margin: auto;
+	}
+
+	.image-header {
+		display: flex;
+		align-items: center;
+	}
+
+	.image-title {
+		flex: 1;
+		text-align: center;
+		font-family: var(--alternative-font);
+	}
+
+	.image-body {
+		flex-direction: column;
+		align-items: stretch;
+		display: flex;
+		gap: 0.4em;
+	}
+
+	.image-preview {
+		width: 100%;
+		height: 100%;
+		max-width: 10em;
+		min-width: 5em;
+		position: relative;
+		max-height: 10em;
+		display: flex;
+		flex-direction: column;
+		overflow: auto;
+		margin: auto;
+	}
+
+	.alt-row {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.alt-input {
+		flex: 1;
+	}
+</style>

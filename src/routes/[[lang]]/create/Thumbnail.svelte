@@ -73,6 +73,7 @@
 
 	.thumb {
 		flex: 1;
+		aspect-ratio: 4 / 3;
 		padding: 0;
 		appearance: none;
 		background: none;
@@ -82,7 +83,9 @@
 		border-radius: 0.5em;
 		overflow: hidden;
 		cursor: pointer;
-		transition: border-color 100ms ease-out, box-shadow 100ms ease-out;
+		transition:
+			border-color 100ms ease-out,
+			box-shadow 100ms ease-out;
 	}
 
 	.thumb.selected {
@@ -90,9 +93,10 @@
 		box-shadow: 0 0 0 1px var(--primary);
 	}
 
-	@media only screen and (max-width: 600px) {
+	@media only screen and (max-width: 900px) {
 		.thumb {
-			width: 150px;
+			flex: none;
+			width: 8em;
 		}
 	}
 </style>

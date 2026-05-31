@@ -28,14 +28,8 @@
 	backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.[1]}
 	active={false}
 >
-	<div
-		style:display="flex"
-		style:align-items="center"
-		style:padding="0.15em 0.3em"
-		style:gap="0.3em"
-		style:color="var(--palette-light)"
-	>
-		<div style:height="1.5em" style:display="flex">
+	<div class="row">
+		<div class="check-cell">
 			<Checkbox
 				{attention}
 				bind:value={correct}
@@ -49,6 +43,23 @@
 			lightText
 			maxLength={limits.fuiz.maxAnswerTextLength}
 		/>
-		<IconButton alt={m.delete_answer()} {onclick}><DeleteOutline height="1.25em" /></IconButton>
+		<IconButton alt={m.delete_answer()} {onclick}>
+			<DeleteOutline height="1.25em" />
+		</IconButton>
 	</div>
 </FancyButton>
+
+<style>
+	.row {
+		display: flex;
+		align-items: center;
+		padding: 0.15em 0.3em;
+		gap: 0.3em;
+		color: var(--palette-light);
+	}
+
+	.check-cell {
+		height: 1.5em;
+		display: flex;
+	}
+</style>

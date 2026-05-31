@@ -2,6 +2,7 @@
 	import { limits } from '$lib/clientOnly';
 	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import SlideEditorLayout from '$lib/question-types/editor/SlideEditorLayout.svelte';
 	import type { TypeAnswer } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -18,53 +19,24 @@
 	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
 </script>
 
-<div
-	style:flex="1"
-	style:display="flex"
-	style:flex-direction="column"
-	style:gap="0.2em"
-	style:padding="0.6em 0.4em 0.4em"
-	style:align-items="center"
-	style:justify-content="space-between"
->
-	<div
-		style:display="flex"
-		style:flex-wrap="wrap-reverse"
-		style:width="100%"
-		style:justify-content="center"
-		style:align-items="end"
-		style:max-width="30ch"
-		style:gap="0.2em"
-	>
-		<div style:display="flex" style:align-items="center" style:justify-content="center">
-			<MediaChooser bind:media={slide.media} />
-		</div>
-		<div
-			style:max-width="25ch"
-			style:flex="1"
-			style:min-width="fit-content"
-			style:padding-top="0.5em"
-			style:overflow="auto"
-		>
-			<Textarea
-				bind:value={slide.title}
-				placeholder={m.question_text()}
-				id="question_title"
-				required={false}
-				disabled={false}
-				maxHeight="4em"
-				maxLength={limits.fuiz.typeAnswer.maxTitleLength}
-			/>
-		</div>
-	</div>
-	<div style:display="flex" style:flex-direction="column" style:gap="0.4em" style:width="20ch">
+<SlideEditorLayout>
+	{#snippet media()}
+		<MediaChooser bind:media={slide.media} />
+	{/snippet}
+	{#snippet title()}
+		<Textarea
+			bind:value={slide.title}
+			placeholder={m.question_text()}
+			id="question_title"
+			required={false}
+			disabled={false}
+			maxHeight="4em"
+			maxLength={limits.fuiz.typeAnswer.maxTitleLength}
+		/>
+	{/snippet}
+	<div class="answers">
 		{#each slide.answers as answer (answer.id)}
-			<div
-				style:display="flex"
-				style:gap="0.2em"
-				style:align-items="center"
-				style:justify-content="center"
-			>
+			<div class="answer-row">
 				<Textfield
 					bind:value={answer.text}
 					placeholder={m.answer_text()}
@@ -89,4 +61,20 @@
 			</FancyButton>
 		{/if}
 	</div>
-</div>
+</SlideEditorLayout>
+
+<style>
+	.answers {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
+		width: 20ch;
+	}
+
+	.answer-row {
+		display: flex;
+		gap: 0.2em;
+		align-items: center;
+		justify-content: center;
+	}
+</style>

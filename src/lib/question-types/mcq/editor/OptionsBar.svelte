@@ -82,7 +82,7 @@
 
 <style>
 	#sidebar {
-		width: 8em;
+		width: 11em;
 		display: flex;
 		flex-direction: column;
 		border-inline-start: 1px solid var(--outline);

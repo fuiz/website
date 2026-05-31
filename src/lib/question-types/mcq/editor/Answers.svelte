@@ -16,7 +16,7 @@
 	} = $props();
 </script>
 
-<div id="grid" style:display="grid" style:gap="0.2em" style:width="100%">
+<div class="grid">
 	{#each answers as answer, index (answer.id)}
 		<div transition:scale={{ easing: backOut, duration: 300 }} animate:flip={{ duration: 300 }}>
 			<Answer
@@ -32,7 +32,7 @@
 		</div>
 	{/each}
 	{#if answers.length < limits.fuiz.multipleChoice.maxAnswerCount}
-		<div style:grid-column="1/ -1" transition:scale={{ easing: backOut, duration: 300 }}>
+		<div class="add-cell" transition:scale={{ easing: backOut, duration: 300 }}>
 			<FancyButton
 				backgroundColor={buttonColors.at(answers.length % buttonColors.length)?.[0]}
 				backgroundDeepColor={buttonColors.at(answers.length % buttonColors.length)?.[1]}
@@ -47,16 +47,7 @@
 					answers = answers;
 				}}
 			>
-				<div
-					style:height="100%"
-					style:text-align="center"
-					style:display="flex"
-					style:align-items="center"
-					style:justify-content="center"
-					style:padding="0.2em 0.6em"
-					style:gap="0.2em"
-					style:box-sizing="border-box"
-				>
+				<div class="add-label">
 					<VariableAddOutline height="1.25em" title={m.add_answer()} />
 					<div>{m.add_answer()}</div>
 				</div>
@@ -66,12 +57,30 @@
 </div>
 
 <style>
-	#grid {
+	.grid {
+		display: grid;
+		gap: 0.2em;
+		width: 100%;
 		grid-template-columns: 1fr 1fr;
 	}
 
+	.add-cell {
+		grid-column: 1 / -1;
+	}
+
+	.add-label {
+		height: 100%;
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.2em 0.6em;
+		gap: 0.2em;
+		box-sizing: border-box;
+	}
+
 	@media only screen and (max-width: 600px) {
-		#grid {
+		.grid {
 			grid-template-columns: 1fr;
 		}
 	}

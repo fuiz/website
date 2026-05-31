@@ -14,16 +14,7 @@
 </script>
 
 {#if slide === undefined}
-	<div
-		style:flex="1"
-		style:display="flex"
-		style:flex-direction="column"
-		style:align-items="center"
-		style:justify-content="center"
-		style:text-align="center"
-		style:font-size="2em"
-		style:opacity="0.4"
-	>
+	<div class="empty">
 		<GhostIcon height="min(30vh, 60vw)" width="min(30vh, 60vw)" title={m.no_slides()} />
 		{m.no_slides()}
 	</div>
@@ -34,3 +25,16 @@
 {:else}
 	<TypeAnswerSlideEditor bind:slide={slide.TypeAnswer} />
 {/if}
+
+<style>
+	.empty {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		font-size: 2em;
+		opacity: 0.4;
+	}
+</style>
