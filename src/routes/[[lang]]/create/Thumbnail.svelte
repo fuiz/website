@@ -1,12 +1,12 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
+	import McqThumbnail from '$lib/question-types/mcq/editor/Thumbnail.svelte';
+	import OrderThumbnail from '$lib/question-types/order/editor/Thumbnail.svelte';
+	import TypeAnswerThumbnail from '$lib/question-types/type-answer/editor/Thumbnail.svelte';
 	import type { Slide } from '$lib/types';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import ContentCopyOutline from '~icons/material-symbols/content-copy-outline';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import MultipleChoiceThumbnail from './MultipleChoiceThumbnail.svelte';
-	import OrderThumbnail from './OrderThumbnail.svelte';
-	import TypeAnswerThumbnail from './TypeAnswerThumbnail.svelte';
 
 	let {
 		slide,
@@ -25,49 +25,21 @@
 	} = $props();
 </script>
 
-<div style:display="flex" style:gap="0.4em" style:box-sizing="border-box">
-	<div
-		style:display="flex"
-		style:justify-content="space-between"
-		style:flex-direction="column"
-		style:text-align="center"
-		style:align-items="center"
-		style:gap="0.4em"
-	>
-		<div>
-			{index + 1}
-		</div>
-		<div
-			style:display="flex"
-			style:flex-direction="column"
-			style:gap="0.2em"
-			style:padding="0.2em 0"
-		>
-			<IconButton onclick={ondelete} alt={m.delete_confirm()}
-				><DeleteOutline height="1em" /></IconButton
-			>
-			<IconButton onclick={onduplicate} alt={m.duplicate()}
-				><ContentCopyOutline height="1em" /></IconButton
-			>
+<div class="row">
+	<div class="meta">
+		<div>{index + 1}</div>
+		<div class="actions">
+			<IconButton onclick={ondelete} alt={m.delete_confirm()}>
+				<DeleteOutline height="1em" />
+			</IconButton>
+			<IconButton onclick={onduplicate} alt={m.duplicate()}>
+				<ContentCopyOutline height="1em" />
+			</IconButton>
 		</div>
 	</div>
-	<button
-		class="thumb"
-		style:flex="1"
-		style:padding="0"
-		style:appearance="none"
-		style:background="none"
-		style:font="inherit"
-		style:color="inherit"
-		style:border="none"
-		style:outline={selected ? '3px solid var(--primary)' : '1px solid darkgray'}
-		style:border-radius="0.5em"
-		style:overflow="hidden"
-		style:cursor="pointer"
-		onclick={onselect}
-	>
+	<button class="thumb" class:selected onclick={onselect}>
 		{#if 'MultipleChoice' in slide}
-			<MultipleChoiceThumbnail slide={slide.MultipleChoice} />
+			<McqThumbnail slide={slide.MultipleChoice} />
 		{:else if 'Order' in slide}
 			<OrderThumbnail slide={slide.Order} />
 		{:else}
@@ -77,6 +49,47 @@
 </div>
 
 <style>
+	.row {
+		display: flex;
+		gap: 0.4em;
+		box-sizing: border-box;
+	}
+
+	.meta {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+		text-align: center;
+		align-items: center;
+		gap: 0.4em;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2em;
+		padding: 0.2em 0;
+	}
+
+	.thumb {
+		flex: 1;
+		padding: 0;
+		appearance: none;
+		background: none;
+		font: inherit;
+		color: inherit;
+		border: 1px solid var(--outline);
+		border-radius: 0.5em;
+		overflow: hidden;
+		cursor: pointer;
+		transition: border-color 100ms ease-out, box-shadow 100ms ease-out;
+	}
+
+	.thumb.selected {
+		border-color: var(--primary);
+		box-shadow: 0 0 0 1px var(--primary);
+	}
+
 	@media only screen and (max-width: 600px) {
 		.thumb {
 			width: 150px;

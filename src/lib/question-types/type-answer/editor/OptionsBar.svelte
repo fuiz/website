@@ -79,7 +79,7 @@
 		width: 8em;
 		display: flex;
 		flex-direction: column;
-		border-inline-start: 0.05em solid #00000020;
+		border-inline-start: 1px solid var(--outline);
 		height: 100%;
 
 		& > div {
@@ -98,7 +98,7 @@
 			overflow: scroll;
 			width: auto;
 			flex-direction: row;
-			border-block-end: 0.05em solid #00000020;
+			border-block-end: 1px solid var(--outline);
 			border-inline-start: none;
 		}
 

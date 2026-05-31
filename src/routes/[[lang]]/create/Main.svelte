@@ -1,10 +1,10 @@
 <script lang="ts">
+	import McqOptionsBar from '$lib/question-types/mcq/editor/OptionsBar.svelte';
+	import OrderOptionsBar from '$lib/question-types/order/editor/OptionsBar.svelte';
+	import TypeAnswerOptionsBar from '$lib/question-types/type-answer/editor/OptionsBar.svelte';
 	import type { FuizConfig } from '$lib/types';
-	import MultipleChoiceOptionBar from './MultipleChoiceOptionsBar.svelte';
-	import OrderOptionsBar from './OrderOptionsBar.svelte';
 	import Sidebar from './Sidebar.svelte';
 	import SlideEditor from './SlideEditor.svelte';
-	import TypeAnswerOptionsBar from './TypeAnswerOptionsBar.svelte';
 
 	let {
 		config = $bindable()
@@ -30,7 +30,7 @@
 	</div>
 	{#if activeSlide}
 		{#if 'MultipleChoice' in activeSlide}
-			<MultipleChoiceOptionBar bind:activeSlide={activeSlide.MultipleChoice} />
+			<McqOptionsBar bind:activeSlide={activeSlide.MultipleChoice} />
 		{:else if 'Order' in activeSlide}
 			<OrderOptionsBar bind:activeSlide={activeSlide.Order} />
 		{:else}

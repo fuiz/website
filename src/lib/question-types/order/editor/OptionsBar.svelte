@@ -1,40 +1,39 @@
 <script lang="ts">
 	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { MultipleChoiceSlide } from '$lib/types';
+	import type { OrderSlide } from '$lib/types';
 	import SelectTime from '$lib/ui/SelectTime.svelte';
-	import Switch from '$lib/ui/Switch.svelte';
 	import SportsScore from '~icons/material-symbols/sports-score';
 	import TimerOutline from '~icons/material-symbols/timer-outline';
 
 	let {
 		activeSlide = $bindable()
 	}: {
-		activeSlide: MultipleChoiceSlide;
+		activeSlide: OrderSlide;
 	} = $props();
 </script>
 
 <div id="sidebar-container">
 	<div id="sidebar">
 		<div>
-			<div class="field-title">{m.time_before_answers()}</div>
+			<div class="field-title">{m.time_limit()}</div>
 			<div>
 				<SelectTime
-					options={[...limits.fuiz.multipleChoice.allowedIntroduceQuestion]}
+					options={[...limits.fuiz.typeAnswer.allowedTimeLimits]}
 					map={(v) => (v === '' ? '∞' : (parseInt(v) / 1000).toString())}
-					bind:selected={activeSlide.introduce_question}
+					bind:selected={activeSlide.time_limit}
 				>
 					<TimerOutline height="1em" title={m.time_limit()} />
 				</SelectTime>
 			</div>
 		</div>
 		<div>
-			<div class="field-title">{m.time_limit()}</div>
+			<div class="field-title">{m.time_before_answers()}</div>
 			<div>
 				<SelectTime
-					options={[...limits.fuiz.multipleChoice.allowedTimeLimits]}
+					options={[...limits.fuiz.typeAnswer.allowedIntroduceQuestion]}
 					map={(v) => (v === '' ? '∞' : (parseInt(v) / 1000).toString())}
-					bind:selected={activeSlide.time_limit}
+					bind:selected={activeSlide.introduce_question}
 				>
 					<TimerOutline height="1em" title={m.time_limit()} />
 				</SelectTime>
@@ -44,7 +43,7 @@
 			<div class="field-title">{m.points()}</div>
 			<div>
 				<SelectTime
-					options={[...limits.fuiz.multipleChoice.allowedPointsAwarded]}
+					options={[...limits.fuiz.typeAnswer.allowedPointsAwarded]}
 					map={(v) => {
 						if (v === '0') {
 							return m.none();
@@ -63,20 +62,6 @@
 				</SelectTime>
 			</div>
 		</div>
-		<div>
-			<div class="field-title">
-				{m.multiple_answers()}
-				<div>
-					<Switch
-						checked={activeSlide.answer_mode === 'MultipleAnswers'}
-						onchange={(checked) => {
-							activeSlide.answer_mode = checked ? 'MultipleAnswers' : 'SingleAnswer';
-						}}
-						id="answer-mode"
-					/>
-				</div>
-			</div>
-		</div>
 	</div>
 </div>
 
@@ -85,7 +70,7 @@
 		width: 8em;
 		display: flex;
 		flex-direction: column;
-		border-inline-start: 0.05em solid #00000020;
+		border-inline-start: 1px solid var(--outline);
 		height: 100%;
 
 		& > div {
@@ -104,7 +89,7 @@
 			overflow: scroll;
 			width: auto;
 			flex-direction: row;
-			border-block-end: 0.05em solid #00000020;
+			border-block-end: 1px solid var(--outline);
 			border-inline-start: none;
 		}
 
@@ -120,11 +105,6 @@
 		.field-title {
 			flex-direction: column;
 			align-items: start;
-		}
-
-		.field-title div {
-			font-size: 2em;
-			padding: 0.2em;
 		}
 	}
 </style>

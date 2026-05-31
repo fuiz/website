@@ -236,7 +236,7 @@
 <style>
 	#sidebar {
 		width: 8em;
-		border-inline-end: 0.05em solid #00000020;
+		border-inline-end: 1px solid var(--outline);
 		display: flex;
 		flex-direction: column;
 	}
@@ -283,7 +283,7 @@
 
 	#add-button {
 		padding: 0.4em;
-		border-top: 0.05em solid #00000020;
+		border-top: 1px solid var(--outline);
 	}
 
 	#controls {
@@ -333,12 +333,12 @@
 		}
 
 		#add-button {
-			border-inline-start: 0.05em solid #00000020;
+			border-inline-start: 1px solid var(--outline);
 			border-top: none;
 		}
 
 		#controls {
-			border-top: 0.05em solid #00000020;
+			border-top: 1px solid var(--outline);
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -348,7 +348,7 @@
 		#sidebar {
 			width: unset;
 			height: unset;
-			border-top: 0.05em solid #00000020;
+			border-top: 1px solid var(--outline);
 			border-inline-end: none;
 		}
 
