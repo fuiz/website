@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import VerticalSplit from '$lib/game/VerticalSplit.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import { getImageInfo } from '$lib/media/imageInfo';
 	import type { Media } from '$lib/types';
 
 	let {
@@ -15,15 +15,17 @@
 		warning?: string;
 		children?: Snippet;
 	} = $props();
+
+	let imageInfo = $derived(media ? getImageInfo(media) : undefined);
 </script>
 
 <div class="thumb">
 	<div class="title">{title || '...'}</div>
 	<VerticalSplit>
 		{#snippet top()}
-			{#if media}
+			{#if imageInfo}
 				<div class="media">
-					<MediaContainer {media} />
+					<img src={imageInfo.src} alt={imageInfo.alt} />
 				</div>
 			{/if}
 		{/snippet}
@@ -45,20 +47,34 @@
 		overflow: hidden;
 		flex-direction: column;
 		justify-content: space-between;
-		background: var(--surface);
 	}
 
 	.title {
 		padding: 0.2em;
 		box-sizing: border-box;
-		box-shadow: 0 2px 2px #00000040;
 		text-align: center;
 		font-size: 0.8em;
 		white-space: nowrap;
 	}
 
 	.media {
-		height: 50px;
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-inline: 0.4em;
+		box-sizing: border-box;
+		overflow: hidden;
+	}
+
+	.media img {
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+		width: auto;
+		height: auto;
+		border-radius: 0.25em;
 	}
 
 	.warn {

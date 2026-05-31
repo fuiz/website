@@ -76,21 +76,21 @@
 		aspect-ratio: 4 / 3;
 		padding: 0;
 		appearance: none;
-		background: none;
+		background: var(--surface-variant);
 		font: inherit;
 		color: inherit;
-		border: 1px solid var(--outline);
+		border: none;
 		border-radius: 0.5em;
 		overflow: hidden;
 		cursor: pointer;
-		transition:
-			border-color 100ms ease-out,
-			box-shadow 100ms ease-out;
+	}
+
+	.thumb:where(:hover, :focus-visible) {
+		outline: 3px solid var(--outline);
 	}
 
 	.thumb.selected {
-		border-color: var(--primary);
-		box-shadow: 0 0 0 1px var(--primary);
+		outline: 3px solid var(--primary);
 	}
 
 	@media only screen and (max-width: 900px) {

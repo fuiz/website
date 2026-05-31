@@ -17,7 +17,11 @@
 		"lint:fix": "biome format --write && biome check --write && eslint . --fix",
 		"format": "biome format --write",
 		"test": "vitest run",
-		"test:watch": "vitest"
+		"test:watch": "vitest",
+		"lang": "bun run lang:check && bun run lang:untranslated && bun run lang:unused",
+		"lang:check": "node scripts/check-messages.js",
+		"lang:untranslated": "node scripts/find-untranslated.js",
+		"lang:unused": "node scripts/find-unused-messages.js"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.14",

@@ -3,16 +3,20 @@
 	import { flip } from 'svelte/animate';
 	import { type DndEvent, dndzone } from 'svelte-dnd-action';
 	import { limits } from '$lib/clientOnly';
+	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 	import Modal from '$lib/feedback/Modal.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Slide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
+	import CheckBoxOutline from '~icons/material-symbols/check-box-outline';
 	import ChevronLeft from '~icons/material-symbols/chevron-left';
 	import ChevronRight from '~icons/material-symbols/chevron-right';
 	import FirstPage from '~icons/material-symbols/first-page';
+	import KeyboardOutline from '~icons/material-symbols/keyboard-outline';
 	import LastPage from '~icons/material-symbols/last-page';
 	import MagnifyDocked from '~icons/material-symbols/magnify-docked';
+	import SwapVert from '~icons/material-symbols/swap-vert';
 	import Thumbnail from './Thumbnail.svelte';
 
 	let {
@@ -75,8 +79,18 @@
 	}
 
 	let addModal = $state<Modal>();
+	let deleteDialog = $state<ConfirmationDialog>();
+	let pendingDeleteIndex = $state<number | null>(null);
 
-	async function onDelete(index: number) {
+	function onDelete(index: number) {
+		pendingDeleteIndex = index;
+		deleteDialog?.open();
+	}
+
+	async function confirmDelete() {
+		if (pendingDeleteIndex === null) return;
+		const index = pendingDeleteIndex;
+		pendingDeleteIndex = null;
 		slides.splice(index, 1);
 		if (index <= selectedSlideIndex) {
 			await changeSelected(selectedSlideIndex - 1);
@@ -170,7 +184,9 @@
 <Modal bind:this={addModal}>
 	<h2 class="modal-title">{m.add_slide()}</h2>
 	<div class="slide-types">
-		<FancyButton
+		<button
+			type="button"
+			class="slide-type"
 			onclick={() => {
 				addModal?.close();
 				slides.push({
@@ -188,9 +204,15 @@
 				changeSelected(slides.length - 1);
 			}}
 		>
-			<div class="slide-type-label">{m.multiple_choice()}</div>
-		</FancyButton>
-		<FancyButton
+			<div class="slide-type-icon"><CheckBoxOutline height="1.4em" /></div>
+			<div class="slide-type-body">
+				<div class="slide-type-title">{m.multiple_choice()}</div>
+				<div class="slide-type-desc">{m.multiple_choice_desc()}</div>
+			</div>
+		</button>
+		<button
+			type="button"
+			class="slide-type"
 			onclick={() => {
 				addModal?.close();
 				slides.push({
@@ -208,9 +230,15 @@
 				changeSelected(slides.length - 1);
 			}}
 		>
-			<div class="slide-type-label">{m.short_answer()}</div>
-		</FancyButton>
-		<FancyButton
+			<div class="slide-type-icon"><KeyboardOutline height="1.4em" /></div>
+			<div class="slide-type-body">
+				<div class="slide-type-title">{m.short_answer()}</div>
+				<div class="slide-type-desc">{m.short_answer_desc()}</div>
+			</div>
+		</button>
+		<button
+			type="button"
+			class="slide-type"
 			onclick={() => {
 				addModal?.close();
 				slides.push({
@@ -228,10 +256,22 @@
 				changeSelected(slides.length - 1);
 			}}
 		>
-			<div class="slide-type-label">{m.puzzle()}</div>
-		</FancyButton>
+			<div class="slide-type-icon"><SwapVert height="1.4em" /></div>
+			<div class="slide-type-body">
+				<div class="slide-type-title">{m.puzzle()}</div>
+				<div class="slide-type-desc">{m.puzzle_desc()}</div>
+			</div>
+		</button>
 	</div>
 </Modal>
+
+<ConfirmationDialog
+	bind:this={deleteDialog}
+	title={m.delete_forever()}
+	message=""
+	confirmText={m.delete_confirm()}
+	onConfirm={confirmDelete}
+/>
 
 <style>
 	#sidebar {
@@ -319,12 +359,57 @@
 	.slide-types {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5em;
+		gap: 0.4em;
 	}
 
-	.slide-type-label {
-		padding: 0.2em 0.6em;
+	.slide-type {
+		appearance: none;
+		font: inherit;
+		color: inherit;
+		text-align: start;
+		background: var(--surface);
+		border: 1px solid var(--outline);
+		border-radius: 0.5em;
+		padding: 0.6em 0.7em;
+		cursor: pointer;
+		display: grid;
+		grid-template-columns: 1.8em 1fr;
+		gap: 0.6em;
+		align-items: center;
+		transition:
+			border-color 100ms ease-out,
+			background 100ms ease-out,
+			color 100ms ease-out;
+	}
+
+	.slide-type:where(:hover, :focus-visible) {
+		border-color: var(--primary);
+		background: color-mix(in srgb, var(--primary) 6%, transparent);
+		color: var(--primary);
+		outline: none;
+	}
+
+	.slide-type-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.slide-type-title {
 		font-family: var(--alternative-font);
+		font-weight: 700;
+		font-size: 0.95em;
+	}
+
+	.slide-type-desc {
+		font-size: 0.75em;
+		opacity: 0.65;
+		line-height: 1.3;
+		margin-top: 0.1em;
+	}
+
+	.slide-type:where(:hover, :focus-visible) .slide-type-desc {
+		opacity: 0.85;
 	}
 
 	@media only screen and (max-width: 900px) {
