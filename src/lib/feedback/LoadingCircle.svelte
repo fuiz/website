@@ -2,25 +2,29 @@
 	let { borderWidth = 4 }: { borderWidth?: number } = $props();
 </script>
 
-<div style:--border-width="{borderWidth}px"></div>
+<svg style:--border-width="{borderWidth}px" aria-hidden="true">
+	<circle fill="none" stroke="currentColor" pathLength="100" stroke-dasharray="75 25" />
+</svg>
 
 <style>
-	div {
-		box-sizing: border-box;
-		border: var(--border-width) solid;
-		border-radius: 50%;
-		border-top: var(--border-width) solid transparent;
+	svg {
+		display: block;
 		width: 100%;
 		height: 100%;
+		overflow: visible;
+	}
+
+	circle {
+		cx: 50%;
+		cy: 50%;
+		r: calc(50% - var(--border-width) / 2);
+		stroke-width: var(--border-width);
 		animation: spin 1s linear infinite;
 	}
 
 	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
+		to {
+			stroke-dashoffset: -100;
 		}
 	}
 </style>
