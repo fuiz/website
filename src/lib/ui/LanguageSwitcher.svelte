@@ -53,6 +53,9 @@
 		color: inherit;
 		inset: unset;
 		position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+		box-shadow:
+			0 1px 2px color-mix(in srgb, var(--on-surface) 8%, transparent),
+			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
 	}
 
 	[popover].up {

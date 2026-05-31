@@ -26,7 +26,7 @@
 
 <style>
 	dialog {
-		border: none;
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		padding: 1em;
 		margin: auto;
@@ -35,7 +35,9 @@
 		box-sizing: border-box;
 		background: var(--surface);
 		color: inherit;
-		box-shadow: 0 0.5em 1.5em #00000060;
+		box-shadow:
+			0 1px 2px color-mix(in srgb, var(--on-surface) 8%, transparent),
+			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
 	}
 
 	dialog::backdrop {

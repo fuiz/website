@@ -189,13 +189,16 @@
 
 	:global([popover].fuiz-popover) {
 		background-color: var(--surface);
-		border: 3px solid;
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
-		padding: 0em 0.4em;
+		padding: 0.4em 0.7em;
 		font-size: inherit;
 		color: inherit;
 		margin: 0;
 		inset: auto;
 		position-area: top;
+		box-shadow:
+			0 1px 2px color-mix(in srgb, var(--on-surface) 8%, transparent),
+			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
 	}
 </style>

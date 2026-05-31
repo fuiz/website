@@ -3,6 +3,7 @@
 	import { flip } from 'svelte/animate';
 	import { type DndEvent, dndzone } from 'svelte-dnd-action';
 	import { limits } from '$lib/clientOnly';
+	import Modal from '$lib/feedback/Modal.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Slide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
@@ -73,7 +74,7 @@
 		});
 	}
 
-	let popoverElement = $state<HTMLElement>();
+	let addModal = $state<Modal>();
 
 	async function onDelete(index: number) {
 		slides.splice(index, 1);
@@ -83,35 +84,20 @@
 	}
 </script>
 
-<div id="sidebar" style:display="flex" style:flex-direction="column">
-	<div
-		class="switched"
-		style:flex="1"
-		style:display="flex"
-		style:align-items="stretch"
-		style:justify-content="space-between"
-		style:box-sizing="border-box"
-	>
-		<div style:flex="1" style:flex-direction="column" style:box-sizing="border-box">
+<div id="sidebar">
+	<div class="sidebar-body switched">
+		<div class="slides-wrap">
 			<section
 				bind:this={section}
 				use:dndzone={{ items: slides, flipDurationMs: 100, dropTargetStyle: {} }}
-				class="switched"
-				style:display="flex"
-				style:width="0"
-				style:min-height="100%"
-				style:min-width="100%"
-				style:gap="0.2em"
-				style:overflow="auto"
+				class="slides switched"
 				onconsider={handleConsider}
 				onfinalize={handleFinalize}
 			>
 				{#each slides as slide, index (slide.id)}
 					<div
 						id="slide_{index}"
-						style:padding="0.4em"
-						style:box-sizing="border-box"
-						style:height="fit-content"
+						class="slide-wrap"
 						animate:flip={{ duration: 300 }}
 					>
 						<Thumbnail
@@ -133,90 +119,11 @@
 			</section>
 		</div>
 		<div id="add-button">
-			<div
-				popover="auto"
-				bind:this={popoverElement}
-				style:border="4px solid currentColor"
-				style:background="var(--surface)"
-				style:border-radius="1em"
-				style:padding="1em"
-			>
-				<FancyButton
-					onclick={() => {
-						popoverElement?.hidePopover();
-						slides.push({
-							MultipleChoice: {
-								title: '',
-								media: undefined,
-								introduce_question: limits.fuiz.multipleChoice.introduceQuestion,
-								time_limit: limits.fuiz.multipleChoice.defaultTimeLimit,
-								points_awarded: limits.fuiz.multipleChoice.pointsAwarded,
-								answers: []
-							},
-							id: Date.now()
-						});
-						slides = slides;
-						changeSelected(slides.length - 1);
-					}}
-				>
-					<div style:padding="0.2em 0.6em">
-						{m.multiple_choice()}
-					</div>
-				</FancyButton>
-				<FancyButton
-					onclick={() => {
-						popoverElement?.hidePopover();
-						slides.push({
-							TypeAnswer: {
-								title: '',
-								introduce_question: limits.fuiz.typeAnswer.introduceQuestion,
-								time_limit: limits.fuiz.typeAnswer.defaultTimeLimit,
-								points_awarded: limits.fuiz.typeAnswer.pointsAwarded,
-								case_sensitive: false,
-								answers: []
-							},
-							id: Date.now()
-						});
-						slides = slides;
-						changeSelected(slides.length - 1);
-					}}
-				>
-					<div style:padding="0.2em 0.6em">{m.short_answer()}</div>
-				</FancyButton>
-				<FancyButton
-					onclick={() => {
-						popoverElement?.hidePopover();
-						slides.push({
-							Order: {
-								title: '',
-								introduce_question: limits.fuiz.order.introduceQuestion,
-								time_limit: limits.fuiz.order.defaultTimeLimit,
-								points_awarded: limits.fuiz.order.pointsAwarded,
-								axis_labels: { from: '', to: '' },
-								answers: []
-							},
-							id: Date.now()
-						});
-						slides = slides;
-						changeSelected(slides.length - 1);
-					}}
-				>
-					<div style:padding="0.2em 0.6em">{m.puzzle()}</div>
-				</FancyButton>
-			</div>
 			<FancyButton
 				disabled={slides.length >= limits.fuiz.maxSlidesCount}
-				onclick={() => popoverElement?.showPopover()}
+				onclick={() => addModal?.open()}
 			>
-				<div
-					style:padding="0.2em 0.4em"
-					style:height="100%"
-					style:box-sizing="border-box"
-					style:display="flex"
-					style:align-items="center"
-					style:justify-content="center"
-					style:gap="0.2em"
-				>
+				<div class="add-label">
 					<MagnifyDocked height="1em" title={m.add_slide()} />
 					<div class="would-be-hidden">{m.add_slide()}</div>
 				</div>
@@ -238,13 +145,7 @@
 			>
 		</div>
 		<div>
-			<div
-				style:height="1.2em"
-				style:aspect-ratio="1/1"
-				style:padding="0.2em"
-				style:text-align="center"
-				style:font-weight="bold"
-			>
+			<div class="counter">
 				{selectedSlideIndex + 1}
 			</div>
 		</div>
@@ -266,10 +167,114 @@
 	</div>
 </div>
 
+<Modal bind:this={addModal}>
+	<h2 class="modal-title">{m.add_slide()}</h2>
+	<div class="slide-types">
+		<FancyButton
+			onclick={() => {
+				addModal?.close();
+				slides.push({
+					MultipleChoice: {
+						title: '',
+						media: undefined,
+						introduce_question: limits.fuiz.multipleChoice.introduceQuestion,
+						time_limit: limits.fuiz.multipleChoice.defaultTimeLimit,
+						points_awarded: limits.fuiz.multipleChoice.pointsAwarded,
+						answers: []
+					},
+					id: Date.now()
+				});
+				slides = slides;
+				changeSelected(slides.length - 1);
+			}}
+		>
+			<div class="slide-type-label">{m.multiple_choice()}</div>
+		</FancyButton>
+		<FancyButton
+			onclick={() => {
+				addModal?.close();
+				slides.push({
+					TypeAnswer: {
+						title: '',
+						introduce_question: limits.fuiz.typeAnswer.introduceQuestion,
+						time_limit: limits.fuiz.typeAnswer.defaultTimeLimit,
+						points_awarded: limits.fuiz.typeAnswer.pointsAwarded,
+						case_sensitive: false,
+						answers: []
+					},
+					id: Date.now()
+				});
+				slides = slides;
+				changeSelected(slides.length - 1);
+			}}
+		>
+			<div class="slide-type-label">{m.short_answer()}</div>
+		</FancyButton>
+		<FancyButton
+			onclick={() => {
+				addModal?.close();
+				slides.push({
+					Order: {
+						title: '',
+						introduce_question: limits.fuiz.order.introduceQuestion,
+						time_limit: limits.fuiz.order.defaultTimeLimit,
+						points_awarded: limits.fuiz.order.pointsAwarded,
+						axis_labels: { from: '', to: '' },
+						answers: []
+					},
+					id: Date.now()
+				});
+				slides = slides;
+				changeSelected(slides.length - 1);
+			}}
+		>
+			<div class="slide-type-label">{m.puzzle()}</div>
+		</FancyButton>
+	</div>
+</Modal>
+
 <style>
 	#sidebar {
 		width: 8em;
 		border-inline-end: 0.05em solid #00000020;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.sidebar-body {
+		flex: 1;
+		display: flex;
+		align-items: stretch;
+		justify-content: space-between;
+		box-sizing: border-box;
+	}
+
+	.slides-wrap {
+		flex: 1;
+		box-sizing: border-box;
+	}
+
+	.slides {
+		display: flex;
+		width: 0;
+		min-width: 100%;
+		min-height: 100%;
+		gap: 0.2em;
+		overflow: auto;
+	}
+
+	.slide-wrap {
+		padding: 0.4em;
+		box-sizing: border-box;
+		height: fit-content;
+	}
+
+	.counter {
+		height: 1.2em;
+		aspect-ratio: 1/1;
+		padding: 0.2em;
+		text-align: center;
+		font-weight: bold;
 	}
 
 	.switched {
@@ -295,8 +300,31 @@
 		height: 0;
 	}
 
-	[popover]::backdrop {
-		background: color-mix(in srgb, currentColor 20%, transparent);
+	.add-label {
+		padding: 0.2em 0.4em;
+		height: 100%;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.2em;
+	}
+
+	.modal-title {
+		font-family: var(--alternative-font);
+		margin: 0 0 0.7em;
+		font-size: 1.25em;
+	}
+
+	.slide-types {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+
+	.slide-type-label {
+		padding: 0.2em 0.6em;
+		font-family: var(--alternative-font);
 	}
 
 	@media only screen and (max-width: 900px) {
