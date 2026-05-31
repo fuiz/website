@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { buttonColors } from '$lib/clientOnly';
-	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Media } from '$lib/types';
-	import IconButton from '$lib/ui/IconButton.svelte';
-	import Textarea from '$lib/ui/Textarea.svelte';
 	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import HelpOutline from '~icons/material-symbols/help-outline';
+	import EditOutline from '~icons/material-symbols/edit-outline';
 
 	let {
 		media = $bindable()
@@ -16,6 +13,9 @@
 	} = $props();
 
 	let dragOver = $state(false);
+	let editingAlt = $state(false);
+	let altDraft = $state('');
+	let altInput = $state<HTMLInputElement>();
 
 	function load_from_input() {
 		const target = document.querySelector('input[type=file]');
@@ -45,192 +45,258 @@
 			};
 		});
 	}
+
+	function startEditAlt(currentAlt: string) {
+		altDraft = currentAlt;
+		editingAlt = true;
+	}
+
+	function commitEditAlt() {
+		if (media && 'Image' in media && 'Base64' in media.Image) {
+			media.Image.Base64.alt = altDraft.trim();
+		}
+		editingAlt = false;
+	}
+
+	function cancelEditAlt() {
+		editingAlt = false;
+	}
+
+	$effect(() => {
+		if (editingAlt) altInput?.focus();
+	});
 </script>
 
 {#if !media}
-	<div class="empty-wrap">
-		<input
-			class="file-input"
-			type="file"
-			name="image_input"
-			accept="image/png, image/jpeg, image/gif, image/webp"
-			id="image_input"
-			onchange={load_from_input}
-		/>
-		<button
-			class="upload-button"
-			ondragover={(e) => {
-				e.preventDefault();
-				dragOver = true;
-			}}
-			ondragenter={() => {
-				dragOver = true;
-			}}
-			ondragleave={() => {
-				dragOver = false;
-			}}
-			ondrop={(e) => {
-				e.preventDefault();
-				dragOver = false;
-				const files = e.dataTransfer?.files ?? undefined;
-				if (files && files.length > 0) {
-					loadFile(e.dataTransfer?.files?.item(0) ?? undefined);
-				}
-			}}
-		>
-			<div class="dropzone" class:drag-over={dragOver} style:--drag-bg={buttonColors[0][0]}>
-				<label class="upload-label" for="image_input">
-					<AddPhotoAlternateOutline height="1em" title={m.open_image()} />
-				</label>
-			</div>
-		</button>
-	</div>
+	<input
+		class="file-input"
+		type="file"
+		name="image_input"
+		accept="image/png, image/jpeg, image/gif, image/webp"
+		id="image_input"
+		onchange={load_from_input}
+	/>
+	<label
+		for="image_input"
+		class="dropzone"
+		class:drag-over={dragOver}
+		style:--drag-bg={buttonColors[0][0]}
+		ondragover={(e) => {
+			e.preventDefault();
+			dragOver = true;
+		}}
+		ondragenter={() => {
+			dragOver = true;
+		}}
+		ondragleave={() => {
+			dragOver = false;
+		}}
+		ondrop={(e) => {
+			e.preventDefault();
+			dragOver = false;
+			const files = e.dataTransfer?.files ?? undefined;
+			if (files && files.length > 0) {
+				loadFile(e.dataTransfer?.files?.item(0) ?? undefined);
+			}
+		}}
+	>
+		<AddPhotoAlternateOutline height="1.6em" />
+		<span>{m.open_image()}</span>
+	</label>
 {:else if 'Image' in media}
 	{#if 'Base64' in media.Image}
+		{@const currentAlt = media.Image.Base64.alt}
 		<div class="image-card">
-			<div class="image-header">
-				<div class="image-title">{m.local_image()}</div>
-				<IconButton
-					alt={m.remove()}
+			<div class="image-frame">
+				<img class="image" src={media.Image.Base64.data} alt={currentAlt} />
+				<button
+					type="button"
+					class="remove-btn"
+					aria-label={m.remove()}
 					onclick={() => {
 						media = undefined;
+						editingAlt = false;
 					}}
 				>
-					<DeleteOutline height="1.2em" />
-				</IconButton>
+					<DeleteOutline height="1em" />
+				</button>
 			</div>
-			<div class="image-body">
-				<div class="image-preview">
-					<MediaDisplay {media} fit="contain" />
-				</div>
-				<div class="alt-row">
-					<div class="alt-input">
-						<Textarea
-							id="alt"
-							required={false}
-							disabled={false}
-							maxHeight="5em"
-							bind:value={media.Image.Base64.alt}
-							placeholder={m.image_alt()}
-						/>
-					</div>
-					<div>
-						<IconButton alt={m.image_alt()} popovertarget="alt-help-popover">
-							<HelpOutline height="1.2em" />
-						</IconButton>
-						<div id="alt-help-popover" popover class="fuiz-popover">{m.image_alt_desc()}</div>
-					</div>
-				</div>
-			</div>
+			{#if editingAlt}
+				<input
+					bind:this={altInput}
+					class="alt-input"
+					type="text"
+					bind:value={altDraft}
+					placeholder={m.image_alt()}
+					onblur={commitEditAlt}
+					onkeydown={(e) => {
+						if (e.key === 'Enter') {
+							e.preventDefault();
+							commitEditAlt();
+						} else if (e.key === 'Escape') {
+							e.preventDefault();
+							cancelEditAlt();
+						}
+					}}
+				/>
+			{:else}
+				<button type="button" class="alt-caption" onclick={() => startEditAlt(currentAlt)}>
+					<EditOutline height="0.85em" />
+					<span class="alt-text">
+						{#if currentAlt}
+							<em>{currentAlt}</em>
+						{:else}
+							<span class="placeholder">{m.image_alt()}</span>
+						{/if}
+					</span>
+				</button>
+			{/if}
 		</div>
 	{/if}
 {/if}
 
 <style>
-	.empty-wrap {
-		display: flex;
-		justify-content: center;
-	}
-
 	.file-input {
 		display: none;
 	}
 
-	.upload-button {
-		appearance: none;
-		color: inherit;
-		border: none;
-		padding: 0;
-		font: inherit;
-		background: none;
-	}
-
 	.dropzone {
-		aspect-ratio: 1;
-		width: 2em;
-		background: transparent;
+		aspect-ratio: 16 / 9;
+		width: 100%;
+		max-width: 40ch;
+		margin: 0 auto;
+		background: color-mix(in srgb, var(--on-surface) 4%, transparent);
 		border: 1px dashed var(--outline);
-		border-radius: 0.2em;
-		padding: 0.2em;
+		border-radius: 0.5em;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.4em;
-		color: color-mix(in srgb, currentColor 50%, transparent);
+		justify-content: center;
+		gap: 0.3em;
+		font-size: 0.9em;
+		color: color-mix(in srgb, currentColor 65%, transparent);
+		cursor: pointer;
 		transition:
 			background 200ms,
 			border-color 200ms,
 			color 200ms;
 	}
 
+	.dropzone:hover {
+		border-color: var(--primary);
+		color: var(--primary);
+	}
+
 	.dropzone.drag-over {
 		background: var(--drag-bg);
 		border-color: #fff;
-		color: inherit;
-	}
-
-	.upload-label {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		cursor: pointer;
-		justify-content: center;
+		color: #fff;
 	}
 
 	.image-card {
 		display: flex;
 		flex-direction: column;
-		border: 1px solid var(--outline);
-		flex: 1;
-		border-radius: 0.7em;
-		gap: 0.4em;
-		padding: 0.3em;
-		box-sizing: border-box;
+		gap: 0.3em;
 		max-width: 40ch;
-		min-width: 15ch;
+		min-width: 8ch;
 		margin: auto;
 	}
 
-	.image-header {
-		display: flex;
-		align-items: center;
-	}
-
-	.image-title {
-		flex: 1;
-		text-align: center;
-		font-family: var(--alternative-font);
-	}
-
-	.image-body {
-		flex-direction: column;
-		align-items: stretch;
-		display: flex;
-		gap: 0.4em;
-	}
-
-	.image-preview {
-		width: 100%;
-		height: 100%;
-		max-width: 10em;
-		min-width: 5em;
+	.image-frame {
 		position: relative;
-		max-height: 10em;
-		display: flex;
-		flex-direction: column;
-		overflow: auto;
-		margin: auto;
-	}
-
-	.alt-row {
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		justify-content: center;
+		align-self: center;
+		width: fit-content;
+		max-width: 100%;
+		min-width: 6em;
+		min-height: 6em;
+		background: color-mix(in srgb, var(--on-surface) 10%, transparent);
+		border-radius: 0.5em;
+		overflow: hidden;
+	}
+
+	.image {
+		display: block;
+		max-width: 100%;
+		max-height: 14em;
+		width: auto;
+		height: auto;
+	}
+
+	.remove-btn {
+		position: absolute;
+		top: 0.3em;
+		right: 0.3em;
+		appearance: none;
+		font: inherit;
+		background: rgba(0, 0, 0, 0.55);
+		color: white;
+		border: none;
+		border-radius: 999px;
+		width: 1.8em;
+		height: 1.8em;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: background 100ms ease-out;
+	}
+
+	.remove-btn:hover {
+		background: rgba(0, 0, 0, 0.75);
+	}
+
+	.alt-caption {
+		appearance: none;
+		font: inherit;
+		color: inherit;
+		background: none;
+		border: none;
+		padding: 0.2em 0.3em;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		font-size: 0.8em;
+		opacity: 0.7;
+		cursor: pointer;
+		text-align: start;
+		align-self: center;
+		max-width: 100%;
+		transition:
+			opacity 100ms ease-out,
+			color 100ms ease-out;
+	}
+
+	.alt-caption:hover {
+		opacity: 1;
+		color: var(--primary);
+	}
+
+	.alt-text em {
+		font-style: italic;
+	}
+
+	.alt-text .placeholder {
+		font-style: italic;
+		opacity: 0.7;
 	}
 
 	.alt-input {
-		flex: 1;
+		appearance: none;
+		font: inherit;
+		font-size: 0.85em;
+		font-style: italic;
+		color: inherit;
+		background: color-mix(in srgb, var(--on-surface) 4%, transparent);
+		border: 1px solid var(--primary);
+		border-radius: 0.35em;
+		padding: 0.3em 0.5em;
+		outline: none;
+		align-self: stretch;
+		text-align: center;
+		box-sizing: border-box;
 	}
 </style>

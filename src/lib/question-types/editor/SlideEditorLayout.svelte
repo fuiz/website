@@ -13,9 +13,9 @@
 </script>
 
 <div class="editor">
-	<div class="header-row">
-		<div class="media-cell">{@render media?.()}</div>
+	<div class="header">
 		<div class="title-cell">{@render title?.()}</div>
+		<div class="media-cell">{@render media?.()}</div>
 	</div>
 	{@render children?.()}
 </div>
@@ -25,33 +25,28 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 0.2em;
+		gap: 0.6em;
 		padding: 0.6em 0.4em 0.4em;
 		align-items: center;
 		justify-content: space-between;
 	}
 
-	.header-row {
+	.header {
 		display: flex;
-		flex-wrap: wrap-reverse;
+		flex-direction: column;
+		gap: 0.5em;
 		width: 100%;
-		justify-content: center;
-		align-items: end;
-		max-width: 30ch;
-		gap: 0.2em;
+		max-width: 32ch;
+	}
+
+	.title-cell {
+		width: 100%;
+		text-align: center;
 	}
 
 	.media-cell {
 		display: flex;
-		align-items: center;
 		justify-content: center;
-	}
-
-	.title-cell {
-		max-width: 25ch;
-		flex: 1;
-		min-width: fit-content;
-		padding-top: 0.5em;
-		overflow: auto;
+		width: 100%;
 	}
 </style>
