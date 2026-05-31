@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { limits } from '$lib/clientOnly';
+	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { MultipleChoiceSlide } from '$lib/types';
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import Answers from './Answers.svelte';
-	import MediaChooser from './MediaChooser.svelte';
 
 	let {
 		slide = $bindable()

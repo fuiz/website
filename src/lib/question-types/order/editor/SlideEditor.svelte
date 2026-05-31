@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { buttonColors, limits } from '$lib/clientOnly';
+	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { OrderSlide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
@@ -10,7 +11,6 @@
 	import Add from '~icons/material-symbols/add';
 	import ArrowDownward from '~icons/material-symbols/arrow-downward';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import MediaChooser from './MediaChooser.svelte';
 
 	let {
 		slide = $bindable()

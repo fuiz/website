@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { limits } from '$lib/clientOnly';
+	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { TypeAnswer } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
@@ -7,7 +8,6 @@
 	import Textarea from '$lib/ui/Textarea.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
-	import MediaChooser from './MediaChooser.svelte';
 
 	let {
 		slide = $bindable()

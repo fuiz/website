@@ -1,11 +1,10 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
+	import McqSlideEditor from '$lib/question-types/mcq/editor/SlideEditor.svelte';
+	import OrderSlideEditor from '$lib/question-types/order/editor/SlideEditor.svelte';
+	import TypeAnswerSlideEditor from '$lib/question-types/type-answer/editor/SlideEditor.svelte';
 	import type { Slide } from '$lib/types';
-
 	import GhostIcon from '~icons/custom/ghost';
-	import MultipleChoiceSlideEditor from './MultipleChoiceSlideEditor.svelte';
-	import OrderSlideEditor from './OrderSlideEditor.svelte';
-	import TypeAnswerSlideEditor from './TypeAnswerSlideEditor.svelte';
 
 	let {
 		slide = $bindable()
@@ -29,7 +28,7 @@
 		{m.no_slides()}
 	</div>
 {:else if 'MultipleChoice' in slide}
-	<MultipleChoiceSlideEditor bind:slide={slide.MultipleChoice} />
+	<McqSlideEditor bind:slide={slide.MultipleChoice} />
 {:else if 'Order' in slide}
 	<OrderSlideEditor bind:slide={slide.Order} />
 {:else}
