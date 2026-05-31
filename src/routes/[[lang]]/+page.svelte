@@ -356,7 +356,7 @@
 	}
 
 	.slide-container {
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 1em 1em 1.25em 1.25em;
 		position: relative;
 		overflow: hidden;

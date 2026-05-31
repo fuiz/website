@@ -46,8 +46,8 @@
 		font: inherit;
 		color: inherit;
 		background: none;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 25%, transparent);
-		border-radius: 999px;
+		border: 1px solid var(--outline);
+		border-radius: 0.7em;
 		padding: 0.35em 0.5em 0.35em 0.8em;
 		cursor: pointer;
 		transition:

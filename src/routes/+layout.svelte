@@ -70,7 +70,7 @@
 		--on-surface: #241f31;
 		--surface-variant: #ede7df;
 		--on-surface-variant: #4d4843;
-		--outline: #7f7a74;
+		--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
 
 		/* primary (brand red) */
 		--primary: #d4131b;
@@ -99,7 +99,7 @@
 			--on-surface: #fffbf5;
 			--surface-variant: #3d3849;
 			--on-surface-variant: #c9c4bf;
-			--outline: #938e89;
+			--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
 
 			--primary: #d4131b;
 			--on-primary: #ffffff;
@@ -123,7 +123,7 @@
 		--on-surface: #241f31;
 		--surface-variant: #ede7df;
 		--on-surface-variant: #4d4843;
-		--outline: #7f7a74;
+		--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
 
 		--primary: #d4131b;
 		--on-primary: #ffffff;
@@ -148,7 +148,7 @@
 		--on-surface: #fffbf5;
 		--surface-variant: #3d3849;
 		--on-surface-variant: #c9c4bf;
-		--outline: #938e89;
+		--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
 
 		--primary: #d4131b;
 		--on-primary: #ffffff;

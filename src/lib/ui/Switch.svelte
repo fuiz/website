@@ -125,7 +125,7 @@
 		width: 0.7em;
 		height: 0.7em;
 		border-radius: 999px;
-		background: var(--outline);
+		background: var(--on-surface-variant);
 		display: flex;
 		align-items: center;
 		justify-content: center;

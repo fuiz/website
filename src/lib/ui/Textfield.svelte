@@ -106,7 +106,7 @@
 
 	input {
 		background: none;
-		border: 2px solid #a9a8aa;
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		width: 100%;
 		color: inherit;

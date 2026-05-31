@@ -295,7 +295,7 @@
 	}
 
 	.filter-group {
-		border: 1px solid color-mix(in srgb, var(--on-surface) 18%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.6em;
 		background: var(--surface);
 		overflow: hidden;
@@ -368,7 +368,7 @@
 		align-items: center;
 		gap: 0.35em;
 		padding: 0.3em 0.5em;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.4em;
 		color: color-mix(in srgb, var(--on-surface) 60%, transparent);
 	}

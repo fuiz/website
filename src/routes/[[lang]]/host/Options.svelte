@@ -287,7 +287,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.6em;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		background: var(--surface);
 		padding: 0.6em 0.7em;
@@ -320,7 +320,7 @@
 		text-align: start;
 		cursor: pointer;
 		padding: 0.6em 0.7em;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.6em;
 		background: var(--surface);
 		transition: border-color 150ms, background 150ms;

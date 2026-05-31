@@ -245,7 +245,7 @@
 		max-width: 30ch;
 		flex: 1;
 		background: var(--surface);
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		overflow: hidden;
 		min-width: fit-content;
@@ -276,7 +276,7 @@
 		font-weight: 600;
 		background: var(--surface);
 		color: inherit;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.5em;
 		padding: 0.3em 0.7em;
 		cursor: pointer;
@@ -303,7 +303,7 @@
 		display: flex;
 		flex-direction: column;
 		background: var(--surface);
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		overflow: hidden;
 		min-height: 16em;

@@ -158,7 +158,7 @@
 	}
 
 	.card {
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		background: var(--surface);
 		padding: 0.5em 0.7em;

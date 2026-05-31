@@ -101,7 +101,7 @@
 		justify-content: center;
 		font-size: 3em;
 		font-weight: 800;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		background: var(--surface);
 		border-radius: 0.7em;
 		padding: 0.4em 0.8em;

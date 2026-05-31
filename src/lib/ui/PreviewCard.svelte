@@ -32,7 +32,7 @@
 		display: flex;
 		flex-direction: column;
 		background: var(--surface);
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		overflow: hidden;
 	}
@@ -44,7 +44,7 @@
 
 	.info {
 		padding: 0.4em 0.6em;
-		border-top: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border-top: 1px solid var(--outline);
 	}
 
 	.title {

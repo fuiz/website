@@ -94,7 +94,7 @@
 		height: 1.1em;
 		border-radius: 999px;
 		background: var(--surface);
-		border: 2px solid color-mix(in srgb, var(--on-surface) 25%, transparent);
+		border: 2px solid var(--outline);
 		box-sizing: border-box;
 	}
 

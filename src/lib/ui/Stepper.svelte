@@ -69,7 +69,7 @@
 		color: inherit;
 		font-family: var(--alternative-font);
 		font-weight: 800;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 25%, transparent);
+		border: 1px solid var(--outline);
 		width: 1.7em;
 		height: 1.7em;
 		border-radius: 999px;

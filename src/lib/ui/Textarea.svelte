@@ -85,7 +85,7 @@
 		background: none;
 		font: inherit;
 		font-weight: bold;
-		border: 2px solid #a9a8aa;
+		border: 1px solid var(--outline);
 		border-radius: 10px;
 		width: 100%;
 		color: inherit;

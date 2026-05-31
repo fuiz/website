@@ -104,7 +104,7 @@
 		position: fixed;
 		position-area: bottom span-left;
 		background: var(--surface);
-		border: 1px solid color-mix(in srgb, var(--on-surface) 20%, transparent);
+		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		padding: 0;
 		margin: 0.3em;
