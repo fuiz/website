@@ -204,7 +204,7 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 		'title = "Quiz \\"with\\" special\\nchars"\nslides = []\n'
 	],
 	[
-		'ReferencingOnlineFuiz — minimal',
+		'ReferencingOnlineFuiz: minimal',
 		{
 			config: { title: 'Online', slides: [] },
 			author: 'alice',
@@ -221,7 +221,7 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 		].join('\n')
 	],
 	[
-		'ReferencingOnlineFuiz — with subjects, grades, keywords',
+		'ReferencingOnlineFuiz: with subjects, grades, keywords',
 		{
 			config: { title: 'Geography Quiz', slides: [] },
 			author: 'bob',
@@ -244,7 +244,7 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 		].join('\n')
 	],
 	[
-		'ReferencingOnlineFuiz — with slides and media',
+		'ReferencingOnlineFuiz: with slides and media',
 		{
 			config: {
 				title: 'Full Online',
@@ -299,7 +299,7 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 		].join('\n')
 	],
 	[
-		'ReferencingOnlineFuiz — empty optional arrays',
+		'ReferencingOnlineFuiz: empty optional arrays',
 		{
 			config: { title: 'Bare', slides: [] },
 			author: 'dave',
@@ -324,11 +324,11 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 ];
 
 describe('stringifyToml', () => {
-	it.each(cases)('%s — serializes correctly', (_, input, expected) => {
+	it.each(cases)('%s: serializes correctly', (_, input, expected) => {
 		expect(stringifyToml(input)).toBe(expected);
 	});
 
-	it.each(cases)('%s — roundtrips through smol-toml parse', (_, input) => {
+	it.each(cases)('%s: roundtrips through smol-toml parse', (_, input) => {
 		expect(parse(stringifyToml(input))).toEqual(input);
 	});
 });

@@ -1,5 +1,5 @@
 // Curated list of ~90 content languages (BCP 47 codes).
-// Decoupled from the app's UI locales — a quiz can be authored in any language,
+// Decoupled from the app's UI locales: a quiz can be authored in any language,
 // regardless of which language the platform UI itself is offered in.
 export const CONTENT_LANGUAGES = [
 	'af',
