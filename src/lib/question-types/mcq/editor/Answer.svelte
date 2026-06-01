@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors, limits } from '$lib/clientOnly';
+	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { TextOrMedia } from '$lib/types';
 	import Checkbox from '$lib/ui/Checkbox.svelte';
@@ -23,18 +23,10 @@
 	} = $props();
 </script>
 
-<FancyButton
-	backgroundColor={buttonColors.at(index % buttonColors.length)?.[0]}
-	backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.[1]}
-	active={false}
->
+<FancyButton palette={index} active={false}>
 	<div class="row">
 		<div class="check-cell">
-			<Checkbox
-				{attention}
-				bind:value={correct}
-				color={buttonColors.at(index % buttonColors.length)?.[0]}
-			/>
+			<Checkbox {attention} bind:value={correct} />
 		</div>
 		<Textbox
 			bind:value={content.Text}

@@ -10,8 +10,6 @@
 		cancelText = m.cancel(),
 		confirmText,
 		onConfirm,
-		confirmButtonColor,
-		confirmButtonDeepColor,
 		checklist = []
 	}: {
 		title: string;
@@ -19,8 +17,6 @@
 		cancelText?: string;
 		confirmText: string;
 		onConfirm: () => void;
-		confirmButtonColor?: string;
-		confirmButtonDeepColor?: string;
 		checklist?: string[];
 	} = $props();
 
@@ -72,26 +68,14 @@
 	{/if}
 	<div class="actions">
 		<div class="action">
-			<FancyButton
-				type="button"
-				backgroundColor="var(--surface)"
-				backgroundDeepColor="currentcolor"
-				foregroundColor="currentcolor"
-				onclick={close}
-			>
+			<FancyButton type="button" palette="ghost" onclick={close}>
 				<div class="action-label">
 					{cancelText}
 				</div>
 			</FancyButton>
 		</div>
 		<div class="action">
-			<FancyButton
-				type="button"
-				onclick={handleConfirm}
-				disabled={!allChecked}
-				backgroundColor={confirmButtonColor}
-				backgroundDeepColor={confirmButtonDeepColor}
-			>
+			<FancyButton type="button" onclick={handleConfirm} disabled={!allChecked}>
 				<div class="action-label">
 					{confirmText}
 				</div>

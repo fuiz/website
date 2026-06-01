@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
+	import { buttonSymbols } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Check from '~icons/custom/check';
@@ -26,12 +26,7 @@
 </script>
 
 <div class="root" style:--opacity={opacity}>
-	<FancyButton
-		{onclick}
-		backgroundColor={buttonColors.at(index % buttonColors.length)?.at(0)}
-		backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.at(1)}
-		height="100%"
-	>
+	<FancyButton {onclick} palette={index} height="100%">
 		<div class="row">
 			<div id="icon" class="icon">
 				<buttonSymbol.icon title={buttonSymbol.label} height="1em" width="1em" />

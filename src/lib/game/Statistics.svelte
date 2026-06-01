@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
+	import { buttonSymbols, paletteClass } from '$lib/clientOnly';
 
 	let { statistics = [] }: { statistics?: { count: number; correct: boolean }[] } = $props();
 
@@ -8,13 +8,10 @@
 
 <div class="stats">
 	{#each statistics as { count, correct }, index (index)}
-		{@const buttonSymbol = buttonSymbols[index % buttonColors.length]}
-		{@const colors = buttonColors.at(index % buttonColors.length)}
+		{@const buttonSymbol = buttonSymbols[index % buttonSymbols.length]}
 		<div
-			class="bar-stack"
+			class={['bar-stack', paletteClass(index)]}
 			class:faded={!correct}
-			style:--color={colors?.at(0)}
-			style:--color-dark={colors?.at(1)}
 			style:--height-pct={maximum === 0 ? 0 : count / maximum}
 		>
 			<div class="symbol">
@@ -56,8 +53,8 @@
 		border-radius: 0.7em;
 		color: var(--palette-light);
 		padding: 0.3em 0.8em;
-		background: var(--color);
-		border: 0.15em solid var(--color-dark);
+		background: var(--btn-bg);
+		border: 0.15em solid var(--btn-deep);
 	}
 
 	.bar-fill {
@@ -68,8 +65,8 @@
 
 	.bar {
 		border-radius: 0.7em;
-		background: var(--color);
-		border: 0.15em solid var(--color-dark);
+		background: var(--btn-bg);
+		border: 0.15em solid var(--btn-deep);
 		height: max(1em, calc((100% - 2em) * var(--height-pct)));
 	}
 
@@ -77,6 +74,6 @@
 		display: flex;
 		justify-content: center;
 		font-family: var(--alternative-font);
-		color: var(--color);
+		color: var(--btn-bg);
 	}
 </style>

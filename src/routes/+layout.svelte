@@ -94,6 +94,24 @@
 		--palette-light: #fffbf5;
 		--palette-dark: #241f31;
 
+		/* answer-button palette (8 colors, paired bg + deep) */
+		--btn-bg-0: hsl(358, 84%, 45%);
+		--btn-deep-0: hsl(358, 84%, 35%);
+		--btn-bg-1: hsl(205, 84%, 30%);
+		--btn-deep-1: hsl(205, 84%, 20%);
+		--btn-bg-2: hsl(120, 83%, 18%);
+		--btn-deep-2: hsl(120, 83%, 8%);
+		--btn-bg-3: hsl(25, 84%, 48%);
+		--btn-deep-3: hsl(25, 84%, 38%);
+		--btn-bg-4: hsl(318, 84%, 25%);
+		--btn-deep-4: hsl(318, 84%, 15%);
+		--btn-bg-5: hsl(179, 84%, 32%);
+		--btn-deep-5: hsl(179, 84%, 22%);
+		--btn-bg-6: hsl(69, 84%, 40%);
+		--btn-deep-6: hsl(69, 84%, 30%);
+		--btn-bg-7: hsl(0, 0%, 20%);
+		--btn-deep-7: hsl(0, 0%, 10%);
+
 		@media (prefers-color-scheme: dark) {
 			--surface: #241f31;
 			--on-surface: #fffbf5;
@@ -185,6 +203,61 @@
 
 	:global(html) {
 		background: var(--surface);
+	}
+
+	:global(.palette-0) {
+		--btn-bg: var(--btn-bg-0);
+		--btn-deep: var(--btn-deep-0);
+	}
+	:global(.palette-1) {
+		--btn-bg: var(--btn-bg-1);
+		--btn-deep: var(--btn-deep-1);
+	}
+	:global(.palette-2) {
+		--btn-bg: var(--btn-bg-2);
+		--btn-deep: var(--btn-deep-2);
+	}
+	:global(.palette-3) {
+		--btn-bg: var(--btn-bg-3);
+		--btn-deep: var(--btn-deep-3);
+	}
+	:global(.palette-4) {
+		--btn-bg: var(--btn-bg-4);
+		--btn-deep: var(--btn-deep-4);
+	}
+	:global(.palette-5) {
+		--btn-bg: var(--btn-bg-5);
+		--btn-deep: var(--btn-deep-5);
+	}
+	:global(.palette-6) {
+		--btn-bg: var(--btn-bg-6);
+		--btn-deep: var(--btn-deep-6);
+	}
+	:global(.palette-7) {
+		--btn-bg: var(--btn-bg-7);
+		--btn-deep: var(--btn-deep-7);
+	}
+
+	/* named (non-numbered) palettes for CTAs that aren't part of the 8-color answer set */
+	:global(.palette-secondary) {
+		--btn-bg: var(--secondary);
+		--btn-deep: color-mix(in srgb, var(--secondary) 80%, black);
+		--btn-fg: var(--on-secondary);
+	}
+	:global(.palette-tertiary) {
+		--btn-bg: var(--tertiary);
+		--btn-deep: color-mix(in srgb, var(--tertiary) 80%, black);
+		--btn-fg: var(--on-tertiary);
+	}
+	:global(.palette-gitlab) {
+		--btn-bg: #fc6d26;
+		--btn-deep: #e24329;
+		--btn-fg: #ffffff;
+	}
+	:global(.palette-ghost) {
+		--btn-bg: var(--surface);
+		--btn-deep: currentcolor;
+		--btn-fg: currentcolor;
 	}
 
 	:global([popover].fuiz-popover) {

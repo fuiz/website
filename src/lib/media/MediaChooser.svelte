@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { buttonColors } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { Media } from '$lib/types';
 	import AddPhotoAlternateOutline from '~icons/material-symbols/add-photo-alternate-outline';
@@ -78,9 +77,8 @@
 	/>
 	<label
 		for="image_input"
-		class="dropzone"
+		class="dropzone palette-0"
 		class:drag-over={dragOver}
-		style:--drag-bg={buttonColors[0][0]}
 		ondragover={(e) => {
 			e.preventDefault();
 			dragOver = true;
@@ -189,7 +187,7 @@
 	}
 
 	.dropzone.drag-over {
-		background: var(--drag-bg);
+		background: var(--btn-bg);
 		border-color: #fff;
 		color: #fff;
 	}

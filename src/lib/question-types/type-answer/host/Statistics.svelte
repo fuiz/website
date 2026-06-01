@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { buttonColors } from '$lib/clientOnly';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import StatisticsLayout from '$lib/question-types/host/StatisticsLayout.svelte';
@@ -78,14 +77,9 @@
 						{/if}
 						{text}
 					</div>
-					<div class="bar-row" class:faded={!correct}>
+					<div class="bar-row palette-0" class:faded={!correct}>
 						<div class="track">
-							<div
-								class="bar"
-								style:--bar-bg={buttonColors[0][0]}
-								style:--bar-border={buttonColors[0][1]}
-								style:--width="{(count / maxCount) * 100}%"
-							>
+							<div class="bar" style:--width="{(count / maxCount) * 100}%">
 								<span class="bar-count">{count}</span>
 							</div>
 						</div>
@@ -153,8 +147,8 @@
 		height: 100%;
 		min-width: 1.6em;
 		width: var(--width);
-		background: var(--bar-bg);
-		border: 0.15em solid var(--bar-border);
+		background: var(--btn-bg);
+		border: 0.15em solid var(--btn-deep);
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;

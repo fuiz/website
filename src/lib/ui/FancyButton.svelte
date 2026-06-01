@@ -1,11 +1,10 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { Palette } from '$lib/clientOnly';
 	import FancyButtonBase from './FancyButtonBase.svelte';
 
 	let {
-		foregroundColor = undefined,
-		backgroundColor = undefined,
-		backgroundDeepColor = undefined,
+		palette = undefined,
 		disabled = false,
 		active = true,
 		type = undefined,
@@ -13,9 +12,7 @@
 		onclick = undefined,
 		children
 	}: {
-		foregroundColor?: string;
-		backgroundColor?: string;
-		backgroundDeepColor?: string;
+		palette?: Palette;
 		disabled?: boolean;
 		active?: boolean;
 		type?: 'button' | 'submit' | 'reset';
@@ -25,16 +22,7 @@
 	} = $props();
 </script>
 
-<FancyButtonBase
-	{type}
-	foregroundColor={foregroundColor ?? '#FFFFFF'}
-	backgroundColor={backgroundColor ?? 'var(--primary)'}
-	backgroundDeepColor={backgroundDeepColor ?? 'color-mix(in srgb, var(--primary) 80%, black)'}
-	{disabled}
-	{active}
-	{height}
-	{onclick}
->
+<FancyButtonBase {type} {palette} {disabled} {active} {height} {onclick}>
 	<div class="content">
 		{@render children?.()}
 	</div>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { buttonColors } from '$lib/clientOnly';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import { getImageInfo } from '$lib/media/imageInfo';
@@ -79,11 +78,7 @@
 			<FancyButton onclick={onImport}>
 				<div class="cta-label">{m.import_fuiz()}</div>
 			</FancyButton>
-			<FancyButton
-				onclick={onStart}
-				backgroundColor={buttonColors[1][0]}
-				backgroundDeepColor={buttonColors[1][1]}
-			>
+			<FancyButton onclick={onStart} palette={1}>
 				<div class="cta-label">{m.host()}</div>
 			</FancyButton>
 		</div>

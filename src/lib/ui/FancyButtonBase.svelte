@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { type Palette, paletteClass } from '$lib/clientOnly';
 
 	let {
-		foregroundColor,
-		backgroundColor,
-		backgroundDeepColor,
+		palette,
 		disabled = false,
 		active = true,
 		type = undefined,
@@ -12,9 +11,7 @@
 		children,
 		onclick
 	}: {
-		foregroundColor: string;
-		backgroundColor: string;
-		backgroundDeepColor: string;
+		palette?: Palette;
 		disabled?: boolean;
 		active?: boolean;
 		type?: 'button' | 'submit' | 'reset';
@@ -35,11 +32,8 @@
 {#if active}
 	<button
 		{type}
-		class="root"
+		class={['root', paletteClass(palette)]}
 		class:disabled
-		style:--bg={backgroundColor}
-		style:--bg-deep={backgroundDeepColor}
-		style:--fg={foregroundColor}
 		style:height={height ?? 'fit-content'}
 		disabled={disabled || !active}
 		onclick={() => {
@@ -50,11 +44,8 @@
 	</button>
 {:else}
 	<div
-		class="root"
+		class={['root', paletteClass(palette)]}
 		class:disabled
-		style:--bg={backgroundColor}
-		style:--bg-deep={backgroundDeepColor}
-		style:--fg={foregroundColor}
 		style:height={height ?? 'fit-content'}
 	>
 		{@render body()}
@@ -74,13 +65,13 @@
 		outline: none;
 	}
 
-	.disabled {
-		--bg: #737373;
-		--bg-deep: #636363;
+	.root.disabled {
+		--btn-bg: #737373;
+		--btn-deep: #636363;
 	}
 
 	.back {
-		background: var(--bg-deep);
+		background: var(--btn-deep, color-mix(in srgb, var(--primary) 80%, black));
 		transition: background 300ms linear;
 		border-radius: 0.7em;
 		transform: translateY(0);
@@ -89,11 +80,11 @@
 	}
 
 	.front {
-		background-color: var(--bg);
-		border: 0.1em solid var(--bg-deep);
+		background-color: var(--btn-bg, var(--primary));
+		border: 0.1em solid var(--btn-deep, color-mix(in srgb, var(--primary) 80%, black));
 		border-radius: 0.7em;
 		box-sizing: border-box;
-		color: var(--fg);
+		color: var(--btn-fg, #ffffff);
 		width: 100%;
 		height: 100%;
 		transform: translateY(-0.15em);

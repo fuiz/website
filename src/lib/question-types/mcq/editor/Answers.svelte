@@ -2,7 +2,7 @@
 	import { flip } from 'svelte/animate';
 	import { backOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
-	import { buttonColors, limits } from '$lib/clientOnly';
+	import { limits } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { MultipleChoiceAnswer } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
@@ -34,8 +34,7 @@
 	{#if answers.length < limits.fuiz.multipleChoice.maxAnswerCount}
 		<div class="add-cell" transition:scale={{ easing: backOut, duration: 300 }}>
 			<FancyButton
-				backgroundColor={buttonColors.at(answers.length % buttonColors.length)?.[0]}
-				backgroundDeepColor={buttonColors.at(answers.length % buttonColors.length)?.[1]}
+				palette={answers.length}
 				onclick={() => {
 					answers.push({
 						correct: false,

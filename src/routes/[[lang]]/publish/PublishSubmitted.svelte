@@ -9,12 +9,7 @@
 	<h2 class="title">{m.fuiz_submitted()}</h2>
 	<p class="desc">{m.fuiz_submitted_desc()}</p>
 	<div class="cta">
-		<FancyAnchorButton
-			href={prUrl}
-			backgroundColor="#FC6D26"
-			backgroundDeepColor="#E24329"
-			foregroundColor="#FFFFFF"
-		>
+		<FancyAnchorButton href={prUrl} palette="gitlab">
 			<div class="cta-label">{m.view_on_gitlab()}</div>
 		</FancyAnchorButton>
 	</div>

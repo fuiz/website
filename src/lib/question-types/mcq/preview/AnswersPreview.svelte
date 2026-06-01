@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors } from '$lib/clientOnly';
+	import { paletteClass } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import type { IdlessMultipleChoiceSlide } from '$lib/types';
 	import Check from '~icons/custom/check';
@@ -19,12 +19,7 @@
 
 <div class="answers" class:revealed={showAnswers}>
 	{#each slide.answers as answer, answerIndex (answerIndex)}
-		{@const color = buttonColors.at(answerIndex % buttonColors.length)}
-		<div
-			class="bar"
-			style:--bar-bg={color?.[0]}
-			style:--bar-border={color?.[1]}
-		>
+		<div class={['bar', paletteClass(answerIndex)]}>
 			{#if correctSet?.has(answerIndex)}
 				<span class="bar-check">
 					<Check height="0.9em" width="0.9em" title={m.correct()} />
@@ -55,8 +50,8 @@
 		min-height: 1.2em;
 		padding: 0.15em 0.4em;
 		border-radius: 0.4em;
-		border: 1px solid var(--bar-border);
-		background-color: var(--bar-bg);
+		border: 1px solid var(--btn-deep);
+		background-color: var(--btn-bg);
 		color: #ffffff;
 		display: flex;
 		align-items: center;

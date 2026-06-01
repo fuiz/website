@@ -397,16 +397,20 @@ export async function playBackendReadyIdConfig(
 	);
 }
 
-export const buttonColors = [
-	['hsl(358, 84%, 45%)', 'hsl(358, 84%, 35%)'],
-	['hsl(205, 84%, 30%)', 'hsl(205, 84%, 20%)'],
-	['hsl(120, 83%, 18%)', 'hsl(120, 83%, 8%)'],
-	['hsl(25, 84%, 48%)', 'hsl(25, 84%, 38%)'],
-	['hsl(318, 84%, 25%)', 'hsl(318, 84%, 15%)'],
-	['hsl(179, 84%, 32%)', 'hsl(179, 84%, 22%)'],
-	['hsl(69, 84%, 40%)', 'hsl(69, 84%, 30%)'],
-	['hsl(0, 0%, 20%)', 'hsl(0, 0%, 10%)']
-] as const;
+/**
+ * Button palette. Numeric values are wrapped to the 8-slot answer-button palette;
+ * named values ('secondary', 'tertiary', 'gitlab', 'ghost') target non-answer CTAs.
+ * Token definitions live in `src/routes/+layout.svelte` under `.palette-*`.
+ */
+const PALETTE_SIZE = 8;
+
+export type Palette = number | 'secondary' | 'tertiary' | 'gitlab' | 'ghost';
+
+export function paletteClass(palette: Palette | undefined): string | undefined {
+	if (palette === undefined) return undefined;
+	if (typeof palette === 'number') return `palette-${palette % PALETTE_SIZE}`;
+	return `palette-${palette}`;
+}
 
 export const medalColors = ['#C8A200', '#A0A0A0', '#B07D3B'] as const;
 

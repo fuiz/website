@@ -22,7 +22,7 @@
 	class="root"
 	role="checkbox"
 	aria-checked={value}
-	style:--fill={color ?? 'var(--primary)'}
+	style:--fill={color ?? 'var(--btn-bg, var(--primary))'}
 	onclick={() => (value = !value)}
 >
 	<div class="box">

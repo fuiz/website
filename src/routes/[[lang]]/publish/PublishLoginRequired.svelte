@@ -10,12 +10,7 @@
 	<p class="desc">{m.login_required_desc()}</p>
 	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- URL is resolved at the call site -->
 	<a class="cta" href={gitLoginUrl}>
-		<FancyButton
-			type="button"
-			backgroundColor="#FC6D26"
-			backgroundDeepColor="#E24329"
-			foregroundColor="#FFFFFF"
-		>
+		<FancyButton type="button" palette="gitlab">
 			<div class="cta-label">{m.connect_gitlab()}</div>
 		</FancyButton>
 	</a>

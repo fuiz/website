@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors, buttonSymbols } from '$lib/clientOnly';
+	import { buttonSymbols, paletteClass } from '$lib/clientOnly';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Check from '~icons/custom/check';
 
@@ -13,16 +13,11 @@
 		onclick?: () => void;
 	} = $props();
 
-	let buttonSymbol = $derived(buttonSymbols[index % buttonColors.length]);
+	let buttonSymbol = $derived(buttonSymbols[index % buttonSymbols.length]);
 </script>
 
 <div class="wrapper">
-	<FancyButton
-		{onclick}
-		backgroundColor={buttonColors.at(index % buttonColors.length)?.at(0)}
-		backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.at(1)}
-		height="100%"
-	>
+	<FancyButton {onclick} palette={index} height="100%">
 		<div class="content">
 			<div class="icon">
 				<buttonSymbol.icon title={buttonSymbol.label} height="100%" width="100%" />
@@ -30,11 +25,7 @@
 		</div>
 	</FancyButton>
 	{#if selected}
-		<div
-			class="badge"
-			style:--bg={buttonColors.at(index % buttonColors.length)?.at(0)}
-			style:--border={buttonColors.at(index % buttonColors.length)?.at(1)}
-		>
+		<div class={['badge', paletteClass(index)]}>
 			<Check height="100%" width="100%" />
 		</div>
 	{/if}
@@ -74,8 +65,8 @@
 		height: 2em;
 		width: 2em;
 		border-radius: 50%;
-		border: 0.1em solid var(--border);
-		background: var(--bg);
+		border: 0.1em solid var(--btn-deep);
+		background: var(--btn-bg);
 		color: #ffffff;
 		display: flex;
 		align-items: center;

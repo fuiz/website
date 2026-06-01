@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors, limits } from '$lib/clientOnly';
+	import { limits } from '$lib/clientOnly';
 	import MediaChooser from '$lib/media/MediaChooser.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import SlideEditorLayout from '$lib/question-types/editor/SlideEditorLayout.svelte';
@@ -70,11 +70,7 @@
 						<Add height="1.25em" />
 					</IconButton>
 				{/if}
-				<FancyButton
-					backgroundColor={buttonColors.at(index % buttonColors.length)?.[0]}
-					backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.[1]}
-					active={false}
-				>
+				<FancyButton palette={index} active={false}>
 					<Textbox
 						bind:value={slide.answers[index].text}
 						placeholder={m.answer_text()}

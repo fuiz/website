@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors } from '$lib/clientOnly';
+	import { paletteClass } from '$lib/clientOnly';
 	import ThumbnailLayout from '$lib/question-types/editor/ThumbnailLayout.svelte';
 	import { lintMultipleChoice } from '$lib/question-types/lint';
 	import { lintIssueMessage } from '$lib/question-types/lintMessages';
@@ -17,10 +17,7 @@
 <ThumbnailLayout title={slide.title} media={slide.media} {warning}>
 	<div class="bars">
 		{#each slide.answers as answer, i (answer.id)}
-			<div
-				class="bar"
-				style:--bar-color={buttonColors.at(i % buttonColors.length)?.[0]}
-			></div>
+			<div class={['bar', paletteClass(i)]}></div>
 		{/each}
 	</div>
 </ThumbnailLayout>
@@ -34,7 +31,7 @@
 	}
 
 	.bar {
-		background: var(--bar-color);
+		background: var(--btn-bg);
 		height: 0.5em;
 		border-radius: 0.7em;
 	}

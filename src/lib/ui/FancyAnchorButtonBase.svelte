@@ -1,17 +1,14 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { type Palette, paletteClass } from '$lib/clientOnly';
 
 	let {
-		foregroundColor,
-		backgroundColor,
-		backgroundDeepColor,
+		palette,
 		href,
 		children,
 		download
 	}: {
-		foregroundColor: string;
-		backgroundColor: string;
-		backgroundDeepColor: string;
+		palette?: Palette;
 		href: string;
 		children?: Snippet;
 		download?: unknown;
@@ -19,14 +16,7 @@
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
-<a
-	{href}
-	{download}
-	class="root"
-	style:--bg={backgroundColor}
-	style:--bg-deep={backgroundDeepColor}
-	style:--fg={foregroundColor}
->
+<a {href} {download} class={['root', paletteClass(palette)]}>
 	<div class="back">
 		<div class="front">
 			{@render children?.()}
@@ -50,7 +40,7 @@
 	}
 
 	.back {
-		background: var(--bg-deep);
+		background: var(--btn-deep, color-mix(in srgb, var(--primary) 80%, black));
 		border-radius: 0.7em;
 		transform: translateY(0);
 		width: 100%;
@@ -58,11 +48,11 @@
 	}
 
 	.front {
-		background: var(--bg);
-		border: 0.1em solid var(--bg-deep);
+		background: var(--btn-bg, var(--primary));
+		border: 0.1em solid var(--btn-deep, color-mix(in srgb, var(--primary) 80%, black));
 		border-radius: 0.7em;
 		box-sizing: border-box;
-		color: var(--fg);
+		color: var(--btn-fg, #ffffff);
 		width: 100%;
 		height: 100%;
 		transform: translateY(-0.15em);

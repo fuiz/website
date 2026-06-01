@@ -208,9 +208,7 @@
 					<div class="cta-button">
 						<FancyAnchorButton
 							href="https://forms.gle/orFqr1wnhm6dv7xY7"
-							backgroundColor="var(--secondary)"
-							backgroundDeepColor="color-mix(in srgb, var(--secondary) 80%, black)"
-							foregroundColor="var(--on-secondary)"
+							palette="secondary"
 						>
 							{m.feedback_form()}
 						</FancyAnchorButton>
@@ -218,9 +216,7 @@
 					<div class="cta-button">
 						<FancyAnchorButton
 							href="https://join.slack.com/t/fuiz/shared_invite/zt-2enihgtpy-C1KxJ96pEQN707msi~vNRg"
-							backgroundColor="var(--tertiary)"
-							backgroundDeepColor="color-mix(in srgb, var(--tertiary) 80%, black)"
-							foregroundColor="var(--on-tertiary)"
+							palette="tertiary"
 						>
 							{m.join_slack()}
 						</FancyAnchorButton>

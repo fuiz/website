@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { buttonColors } from '$lib/clientOnly';
+	import { paletteClass } from '$lib/clientOnly';
 	import type { IdlessOrderSlide } from '$lib/types';
 
 	let {
@@ -16,12 +16,7 @@
 		<div class="axis-label">{slide.axis_labels.from}</div>
 	{/if}
 	{#each slide.answers as answer, answerIndex (answerIndex)}
-		{@const color = buttonColors.at(answerIndex % buttonColors.length)}
-		<div
-			class="bar"
-			style:--bar-bg={color?.[0]}
-			style:--bar-border={color?.[1]}
-		>
+		<div class={['bar', paletteClass(answerIndex)]}>
 			<span class="bar-num">{answerIndex + 1}</span>
 			{#if showAnswers}
 				<span class="bar-text">{answer}</span>
@@ -47,8 +42,8 @@
 		min-height: 1.2em;
 		padding: 0.15em 0.4em;
 		border-radius: 0.4em;
-		border: 1px solid var(--bar-border);
-		background-color: var(--bar-bg);
+		border: 1px solid var(--btn-deep);
+		background-color: var(--btn-bg);
 		color: #ffffff;
 		display: flex;
 		align-items: center;

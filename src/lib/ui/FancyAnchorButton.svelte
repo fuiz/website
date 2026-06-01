@@ -1,31 +1,22 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { Palette } from '$lib/clientOnly';
 	import FancyAnchorButtonBase from './FancyAnchorButtonBase.svelte';
 
 	let {
-		foregroundColor = undefined,
-		backgroundColor = undefined,
-		backgroundDeepColor = undefined,
+		palette = undefined,
 		href,
 		download,
 		children
 	}: {
-		foregroundColor?: string;
-		backgroundColor?: string;
-		backgroundDeepColor?: string;
+		palette?: Palette;
 		href: string;
-		children?: Snippet;
 		download?: unknown;
+		children?: Snippet;
 	} = $props();
 </script>
 
-<FancyAnchorButtonBase
-	foregroundColor={foregroundColor ?? '#FFFFFF'}
-	backgroundColor={backgroundColor ?? 'var(--primary)'}
-	backgroundDeepColor={backgroundDeepColor ?? 'color-mix(in srgb, var(--primary) 80%, black)'}
-	{href}
-	{download}
->
+<FancyAnchorButtonBase {palette} {href} {download}>
 	<div class="content">
 		{@render children?.()}
 	</div>
