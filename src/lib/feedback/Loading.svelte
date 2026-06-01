@@ -3,19 +3,38 @@
 	import LoadingCircle from './LoadingCircle.svelte';
 </script>
 
-<div style:height="100%" style:display="flex" style:flex-direction="column">
-	<div style:flex="1">
+<div class="root">
+	<div class="fill">
 		<NiceBackground>
-			<div
-				style:height="100%"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-			>
-				<div style:height="40px" style:width="40px">
+			<div class="center">
+				<div class="spinner">
 					<LoadingCircle borderWidth={8} />
 				</div>
 			</div>
 		</NiceBackground>
 	</div>
 </div>
+
+<style>
+	.root {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.fill {
+		flex: 1;
+	}
+
+	.center {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.spinner {
+		height: 40px;
+		width: 40px;
+	}
+</style>

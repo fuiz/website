@@ -33,9 +33,9 @@
 	};
 </script>
 
-<div style:position="relative">
+<div>
 	<textarea
-		style:max-height={maxHeight}
+		style:--max-h={maxHeight}
 		bind:this={editableElement}
 		{id}
 		name={id}
@@ -51,6 +51,7 @@
 
 <style>
 	div {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -88,6 +89,7 @@
 		border: 1px solid var(--outline);
 		border-radius: 10px;
 		width: 100%;
+		max-height: var(--max-h);
 		color: inherit;
 		box-sizing: border-box;
 		text-align: center;

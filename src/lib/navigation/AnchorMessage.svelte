@@ -21,7 +21,7 @@
 	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 	<a href={resolveIfInternal(href)} style:--background={background} style:--color={color}>
 		{@render icon()}
-		<div style:flex="1" style:text-align="center">
+		<div class="text">
 			{message}
 		</div>
 	</a>
@@ -40,5 +40,10 @@
 		color: var(--color);
 		font-weight: bold;
 		word-wrap: anywhere;
+	}
+
+	.text {
+		flex: 1;
+		text-align: center;
 	}
 </style>

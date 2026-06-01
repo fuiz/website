@@ -32,8 +32,8 @@
 	{#if selected}
 		<div
 			class="badge"
-			style:background={buttonColors.at(index % buttonColors.length)?.at(0)}
-			style:border-color={buttonColors.at(index % buttonColors.length)?.at(1)}
+			style:--bg={buttonColors.at(index % buttonColors.length)?.at(0)}
+			style:--border={buttonColors.at(index % buttonColors.length)?.at(1)}
 		>
 			<Check height="100%" width="100%" />
 		</div>
@@ -74,7 +74,8 @@
 		height: 2em;
 		width: 2em;
 		border-radius: 50%;
-		border: 0.1em solid;
+		border: 0.1em solid var(--border);
+		background: var(--bg);
 		color: #ffffff;
 		display: flex;
 		align-items: center;

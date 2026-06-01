@@ -31,14 +31,14 @@
 	} = $props();
 </script>
 
-<div style:position="relative">
+<div>
 	<input
 		class={showInvalid ? 'show-invalid' : ''}
 		{id}
 		name={id}
 		{autocomplete}
 		type="text"
-		style:text-transform={textTransform}
+		style:--tt={textTransform}
 		{required}
 		{disabled}
 		placeholder=""
@@ -55,6 +55,7 @@
 
 <style>
 	div {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -112,8 +113,8 @@
 		color: inherit;
 		box-sizing: border-box;
 		font: inherit;
-		box-sizing: border-box;
 		text-align: center;
+		text-transform: var(--tt);
 		padding: 8px 5px;
 		resize: none;
 		transition: border-color 100ms linear;

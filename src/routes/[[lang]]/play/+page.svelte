@@ -21,9 +21,16 @@
 </svelte:head>
 
 {#if code !== null}
-	<div style:display="contents" style:font-size="0.75em">
+	<div class="play-shell">
 		<Play {code} />
 	</div>
 {:else}
 	<Join />
 {/if}
+
+<style>
+	.play-shell {
+		display: contents;
+		font-size: 0.75em;
+	}
+</style>

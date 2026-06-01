@@ -4,17 +4,27 @@
 	let { top, center, bottom }: { top?: Snippet; center?: Snippet; bottom?: Snippet } = $props();
 </script>
 
-<div style:height="100%" style:display="grid" style:grid-template-rows="auto 1fr auto">
+<div class="root">
 	{@render top?.()}
-	<div
-		style:flex="1"
-		style:display="flex"
-		style:flex-direction="column"
-		style:align-items="center"
-		style:justify-content="center"
-		style:position="relative"
-	>
+	<div class="center">
 		{@render center?.()}
 	</div>
 	{@render bottom?.()}
 </div>
+
+<style>
+	.root {
+		height: 100%;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+	}
+
+	.center {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+</style>

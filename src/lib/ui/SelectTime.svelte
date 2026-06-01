@@ -18,9 +18,9 @@
 </script>
 
 <FancyButton onclick={() => dialog?.showModal()}>
-	<div style:display="flex" style:align-items="center" style:justify-content="center">
+	<div class="trigger">
 		{@render children?.()}
-		<div style:padding="0 5px" style:text-transform="capitalize">
+		<div class="trigger-label">
 			{map(String(selected ?? ''))}
 		</div>
 	</div>
@@ -37,7 +37,7 @@
 							dialog?.close();
 						}}
 					>
-						<div style:padding="0.25em 0.5em" style:text-transform="capitalize">
+						<div class="option-label">
 							{map(String(value ?? ''))}
 						</div>
 					</FancyButton>
@@ -48,6 +48,22 @@
 </dialog>
 
 <style>
+	.trigger {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.trigger-label {
+		padding: 0 5px;
+		text-transform: capitalize;
+	}
+
+	.option-label {
+		padding: 0.25em 0.5em;
+		text-transform: capitalize;
+	}
+
 	#container {
 		position: fixed;
 		z-index: 1;

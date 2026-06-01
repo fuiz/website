@@ -19,9 +19,7 @@ function hasDuplicates(values: string[]): boolean {
 	return new Set(values).size !== values.length;
 }
 
-export function lintMultipleChoice<T>(
-	slide: GenericMultipleChoiceSlide<T>
-): LintIssue | undefined {
+export function lintMultipleChoice<T>(slide: GenericMultipleChoiceSlide<T>): LintIssue | undefined {
 	if (slide.answers.length === 0) return 'no_answers';
 	if (slide.answers.every((a) => !a.correct)) return 'no_correct';
 	if (slide.answers.some((a) => !a.content.Text.length)) return 'empty_answer';

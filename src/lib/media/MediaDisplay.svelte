@@ -9,14 +9,16 @@
 </script>
 
 {#if info}
-	<img
-		style:display="flex"
-		style:height="100%"
-		style:width="100%"
-		style:object-fit={fit}
-		alt={info.alt}
-		src={info.src}
-	/>
+	<img class="img" style:--fit={fit} alt={info.alt} src={info.src} />
 {:else}
 	<MediaFallback />
 {/if}
+
+<style>
+	.img {
+		display: flex;
+		height: 100%;
+		width: 100%;
+		object-fit: var(--fit);
+	}
+</style>

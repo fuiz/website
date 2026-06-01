@@ -26,7 +26,7 @@
 	<button
 		class="player"
 		class:kickable={onkick !== undefined && !selectable}
-		style:color={selected ? 'var(--primary)' : 'inherit'}
+		class:selected
 		disabled={!interactive}
 		title={onkick !== undefined && !selectable ? m.remove_player({ name: player }) : undefined}
 		aria-label={onkick !== undefined && !selectable
@@ -74,6 +74,9 @@
 	}
 	.player:not(:disabled) {
 		cursor: pointer;
+	}
+	.player.selected {
+		color: var(--primary);
 	}
 	.kickable:hover,
 	.kickable:focus-visible {

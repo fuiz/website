@@ -82,9 +82,9 @@
 						<div class="track">
 							<div
 								class="bar"
-								style:background={buttonColors[0][0]}
-								style:border="0.15em solid {buttonColors[0][1]}"
-								style:width="{(count / maxCount) * 100}%"
+								style:--bar-bg={buttonColors[0][0]}
+								style:--bar-border={buttonColors[0][1]}
+								style:--width="{(count / maxCount) * 100}%"
 							>
 								<span class="bar-count">{count}</span>
 							</div>
@@ -152,6 +152,9 @@
 		border-radius: 0.4em;
 		height: 100%;
 		min-width: 1.6em;
+		width: var(--width);
+		background: var(--bar-bg);
+		border: 0.15em solid var(--bar-border);
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;

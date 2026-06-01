@@ -35,12 +35,16 @@
 	{height}
 	{onclick}
 >
-	<div
-		style:height="100%"
-		style:padding="5px"
-		style:font-weight=500
-		style:box-sizing="border-box"
-	>
+	<div class="content">
 		{@render children?.()}
 	</div>
 </FancyButtonBase>
+
+<style>
+	.content {
+		height: 100%;
+		padding: 5px;
+		font-weight: 500;
+		box-sizing: border-box;
+	}
+</style>

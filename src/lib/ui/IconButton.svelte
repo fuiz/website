@@ -25,7 +25,7 @@
 </script>
 
 <button
-	style:padding
+	style:--pad={padding}
 	{popovertarget}
 	{disabled}
 	{onclick}
@@ -49,7 +49,7 @@
 		box-sizing: border-box;
 		border: none;
 		color: inherit;
-
+		padding: var(--pad);
 		cursor: pointer;
 	}
 

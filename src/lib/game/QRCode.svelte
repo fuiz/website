@@ -44,61 +44,62 @@
 	let dialogElement = $state<HTMLDialogElement>();
 </script>
 
-
-<button
-	onclick={() => dialogElement?.showModal()}
-	style:font="inherit"
-	style:appearance="none"
-	style:border="none"
-	style:background="none"
-	style:padding="0"
-	style:display="flex"
-	style:cursor="pointer"
->
-	<img
-		src={image}
-		style:height={smallSize}
-		style:width={smallSize}
-		alt={m.qr_code()}
-		style:image-rendering="pixelated"
-		style:border-radius="0.2em"
-	/>
+<button class="thumb" style:--small-size={smallSize} onclick={() => dialogElement?.showModal()}>
+	<img class="thumb-img" src={image} alt={m.qr_code()} />
 </button>
 
-<dialog
-	bind:this={dialogElement}
-	closedby="any"
-	style:border="none"
-	style:background="transparent"
-	style:padding="0"
-	style:max-width="none"
-	style:max-height="none"
->
-	<button
-		onclick={() => dialogElement?.close()}
-		style:appearance="none"
-		style:border="none"
-		style:font="inherit"
-		style:box-sizing="border-box"
-		style:background="none"
-		style:padding="0"
-		style:cursor="pointer"
-	>
-		<img
-			src={image}
-			style:margin="auto"
-			style:height="80vmin"
-			style:width="auto"
-			style:aspect-ratio="1"
-			style:max-height="700px"
-			alt={m.qr_code()}
-			style:image-rendering="pixelated"
-			style:border-radius="5px"
-		/>
+<dialog class="modal" bind:this={dialogElement} closedby="any">
+	<button class="modal-btn" onclick={() => dialogElement?.close()}>
+		<img class="modal-img" src={image} alt={m.qr_code()} />
 	</button>
 </dialog>
 
 <style>
+	.thumb {
+		font: inherit;
+		appearance: none;
+		border: none;
+		background: none;
+		padding: 0;
+		display: flex;
+		cursor: pointer;
+	}
+
+	.thumb-img {
+		height: var(--small-size);
+		width: var(--small-size);
+		image-rendering: pixelated;
+		border-radius: 0.2em;
+	}
+
+	.modal {
+		border: none;
+		background: transparent;
+		padding: 0;
+		max-width: none;
+		max-height: none;
+	}
+
+	.modal-btn {
+		appearance: none;
+		border: none;
+		font: inherit;
+		box-sizing: border-box;
+		background: none;
+		padding: 0;
+		cursor: pointer;
+	}
+
+	.modal-img {
+		margin: auto;
+		height: 80vmin;
+		width: auto;
+		aspect-ratio: 1;
+		max-height: 700px;
+		image-rendering: pixelated;
+		border-radius: 5px;
+	}
+
 	dialog::backdrop {
 		background-color: rgba(0, 0, 0, 0.63);
 	}

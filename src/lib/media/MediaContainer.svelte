@@ -16,18 +16,22 @@
 	} = $props();
 </script>
 
-<div
-	style:max-height="100%"
-	style:display="flex"
-	style:justify-content={align}
-	style:max-width="100%"
-	style:margin="auto"
-	style:position="absolute"
-	style:inset="0"
->
+<div class="container" style:--align={align}>
 	{#if media}
 		<MediaDisplay {media} {fit} />
 	{:else if showFallback}
 		<MediaFallback />
 	{/if}
 </div>
+
+<style>
+	.container {
+		max-height: 100%;
+		max-width: 100%;
+		display: flex;
+		justify-content: var(--align);
+		margin: auto;
+		position: absolute;
+		inset: 0;
+	}
+</style>

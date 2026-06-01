@@ -37,28 +37,34 @@
 	bind:this={editableElement}
 	{value}
 	oninput={onInput}
-	style:background="none"
-	style:color="inherit"
-	style:display="flex"
-	style:font="inherit"
-	style:width="100%"
-	style:padding
-	style:text-align={textAlign}
+	class="root"
+	style:--pad={padding}
+	style:--text-align={textAlign}
+	style:--placeholder-color={placeholderColor}
 	{placeholder}
-	style:box-sizing="border-box"
-	style:word-wrap="anywhere"
-	style:border="none"
-	style:resize="none"
-	style:margin="0"
-	style:outline="none"
-	style:height="100%"
-	style="--placeholderColor: {placeholderColor}"
 	rows="1"
 	maxlength={maxLength}
 ></textarea>
 
 <style>
-	textarea::placeholder {
-		color: var(--placeholderColor);
+	.root {
+		background: none;
+		color: inherit;
+		display: flex;
+		font: inherit;
+		width: 100%;
+		height: 100%;
+		padding: var(--pad);
+		text-align: var(--text-align);
+		box-sizing: border-box;
+		word-wrap: anywhere;
+		border: none;
+		resize: none;
+		margin: 0;
+		outline: none;
+	}
+
+	.root::placeholder {
+		color: var(--placeholder-color);
 	}
 </style>

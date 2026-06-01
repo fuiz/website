@@ -4,21 +4,27 @@
 	let { top, bottom }: { top?: Snippet; bottom?: Snippet } = $props();
 </script>
 
-<div
-	style:height="100%"
-	style:display="grid"
-	style:grid-template-rows="1fr auto"
-	style:flex-direction="column"
->
-	<div
-		style:flex="1"
-		style:display="flex"
-		style:flex-direction="column"
-		style:align-items="center"
-		style:justify-content="center"
-		style:position="relative"
-	>
+<div class="root">
+	<div class="top">
 		{@render top?.()}
 	</div>
 	{@render bottom?.()}
 </div>
+
+<style>
+	.root {
+		height: 100%;
+		display: grid;
+		grid-template-rows: 1fr auto;
+		flex-direction: column;
+	}
+
+	.top {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+</style>

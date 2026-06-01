@@ -24,87 +24,78 @@
 	} = $props();
 </script>
 
+{#snippet body()}
+	<div class="back">
+		<div class="front">
+			{@render children?.()}
+		</div>
+	</div>
+{/snippet}
+
 {#if active}
 	<button
 		{type}
-		class="button-root"
-		style:display="flex"
-		style:background="none"
-		style:border="none"
-		style:color="inherit"
-		style:box-sizing="border-box"
-		style:padding="0.3em 0 0 0"
-		style:width="100%"
+		class="root"
+		class:disabled
+		style:--bg={backgroundColor}
+		style:--bg-deep={backgroundDeepColor}
+		style:--fg={foregroundColor}
 		style:height={height ?? 'fit-content'}
-		style:font="inherit"
-		style:outline="none"
 		disabled={disabled || !active}
 		onclick={() => {
 			if (onclick) onclick();
 		}}
 	>
-		<div
-			style:background={disabled ? '#636363' : backgroundDeepColor}
-			style:transition="background 300ms linear"
-			style:border-radius="0.7em"
-			style:transform="translateY(0)"
-			style:width="100%"
-			style:height="100%"
-		>
-			<div
-				class="front"
-				style:background-color={disabled ? '#737373' : backgroundColor}
-				style:border="0.1em solid {disabled ? '#636363' : backgroundDeepColor}"
-				style:border-radius="0.7em"
-				style:box-sizing="border-box"
-				style:color={foregroundColor}
-				style:width="100%"
-				style:height="100%"
-			>
-				{@render children?.()}
-			</div>
-		</div>
+		{@render body()}
 	</button>
 {:else}
 	<div
-		class="button-root"
-		style:display="flex"
-		style:background="none"
-		style:border="none"
-		style:color="inherit"
-		style:box-sizing="border-box"
-		style:padding="0.3em 0 0 0"
-		style:width="100%"
+		class="root"
+		class:disabled
+		style:--bg={backgroundColor}
+		style:--bg-deep={backgroundDeepColor}
+		style:--fg={foregroundColor}
 		style:height={height ?? 'fit-content'}
-		style:font="inherit"
-		style:outline="none"
 	>
-		<div
-			style:background={disabled ? '#636363' : backgroundDeepColor}
-			style:transition="background 300ms linear"
-			style:border-radius="0.7em"
-			style:transform="translateY(0)"
-			style:width="100%"
-			style:height="100%"
-		>
-			<div
-				class="front"
-				style:background-color={disabled ? '#737373' : backgroundColor}
-				style:border="0.1em solid {disabled ? '#636363' : backgroundDeepColor}"
-				style:border-radius="0.7em"
-				style:box-sizing="border-box"
-				style:color={foregroundColor}
-				style:width="100%"
-				style:height="100%"
-			>
-				{@render children?.()}
-			</div>
-		</div>
+		{@render body()}
 	</div>
 {/if}
 
 <style>
-	.button-root .front {
+	.root {
+		display: flex;
+		background: none;
+		border: none;
+		color: inherit;
+		box-sizing: border-box;
+		padding: 0.3em 0 0 0;
+		width: 100%;
+		font: inherit;
+		outline: none;
+	}
+
+	.disabled {
+		--bg: #737373;
+		--bg-deep: #636363;
+	}
+
+	.back {
+		background: var(--bg-deep);
+		transition: background 300ms linear;
+		border-radius: 0.7em;
+		transform: translateY(0);
+		width: 100%;
+		height: 100%;
+	}
+
+	.front {
+		background-color: var(--bg);
+		border: 0.1em solid var(--bg-deep);
+		border-radius: 0.7em;
+		box-sizing: border-box;
+		color: var(--fg);
+		width: 100%;
+		height: 100%;
 		transform: translateY(-0.15em);
 		transition:
 			transform 150ms,
@@ -112,11 +103,11 @@
 			border-color 300ms linear;
 	}
 
-	.button-root:active:not(:disabled) .front {
-		transform: translateY(0em);
+	.root:active:not(:disabled) .front {
+		transform: translateY(0);
 	}
 
-	.button-root:where(:global(:hover, :focus)) .front {
+	.root:where(:global(:hover, :focus)) .front {
 		transform: translateY(-0.3em);
 	}
 </style>

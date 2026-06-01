@@ -16,7 +16,7 @@
 </script>
 
 <div class="card">
-	<div class="media" style:aspect-ratio={aspectRatio}>
+	<div class="media" style:--aspect={aspectRatio}>
 		<MediaContainer {media} fit="cover" />
 	</div>
 	<div class="info">
@@ -40,6 +40,7 @@
 	.media {
 		position: relative;
 		width: 100%;
+		aspect-ratio: var(--aspect);
 	}
 
 	.info {

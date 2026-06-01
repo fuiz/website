@@ -8,16 +8,23 @@
 </script>
 
 <TypicalPage>
-	<div
-		style:height="100%"
-		style:display="flex"
-		style:align-items="center"
-		style:max-width="40ch"
-		style:margin="auto"
-		transition:scale={{ delay: 500, duration: 150, easing: backOut }}
-	>
-		<div style:margin="auto">
+	<div class="root" transition:scale={{ delay: 500, duration: 150, easing: backOut }}>
+		<div class="inner">
 			<ErrorMessage {errorMessage} />
 		</div>
 	</div>
 </TypicalPage>
+
+<style>
+	.root {
+		height: 100%;
+		display: flex;
+		align-items: center;
+		max-width: 40ch;
+		margin: auto;
+	}
+
+	.inner {
+		margin: auto;
+	}
+</style>

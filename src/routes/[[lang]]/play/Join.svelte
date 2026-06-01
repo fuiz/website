@@ -42,13 +42,8 @@
 </script>
 
 <NiceBackground>
-	<div
-		style:height="100%"
-		style:display="flex"
-		style:flex-direction="column"
-		style:align-items="center"
-	>
-		<header style:margin="0.5em 0">
+	<div class="page">
+		<header class="header">
 			<Header />
 		</header>
 		<form
@@ -57,15 +52,9 @@
 				submit();
 			}}
 		>
-			<div
-				style:flex="1"
-				style:display="flex"
-				style:flex-direction="column"
-				style:justify-content="center"
-				style:gap="5px"
-			>
+			<div class="body">
 				{#if errorMessage}
-					<div style:margin-bottom="10px">
+					<div class="error">
 						<ErrorMessage {errorMessage} />
 					</div>
 				{/if}
@@ -81,14 +70,9 @@
 				/>
 				<div>
 					<FancyButton disabled={sending}>
-						<div
-							style:display="flex"
-							style:align-items="center"
-							style:justify-content="center"
-							style:font-family="var(--alternative-font)"
-						>
+						<div class="cta">
 							{#if sending}
-								<div style:height="1em" style:aspect-ratio="1/1" style:margin="0 5px">
+								<div class="spinner">
 									<LoadingCircle />
 								</div>
 							{/if}
@@ -103,6 +87,17 @@
 </NiceBackground>
 
 <style>
+	.page {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.header {
+		margin: 0.5em 0;
+	}
+
 	form {
 		flex: 1;
 		display: flex;
@@ -113,5 +108,30 @@
 		box-sizing: content-box;
 		width: 300px;
 		max-width: 300px;
+	}
+
+	.body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+	}
+
+	.error {
+		margin-bottom: 10px;
+	}
+
+	.cta {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--alternative-font);
+	}
+
+	.spinner {
+		height: 1em;
+		aspect-ratio: 1 / 1;
+		margin: 0 5px;
 	}
 </style>

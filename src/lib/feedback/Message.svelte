@@ -15,12 +15,7 @@
 </script>
 
 {#if message}
-	<div
-		class="message"
-		style:background
-		style:color
-		style:border-color={color}
-	>
+	<div class="message" style:--bg={background} style:--fg={color}>
 		{@render icon()}
 		<div class="text">
 			{message}
@@ -38,7 +33,9 @@
 		border-radius: 0.7em;
 		gap: 10px;
 		font-weight: bold;
-		border: 1px solid;
+		border: 1px solid var(--fg);
+		background: var(--bg);
+		color: var(--fg);
 		word-wrap: anywhere;
 	}
 

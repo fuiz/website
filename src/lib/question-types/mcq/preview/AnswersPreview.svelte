@@ -13,9 +13,7 @@
 	} = $props();
 
 	let correctSet = $derived(
-		showAnswers
-			? new Set(slide.answers.flatMap((a, i) => (a.correct ? [i] : [])))
-			: undefined
+		showAnswers ? new Set(slide.answers.flatMap((a, i) => (a.correct ? [i] : []))) : undefined
 	);
 </script>
 

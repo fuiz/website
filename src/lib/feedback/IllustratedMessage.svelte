@@ -14,7 +14,7 @@
 
 <div class="container">
 	<img class="image" {src} {alt} />
-	<div class="caption" style:max-width={captionMaxWidth}>
+	<div class="caption" style:--cap-max={captionMaxWidth}>
 		{@render children()}
 	</div>
 </div>
@@ -33,5 +33,6 @@
 	.caption {
 		font-weight: bold;
 		text-align: center;
+		max-width: var(--cap-max);
 	}
 </style>

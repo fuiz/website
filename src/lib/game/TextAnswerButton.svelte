@@ -25,37 +25,56 @@
 	let opacity = $derived(correct === false || dimmed ? '50%' : '100%');
 </script>
 
-<div style:opacity>
+<div class="root" style:--opacity={opacity}>
 	<FancyButton
 		{onclick}
 		backgroundColor={buttonColors.at(index % buttonColors.length)?.at(0)}
 		backgroundDeepColor={buttonColors.at(index % buttonColors.length)?.at(1)}
 		height="100%"
 	>
-		<div style:height="100%" style:width="100%" style:display="flex" style:align-items="center">
-			<div id="icon" style:display="flex" style:padding="0.2em">
+		<div class="row">
+			<div id="icon" class="icon">
 				<buttonSymbol.icon title={buttonSymbol.label} height="1em" width="1em" />
 			</div>
-			<div
-				id="text"
-				style:height="100%"
-				style:flex="1"
-				style:display="flex"
-				style:justify-content="center"
-				style:align-items="center"
-				style:word-break="break-word"
-			>
+			<div id="text" class="text">
 				{answerText}
 			</div>
 			{#if correct === false}
-				<div style:display="flex" style:padding="0.2em">
+				<div class="icon">
 					<Close height="1em" title={m.wrong()} />
 				</div>
 			{:else if correct === true || selected}
-				<div style:display="flex" style:padding="0.2em">
+				<div class="icon">
 					<Check height="1em" title={m.correct()} />
 				</div>
 			{/if}
 		</div>
 	</FancyButton>
 </div>
+
+<style>
+	.root {
+		opacity: var(--opacity);
+	}
+
+	.row {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+	}
+
+	.icon {
+		display: flex;
+		padding: 0.2em;
+	}
+
+	.text {
+		height: 100%;
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		word-break: break-word;
+	}
+</style>

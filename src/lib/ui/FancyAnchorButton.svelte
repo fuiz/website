@@ -26,12 +26,16 @@
 	{href}
 	{download}
 >
-	<div
-		style:height="100%"
-		style:padding="5px"
-		style:font-weight="bold"
-		style:box-sizing="border-box"
-	>
+	<div class="content">
 		{@render children?.()}
 	</div>
 </FancyAnchorButtonBase>
+
+<style>
+	.content {
+		height: 100%;
+		padding: 5px;
+		font-weight: bold;
+		box-sizing: border-box;
+	}
+</style>

@@ -4,13 +4,21 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 </script>
 
-<div style:display="flex" style:justify-content="center">
-	<a
-		href={resolve(localizeHref('/'))}
-		style:height="40px"
-		style:overflow="hidden"
-		style:color="inherit"
-	>
+<div class="row">
+	<a class="link" href={resolve(localizeHref('/'))}>
 		<Logo height={40} />
 	</a>
 </div>
+
+<style>
+	.row {
+		display: flex;
+		justify-content: center;
+	}
+
+	.link {
+		height: 40px;
+		overflow: hidden;
+		color: inherit;
+	}
+</style>

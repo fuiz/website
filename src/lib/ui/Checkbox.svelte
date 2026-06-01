@@ -19,43 +19,27 @@
 </script>
 
 <button
-	style:height="100%"
-	style:aspect-ratio="1/1"
-	style:padding="0"
-	style:background="transparent"
-	style:width="auto"
-	style:box-sizing="border-box"
+	class="root"
 	role="checkbox"
 	aria-checked={value}
-	style:font="inherit"
-	style:color="var(--palette-light)"
-	style:border="none"
+	style:--fill={color ?? 'var(--primary)'}
 	onclick={() => (value = !value)}
 >
-	<div
-		style:height="100%"
-		style:width="auto"
-		style:aspect-ratio="1/1"
-		style:background={color ?? 'var(--primary)'}
-		style:transition="background 300ms linear"
-		style:border="0.2em solid currentcolor"
-		style:border-radius="0.5em"
-		style:box-sizing="border-box"
-	>
+	<div class="box">
 		{#if value}
 			<div
+				class="fill"
 				in:scale={{ easing: backOut, duration: duration, delay: duration }}
 				out:scale={{ easing: backOut, duration: duration }}
-				style:height="100%"
 			>
 				<Check height="100%" title={m.marked_as_correct()} />
 			</div>
 		{:else}
 			<div
+				class="fill"
+				class:attention
 				in:scale={{ easing: backOut, duration: duration, delay: duration }}
-				class={attention ? 'attention' : ''}
 				out:scale={{ easing: backOut, duration: duration }}
-				style:height="100%"
 			>
 				<Close height="100%" title={m.marked_as_wrong()} />
 			</div>
@@ -64,6 +48,33 @@
 </button>
 
 <style>
+	.root {
+		height: 100%;
+		aspect-ratio: 1 / 1;
+		padding: 0;
+		background: transparent;
+		width: auto;
+		box-sizing: border-box;
+		font: inherit;
+		color: var(--palette-light);
+		border: none;
+	}
+
+	.box {
+		height: 100%;
+		width: auto;
+		aspect-ratio: 1 / 1;
+		background: var(--fill);
+		transition: background 300ms linear;
+		border: 0.2em solid currentcolor;
+		border-radius: 0.5em;
+		box-sizing: border-box;
+	}
+
+	.fill {
+		height: 100%;
+	}
+
 	.attention {
 		animation: heartbeat 600ms ease-in-out infinite alternate;
 	}
