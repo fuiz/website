@@ -26,6 +26,7 @@
 	} from './messageHandler';
 	import Question from './Question.svelte';
 	import Result from './Result.svelte';
+	import SlideAnnouncement from './SlideAnnouncement.svelte';
 	import Summary from './Summary.svelte';
 	import WaitingMobile from './WaitingMobile.svelte';
 	import WaitingOthers from './WaitingOthers.svelte';
@@ -303,7 +304,9 @@
 	{@const { Slide: slide, index, count, score } = currentState}
 	{#if 'MultipleChoice' in slide}
 		{@const { MultipleChoice: kind, question, answers, media, results, answered, answer_mode } = slide}
-		{#if kind === 'QuestionAnnouncement'}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement {name} {score} questionType="MultipleChoice" pointsAwarded={slide.points_awarded ?? 0} />
+		{:else if kind === 'QuestionAnnouncement'}
 			<Question {name} {score} {media} questionText={question || ''} />
 		{:else if kind === 'AnswersAnnouncement'}
 			{#if answered === undefined}
@@ -349,7 +352,9 @@
 			accept_answers,
 			case_sensitive
 		} = slide}
-		{#if kind === 'QuestionAnnouncement'}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement {name} {score} questionType="TypeAnswer" pointsAwarded={slide.points_awarded ?? 0} />
+		{:else if kind === 'QuestionAnnouncement'}
 			{#if answered === undefined}
 				{#if accept_answers}
 					<TypeAnswerQuestion
@@ -379,7 +384,9 @@
 		{/if}
 	{:else if 'Order' in slide}
 		{@const { Order: kind, question, answers, media, answered, axis_labels } = slide}
-		{#if kind === 'QuestionAnnouncement'}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement {name} {score} questionType="Order" pointsAwarded={slide.points_awarded ?? 0} />
+		{:else if kind === 'QuestionAnnouncement'}
 			<Question {name} {score} {media} questionText={question || ''} />
 		{:else if kind === 'AnswersAnnouncement'}
 			{#if answered === undefined}

@@ -44,7 +44,7 @@
 		})}
 	</div>
 	<div class="controls">
-		<IconButton alt={m.skip()} onclick={onnext}><SkipNext/></IconButton>
+		<IconButton alt={m.skip()} onclick={onnext} disabled={gameInfo.nextDisabled}><SkipNext/></IconButton>
 		{#if extraControls}
 			{@render extraControls()}
 		{/if}

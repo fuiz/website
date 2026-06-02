@@ -11,7 +11,7 @@
 	import OrderStatistics from '$lib/question-types/order/host/Statistics.svelte';
 	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/Statistics.svelte';
 	import { bring, zip } from '$lib/util';
-	import type { IncomingMessage, State } from '.';
+	import { hostScreenFromState, type IncomingMessage, type State } from '.';
 	import Leaderboard from './Leaderboard.svelte';
 	import {
 		handleGameMessage,
@@ -21,6 +21,7 @@
 		type QuestionMessageResult
 	} from './messageHandler';
 	import Question from './Question.svelte';
+	import SlideAnnouncement from './SlideAnnouncement.svelte';
 	import Summary from './Summary.svelte';
 	import Waiting from './Waiting.svelte';
 
@@ -168,8 +169,21 @@
 		return untrack(() => connectServer(gameCode));
 	});
 
+	// The screen the host is currently viewing, sent with each "Next" so the
+	// server can ignore a duplicate click made before the new screen rendered.
+	let currentScreen = $derived(hostScreenFromState(currentState));
+
+	// Serialized screen of the last "Next" we sent. While the live screen still
+	// equals it, the click hasn't taken effect yet, so "Next" stays disabled.
+	let lastSentScreen = $state<string | null>(null);
+	let nextDisabled = $derived(
+		lastSentScreen !== null && JSON.stringify(currentScreen) === lastSentScreen
+	);
+
 	function onnext() {
-		sendEvent(HOST_NEXT);
+		if (nextDisabled || currentScreen === undefined) return;
+		sendEvent(JSON.stringify({ Host: { Next: currentScreen } }));
+		lastSentScreen = JSON.stringify(currentScreen);
 	}
 
 	function onlock(e: boolean) {
@@ -179,8 +193,6 @@
 	function onkick(name: string) {
 		sendEvent(JSON.stringify({ Host: { Kick: name } }));
 	}
-
-	const HOST_NEXT = JSON.stringify({ Host: 'Next' });
 
 	onMount(() => {
 		const handleKeydown = (e: KeyboardEvent) => {
@@ -209,6 +221,7 @@
 			{onlock}
 			{onkick}
 			{code}
+			{nextDisabled}
 			players={currentState.Game.WaitingScreen.items}
 			exact_count={currentState.Game.WaitingScreen.exact_count}
 			bind:bindableGameInfo
@@ -222,7 +235,8 @@
 	{@const gameInfo = {
 		gameCode: code,
 		questionIndex: index,
-		questionTotalCount: count
+		questionTotalCount: count,
+		nextDisabled
 	}}
 	{#if 'Leaderboard' in slide}
 		<Leaderboard
@@ -243,7 +257,16 @@
 			answered_count: answeredCount,
 			results
 		} = slide}
-		{#if kind === 'QuestionAnnouncement'}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="MultipleChoice"
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
 			<Question
 				{onnext}
 				{onlock}
@@ -290,7 +313,16 @@
 			results,
 			case_sensitive: caseSensitive
 		} = slide}
-		{#if kind === 'QuestionAnnouncement'}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="TypeAnswer"
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
 			<Question
 				{onnext}
 				{onlock}
@@ -315,7 +347,16 @@
 		{/if}
 	{:else if 'Order' in slide}
 		{@const { Order: kind, question, media, answers, results, axis_labels, answered_count } = slide}
-		{#if kind === 'QuestionAnnouncement'}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="Order"
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
 			<Question
 				{onnext}
 				{onlock}

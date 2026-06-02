@@ -49,7 +49,7 @@
 	});
 </script>
 
-<HostLayout bind:bindableGameInfo {gameInfo} {onlock}>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
 	<TextBar {onnext} text={m.scores()} showNext={true} heading={true} />
 	<div class="entries">
 		{#each displayed.items as [name, score], index (name)}

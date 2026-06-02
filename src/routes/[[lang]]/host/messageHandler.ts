@@ -173,6 +173,22 @@ export function handleMultipleChoiceMessage(
 	const { index: previous_index = 0, count: previous_count = 1 } =
 		context.currentState && 'Slide' in context.currentState ? context.currentState : {};
 
+	if ('SlideAnnouncement' in mc) {
+		const { index, count, points_awarded, duration } = mc.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: {
+					MultipleChoice: 'SlideAnnouncement',
+					points_awarded
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
 	if ('QuestionAnnouncement' in mc) {
 		const { index, count, question, media, duration } = mc.QuestionAnnouncement;
 		return {
@@ -265,6 +281,22 @@ export function handleTypeAnswerMessage(
 	const { index: previous_index = 0, count: previous_count = 1 } =
 		context.currentState && 'Slide' in context.currentState ? context.currentState : {};
 
+	if ('SlideAnnouncement' in ta) {
+		const { index, count, points_awarded, duration } = ta.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: {
+					TypeAnswer: 'SlideAnnouncement',
+					points_awarded
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
 	if ('QuestionAnnouncement' in ta) {
 		const { index, count, question, media, duration, accept_answers } = ta.QuestionAnnouncement;
 		return {
@@ -330,6 +362,22 @@ export function handleOrderMessage(
 
 	const { index: previous_index = 0, count: previous_count = 1 } =
 		context.currentState && 'Slide' in context.currentState ? context.currentState : {};
+
+	if ('SlideAnnouncement' in order) {
+		const { index, count, points_awarded, duration } = order.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: {
+					Order: 'SlideAnnouncement',
+					points_awarded
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
 
 	if ('QuestionAnnouncement' in order) {
 		const { index, count, question, media, duration } = order.QuestionAnnouncement;

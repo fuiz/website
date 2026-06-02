@@ -248,6 +248,11 @@ export type GenericSlide<T> =
 
 export type Slide = GenericSlide<Media | undefined>;
 
+// The three question slide kinds, derived from the slide union so this stays in
+// sync with the Slide definition (distributes over the union to grab each key).
+type SlideKind<S> = S extends S ? keyof S : never;
+export type QuestionType = SlideKind<GenericIdlessSlide<unknown>>;
+
 export type GenericFuizConfig<T> = {
 	title: string;
 	slides: GenericSlide<T>[];

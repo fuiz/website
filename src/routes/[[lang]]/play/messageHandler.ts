@@ -271,6 +271,21 @@ export function handleMultipleChoiceMessage(
 			? context.currentState.Slide
 			: undefined;
 
+	if ('SlideAnnouncement' in mc) {
+		const { index, count, points_awarded } = mc.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: {
+					MultipleChoice: 'SlideAnnouncement',
+					points_awarded
+				}
+			}
+		};
+	}
+
 	if ('QuestionAnnouncement' in mc) {
 		const { index, count, question, media } = mc.QuestionAnnouncement;
 		return {
@@ -345,6 +360,21 @@ export function handleTypeAnswerMessage(
 			? context.currentState.Slide
 			: undefined;
 
+	if ('SlideAnnouncement' in ta) {
+		const { index, count, points_awarded } = ta.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: {
+					TypeAnswer: 'SlideAnnouncement',
+					points_awarded
+				}
+			}
+		};
+	}
+
 	if ('QuestionAnnouncement' in ta) {
 		const { index, count, question, media, accept_answers } = ta.QuestionAnnouncement;
 		return {
@@ -396,6 +426,21 @@ export function handleOrderMessage(
 		context.currentState && 'Slide' in context.currentState && 'Order' in context.currentState.Slide
 			? context.currentState.Slide
 			: undefined;
+
+	if ('SlideAnnouncement' in order) {
+		const { index, count, points_awarded } = order.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: {
+					Order: 'SlideAnnouncement',
+					points_awarded
+				}
+			}
+		};
+	}
 
 	if ('QuestionAnnouncement' in order) {
 		const { index, count, question, media } = order.QuestionAnnouncement;

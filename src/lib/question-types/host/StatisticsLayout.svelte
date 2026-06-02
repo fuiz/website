@@ -30,7 +30,7 @@
 	let showMedia = $state(false);
 </script>
 
-<HostLayout bind:bindableGameInfo {gameInfo} {onlock}>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
 	{#snippet extraControls()}
 		{#if media}
 			<StatedIconButton

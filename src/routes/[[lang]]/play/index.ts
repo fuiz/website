@@ -43,7 +43,11 @@ type GameState =
 
 type SlideState =
 	| {
-			MultipleChoice: 'QuestionAnnouncement' | 'AnswersAnnouncement' | 'AnswersResults';
+			MultipleChoice:
+				| 'SlideAnnouncement'
+				| 'QuestionAnnouncement'
+				| 'AnswersAnnouncement'
+				| 'AnswersResults';
 
 			question?: string;
 			media?: Media;
@@ -51,9 +55,10 @@ type SlideState =
 			results?: AnswerResult[];
 			answered?: number | number[];
 			answer_mode?: AnswerMode;
+			points_awarded?: number;
 	  }
 	| {
-			TypeAnswer: 'QuestionAnnouncement' | 'AnswersResults';
+			TypeAnswer: 'SlideAnnouncement' | 'QuestionAnnouncement' | 'AnswersResults';
 
 			question?: string;
 			media?: Media;
@@ -62,9 +67,14 @@ type SlideState =
 			answered?: string;
 			accept_answers?: boolean;
 			case_sensitive?: boolean;
+			points_awarded?: number;
 	  }
 	| {
-			Order: 'QuestionAnnouncement' | 'AnswersAnnouncement' | 'AnswersResults';
+			Order:
+				| 'SlideAnnouncement'
+				| 'QuestionAnnouncement'
+				| 'AnswersAnnouncement'
+				| 'AnswersResults';
 
 			question?: string;
 			media?: Media;
@@ -75,6 +85,7 @@ type SlideState =
 				to?: string;
 			};
 			answered?: string[];
+			points_awarded?: number;
 	  }
 	| {
 			Score: {
@@ -169,7 +180,17 @@ export type GameIncomingMessage =
 			};
 	  };
 
+export type SlideAnnouncementMessage = {
+	SlideAnnouncement: {
+		index: number;
+		count: number;
+		points_awarded: number;
+		duration?: number | null;
+	};
+};
+
 export type MultipleChoiceIncomingMessage =
+	| SlideAnnouncementMessage
 	| {
 			QuestionAnnouncement: {
 				index: number;
@@ -204,6 +225,7 @@ export type MultipleChoiceIncomingMessage =
 	  };
 
 export type TypeAnswerIncomingMessage =
+	| SlideAnnouncementMessage
 	| {
 			QuestionAnnouncement: {
 				index: number;
@@ -227,6 +249,7 @@ export type TypeAnswerIncomingMessage =
 	  };
 
 export type OrderSlideIncomingMessage =
+	| SlideAnnouncementMessage
 	| {
 			QuestionAnnouncement: {
 				index: number;

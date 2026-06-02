@@ -22,6 +22,7 @@
 		players,
 		exact_count,
 		bindableGameInfo = $bindable(),
+		nextDisabled = false,
 		onnext,
 		onlock,
 		onkick
@@ -30,6 +31,7 @@
 		players: string[];
 		exact_count: number;
 		bindableGameInfo: BindableGameInfo;
+		nextDisabled?: boolean;
 		onnext?: () => void;
 		onlock?: (locked: boolean) => void;
 		onkick?: (name: string) => void;
@@ -90,7 +92,7 @@
 			<QrCode url={actualUrl} smallSize="min(9em, 25vw)" />
 		</div>
 		<div class="start-button">
-			<FancyButton onclick={onnext}>
+			<FancyButton onclick={onnext} disabled={nextDisabled}>
 				<div class="start-label">{m.start()}</div>
 			</FancyButton>
 		</div>
