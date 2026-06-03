@@ -53,6 +53,7 @@
 	.next {
 		font-size: 1.2em;
 		font-family: var(--alternative-font);
+		margin-inline-start: 0.6em;
 	}
 
 	.next-padding {

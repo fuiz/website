@@ -353,16 +353,30 @@
 
 	.slide-container {
 		border: 1px solid var(--outline);
-		border-radius: 1em 1em 1.25em 1.25em;
+		border-radius: 1rem 1rem 1.25rem 1.25rem;
 		position: relative;
 		overflow: hidden;
+		/* Container query below resolves `ch` against this font, so match the
+		   answer area's font (1.5em of the slide font) — that way our threshold
+		   lines up with the answers' own 2×2 → 1×4 flip. */
+		container-type: inline-size;
+		font-size: calc(1.5 * min(1rem, 3vw));
 	}
 
 	.slide {
 		position: relative;
-		font-size: min(1em, 3vw);
+		font-size: min(1rem, 3vw);
 		aspect-ratio: 90 / 72;
 		z-index: 1;
+	}
+
+	/* Same threshold the answers use to stack into one column
+	   (game/Answers.svelte: @container (width <= 40ch)). When that happens the
+	   host screen is taller, so switch to a taller, portrait box at the same point. */
+	@container (width <= 40ch) {
+		.slide {
+			aspect-ratio: 4 / 5;
+		}
 	}
 
 	.features {
