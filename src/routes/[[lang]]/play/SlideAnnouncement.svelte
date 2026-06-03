@@ -16,8 +16,24 @@
 		questionType: QuestionType;
 		pointsAwarded: number;
 	} = $props();
+
+	// Lift the leaving splash to a fixed overlay so it doesn't stack below the
+	// incoming question in flow; its pieces fly out within (see Spotlight). Stays
+	// fixed long enough to cover the staggered flight.
+	function lift(_node: HTMLElement, { duration = 580 } = {}) {
+		if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return { duration: 0 };
+		return { duration, css: () => 'position: fixed; inset: 0; z-index: 5;' };
+	}
 </script>
 
-<PlayerLayout {name} {score}>
-	<AnnouncementContent {questionType} {pointsAwarded} />
-</PlayerLayout>
+<div class="exit-wrap" out:lift>
+	<PlayerLayout {name} {score}>
+		<AnnouncementContent {questionType} {pointsAwarded} />
+	</PlayerLayout>
+</div>
+
+<style>
+	.exit-wrap {
+		height: 100%;
+	}
+</style>

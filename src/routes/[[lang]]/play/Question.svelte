@@ -47,6 +47,26 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		/* Enters after the slide announcement has flown out. */
+		animation: question-reveal 0.45s cubic-bezier(0.2, 1.1, 0.3, 1) 0.56s backwards;
+	}
+
+	@keyframes question-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(0.5em) scale(0.96);
+		}
+
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.content {
+			animation: none;
+		}
 	}
 
 	.content.has-media {

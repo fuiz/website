@@ -62,6 +62,27 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		/* Hold hidden while the slide announcement flies out, then enter — so the
+		   question reveals with motion instead of appearing already-settled. */
+		animation: question-reveal 0.45s cubic-bezier(0.2, 1.1, 0.3, 1) 0.56s backwards;
+	}
+
+	@keyframes question-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(0.6em) scale(0.97);
+		}
+
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.content {
+			animation: none;
+		}
 	}
 
 	.media {

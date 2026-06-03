@@ -185,6 +185,7 @@
 
 	.chip.selected .label {
 		color: var(--on-surface);
+		font-weight: bold;
 	}
 
 	.trailing {

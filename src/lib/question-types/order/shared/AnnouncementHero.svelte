@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { flyIn, flyOut } from '$lib/animation/flyAway';
+
 	// The announcement glyph for Order: ranked bars. Sized in `em` so the parent
 	// scene controls the scale.
 	const rows = [
@@ -6,11 +8,22 @@
 		{ palette: 3, rank: 2, width: '48%' },
 		{ palette: 1, rank: 3, width: '60%' }
 	];
+
+	// Each row flies from / to a different side, fanned vertically.
+	const dirs = [
+		{ x: -60, y: -25, rotate: -10 },
+		{ x: 60, y: 0, rotate: 10 },
+		{ x: -60, y: 30, rotate: -8 }
+	];
 </script>
 
 <div class="order">
-	{#each rows as { palette, rank, width } (rank)}
-		<div class="row palette-{palette}">
+	{#each rows as { palette, rank, width }, i (rank)}
+		<div
+			class="row palette-{palette}"
+			in:flyIn|global={{ ...dirs[i], duration: 460, delay: i * 90 }}
+			out:flyOut|global={{ ...dirs[i], duration: 420, delay: i * 45 }}
+		>
 			<span class="rank">{rank}</span>
 			<span class="line" style:--lw={width}></span>
 		</div>

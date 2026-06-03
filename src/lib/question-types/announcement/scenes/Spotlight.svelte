@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { flyOut } from '$lib/animation/flyAway';
 	import type { QuestionType } from '$lib/types';
 	import AnnouncementHero from '../AnnouncementHero.svelte';
 	import PointsBadge from '../PointsBadge.svelte';
@@ -14,14 +15,19 @@
 	} = $props();
 </script>
 
-<!-- Composition: the hero springs in at centre, the type rides in on a ribbon
-     below. No background wash. -->
+<!-- Composition: the hero's own pieces fly in from their own directions (each
+     hero glyph handles that), the type rides in on a ribbon from the left, the
+     points badge from the right. On exit each flies back out. -->
 <div class="scene">
-	<div class="hero"><AnnouncementHero {questionType} /></div>
+	<AnnouncementHero {questionType} />
 
 	<div class="caption">
-		<div class="plank"><span class="label">{label}</span></div>
-		<PointsBadge {pointsAwarded} />
+		<div class="exit-piece" out:flyOut|global={{ x: -125, y: 30, rotate: -16 }}>
+			<div class="plank"><span class="label">{label}</span></div>
+		</div>
+		<div class="exit-piece" out:flyOut|global={{ x: 125, y: 45, rotate: 16 }}>
+			<PointsBadge {pointsAwarded} />
+		</div>
 	</div>
 </div>
 
@@ -38,8 +44,8 @@
 		font-size: clamp(0.8rem, 3.6cqmin, 2.2rem);
 	}
 
-	.hero {
-		animation: pop 0.7s cubic-bezier(0.2, 1.3, 0.3, 1) 0.1s both;
+	.exit-piece {
+		display: inline-flex;
 	}
 
 	.caption {
@@ -47,7 +53,6 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0.6em;
-		perspective: 600px;
 	}
 
 	.plank {
@@ -73,41 +78,34 @@
 		animation: rise 0.5s cubic-bezier(0.2, 1.4, 0.3, 1) 0.75s both;
 	}
 
-	@keyframes pop {
-		0% {
-			opacity: 0;
-			transform: scale(0.3) rotate(-6deg);
-		}
-		55% {
-			opacity: 1;
-			transform: scale(1.08) rotate(3deg);
-		}
-		75% {
-			transform: scale(0.97) rotate(-1.5deg);
-		}
-		100% {
-			opacity: 1;
-			transform: scale(1) rotate(0);
-		}
-	}
+	/* Label slides in from the left. */
 	@keyframes sweep {
 		0% {
 			opacity: 0;
-			transform: translateY(1em) rotateX(85deg);
+			transform: translateX(-75vw) rotate(-5deg);
+		}
+		70% {
+			opacity: 1;
+			transform: translateX(4%) rotate(2deg);
 		}
 		100% {
 			opacity: 1;
-			transform: translateY(0) rotateX(0);
+			transform: translateX(0) rotate(0);
 		}
 	}
+	/* Points badge slides in from the right. */
 	@keyframes rise {
 		0% {
 			opacity: 0;
-			transform: translateY(0.7em) scale(0.8);
+			transform: translateX(70vw) scale(0.9);
+		}
+		70% {
+			opacity: 1;
+			transform: translateX(-4%) scale(1.03);
 		}
 		100% {
 			opacity: 1;
-			transform: translateY(0) scale(1);
+			transform: translateX(0) scale(1);
 		}
 	}
 
@@ -116,7 +114,6 @@
 			animation-duration: 0.001s !important;
 			animation-delay: 0s !important;
 		}
-		.hero,
 		.plank,
 		.caption :global(.pill) {
 			opacity: 1 !important;
