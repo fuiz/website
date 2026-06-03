@@ -23,6 +23,7 @@
 	type="button"
 	class="chip"
 	class:selected
+	class:removable
 	class:sm={size === 'sm'}
 	aria-label={ariaLabel}
 	aria-pressed={selected ? 'true' : 'false'}
@@ -100,7 +101,7 @@
 	}
 
 	.bg {
-		background: color-mix(in srgb, var(--primary) 18%, var(--surface));
+		background: var(--primary-container);
 		opacity: 0;
 		transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
 	}
@@ -147,6 +148,10 @@
 
 	.chip.selected .cell {
 		padding-inline-start: 0.5em;
+	}
+
+	.chip.removable .cell {
+		padding-inline: 1em 0.5em;
 	}
 
 	.icon {
