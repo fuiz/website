@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { Confetti } from 'svelte-confetti';
-	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
-	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
-	import IllustratedMessage from '$lib/feedback/IllustratedMessage.svelte';
+	import FeedbackSign from '$lib/feedback/FeedbackSign.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
@@ -20,10 +18,7 @@
 </script>
 
 <PlayerLayout {name} {score} centered>
-	<IllustratedMessage
-		src={correct ? correct_penguin : wrong_penguin}
-		alt={correct ? m.penguin_checkmark() : m.penguin_crossmark()}
-	>
+	<FeedbackSign variant={correct ? 'correct' : 'wrong'}>
 		{#if correct}
 			{m.thats_correct()}
 		{:else if partial}
@@ -31,7 +26,7 @@
 		{:else}
 			{m.try_again()}
 		{/if}
-	</IllustratedMessage>
+	</FeedbackSign>
 	{#if correct}
 		<div class="confetti">
 			<Confetti

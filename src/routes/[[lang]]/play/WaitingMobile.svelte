@@ -1,6 +1,5 @@
 <script lang="ts">
-	import waiting_penguin from '$lib/assets/visuals/waiting.svg';
-	import IllustratedMessage from '$lib/feedback/IllustratedMessage.svelte';
+	import FeedbackSign from '$lib/feedback/FeedbackSign.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 
@@ -12,7 +11,7 @@
 </script>
 
 <PlayerLayout {name} centered>
-	<IllustratedMessage src={waiting_penguin} alt={m.penguin_waiting()}>
+	<FeedbackSign variant="waiting-host">
 		{m.waiting_host()}
-	</IllustratedMessage>
+	</FeedbackSign>
 </PlayerLayout>

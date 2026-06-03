@@ -1,7 +1,5 @@
 <script lang="ts">
-	import correct_penguin from '$lib/assets/visuals/correct_penguin.svg';
-	import wrong_penguin from '$lib/assets/visuals/wrong_penguin.svg';
-	import IllustratedMessage from '$lib/feedback/IllustratedMessage.svelte';
+	import FeedbackSign from '$lib/feedback/FeedbackSign.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale } from '$lib/paraglide/runtime.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
@@ -22,11 +20,7 @@
 </script>
 
 <PlayerLayout {name} {score} centered>
-	<IllustratedMessage
-		src={isWinner ? correct_penguin : wrong_penguin}
-		alt={isWinner ? m.penguin_checkmark() : m.penguin_crossmark()}
-		captionMaxWidth="20ch"
-	>
+	<FeedbackSign variant={isWinner ? 'correct' : 'wrong'} captionMaxWidth="20ch">
 		{#if isWinner}
 			{m.congrats()}
 			{m.list_won({
@@ -38,5 +32,5 @@
 				winners: formatter.format(winners)
 			})}
 		{/if}
-	</IllustratedMessage>
+	</FeedbackSign>
 </PlayerLayout>
