@@ -294,7 +294,7 @@ export function handleMultipleChoiceMessage(
 			: undefined;
 
 	if ('SlideAnnouncement' in mc) {
-		const { index, count, points_awarded } = mc.SlideAnnouncement;
+		const { index, count, points_awarded, answer_mode } = mc.SlideAnnouncement;
 		return {
 			newState: {
 				index,
@@ -302,7 +302,8 @@ export function handleMultipleChoiceMessage(
 				score: context.previousScore,
 				Slide: {
 					MultipleChoice: 'SlideAnnouncement',
-					points_awarded
+					points_awarded,
+					answer_mode
 				}
 			}
 		};
@@ -318,7 +319,8 @@ export function handleMultipleChoiceMessage(
 				Slide: {
 					MultipleChoice: 'QuestionAnnouncement',
 					question,
-					media: media ?? undefined
+					media: media ?? undefined,
+					answer_mode: previous_state?.answer_mode
 				}
 			}
 		};

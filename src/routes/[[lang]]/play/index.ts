@@ -191,6 +191,7 @@ export type SlideAnnouncementMessage = {
 		count: number;
 		points_awarded: number;
 		duration?: number | null;
+		answer_mode?: AnswerMode;
 	};
 };
 
