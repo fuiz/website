@@ -110,6 +110,8 @@ export type State =
 
 export type NameError = 'Used' | 'Assigned' | 'Empty' | 'Sinful' | 'TooLong';
 
+export type JoinError = 'MaximumPlayers' | 'Locked';
+
 export type GameIncomingMessage =
 	| { IdAssign: string }
 	| {
@@ -153,6 +155,9 @@ export type GameIncomingMessage =
 	  }
 	| 'NameChoose'
 	| 'Kicked'
+	| {
+			CannotJoin: JoinError;
+	  }
 	| {
 			NameAssign: string;
 	  }

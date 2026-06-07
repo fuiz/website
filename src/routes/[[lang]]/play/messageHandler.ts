@@ -2,6 +2,7 @@ import { addIds } from '$lib/clientOnly';
 import * as m from '$lib/paraglide/messages.js';
 import type {
 	GameIncomingMessage,
+	JoinError,
 	MultipleChoiceIncomingMessage,
 	NameError,
 	OrderSlideIncomingMessage,
@@ -59,6 +60,17 @@ function nameErrorToMessage(nameError: NameError): string {
 	}
 }
 
+function joinErrorToMessage(joinError: JoinError): string {
+	switch (joinError) {
+		case 'MaximumPlayers':
+			return m.game_full();
+		case 'Locked':
+			return m.game_locked();
+		default:
+			return m.cannot_join();
+	}
+}
+
 /**
  * Handles incoming Game messages
  */
@@ -83,6 +95,16 @@ export function handleGameMessage(
 		return {
 			newState: {
 				Error: m.you_were_kicked()
+			},
+			shouldMarkFinished: true,
+			shouldCloseSocket: true
+		};
+	}
+
+	if ('CannotJoin' in game) {
+		return {
+			newState: {
+				Error: joinErrorToMessage(game.CannotJoin)
 			},
 			shouldMarkFinished: true,
 			shouldCloseSocket: true
