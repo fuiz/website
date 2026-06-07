@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AnnouncementContent from '$lib/question-types/announcement/AnnouncementContent.svelte';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
-	import type { QuestionType } from '$lib/types';
+	import type { AnswerMode, QuestionType } from '$lib/types';
 
 	// Splash for the `Unstarted` phase: announces the upcoming question's type and
 	// scoring before the question is revealed, with an intro animation.
@@ -9,11 +9,14 @@
 		name,
 		score,
 		questionType,
+		answerMode,
 		pointsAwarded
 	}: {
 		name: string;
 		score: number;
 		questionType: QuestionType;
+		// For multiple choice: whether players pick one or several answers.
+		answerMode?: AnswerMode;
 		pointsAwarded: number;
 	} = $props();
 
@@ -28,7 +31,7 @@
 
 <div class="exit-wrap" out:lift>
 	<PlayerLayout {name} {score}>
-		<AnnouncementContent {questionType} {pointsAwarded} />
+		<AnnouncementContent {questionType} {answerMode} {pointsAwarded} />
 	</PlayerLayout>
 </div>
 

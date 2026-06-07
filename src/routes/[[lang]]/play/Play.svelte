@@ -305,7 +305,7 @@
 	{#if 'MultipleChoice' in slide}
 		{@const { MultipleChoice: kind, question, answers, media, results, answered, answer_mode } = slide}
 		{#if kind === 'SlideAnnouncement'}
-			<SlideAnnouncement {name} {score} questionType="MultipleChoice" pointsAwarded={slide.points_awarded ?? 0} />
+			<SlideAnnouncement {name} {score} questionType="MultipleChoice" answerMode={answer_mode} pointsAwarded={slide.points_awarded ?? 0} />
 		{:else if kind === 'QuestionAnnouncement'}
 			<Question {name} {score} {media} questionText={question || ''} />
 		{:else if kind === 'AnswersAnnouncement'}

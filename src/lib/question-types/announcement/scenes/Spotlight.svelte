@@ -7,10 +7,13 @@
 	let {
 		questionType,
 		label,
+		subtext,
 		pointsAwarded
 	}: {
 		questionType: QuestionType;
 		label: string;
+		// Optional clarifier under the type label (e.g. single vs. multiple answers).
+		subtext?: string;
 		pointsAwarded: number;
 	} = $props();
 </script>
@@ -22,8 +25,11 @@
 	<AnnouncementHero {questionType} />
 
 	<div class="caption">
-		<div class="exit-piece" out:flyOut|global={{ x: -125, y: 30, rotate: -16 }}>
+		<div class="exit-piece label-group" out:flyOut|global={{ x: -125, y: 30, rotate: -16 }}>
 			<div class="plank"><span class="label">{label}</span></div>
+			{#if subtext}
+				<span class="subtext">{subtext}</span>
+			{/if}
 		</div>
 		<div class="exit-piece" out:flyOut|global={{ x: 125, y: 45, rotate: 16 }}>
 			<PointsBadge {pointsAwarded} />
@@ -46,6 +52,22 @@
 
 	.exit-piece {
 		display: inline-flex;
+	}
+
+	.label-group {
+		flex-direction: column;
+		align-items: center;
+		gap: 0.55em;
+	}
+
+	.subtext {
+		font-family: var(--alternative-font);
+		font-weight: 700;
+		font-size: 1.15em;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--on-surface-variant);
+		animation: fade-up 0.5s cubic-bezier(0.2, 0.9, 0.2, 1) 0.95s both;
 	}
 
 	.caption {
@@ -93,6 +115,17 @@
 			transform: translateX(0) rotate(0);
 		}
 	}
+	/* Subtext settles in just after the type label lands. */
+	@keyframes fade-up {
+		0% {
+			opacity: 0;
+			transform: translateY(0.5em);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 	/* Points badge slides in from the right. */
 	@keyframes rise {
 		0% {
@@ -115,6 +148,7 @@
 			animation-delay: 0s !important;
 		}
 		.plank,
+		.subtext,
 		.caption :global(.pill) {
 			opacity: 1 !important;
 			transform: none !important;
