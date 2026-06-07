@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { SvelteSet } from 'svelte/reactivity';
 	import Answers from '$lib/game/Answers.svelte';
 	import EmptyAnswers from '$lib/game/EmptyAnswers.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
-	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { AnswerMode, Media, TextOrMedia } from '$lib/types';
-	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import MultiSelectAnswers from './MultiSelectAnswers.svelte';
 
 	let {
 		questionText,
@@ -32,30 +30,6 @@
 	} = $props();
 
 	let isMultiSelect = $derived(answerMode === 'MultipleAnswers');
-
-	let selectedIndices = new SvelteSet<number>();
-
-	function toggleIndex(index: number) {
-		if (selectedIndices.has(index)) {
-			selectedIndices.delete(index);
-		} else {
-			selectedIndices.add(index);
-		}
-	}
-
-	function submitMultiAnswer() {
-		if (onarrayanswer && selectedIndices.size > 0) {
-			onarrayanswer([...selectedIndices]);
-		}
-	}
-
-	function handleAnswer(index: number) {
-		if (isMultiSelect) {
-			toggleIndex(index);
-		} else {
-			if (onanswer) onanswer(index);
-		}
-	}
 </script>
 
 <PlayerLayout {name} {score}>
@@ -68,26 +42,16 @@
 				<MediaDisplay {media} fit="contain" />
 			</div>
 		{/if}
-		{#if !showAnswers}
-			<EmptyAnswers
-				indices={[...new Array(answers.length).keys()]}
-				selected={isMultiSelect ? selectedIndices : undefined}
-				onanswer={handleAnswer}
-			/>
+		{#if isMultiSelect}
+			<MultiSelectAnswers {answers} {showAnswers} onsubmit={onarrayanswer} />
+		{:else if !showAnswers}
+			<EmptyAnswers indices={[...new Array(answers.length).keys()]} onanswer={onanswer} />
 		{:else}
 			<div class="answers">
 				<Answers
 					answers={answers.map((t) => ({ text: t?.Text, correct: undefined }))}
-					selected={isMultiSelect ? selectedIndices : undefined}
-					onanswer={handleAnswer}
+					onanswer={onanswer}
 				/>
-			</div>
-		{/if}
-		{#if isMultiSelect}
-			<div class="submit-row">
-				<FancyButton onclick={submitMultiAnswer} disabled={selectedIndices.size === 0}>
-					<div class="submit-label">{m.submit()}</div>
-				</FancyButton>
 			</div>
 		{/if}
 	</div>
@@ -109,13 +73,5 @@
 		flex: 1;
 		min-height: 0;
 		font-size: 1.1em;
-	}
-
-	.submit-row {
-		padding: 0.2em;
-	}
-
-	.submit-label {
-		padding: 0.2em 0.5em;
 	}
 </style>

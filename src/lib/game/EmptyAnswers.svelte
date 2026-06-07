@@ -3,11 +3,9 @@
 
 	let {
 		indices,
-		selected,
 		onanswer
 	}: {
 		indices: number[];
-		selected?: Set<number>;
 		onanswer?: (index: number) => void;
 	} = $props();
 </script>
@@ -16,7 +14,6 @@
 	{#each indices as index (index)}
 		<EmptyAnswerButton
 			{index}
-			selected={selected?.has(index)}
 			onclick={() => {
 				if (onanswer) onanswer(index);
 			}}

@@ -241,5 +241,6 @@
 	"hide_answers": "Cavabları gizlət",
 	"no_language_matches": "\"{query}\" üçün uyğun dil tapılmadı",
 	"decrease": "Azalt",
-	"increase": "Artır"
+	"increase": "Artır",
+	"select_all_that_apply": "Uyğun olanların hamısını seçin"
 }

@@ -241,5 +241,6 @@
 	"hide_answers": "Ukryj odpowiedzi",
 	"no_language_matches": "Brak języka pasującego do „{query}\"",
 	"decrease": "Zmniejsz",
-	"increase": "Zwiększ"
+	"increase": "Zwiększ",
+	"select_all_that_apply": "Wybierz wszystkie pasujące"
 }

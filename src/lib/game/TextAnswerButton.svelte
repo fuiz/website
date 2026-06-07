@@ -9,20 +9,16 @@
 		index,
 		answerText,
 		correct,
-		selected = false,
-		dimmed = false,
 		onclick
 	}: {
 		index: number;
 		answerText: string;
 		correct: boolean | undefined;
-		selected?: boolean;
-		dimmed?: boolean;
 		onclick?: () => void;
 	} = $props();
 
 	let buttonSymbol = $derived(buttonSymbols[index % buttonSymbols.length]);
-	let opacity = $derived(correct === false || dimmed ? '50%' : '100%');
+	let opacity = $derived(correct === false ? '50%' : '100%');
 </script>
 
 <div class="root" style:--opacity={opacity}>
@@ -38,7 +34,7 @@
 				<div class="icon">
 					<Close height="1em" title={m.wrong()} />
 				</div>
-			{:else if correct === true || selected}
+			{:else if correct === true}
 				<div class="icon">
 					<Check height="1em" title={m.correct()} />
 				</div>

@@ -241,5 +241,6 @@
 	"hide_answers": "Sembunyikan jawaban",
 	"no_language_matches": "Tidak ada bahasa yang cocok dengan \"{query}\"",
 	"decrease": "Kurangi",
-	"increase": "Tambah"
+	"increase": "Tambah",
+	"select_all_that_apply": "Pilih semua yang sesuai"
 }

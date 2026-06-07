@@ -241,5 +241,6 @@
 	"hide_answers": "إخفاء الإجابات",
 	"no_language_matches": "لا توجد لغة تطابق \"{query}\"",
 	"decrease": "إنقاص",
-	"increase": "زيادة"
+	"increase": "زيادة",
+	"select_all_that_apply": "اختر كل ما ينطبق"
 }

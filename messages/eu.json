@@ -241,5 +241,6 @@
 	"hide_answers": "Ezkutatu erantzunak",
 	"no_language_matches": "Ez dago \"{query}\"-rekin bat datorren hizkuntzarik",
 	"decrease": "Gutxitu",
-	"increase": "Handitu"
+	"increase": "Handitu",
+	"select_all_that_apply": "Hautatu dagozkion guztiak"
 }

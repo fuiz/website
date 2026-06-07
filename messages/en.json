@@ -241,5 +241,6 @@
 	"hide_answers": "Hide answers",
 	"no_language_matches": "No language matches \"{query}\"",
 	"decrease": "Decrease",
-	"increase": "Increase"
+	"increase": "Increase",
+	"select_all_that_apply": "Pick all that apply"
 }

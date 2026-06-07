@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { FormEventHandler } from 'svelte/elements';
-	import Check from '~icons/custom/check';
 
 	let {
 		checked = $bindable(),
@@ -51,11 +50,7 @@
 		}}
 	>
 		<span class="handle-container">
-			<span class="handle">
-				{#if checked}
-					<Check height="0.7em" width="0.7em" />
-				{/if}
-			</span>
+			<span class="handle"></span>
 		</span>
 	</button>
 </div>
@@ -126,10 +121,6 @@
 		height: 0.7em;
 		border-radius: 999px;
 		background: var(--on-surface-variant);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--on-primary-container);
 		transition: width 250ms cubic-bezier(0.2, 0, 0, 1),
 			height 250ms cubic-bezier(0.2, 0, 0, 1), background-color 67ms linear;
 	}

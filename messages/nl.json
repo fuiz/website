@@ -241,5 +241,6 @@
 	"hide_answers": "Verberg antwoorden",
 	"no_language_matches": "Geen taal komt overeen met \"{query}\"",
 	"decrease": "Verlagen",
-	"increase": "Verhogen"
+	"increase": "Verhogen",
+	"select_all_that_apply": "Selecteer alles wat van toepassing is"
 }

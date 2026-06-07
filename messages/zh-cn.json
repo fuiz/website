@@ -241,5 +241,6 @@
 	"hide_answers": "隐藏答案",
 	"no_language_matches": "没有匹配 \"{query}\" 的语言",
 	"decrease": "减少",
-	"increase": "增加"
+	"increase": "增加",
+	"select_all_that_apply": "选择所有适用项"
 }
