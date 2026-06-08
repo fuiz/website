@@ -45,7 +45,7 @@
 		{/if}
 		{#if !selfHosted}
 			<div>
-				<FancyAnchorButton href="https://opencollective.com/fuiz">
+				<FancyAnchorButton href="https://opencollective.com/beyond-expiry/projects/fuiz">
 					<div class="a">
 						<VolunteerActivism height="1.2em" title={m.donate()} />
 						<div>{m.donate()}</div>

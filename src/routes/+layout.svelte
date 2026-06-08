@@ -254,6 +254,11 @@
 		--btn-deep: #e24329;
 		--btn-fg: #ffffff;
 	}
+	:global(.palette-slack) {
+		--btn-bg: #4a154b;
+		--btn-deep: #3a1039;
+		--btn-fg: #ffffff;
+	}
 	:global(.palette-ghost) {
 		--btn-bg: var(--surface);
 		--btn-deep: currentcolor;

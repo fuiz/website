@@ -13,8 +13,8 @@
 	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
 	import Diversity1 from '~icons/material-symbols/diversity-1';
 	import Diversity2Outline from '~icons/material-symbols/diversity-2-outline';
+	import Forum from '~icons/material-symbols/forum-outline';
 	import Language from '~icons/material-symbols/language';
-	import MailOutline from '~icons/material-symbols/mail-outline';
 	import MoneyOff from '~icons/material-symbols/money-off';
 	import Palette from '~icons/material-symbols/palette';
 
@@ -201,22 +201,14 @@
 		</section>
 		<section>
 			<div class="cta">
-				<MailOutline height="2em" width="2em" title={m.stay_in_touch()} />
-				<h2>{m.stay_in_touch()}</h2>
-				<p>{m.stay_in_touch_subtitle()}</p>
+				<Forum height="2em" width="2em" title={m.join_community()} />
+				<h2>{m.join_community()}</h2>
+				<p>{m.join_community_subtitle()}</p>
 				<div class="cta-buttons">
 					<div class="cta-button">
 						<FancyAnchorButton
-							href="https://forms.gle/orFqr1wnhm6dv7xY7"
-							palette="secondary"
-						>
-							{m.feedback_form()}
-						</FancyAnchorButton>
-					</div>
-					<div class="cta-button">
-						<FancyAnchorButton
 							href="https://join.slack.com/t/fuiz/shared_invite/zt-2enihgtpy-C1KxJ96pEQN707msi~vNRg"
-							palette="tertiary"
+							palette="slack"
 						>
 							{m.join_slack()}
 						</FancyAnchorButton>
@@ -233,6 +225,12 @@
 <style>
 	main {
 		background-color: var(--surface);
+		background-image: radial-gradient(
+			ellipse 120% 40em at center 24em,
+			color-mix(in srgb, var(--primary) 18%, var(--surface)) 0%,
+			var(--surface) 80%
+		);
+		background-repeat: no-repeat;
 		line-height: 1.25;
 	}
 
@@ -267,14 +265,6 @@
 		.hero-enter {
 			animation: none;
 		}
-	}
-
-	section:first-of-type {
-		background: radial-gradient(
-			ellipse at center,
-			color-mix(in srgb, var(--primary) 18%, var(--surface)) 0%,
-			var(--surface) 80%
-		);
 	}
 
 	h2 {

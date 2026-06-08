@@ -404,7 +404,7 @@ export async function playBackendReadyIdConfig(
  */
 const PALETTE_SIZE = 8;
 
-export type Palette = number | 'secondary' | 'tertiary' | 'gitlab' | 'ghost';
+export type Palette = number | 'secondary' | 'tertiary' | 'gitlab' | 'slack' | 'ghost';
 
 export function paletteClass(palette: Palette | undefined): string | undefined {
 	if (palette === undefined) return undefined;
