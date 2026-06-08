@@ -1,6 +1,6 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "fuiz"
-compatibility_date = "2026-01-27"
+compatibility_date = "2026-06-07"
 main = ".svelte-kit/cloudflare/_worker.js"
 assets = { directory = ".svelte-kit/cloudflare", binding = "ASSETS" }
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
