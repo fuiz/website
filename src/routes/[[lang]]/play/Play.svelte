@@ -4,12 +4,10 @@
 	import { env } from '$env/dynamic/public';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
+	import MultipleAnswersResult from '$lib/feedback/MultipleAnswersResult.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import Answers from '$lib/question-types/mcq/player/Answers.svelte';
-	import {
-		getMultipleAnswersBreakdown,
-		isMcqAnswerCorrect
-	} from '$lib/question-types/mcq/shared/correctness';
+	import { isMcqAnswerCorrect } from '$lib/question-types/mcq/shared/correctness';
 	import OrderAnswers from '$lib/question-types/order/player/Answers.svelte';
 	import TypeAnswerQuestion from '$lib/question-types/type-answer/player/Question.svelte';
 	import { bring, zip } from '$lib/util';
@@ -325,19 +323,17 @@
 				<WaitingOthers {name} {score} />
 			{/if}
 		{:else if kind === 'AnswersResults'}
-			{@const correct = isMcqAnswerCorrect(answered, results, answer_mode)}
-			{@const breakdown =
-				!correct && answer_mode === 'MultipleAnswers'
-					? getMultipleAnswersBreakdown(answered, results)
-					: null}
-			<Result
-				{name}
-				{score}
-				{correct}
-				partial={breakdown && breakdown.correctPicks > 0
-					? { picks: breakdown.correctPicks, total: breakdown.totalCorrect }
-					: undefined}
-			/>
+				{#if answer_mode === 'MultipleAnswers'}
+					<MultipleAnswersResult
+						{name}
+						{score}
+						answers={answers || []}
+						results={results || []}
+						{answered}
+					/>
+				{:else}
+					<Result {name} {score} correct={isMcqAnswerCorrect(answered, results, answer_mode)} />
+				{/if}
 		{/if}
 	{:else if 'Score' in slide}
 		{@const { points, position } = slide.Score}

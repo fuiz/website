@@ -7,13 +7,11 @@
 	let {
 		name,
 		score,
-		correct,
-		partial
+		correct
 	}: {
 		name: string;
 		score: number;
 		correct: boolean;
-		partial?: { picks: number; total: number };
 	} = $props();
 </script>
 
@@ -21,8 +19,6 @@
 	<FeedbackSign variant={correct ? 'correct' : 'wrong'}>
 		{#if correct}
 			{m.thats_correct()}
-		{:else if partial}
-			{m.partial_correct({ picks: partial.picks, total: partial.total })}
 		{:else}
 			{m.try_again()}
 		{/if}

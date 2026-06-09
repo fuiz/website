@@ -33,12 +33,45 @@ export function isMcqAnswerCorrect(
 	}
 }
 
-export function getMultipleAnswersBreakdown(
+export type McqAnswerStatus = 'found' | 'missed' | 'wrong' | 'avoided';
+
+export type MultipleAnswersReview = {
+	statuses: McqAnswerStatus[];
+	foundCount: number;
+	missedCount: number;
+	wrongCount: number;
+	totalCorrect: number;
+	isPerfect: boolean;
+};
+
+/**
+ * Classifies every answer of a multiple-answers question into one of four states,
+ * so the player can see what they found, missed, and wrongly picked.
+ */
+export function getMultipleAnswersReview(
 	answered: number | number[] | undefined,
 	results: AnswerResult[] | undefined
-): { correctPicks: number; totalCorrect: number } | null {
-	if (answered === undefined || results === undefined || !Array.isArray(answered)) return null;
-	const totalCorrect = results.filter((r) => r.correct).length;
-	const correctPicks = answered.filter((index) => results.at(index)?.correct).length;
-	return { correctPicks, totalCorrect };
+): MultipleAnswersReview {
+	const safeResults = results ?? [];
+	const picks = answered === undefined ? [] : Array.isArray(answered) ? answered : [answered];
+
+	const statuses: McqAnswerStatus[] = safeResults.map((result, index) => {
+		const picked = picks.includes(index);
+		if (result.correct) return picked ? 'found' : 'missed';
+		return picked ? 'wrong' : 'avoided';
+	});
+
+	const count = (status: McqAnswerStatus) => statuses.filter((s) => s === status).length;
+	const foundCount = count('found');
+	const missedCount = count('missed');
+	const wrongCount = count('wrong');
+
+	return {
+		statuses,
+		foundCount,
+		missedCount,
+		wrongCount,
+		totalCorrect: foundCount + missedCount,
+		isPerfect: missedCount === 0 && wrongCount === 0
+	};
 }
