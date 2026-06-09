@@ -21,6 +21,7 @@
 	import Shuffle from '~icons/material-symbols/shuffle';
 	import SwapVert from '~icons/material-symbols/swap-vert';
 	import TheaterComedyOutline from '~icons/material-symbols/theater-comedy-outline';
+	import TimerOffOutline from '~icons/material-symbols/timer-off-outline';
 
 	let { id }: { id: CreationId } = $props();
 
@@ -36,7 +37,8 @@
 		teams = $state(false),
 		teamSize = $state(4),
 		assignRandom = $state(false),
-		censorNames = $state(true);
+		censorNames = $state(true),
+		hostPaced = $state(false);
 
 	type StyleKey = 'Pet' | 'Roman';
 	const styleKinds: StyleKey[] = ['Pet', 'Roman'];
@@ -96,6 +98,25 @@
 			)
 		};
 	}
+
+	// Host-paced: drop every answering time limit so the host advances manually.
+	function hostPace<T>(
+		config: GenericIdlessFuizConfig<T>,
+		hostPaced: boolean
+	): GenericIdlessFuizConfig<T> {
+		if (!hostPaced) return config;
+		return {
+			...config,
+			slides: config.slides.map((slide) => ({
+				...slide,
+				...('MultipleChoice' in slide && {
+					MultipleChoice: { ...slide.MultipleChoice, time_limit: null }
+				}),
+				...('TypeAnswer' in slide && { TypeAnswer: { ...slide.TypeAnswer, time_limit: null } }),
+				...('Order' in slide && { Order: { ...slide.Order, time_limit: null } })
+			}))
+		};
+	}
 </script>
 
 {#await loadDatabase().then((db) => getCreation(id, db))}
@@ -111,7 +132,7 @@
 					e.preventDefault();
 					errorMessage = '';
 					loading = true;
-					playIdlessConfig(shuffle(config, shuffleSlides, shuffleAnswers), {
+					playIdlessConfig(hostPace(shuffle(config, shuffleSlides, shuffleAnswers), hostPaced), {
 						random_names: nameStyle,
 						show_answers: questionsOnPlayersDevices || teams,
 						no_leaderboard: !leaderboard,
@@ -215,6 +236,10 @@
 						<Switch id="leaderboard" bind:checked={leaderboard}>
 							<LeaderboardOutline height="1.2em" width="1.2em" />
 							{m.leaderboard()}
+						</Switch>
+						<Switch id="unlimited_time" bind:checked={hostPaced}>
+							<TimerOffOutline height="1.2em" width="1.2em" />
+							{m.unlimited_time()}
 						</Switch>
 					</div>
 				</div>
