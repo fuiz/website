@@ -136,15 +136,15 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 				// Upload files
 				send('progress', { state: 'uploading', message: 'Uploading files...' });
 
-				const tomlPath = `${fuizId}/config.toml`;
+				const fileNameToPath = (fileName: string) => `${fuizId}/${fileName}`;
 				const filesToUpload = [
 					{
-						path: tomlPath,
+						path: fileNameToPath('config.toml'),
 						content: tomlContent,
 						encoding: 'text' as const
 					},
 					...Array.from(images.values()).map((image) => ({
-						path: image.name,
+						path: fileNameToPath(image.name),
 						content: image.base64,
 						encoding: 'base64' as const
 					}))
