@@ -137,15 +137,23 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 				send('progress', { state: 'uploading', message: 'Uploading files...' });
 
 				const fileNameToPath = (fileName: string) => `${fuizId}/${fileName}`;
+
+				const uniqueImageFiles = new Map<string, string>();
+				for (const image of images) {
+					if (!uniqueImageFiles.has(image.name)) {
+						uniqueImageFiles.set(image.name, image.base64);
+					}
+				}
+
 				const filesToUpload = [
 					{
 						path: fileNameToPath('config.toml'),
 						content: tomlContent,
 						encoding: 'text' as const
 					},
-					...Array.from(images.values()).map((image) => ({
-						path: fileNameToPath(image.name),
-						content: image.base64,
+					...uniqueImageFiles.entries().map(([name, base64]) => ({
+						path: fileNameToPath(name),
+						content: base64,
 						encoding: 'base64' as const
 					}))
 				];
@@ -175,7 +183,7 @@ export const GET: RequestHandler = async ({ url, locals, cookies }) => {
 ### Details
 - **Slides:** ${fuizConfig.config.slides.length}
 - **Fuiz ID:** ${fuizId}
-- **Images:** ${images.length} file(s)
+- **Images:** ${uniqueImageFiles.size} file(s)
 
 ---
 *This PR was automatically created by the Fuiz publishing system.*
