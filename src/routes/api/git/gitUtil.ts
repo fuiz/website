@@ -3,7 +3,7 @@
  * Provides helpers for OAuth authentication with Git providers (GitLab, GitHub)
  */
 
-import { type Cookies, error } from '@sveltejs/kit';
+import type { Cookies } from '@sveltejs/kit';
 import { getOAuthConfig } from '$lib/git/factory';
 import type { GitProvider, OAuthTokens } from '$lib/git/types';
 
@@ -131,19 +131,6 @@ export function clearTokens(cookies: Cookies, provider: GitProvider): void {
  */
 export function isAuthenticated(cookies: Cookies, provider: GitProvider): boolean {
 	return getTokens(cookies, provider) !== null;
-}
-
-/**
- * Get tokens or throw error
- */
-export function requireTokens(cookies: Cookies, provider: GitProvider): OAuthTokens {
-	const tokens = getTokens(cookies, provider);
-
-	if (!tokens) {
-		error(401, `Not authenticated with ${provider}`);
-	}
-
-	return tokens;
 }
 
 /**

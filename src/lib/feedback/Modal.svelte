@@ -26,6 +26,13 @@
 
 <style>
 	dialog {
+		opacity: 0;
+		scale: 0.97;
+		transition:
+			opacity 0.15s ease,
+			scale 0.15s ease,
+			overlay 0.15s allow-discrete,
+			display 0.15s allow-discrete;
 		border: 1px solid var(--outline);
 		border-radius: 0.7em;
 		padding: 1em;
@@ -40,7 +47,41 @@
 			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
 	}
 
+	dialog[open] {
+		opacity: 1;
+		scale: 1;
+	}
+
+	@starting-style {
+		dialog[open] {
+			opacity: 0;
+			scale: 0.97;
+		}
+	}
+
 	dialog::backdrop {
 		background-color: rgba(0, 0, 0, 0.5);
+		opacity: 0;
+		transition:
+			opacity 0.15s ease,
+			overlay 0.15s allow-discrete,
+			display 0.15s allow-discrete;
+	}
+
+	dialog[open]::backdrop {
+		opacity: 1;
+	}
+
+	@starting-style {
+		dialog[open]::backdrop {
+			opacity: 0;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		dialog,
+		dialog::backdrop {
+			transition-duration: 0.01ms;
+		}
 	}
 </style>
