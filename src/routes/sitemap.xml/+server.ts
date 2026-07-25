@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import * as sitemap from 'super-sitemap';
+import * as sitemap from 'super-sitemap/sveltekit';
 
 export const prerender = false;
 
@@ -7,11 +7,11 @@ export const GET: RequestHandler = async ({ url }) => {
 	const text = await (
 		await sitemap.response({
 			origin: url.origin,
-			lang: {
+			locales: {
 				default: 'en',
 				alternates: ['ar', 'az', 'de', 'es', 'eu', 'fr', 'it', 'id', 'nl', 'pl', 'zh-cn']
 			},
-			excludeRoutePatterns: ['.*\\[id\\].*']
+			excludeRoutePatterns: [/.*\[id\].*/]
 		})
 	).text();
 
