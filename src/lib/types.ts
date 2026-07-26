@@ -273,6 +273,8 @@ export type IdlessLocalReferenceFuizConfig = GenericIdlessFuizConfig<UrlMedia | 
 
 export type Creation = {
 	id: number;
+	/** Stable across devices, unlike `id` — this is what reports link back to. */
+	uniqueId: string;
 	title: string;
 	lastEdited: number;
 	slidesCount: number;

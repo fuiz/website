@@ -1,5 +1,13 @@
 import type { Base64Media } from '../types';
-import type { CreationId, InternalFuiz, InternalFuizMetadata, MediaReferencedFuizConfig } from '.';
+import type {
+	CreationId,
+	InternalFuiz,
+	InternalFuizMetadata,
+	InternalReport,
+	MediaReferencedFuizConfig,
+	ReportBody,
+	ReportId
+} from '.';
 
 export interface RemoteSyncProviderStatus {
 	authenticated: boolean;
@@ -32,6 +40,15 @@ export interface RemoteSyncProvider {
 		delete(uuid: string): Promise<void>;
 		createImage(hash: string, value: Base64Media): Promise<void>;
 		getImage(hash: string): Promise<Base64Media | undefined>;
+
+		syncReports(
+			localDatabase: IDBDatabase,
+			reports: [ReportId, InternalFuizMetadata][]
+		): Promise<void>;
+		createReport(uuid: string, report: InternalReport): Promise<void>;
+		getReport(uuid: string): Promise<ReportBody | undefined>;
+		updateReport(uuid: string, report: InternalReport): Promise<void>;
+		deleteReport(uuid: string): Promise<void>;
 	};
 }
 

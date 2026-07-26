@@ -125,20 +125,24 @@
 	{#if !fuiz}
 		<ErrorPage errorMessage={m.missing_fuiz()} />
 	{:else}
-		{@const { config } = fuiz}
+		{@const { config, uniqueId, versionId } = fuiz}
 		<TypicalPage>
 			<form
 				onsubmit={(e) => {
 					e.preventDefault();
 					errorMessage = '';
 					loading = true;
-					playIdlessConfig(hostPace(shuffle(config, shuffleSlides, shuffleAnswers), hostPaced), {
-						random_names: nameStyle,
-						show_answers: questionsOnPlayersDevices || teams,
-						no_leaderboard: !leaderboard,
-						profanity: censorNames ? 'Censor' : 'Allow',
-						...(teams && { teams: { size: teamSize, assign_random: assignRandom } })
-					}).then((err) => {
+					playIdlessConfig(
+						hostPace(shuffle(config, shuffleSlides, shuffleAnswers), hostPaced),
+						{
+							random_names: nameStyle,
+							show_answers: questionsOnPlayersDevices || teams,
+							no_leaderboard: !leaderboard,
+							profanity: censorNames ? 'Censor' : 'Allow',
+							...(teams && { teams: { size: teamSize, assign_random: assignRandom } })
+						},
+						{ uniqueId, versionId }
+					).then((err) => {
 						loading = false;
 						if (err) {
 							errorMessage = err;

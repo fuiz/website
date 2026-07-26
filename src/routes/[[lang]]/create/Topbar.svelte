@@ -110,7 +110,7 @@
 		<div class="host-wrap" interestfor="error-popover">
 			<FancyButton
 				disabled={errorMessage != undefined}
-				onclick={() => goto(resolve(localizeHref('/host?id=' + id)))}
+				onclick={() => goto(resolve(localizeHref(`/quiz/${id}/host`)))}
 			>
 				<div class="host-label">
 					<LiveTv height="1.1em" />

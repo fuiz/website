@@ -282,11 +282,28 @@ export async function getFilesIdFromName(
 	return await service.file<{ id: string }>(['id'], { name });
 }
 
+/**
+ * Everything lives in one flat appDataFolder, so mimeType is the only type discriminator.
+ * Reports must never reuse `application/json` or they would show up in `getCreations` and
+ * be reconciled as quizzes.
+ */
+export const CREATION_MIME_TYPE = 'application/json';
+export const REPORT_MIME_TYPE = 'application/vnd.fuiz.report+json';
+
 export async function getCreations(
 	service: Drive
 ): Promise<{ name: string; properties: InternalFuizMetadataStrings }[]> {
 	return await service.list<{
 		name: string;
 		properties: InternalFuizMetadataStrings;
-	}>(['name', 'properties'], { mimeType: 'application/json' });
+	}>(['name', 'properties'], { mimeType: CREATION_MIME_TYPE });
+}
+
+export async function getReports(
+	service: Drive
+): Promise<{ name: string; properties: InternalFuizMetadataStrings }[]> {
+	return await service.list<{
+		name: string;
+		properties: InternalFuizMetadataStrings;
+	}>(['name', 'properties'], { mimeType: REPORT_MIME_TYPE });
 }

@@ -4,6 +4,7 @@
 	import {
 		addIds,
 		downloadFuiz,
+		downloadFuizzes,
 		loadSingleToml,
 		loadZip,
 		removeIds,
@@ -19,32 +20,50 @@
 		type Database,
 		deleteCreation,
 		generateUuid,
-		getCreation
+		getCreation,
+		type InternalReport,
+		type ReportId
 	} from '$lib/storage';
 	import { type Creation, getMedia, type Media } from '$lib/types';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import { isNotUndefined, toSorted } from '$lib/util';
 	import BackupOutline from '~icons/material-symbols/backup-outline';
+	import Close from '~icons/material-symbols/close';
 	import CloudDoneOutline from '~icons/material-symbols/cloud-done-outline';
 	import CloudSyncOutline from '~icons/material-symbols/cloud-sync-outline';
+	import DeleteOutline from '~icons/material-symbols/delete-outline';
+	import Download from '~icons/material-symbols/download';
 	import FolderOpenOutline from '~icons/material-symbols/folder-open-outline';
 	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
 	import Refresh from '~icons/material-symbols/refresh';
+	import SelectAllIcon from '~icons/material-symbols/select-all';
 	import GalleryCreation from './GalleryCreation.svelte';
 
 	let {
 		creations = $bindable(),
 		pendingCreations = $bindable(),
+		reports = [],
 		syncing = false,
 		db,
 		showShare
 	}: {
 		creations: Creation[];
 		pendingCreations?: Creation[];
+		reports?: [ReportId, InternalReport][];
 		syncing?: boolean;
 		db: Database;
 		showShare?: boolean;
 	} = $props();
+
+	/** How many saved reports each quiz has, keyed by the quiz's `uniqueId`. */
+	let reportCounts = $derived(
+		reports.reduce((counts, [, report]) => {
+			if (report.fuizUniqueId) {
+				counts.set(report.fuizUniqueId, (counts.get(report.fuizUniqueId) ?? 0) + 1);
+			}
+			return counts;
+		}, new Map<string, number>())
+	);
 
 	function applyPending() {
 		if (!pendingCreations) return;
@@ -71,22 +90,56 @@
 			...creations,
 			{
 				id,
+				uniqueId: newSlide.uniqueId,
 				lastEdited: newSlide.lastEdited,
 				title: newSlide.config.title,
 				slidesCount: newSlide.config.slides.length
 			}
 		];
 
-		await goto(resolve(localizeHref(`/create?id=${id}`)));
+		await goto(resolve(localizeHref(`/quiz/${id}/edit`)));
 	}
 
 	async function deleteSlide(id: number) {
 		await deleteCreation(id, db);
 		creations = creations.filter((c) => c.id !== id);
+		selected = selected.filter((s) => s !== id);
 	}
 
 	let deleteDialog = $state<ConfirmationDialog>();
 	let selectedToDeletion = $state(0);
+
+	let selected = $state<CreationId[]>([]);
+	let selecting = $derived(selected.length > 0);
+
+	function toggle(id: CreationId) {
+		selected = selected.includes(id) ? selected.filter((s) => s !== id) : [...selected, id];
+	}
+
+	let allSelected = $derived(creations.length > 0 && selected.length === creations.length);
+
+	function selectAll() {
+		selected = creations.map((c) => c.id);
+	}
+
+	let bulkDeleteDialog = $state<ConfirmationDialog>();
+
+	async function deleteSelected() {
+		const ids = selected;
+		selected = [];
+		await Promise.all(ids.map((id) => deleteCreation(id, db)));
+		creations = creations.filter((c) => !ids.includes(c.id));
+	}
+
+	/** One archive rather than a burst of downloads, which browsers throttle or drop. */
+	async function downloadSelected() {
+		const creationsToExport = (await Promise.all(selected.map((id) => getCreation(id, db)))).filter(
+			isNotUndefined
+		);
+		if (creationsToExport.length === 0) return;
+		await downloadFuizzes(creationsToExport.map((c) => c.config));
+		selected = [];
+	}
 
 	let logoutDialog = $state<ConfirmationDialog>();
 
@@ -169,6 +222,7 @@
 					...creations,
 					{
 						id,
+						uniqueId: fuiz.uniqueId,
 						lastEdited: fuiz.lastEdited,
 						title: idedConfig.title,
 						slidesCount: idedConfig.slides.length,
@@ -223,10 +277,44 @@
 			<p class="tagline">{m.create_desc()}</p>
 		</header>
 
+		<!-- Stays mounted so the browser has two heights to interpolate between. -->
+		<div class="selbar-wrap" class:open={selecting} inert={!selecting}>
+			<div class="selbar">
+				<button class="clear" onclick={() => (selected = [])}>
+					<Close height="1.1em" />
+					<span>{m.clear_selection()}</span>
+				</button>
+				<span class="count">{m.selected_count({ count: selected.length })}</span>
+				{#if !allSelected}
+					<button class="clear" onclick={selectAll}>
+						<SelectAllIcon height="1.1em" />
+						<span>{m.select_all()}</span>
+					</button>
+				{/if}
+				<div class="selactions">
+					<IconButton alt={m.download()} padding="0.35em" onclick={downloadSelected}>
+						<Download />
+					</IconButton>
+					<IconButton
+						alt={m.delete_confirm()}
+						padding="0.35em"
+						onclick={() => bulkDeleteDialog?.open()}
+					>
+						<DeleteOutline />
+					</IconButton>
+				</div>
+			</div>
+		</div>
+
 		<section class="recent">
 			<div class="recent-header">
 				<h2>{m.recent_fuizzes()}</h2>
 				<div class="actions">
+					{#if reports.length}
+						<!-- Reports live on each quiz's own page; this catches the ones whose quiz was
+						     deleted or that were joined by code. -->
+						<a class="all-reports" href={resolve(localizeHref('/reports'))}>{m.all_reports()}</a>
+					{/if}
 					<IconButton alt={m.start_blank()} onclick={newCreation}>
 						<NoteAddOutline />
 					</IconButton>
@@ -262,7 +350,7 @@
 			</div>
 			{#if sortedCreations.length}
 				<div class="grid">
-					{#each sortedCreations as { id, title, lastEdited, slidesCount, media } (id)}
+					{#each sortedCreations as { id, uniqueId, title, lastEdited, slidesCount, media } (id)}
 						<GalleryCreation
 							{id}
 							{title}
@@ -270,11 +358,15 @@
 							{slidesCount}
 							{media}
 							{showShare}
+							{selecting}
+							selected={selected.includes(id)}
+							ontoggle={() => toggle(id)}
+							reportCount={reportCounts.get(uniqueId) ?? 0}
 							ondelete={() => {
 								selectedToDeletion = id;
 								deleteDialog?.open();
 							}}
-							onplay={() => goto(resolve(localizeHref('/host?id=' + id)))}
+							onplay={() => goto(resolve(localizeHref(`/quiz/${id}/host`)))}
 							ondownload={() => onDownload(id)}
 							onshare={(e) => onShare(id, e)}
 						/>
@@ -287,6 +379,7 @@
 				</button>
 			{/if}
 		</section>
+
 	</div>
 </TypicalPage>
 
@@ -299,6 +392,14 @@
 />
 
 <ConfirmationDialog
+	bind:this={bulkDeleteDialog}
+	title={m.delete_forever()}
+	message={m.delete_selected_message({ count: selected.length })}
+	confirmText={m.delete_confirm()}
+	onConfirm={deleteSelected}
+/>
+
+<ConfirmationDialog
 	bind:this={logoutDialog}
 	title={m.log_out_confirm_title()}
 	message={m.log_out_confirm_message()}
@@ -307,6 +408,81 @@
 />
 
 <style>
+	/*
+	 * `interpolate-size` lets `height: auto` interpolate, so the browser animates the
+	 * layout itself rather than us stepping height from JS every frame. Without support
+	 * the height snaps, which is exactly the un-animated behaviour — so it degrades to
+	 * where we were.
+	 *
+	 * The wrapper carries `position: sticky`, not `.selbar`: sticky does not work inside
+	 * an `overflow: hidden` ancestor, and the clipping is what hides the collapsed bar.
+	 */
+	.selbar-wrap {
+		interpolate-size: allow-keywords;
+		position: sticky;
+		top: 0.4em;
+		z-index: 5;
+		height: 0;
+		opacity: 0;
+		overflow: hidden;
+		transition:
+			height 200ms ease,
+			opacity 140ms ease;
+	}
+
+	.selbar-wrap.open {
+		height: auto;
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.selbar-wrap {
+			transition: none;
+		}
+	}
+
+	.selbar {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		background: var(--primary);
+		color: var(--on-primary);
+		border-radius: 0.6em;
+		padding: 0.35em 0.5em;
+		margin-bottom: 0.6em;
+	}
+
+	.clear {
+		display: flex;
+		align-items: center;
+		gap: 0.3em;
+		font: inherit;
+		font-weight: 700;
+		font-size: 0.85em;
+		color: inherit;
+		background: none;
+		border: none;
+		border-radius: 0.4em;
+		padding: 0.25em 0.35em;
+		cursor: pointer;
+	}
+
+	.clear:where(:hover, :focus-visible) {
+		background: color-mix(in srgb, var(--on-primary) 18%, transparent);
+	}
+
+	.count {
+		flex: 1;
+		font-size: 0.8em;
+		opacity: 0.85;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.selactions {
+		display: flex;
+		gap: 0.15em;
+	}
+
 	.hidden-input {
 		display: none;
 	}
@@ -355,6 +531,14 @@
 		gap: 0.5em;
 	}
 
+	.all-reports {
+		font-size: 0.8em;
+		color: inherit;
+		opacity: 0.7;
+		white-space: nowrap;
+		margin-right: 0.2em;
+	}
+
 	.recent-header h2 {
 		font-family: var(--alternative-font);
 		font-size: 1em;
@@ -363,6 +547,10 @@
 		margin: 0;
 		opacity: 0.65;
 	}
+
+
+
+
 
 	.actions {
 		display: flex;

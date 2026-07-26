@@ -10,20 +10,50 @@ import {
 	mapIdlessSlidesMedia,
 	mapIdlessSlidesMediaSync
 } from '../types';
+import { toSorted } from '../util';
 import {
 	addCreationLocal,
+	addReportLocal,
 	deleteCreationLocal,
+	deleteReportLocal,
 	getAllCreationsLocal,
+	getAllReportsLocal,
 	getCreationLocal,
+	getReportLocal,
 	loadLocalDatabase,
 	retrieveMediaFromLocal,
 	updateCreationLocal,
-	updateLocalImagesDatabase
+	updateLocalImagesDatabase,
+	updateReportLocal
 } from './local';
 import { type RemoteSync, type RemoteSyncProvider, retrieveRemoteSync } from './remoteStorage';
 
 export type LocalDatabase = IDBDatabase;
 export type CreationId = number;
+export type ReportId = number;
+
+/**
+ * How a set of players performed in one hosted game.
+ *
+ * `fuizUniqueId` is the relational link back to the creation it was played from, but the
+ * question titles are snapshotted alongside it: the quiz may be edited, deleted, or never
+ * have been local at all (joined by code, opened from a share link), and the report still
+ * has to render. `fuizVersionId` records which version was played so a later drift can be
+ * flagged rather than silently misattributed.
+ */
+export type ReportBody = {
+	title: string;
+	playedAt: number;
+	gameCode?: string;
+	fuizUniqueId?: string;
+	fuizVersionId?: number;
+	playerCount: number;
+	questions: { title: string; correct: number; wrong: number }[];
+	results: [string, number[]][];
+	teams?: [string, string[]][];
+};
+
+export type InternalReport = ReportBody & InternalFuizMetadata;
 
 export type Database = {
 	local: LocalDatabase;
@@ -228,6 +258,7 @@ export async function getLocalCreations(database: Database): Promise<Creation[]>
 			const value = await collectFuiz(f, database.local);
 			return {
 				id: parseInt(key.toString(), 10),
+				uniqueId: value.uniqueId,
 				lastEdited: value.lastEdited,
 				title: value.config.title,
 				slidesCount: value.config.slides.length,
@@ -272,4 +303,90 @@ export async function updateCreation(
 	const internalFuiz = await internalizeFuiz(newSlide, database);
 	await updateCreationLocal(id, internalFuiz, database.local);
 	await database.remote?.update(newSlide.uniqueId, internalFuiz);
+}
+
+/** Resolves a report's `fuizUniqueId` back to the local creation, when it still exists. */
+export async function findCreationByUniqueId(
+	uniqueId: string,
+	database: Database
+): Promise<{ id: CreationId; versionId: number } | undefined> {
+	const found = (await getAllCreationsLocal(database.local)).find(
+		([, creation]) => creation.uniqueId === uniqueId
+	);
+	if (!found) return undefined;
+	return { id: parseInt(found[0].toString(), 10), versionId: found[1].versionId };
+}
+
+export async function syncRemoteReports(database: Database): Promise<void> {
+	await database.remote?.syncReports(database.local, await getAllReportsLocal(database.local));
+}
+
+export async function getLocalReports(database: Database): Promise<[ReportId, InternalReport][]> {
+	return toSorted(
+		await getAllReportsLocal(database.local),
+		([, a], [, b]) => b.playedAt - a.playedAt
+	);
+}
+
+export async function getAllReports(database: Database): Promise<[ReportId, InternalReport][]> {
+	await syncRemoteReports(database);
+	return await getLocalReports(database);
+}
+
+export async function getReport(
+	id: ReportId,
+	database: Database
+): Promise<InternalReport | undefined> {
+	return await getReportLocal(id, database.local);
+}
+
+/**
+ * Svelte 5 wraps reactive values in a Proxy, and IndexedDB's structured clone throws
+ * `DataCloneError` on one. Creations only avoid this by accident — `internalizeFuiz`
+ * rebuilds the config into fresh objects on the way in — but a report is stored exactly as
+ * handed over, so it needs an explicit plain copy. A report is pure JSON data (strings,
+ * numbers, arrays), so a round-trip is lossless apart from dropping `undefined` optionals,
+ * which is what we want stored anyway.
+ */
+function plainCopy<T>(value: T): T {
+	return JSON.parse(JSON.stringify(value)) as T;
+}
+
+export async function addReport(body: ReportBody, database: Database): Promise<ReportId> {
+	const report: InternalReport = plainCopy({
+		...body,
+		uniqueId: generateUuid(),
+		versionId: 0,
+		lastEdited: Date.now()
+	});
+	const id = await addReportLocal(report, database.local);
+	await database.remote?.createReport(report.uniqueId, report);
+	return id;
+}
+
+/**
+ * Returns the stored report so callers editing repeatedly keep a fresh `versionId` to build
+ * on — reconcile() uses it as the sole conflict tiebreaker, so re-sending the same base
+ * version would leave every edit after the first invisible to sync.
+ */
+export async function updateReport(
+	id: ReportId,
+	report: InternalReport,
+	database: Database
+): Promise<InternalReport> {
+	const updated: InternalReport = plainCopy({
+		...report,
+		versionId: report.versionId + 1,
+		lastEdited: Date.now()
+	});
+	await updateReportLocal(id, updated, database.local);
+	await database.remote?.updateReport(updated.uniqueId, updated);
+	return updated;
+}
+
+export async function deleteReport(id: ReportId, database: Database): Promise<void> {
+	const uniqueId = (await getReportLocal(id, database.local))?.uniqueId;
+	if (!uniqueId) return;
+	await deleteReportLocal(id, database.local);
+	await database.remote?.deleteReport(uniqueId);
 }

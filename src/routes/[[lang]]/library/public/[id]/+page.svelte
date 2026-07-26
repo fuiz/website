@@ -39,12 +39,12 @@
 
 	async function onImport() {
 		const id = await addToCollection();
-		await goto(resolve(localizeHref('/create') + '?id=' + id.toString()));
+		await goto(resolve(localizeHref(`/quiz/${id}/edit`)));
 	}
 
 	async function onStart() {
 		const id = await addToCollection();
-		await goto(resolve(localizeHref('/host') + '?id=' + id.toString()));
+		await goto(resolve(localizeHref(`/quiz/${id}/host`)));
 	}
 </script>
 

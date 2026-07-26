@@ -4,12 +4,15 @@ import {
 	type CreationId,
 	type InternalFuiz,
 	type InternalFuizMetadata,
+	type InternalReport,
 	type LocalDatabase,
 	type LooseMediaReferencedFuizConfig,
 	type MediaReferencedFuizConfig,
+	type ReportBody,
+	type ReportId,
 	strictifyMediaReference
 } from '..';
-import { reconcile } from '../utils';
+import { creationEntity, reconcile, reportEntity } from '../utils';
 
 export class GoogleDriveSync {
 	// Static metadata
@@ -63,8 +66,55 @@ export class GoogleDriveSync {
 				const reqExists = await bring(`/api/gdrive/images/${hash}`, { method: 'HEAD' });
 				return reqExists?.ok ?? false;
 			},
-			existing
+			existing,
+			creationEntity
 		);
+	}
+
+	async syncReports(
+		localDatabase: LocalDatabase,
+		existing: [ReportId, InternalFuizMetadata][]
+	): Promise<void> {
+		const res = await bring(`/api/gdrive/reports`);
+		if (!res?.ok) {
+			console.error('Failed to fetch reports from Google Drive');
+			return;
+		}
+
+		await reconcile(
+			this,
+			localDatabase,
+			await res.json(),
+			// Reports reference no media, so nothing is ever probed.
+			async () => true,
+			existing,
+			reportEntity
+		);
+	}
+
+	async getReport(uuid: string): Promise<ReportBody | undefined> {
+		const res = await bring(`/api/gdrive/reports/${uuid}`);
+		return res?.ok ? ((await res.json()) as ReportBody) : undefined;
+	}
+
+	async createReport(uuid: string, report: InternalReport): Promise<void> {
+		await fetch(`/api/gdrive/reports/${uuid}`, {
+			method: 'POST',
+			body: JSON.stringify(report)
+		});
+	}
+
+	async updateReport(uuid: string, report: InternalReport): Promise<void> {
+		await fetch(`/api/gdrive/reports/${uuid}`, {
+			method: 'PUT',
+			body: JSON.stringify(report)
+		});
+	}
+
+	async deleteReport(uuid: string): Promise<void> {
+		await fetch(`/api/gdrive/reports/${uuid}`, {
+			method: 'DELETE'
+		});
 	}
 
 	async get(uuid: string): Promise<MediaReferencedFuizConfig | undefined> {

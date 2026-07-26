@@ -69,6 +69,60 @@ export async function downloadFuiz(configJson: IdlessFullFuizConfig) {
 	}
 }
 
+/** A title can hold anything, including `/`, which would become a folder inside the zip. */
+const ILLEGAL_FILENAME_CHARS = '\\/:*?"<>|';
+
+function safeFileName(name: string): string {
+	const cleaned = [...name]
+		.filter((char) => char >= ' ' && !ILLEGAL_FILENAME_CHARS.includes(char))
+		.join('')
+		// Stripping a character can leave the spaces that surrounded it doubled up.
+		.replace(/\s+/g, ' ')
+		.trim();
+	return cleaned || 'fuiz';
+}
+
+/** Two quizzes called "New Quiz" would otherwise overwrite each other in the archive. */
+function uniqueFileName(base: string, extension: string, used: Set<string>): string {
+	let name = `${base}.${extension}`;
+	let attempt = 2;
+	while (used.has(name)) {
+		name = `${base} (${attempt++}).${extension}`;
+	}
+	used.add(name);
+	return name;
+}
+
+/**
+ * One archive holding every given fuiz. Each entry keeps the shape `downloadFuiz` would
+ * have produced on its own — a `.zip` when the fuiz carries images, a bare `.toml` when it
+ * doesn't — so unzipping once leaves files that import directly.
+ */
+export async function downloadFuizzes(configs: IdlessFullFuizConfig[], name = 'fuizzes') {
+	if (configs.length === 0) return;
+	if (configs.length === 1) return await downloadFuiz(configs[0]);
+
+	const archive = JSZip();
+	const used = new Set<string>();
+
+	for (const config of configs) {
+		const [urlified, images] = urlifyBase64(config);
+		const toml = stringifyToml(urlified);
+		const base = safeFileName(config.title);
+
+		if (images.length > 0) {
+			archive.file(uniqueFileName(base, 'zip', used), await createZip(toml, images));
+		} else {
+			archive.file(uniqueFileName(base, 'toml', used), toml);
+		}
+	}
+
+	downloadBlob(
+		[await archive.generateAsync({ type: 'blob', compression: 'STORE' })],
+		`${name}.zip`
+	);
+}
+
 export async function loadZip(file: Blob): Promise<IdlessFullFuizConfig | undefined> {
 	const mimetypes = new Map([
 		['apng', 'image/apng'],
@@ -236,7 +290,24 @@ export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig
 	};
 }
 
-async function playJsonString(config: string): Promise<undefined | string> {
+/**
+ * Which local creation a game was launched from. The backend is never told, so this is
+ * stashed alongside the watcher id and read back when the game ends — it's what lets a
+ * saved report link to the quiz that produced it, and it survives a mid-game reload.
+ */
+export type FuizOrigin = { uniqueId: string; versionId: number };
+
+export function getFuizOrigin(code: string): FuizOrigin | undefined {
+	const raw = localStorage.getItem(code + '_fuiz');
+	if (!raw) return undefined;
+	try {
+		return JSON.parse(raw) as FuizOrigin;
+	} catch {
+		return undefined;
+	}
+}
+
+async function playJsonString(config: string, origin?: FuizOrigin): Promise<undefined | string> {
 	const res = await bring(env.PUBLIC_BACKEND_URL + '/add', {
 		method: 'POST',
 		mode: 'cors',
@@ -252,8 +323,11 @@ async function playJsonString(config: string): Promise<undefined | string> {
 	const { game_id, watcher_id } = await res.json();
 
 	localStorage.setItem(game_id + '_host', watcher_id);
+	if (origin) {
+		localStorage.setItem(game_id + '_fuiz', JSON.stringify(origin));
+	}
 
-	await goto(resolve(localizeHref('/host?code=' + game_id)));
+	await goto(resolve(localizeHref('/host/' + game_id)));
 }
 
 function fixTime(time: number | null | undefined): number | null | undefined {
@@ -355,7 +429,8 @@ async function getBackendConfig(config: IdlessFullFuizConfig): Promise<IdlessFui
 
 export async function playIdlessConfig(
 	config: IdlessFullFuizConfig,
-	options: FuizOptions
+	options: FuizOptions,
+	origin?: FuizOrigin
 ): Promise<undefined | string> {
 	let backendReadyConfig: IdlessFuizConfig;
 	try {
@@ -378,7 +453,8 @@ export async function playIdlessConfig(
 			JSON.stringify({
 				config: fixTimes(backendReadyConfig),
 				options
-			})
+			}),
+			origin
 		);
 	} catch {
 		return 'Failed to start game';
@@ -387,13 +463,15 @@ export async function playIdlessConfig(
 
 export async function playBackendReadyIdConfig(
 	config: FuizConfig,
-	options: FuizOptions
+	options: FuizOptions,
+	origin?: FuizOrigin
 ): Promise<undefined | string> {
 	return await playJsonString(
 		JSON.stringify({
 			config: removeIds(config),
 			options
-		})
+		}),
+		origin
 	);
 }
 

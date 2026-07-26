@@ -16,7 +16,7 @@
 			db
 		);
 
-		await goto(resolve(localizeHref('/create') + '?id=' + id.toString()));
+		await goto(resolve(localizeHref(`/quiz/${id}/edit`)));
 	});
 </script>
 

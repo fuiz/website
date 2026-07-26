@@ -1,59 +1,114 @@
 import { type Base64Media, getMedia } from '../types';
 import { isNotUndefined } from '../util';
 import {
-	type CreationId,
 	generateUuid,
 	type InternalFuiz,
 	type InternalFuizMetadata,
-	type LocalDatabase
+	type InternalReport,
+	type LocalDatabase,
+	type MediaReferencedFuizConfig,
+	type ReportBody
 } from '.';
 import type { RemoteSync } from './interface';
 import {
 	addCreationLocal,
+	addReportLocal,
 	getCreationLocal,
+	getReportLocal,
 	retrieveMediaFromLocal,
 	updateCreationLocal,
-	updateLocalImagesDatabase
+	updateLocalImagesDatabase,
+	updateReportLocal
 } from './local';
 
-export async function reconcile(
+/**
+ * Everything `reconcile` needs to know about one kind of synced record. Creations carry
+ * media and live in the `creations` store; reports carry none and live in `reports`.
+ */
+export type SyncEntity<TInternal extends InternalFuizMetadata, TBody> = {
+	getLocal(key: number, database: LocalDatabase): Promise<TInternal | undefined>;
+	addLocal(value: TInternal, database: LocalDatabase): Promise<number>;
+	updateLocal(key: number, value: TInternal, database: LocalDatabase): Promise<void>;
+	getRemote(remote: RemoteSync, uniqueId: string): Promise<TBody | undefined>;
+	createRemote(remote: RemoteSync, uniqueId: string, value: TInternal): Promise<void>;
+	updateRemote(remote: RemoteSync, uniqueId: string, value: TInternal): Promise<void>;
+	compose(metadata: InternalFuizMetadata, body: TBody): TInternal;
+	mediaReferences(value: TInternal): { hash: string; alt?: string }[];
+};
+
+export const creationEntity: SyncEntity<InternalFuiz, MediaReferencedFuizConfig> = {
+	getLocal: getCreationLocal,
+	addLocal: addCreationLocal,
+	updateLocal: updateCreationLocal,
+	getRemote: (remote, uniqueId) => remote.get(uniqueId),
+	createRemote: (remote, uniqueId, value) => remote.create(uniqueId, value),
+	updateRemote: (remote, uniqueId, value) => remote.update(uniqueId, value),
+	compose: (metadata, config) => ({ ...metadata, config }),
+	mediaReferences: (internal) =>
+		internal.config.slides
+			.map((slide) => {
+				const mediaReference = getMedia(slide);
+				if (!mediaReference) return undefined;
+				if (typeof mediaReference === 'string') return { hash: mediaReference };
+				if ('HashReference' in mediaReference.Image) {
+					return {
+						hash: mediaReference.Image.HashReference.hash,
+						alt: mediaReference.Image.HashReference.alt
+					};
+				}
+				return undefined;
+			})
+			.filter(isNotUndefined)
+};
+
+export const reportEntity: SyncEntity<InternalReport, ReportBody> = {
+	getLocal: getReportLocal,
+	addLocal: addReportLocal,
+	updateLocal: updateReportLocal,
+	getRemote: (remote, uniqueId) => remote.getReport(uniqueId),
+	createRemote: (remote, uniqueId, value) => remote.createReport(uniqueId, value),
+	updateRemote: (remote, uniqueId, value) => remote.updateReport(uniqueId, value),
+	compose: (metadata, body) => ({ ...body, ...metadata }),
+	mediaReferences: () => []
+};
+
+export async function reconcile<TInternal extends InternalFuizMetadata, TBody>(
 	remoteDatabase: RemoteSync,
 	localDatabase: LocalDatabase,
 	onRemote: InternalFuizMetadata[],
 	hashOnRemote: (hash: string) => Promise<boolean>,
-	onLocal: [CreationId, InternalFuizMetadata][]
+	onLocal: [number, InternalFuizMetadata][],
+	entity: SyncEntity<TInternal, TBody>
 ) {
-	const uniqueIdToRemoteFuiz: Map<string, InternalFuizMetadata> = new Map();
+	const uniqueIdToRemote: Map<string, InternalFuizMetadata> = new Map();
 	for (const remote of onRemote) {
-		const existing = uniqueIdToRemoteFuiz.get(remote.uniqueId);
+		const existing = uniqueIdToRemote.get(remote.uniqueId);
 		if (existing === undefined || remote.versionId > existing.versionId) {
-			uniqueIdToRemoteFuiz.set(remote.uniqueId, remote);
+			uniqueIdToRemote.set(remote.uniqueId, remote);
 		}
 	}
 
 	const getRemote = (id: string) => {
-		return uniqueIdToRemoteFuiz.get(id);
+		return uniqueIdToRemote.get(id);
 	};
 
-	const uniqueIdToLocalFuiz: Map<string, [CreationId, InternalFuizMetadata]> = new Map();
+	const uniqueIdToLocal: Map<string, [number, InternalFuizMetadata]> = new Map();
 	for (const [key, local] of onLocal) {
-		const existing = uniqueIdToLocalFuiz.get(local.uniqueId);
+		const existing = uniqueIdToLocal.get(local.uniqueId);
 		if (existing === undefined || local.versionId > existing[1].versionId) {
-			uniqueIdToLocalFuiz.set(local.uniqueId, [key, local]);
+			uniqueIdToLocal.set(local.uniqueId, [key, local]);
 		}
 	}
 
 	const getLocal = (id: string) => {
-		return uniqueIdToLocalFuiz.get(id);
+		return uniqueIdToLocal.get(id);
 	};
 
-	const onlyInRemote = uniqueIdToRemoteFuiz
-		.values()
-		.filter((c) => getLocal(c.uniqueId) === undefined);
-	const onlyInExisting = uniqueIdToLocalFuiz
+	const onlyInRemote = uniqueIdToRemote.values().filter((c) => getLocal(c.uniqueId) === undefined);
+	const onlyInExisting = uniqueIdToLocal
 		.values()
 		.filter(([, c]) => getRemote(c.uniqueId) === undefined);
-	const remoteNewer = uniqueIdToRemoteFuiz
+	const remoteNewer = uniqueIdToRemote
 		.values()
 		.map((c) => {
 			const local = getLocal(c.uniqueId);
@@ -62,33 +117,23 @@ export async function reconcile(
 			const localVersion = localInternal.versionId ?? 0;
 			const remoteVersion = c.versionId ?? 0;
 			return localVersion < remoteVersion
-				? ([c, localKey] satisfies [InternalFuizMetadata, CreationId])
+				? ([c, localKey] satisfies [InternalFuizMetadata, number])
 				: undefined;
 		})
 		.filter(isNotUndefined);
-	const localNewer = uniqueIdToLocalFuiz.values().filter(([, c]) => {
+	const localNewer = uniqueIdToLocal.values().filter(([, c]) => {
 		const remote = getRemote(c.uniqueId);
 		return remote && remote.versionId < c.versionId;
 	});
 
-	async function updateLocalImages(internal: InternalFuiz) {
+	async function updateLocalImages(internal: TInternal) {
 		const references = (
 			await Promise.all(
-				internal?.config.slides.map(async (s) => {
-					const mediaReference = getMedia(s);
-					if (!mediaReference) return undefined;
-					if (typeof mediaReference === 'string') {
-						const media = await remoteDatabase.getImage(mediaReference);
-						if (!media) return undefined;
-						return [mediaReference, media] satisfies [string, Base64Media];
-					}
-					if ('HashReference' in mediaReference.Image) {
-						const media = await remoteDatabase.getImage(mediaReference.Image.HashReference.hash);
-						if (!media) return undefined;
-						return [mediaReference.Image.HashReference.hash, media] satisfies [string, Base64Media];
-					}
-					return undefined;
-				}) ?? []
+				entity.mediaReferences(internal).map(async ({ hash }) => {
+					const media = await remoteDatabase.getImage(hash);
+					if (!media) return undefined;
+					return [hash, media] satisfies [string, Base64Media];
+				})
 			)
 		).filter(isNotUndefined);
 		await Promise.all(
@@ -98,29 +143,14 @@ export async function reconcile(
 		);
 	}
 
-	async function images(internal: InternalFuiz): Promise<[string, Base64Media][]> {
+	async function images(internal: TInternal): Promise<[string, Base64Media][]> {
 		return (
 			await Promise.all(
-				internal?.config.slides.map(async (s) => {
-					const mediaReference = getMedia(s);
-					if (!mediaReference) return undefined;
-					if (typeof mediaReference === 'string') {
-						const media = await retrieveMediaFromLocal(mediaReference, localDatabase);
-						if (!media) return undefined;
-
-						return [mediaReference, media] satisfies [string, Base64Media];
-					}
-					if ('HashReference' in mediaReference.Image) {
-						const media = await retrieveMediaFromLocal(
-							mediaReference.Image.HashReference.hash,
-							localDatabase,
-							mediaReference.Image.HashReference.alt
-						);
-						if (!media) return undefined;
-						return [mediaReference.Image.HashReference.hash, media] as [string, Base64Media];
-					}
-					return undefined;
-				}) ?? []
+				entity.mediaReferences(internal).map(async ({ hash, alt }) => {
+					const media = await retrieveMediaFromLocal(hash, localDatabase, alt);
+					if (!media) return undefined;
+					return [hash, media] satisfies [string, Base64Media];
+				})
 			)
 		).filter(isNotUndefined);
 	}
@@ -136,70 +166,50 @@ export async function reconcile(
 		).filter(([, , exists]) => exists);
 	};
 
+	const pushImages = async (internal: TInternal) => {
+		await Promise.all(
+			(await filterNotExists(await images(internal))).map(
+				async ([hash, media]) => await remoteDatabase.createImage(hash, media)
+			)
+		);
+	};
+
 	return await Promise.all([
 		...onlyInRemote.map(async (c) => {
-			const config = await remoteDatabase.get(c.uniqueId);
-			if (!config) return;
+			const body = await entity.getRemote(remoteDatabase, c.uniqueId);
+			if (!body) return;
 
-			const internal: InternalFuiz = {
-				...c,
-				config
-			};
+			const internal = entity.compose(c, body);
 
 			await updateLocalImages(internal);
-			await addCreationLocal(internal, localDatabase);
+			await entity.addLocal(internal, localDatabase);
 		}),
 		...onlyInExisting.map(async ([key]) => {
-			const internal = await getCreationLocal(key, localDatabase);
-			if (!internal) return;
-			const uniqueId = internal.uniqueId ?? generateUuid();
-			await updateCreationLocal(
-				key,
-				{
-					...internal,
-					uniqueId
-				},
-				localDatabase
-			);
-			await Promise.all(
-				(await filterNotExists(await images(internal))).map(
-					async ([hash, media]) => await remoteDatabase.createImage(hash, media)
-				)
-			);
-			await remoteDatabase.create(uniqueId, internal);
+			const existing = await entity.getLocal(key, localDatabase);
+			if (!existing) return;
+			const uniqueId = existing.uniqueId ?? generateUuid();
+			const internal = { ...existing, uniqueId };
+			await entity.updateLocal(key, internal, localDatabase);
+			await pushImages(internal);
+			await entity.createRemote(remoteDatabase, uniqueId, internal);
 		}),
 		...remoteNewer.map(async ([c, localKey]) => {
-			const config = await remoteDatabase.get(c.uniqueId);
-			if (!config) return;
+			const body = await entity.getRemote(remoteDatabase, c.uniqueId);
+			if (!body) return;
 
-			const internal: InternalFuiz = {
-				...c,
-				config
-			};
+			const internal = entity.compose(c, body);
 
 			await updateLocalImages(internal);
-			await updateCreationLocal(localKey, internal, localDatabase);
+			await entity.updateLocal(localKey, internal, localDatabase);
 		}),
 		...localNewer.map(async ([key]) => {
-			const internal = await getCreationLocal(key, localDatabase);
-			if (!internal) return;
-			const uniqueId = internal.uniqueId ?? generateUuid();
-			await updateCreationLocal(
-				key,
-				{
-					...internal,
-					uniqueId
-				},
-				localDatabase
-			);
-			if (internal) {
-				await Promise.all(
-					(await filterNotExists(await images(internal))).map(
-						async ([hash, media]) => await remoteDatabase.createImage(hash, media)
-					)
-				);
-				await remoteDatabase.update(uniqueId, internal);
-			}
+			const existing = await entity.getLocal(key, localDatabase);
+			if (!existing) return;
+			const uniqueId = existing.uniqueId ?? generateUuid();
+			const internal = { ...existing, uniqueId };
+			await entity.updateLocal(key, internal, localDatabase);
+			await pushImages(internal);
+			await entity.updateRemote(remoteDatabase, uniqueId, internal);
 		})
 	]);
 }

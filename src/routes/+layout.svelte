@@ -94,6 +94,13 @@
 		--palette-light: #fffbf5;
 		--palette-dark: #241f31;
 
+		/* Game results. Deliberately not green/red: that is the pair red-green colour
+		   blindness collapses, and here colour is the only thing separating correct from
+		   incorrect. These are the Okabe-Ito blue and vermillion, which stay distinct under
+		   deuteranopia, protanopia and tritanopia. Unanswered stays neutral. */
+		--correct: #0072b2;
+		--incorrect: #d55e00;
+
 		/* answer-button palette (8 colors, paired bg + deep) */
 		--btn-bg-0: hsl(358, 84%, 45%);
 		--btn-deep-0: hsl(358, 84%, 35%);

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, untrack } from 'svelte';
 	import { env } from '$env/dynamic/public';
+	import { getFuizOrigin } from '$lib/clientOnly';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
@@ -227,8 +228,18 @@
 			bind:bindableGameInfo
 		/>
 	{:else if 'Summary' in currentState.Game}
-		{@const { stats, player_count, config, options, results } = currentState.Game.Summary}
-		<Summary {stats} {player_count} {config} {options} {results} />
+		{@const { stats, player_count, config, options, results, team_mapping } =
+			currentState.Game.Summary}
+		<Summary
+			{stats}
+			{player_count}
+			{config}
+			{options}
+			{results}
+			{team_mapping}
+			{code}
+			origin={getFuizOrigin(code)}
+		/>
 	{/if}
 {:else if 'Slide' in currentState}
 	{@const { Slide: slide, index, count } = currentState}

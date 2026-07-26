@@ -3,8 +3,10 @@ import {
 	type CreationId,
 	generateUuid,
 	type InternalFuiz,
+	type InternalReport,
 	type LocalDatabase,
 	type LooseInternalFuiz,
+	type ReportId,
 	strictifyMediaReference
 } from '.';
 
@@ -18,15 +20,20 @@ function strictifyInternalFuiz(internal: LooseInternalFuiz): InternalFuiz {
 }
 
 export async function loadLocalDatabase(): Promise<LocalDatabase> {
-	const request = indexedDB.open('FuizDB', 2);
+	const request = indexedDB.open('FuizDB', 3);
 
-	request.addEventListener('upgradeneeded', (event) => {
+	request.addEventListener('upgradeneeded', () => {
 		const db = request.result;
 
-		if (event.oldVersion !== 1) {
+		if (!db.objectStoreNames.contains('creations')) {
 			db.createObjectStore('creations', { autoIncrement: true });
 		}
-		db.createObjectStore('images');
+		if (!db.objectStoreNames.contains('images')) {
+			db.createObjectStore('images');
+		}
+		if (!db.objectStoreNames.contains('reports')) {
+			db.createObjectStore('reports', { autoIncrement: true });
+		}
 	});
 
 	return await new Promise((resolve, reject) => {
@@ -95,7 +102,8 @@ export async function getCreationLocal(
 	const creationsTransaction = creationsStore.get(id);
 	return await new Promise((resolve) => {
 		creationsTransaction.addEventListener('success', () => {
-			resolve(strictifyInternalFuiz(creationsTransaction.result) ?? undefined);
+			const result: LooseInternalFuiz | undefined = creationsTransaction.result;
+			resolve(result ? strictifyInternalFuiz(result) : undefined);
 		});
 	});
 }
@@ -140,6 +148,86 @@ export async function updateCreationLocal(
 
 	return await new Promise((resolve) => {
 		request.addEventListener('success', () => {
+			resolve(undefined);
+		});
+	});
+}
+
+export async function getAllReportsLocal(
+	database: LocalDatabase
+): Promise<[ReportId, InternalReport][]> {
+	const reportsStore = database.transaction(['reports'], 'readonly').objectStore('reports');
+
+	const reportsTransaction = reportsStore.openCursor();
+
+	return await new Promise((resolve) => {
+		const internals: [ReportId, InternalReport][] = [];
+
+		reportsTransaction.addEventListener('success', () => {
+			const cursor = reportsTransaction.result;
+			if (cursor) {
+				internals.push([parseInt(cursor.key.toString(), 10), cursor.value as InternalReport]);
+				cursor.continue();
+			} else {
+				resolve(internals);
+			}
+		});
+	});
+}
+
+export async function getReportLocal(
+	id: ReportId,
+	database: LocalDatabase
+): Promise<InternalReport | undefined> {
+	const reportsStore = database.transaction(['reports'], 'readonly').objectStore('reports');
+	const reportsTransaction = reportsStore.get(id);
+	return await new Promise((resolve) => {
+		reportsTransaction.addEventListener('success', () => {
+			resolve((reportsTransaction.result as InternalReport | undefined) ?? undefined);
+		});
+	});
+}
+
+export async function addReportLocal(
+	report: InternalReport,
+	database: LocalDatabase
+): Promise<ReportId> {
+	const reportsStore = database.transaction(['reports'], 'readwrite').objectStore('reports');
+
+	const request = reportsStore.put(report);
+
+	return await new Promise((resolve) => {
+		request.addEventListener('success', () => {
+			resolve(parseInt(request.result.toString(), 10));
+		});
+	});
+}
+
+export async function updateReportLocal(
+	id: ReportId,
+	report: InternalReport,
+	database: LocalDatabase
+): Promise<void> {
+	const reportsStore = database.transaction(['reports'], 'readwrite').objectStore('reports');
+	const request = reportsStore.put(report, id);
+
+	return await new Promise((resolve) => {
+		request.addEventListener('success', () => {
+			resolve(undefined);
+		});
+	});
+}
+
+export async function deleteReportLocal(id: ReportId, database: LocalDatabase): Promise<void> {
+	const reportsStore = database.transaction(['reports'], 'readwrite').objectStore('reports');
+
+	const request = reportsStore.delete(id);
+
+	return await new Promise((resolve) => {
+		request.addEventListener('success', () => {
+			resolve(undefined);
+		});
+		request.addEventListener('error', () => {
 			resolve(undefined);
 		});
 	});
