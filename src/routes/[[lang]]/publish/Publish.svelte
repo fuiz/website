@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { addIds } from '$lib/clientOnly';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale } from '$lib/paraglide/runtime.js';
+	import { lintConfig } from '$lib/question-types/lint';
+	import { lintIssueTopbarMessage } from '$lib/question-types/lintMessages';
 	import { type ExportedFuiz } from '$lib/storage';
 	import { type FullOnlineFuiz, type GenericIdlessSlide, getMedia, type Media } from '$lib/types';
 	import type { PublishingState } from '../../api/library/publish-stream/types';
@@ -19,6 +22,14 @@
 		creation: ExportedFuiz;
 		id: number;
 	} = $props();
+
+	/**
+	 * Same gate the editor applies before hosting: a quiz with unanswerable questions should
+	 * not reach the public library either. Linted on the id-ed shape because `removeIds`
+	 * flattens type-answer and order answers to bare strings, which the rules would misread
+	 * as empty.
+	 */
+	let lintMessage = $derived(lintIssueTopbarMessage(lintConfig(addIds(creation.config))));
 
 	let author = $state('');
 	let subjects = $state<string[]>([]);
@@ -140,13 +151,16 @@
 			<PublishForm
 				title={creation.config.title}
 				{media}
-				disabled={!gitAuthStatus?.authenticated}
-				{publishError}
+				disabled={!gitAuthStatus?.authenticated || lintMessage !== undefined}
+				publishError={lintMessage ?? publishError}
 				bind:author
 				bind:lang
 				bind:subjects
 				bind:grades
-				onSubmit={() => warningDialog?.open()}
+				onSubmit={() => {
+					if (lintMessage) return;
+					warningDialog?.open();
+				}}
 			/>
 		{/if}
 	</section>

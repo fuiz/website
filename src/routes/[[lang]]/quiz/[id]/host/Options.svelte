@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { playIdlessConfig } from '$lib/clientOnly';
+	import { addIds, playIdlessConfig } from '$lib/clientOnly';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import { lintConfig } from '$lib/question-types/lint';
+	import { lintIssueTopbarMessage } from '$lib/question-types/lintMessages';
 	import { type CreationId, getCreation, loadDatabase } from '$lib/storage';
 	import type { GenericIdlessFuizConfig, GenericIdlessSlide, NameStyle } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
@@ -126,10 +128,12 @@
 		<ErrorPage errorMessage={m.missing_fuiz()} />
 	{:else}
 		{@const { config, uniqueId, versionId } = fuiz}
+		{@const lintMessage = lintIssueTopbarMessage(lintConfig(addIds(config)))}
 		<TypicalPage>
 			<form
 				onsubmit={(e) => {
 					e.preventDefault();
+					if (lintMessage) return;
 					errorMessage = '';
 					loading = true;
 					playIdlessConfig(
@@ -262,9 +266,9 @@
 					</div>
 				</div>
 
-				<ErrorMessage {errorMessage} />
+				<ErrorMessage errorMessage={lintMessage ?? errorMessage} />
 				<div class="start-row">
-					<FancyButton disabled={loading}>
+					<FancyButton disabled={loading || lintMessage !== undefined}>
 						<div id="button">
 							{#if loading}
 								<div class="spinner">
