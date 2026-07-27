@@ -1,18 +1,15 @@
 <script lang="ts">
-	import AnsweredCount from '$lib/game/AnsweredCount.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
 	import TimeLeft from '$lib/game/TimeLeft.svelte';
 
 	let {
 		questionText,
 		timeLeft = null,
-		timeStarted = null,
-		answeredCount = undefined
+		timeStarted = null
 	}: {
 		questionText: string;
 		timeLeft?: number | null;
 		timeStarted?: number | null;
-		answeredCount?: number;
 	} = $props();
 </script>
 
@@ -24,11 +21,6 @@
 	</div>
 	<div class="text-slot">
 		<TextBar text={questionText} />
-	</div>
-	<div class="control">
-		{#if answeredCount !== undefined}
-			<AnsweredCount {answeredCount} />
-		{/if}
 	</div>
 </div>
 

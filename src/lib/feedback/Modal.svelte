@@ -3,9 +3,13 @@
 
 	let {
 		children,
+		width = 'min(35ch, calc(100vw - 2em))',
 		onclose
 	}: {
 		children: Snippet;
+		/** CSS width for the dialog. Wide content (a picker grid, say) can ask
+		 *  for more room than the default single-column reading width. */
+		width?: string;
 		onclose?: () => void;
 	} = $props();
 
@@ -20,7 +24,7 @@
 	}
 </script>
 
-<dialog bind:this={dialogElement} closedby="any" {onclose}>
+<dialog bind:this={dialogElement} closedby="any" style:--modal-width={width} {onclose}>
 	{@render children()}
 </dialog>
 
@@ -37,8 +41,11 @@
 		border-radius: 0.7em;
 		padding: 1em;
 		margin: auto;
-		width: min(35ch, calc(100vw - 2em));
+		width: var(--modal-width);
 		max-height: calc(100dvh - 2em);
+		/* Tall content (the slide picker) scrolls inside the dialog rather than
+		   spilling past it. */
+		overflow-y: auto;
 		box-sizing: border-box;
 		background: var(--surface);
 		color: inherit;

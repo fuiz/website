@@ -7,7 +7,7 @@
 	import BarChart from '~icons/material-symbols/bar-chart';
 	import ImageOutline from '~icons/material-symbols/image-outline';
 	import HostLayout from './HostLayout.svelte';
-	import type { BindableGameInfo, SharedGameInfo } from './types';
+	import type { BindableGameInfo, ResponseSummary, SharedGameInfo } from './types';
 
 	let {
 		bindableGameInfo = $bindable(),
@@ -16,6 +16,7 @@
 		media,
 		onnext,
 		onlock,
+		responses = undefined,
 		children
 	}: {
 		bindableGameInfo: BindableGameInfo;
@@ -24,13 +25,14 @@
 		media?: Media | undefined;
 		onnext?: () => void;
 		onlock?: (locked: boolean) => void;
+		responses?: ResponseSummary;
 		children: import('svelte').Snippet;
 	} = $props();
 
 	let showMedia = $state(false);
 </script>
 
-<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
+<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext} {responses}>
 	{#snippet extraControls()}
 		{#if media}
 			<StatedIconButton

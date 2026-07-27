@@ -9,7 +9,13 @@
 	import { lintConfig } from '$lib/question-types/lint';
 	import { lintIssueTopbarMessage } from '$lib/question-types/lintMessages';
 	import { type CreationId, getCreation, loadDatabase } from '$lib/storage';
-	import type { GenericIdlessFuizConfig, GenericIdlessSlide, NameStyle } from '$lib/types';
+	import {
+		type GenericIdlessFuizConfig,
+		type GenericIdlessSlide,
+		getQuestionType,
+		type NameStyle,
+		type QuestionType
+	} from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import Stepper from '$lib/ui/Stepper.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
@@ -75,15 +81,20 @@
 		slide: GenericIdlessSlide<T>,
 		shuffleAnswers: boolean
 	): GenericIdlessSlide<T> {
+		if (!shuffleAnswers) return slide;
+		// Only slides whose options are interchangeable get shuffled. A puzzle's
+		// order *is* its answer (the server shuffles what players see), and a
+		// type-answer's list is a set of accepted spellings, not choices.
 		return {
 			...slide,
 			...('MultipleChoice' in slide && {
 				MultipleChoice: {
 					...slide.MultipleChoice,
-					answers: shuffleAnswers
-						? shuffleArray(slide.MultipleChoice.answers)
-						: slide.MultipleChoice.answers
+					answers: shuffleArray(slide.MultipleChoice.answers)
 				}
+			}),
+			...('Poll' in slide && {
+				Poll: { ...slide.Poll, answers: shuffleArray(slide.Poll.answers) }
 			})
 		};
 	}
@@ -101,6 +112,14 @@
 		};
 	}
 
+	/**
+	 * Every field across all slide types that closes an answering window (or, for
+	 * an info slide, moves the game on by itself). Nulling them is what "host
+	 * paced" means; `introduce_question` is left alone so the question still
+	 * reveals its answers on cue.
+	 */
+	const PACED_FIELDS = ['time_limit', 'idea_time_limit', 'vote_time_limit', 'duration'] as const;
+
 	// Host-paced: drop every answering time limit so the host advances manually.
 	function hostPace<T>(
 		config: GenericIdlessFuizConfig<T>,
@@ -109,14 +128,16 @@
 		if (!hostPaced) return config;
 		return {
 			...config,
-			slides: config.slides.map((slide) => ({
-				...slide,
-				...('MultipleChoice' in slide && {
-					MultipleChoice: { ...slide.MultipleChoice, time_limit: null }
-				}),
-				...('TypeAnswer' in slide && { TypeAnswer: { ...slide.TypeAnswer, time_limit: null } }),
-				...('Order' in slide && { Order: { ...slide.Order, time_limit: null } })
-			}))
+			slides: config.slides.map((slide) => {
+				const kind = getQuestionType(slide);
+				const body: Record<string, unknown> = {
+					...(slide as unknown as Record<QuestionType, Record<string, unknown>>)[kind]
+				};
+				for (const field of PACED_FIELDS) {
+					if (field in body) body[field] = null;
+				}
+				return { [kind]: body } as GenericIdlessSlide<T>;
+			})
 		};
 	}
 </script>

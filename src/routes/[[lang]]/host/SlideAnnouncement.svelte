@@ -2,7 +2,7 @@
 	import AnnouncementContent from '$lib/question-types/announcement/AnnouncementContent.svelte';
 	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
 	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
-	import type { QuestionType } from '$lib/types';
+	import type { FreeTextMode, QuestionType, ScaleStyle } from '$lib/types';
 
 	// Splash for the `Unstarted` phase: announces the upcoming question's type and
 	// scoring before the question is revealed, with an intro animation.
@@ -10,6 +10,9 @@
 		bindableGameInfo = $bindable(),
 		gameInfo,
 		questionType,
+		scaleStyle,
+		freeTextMode,
+		scored,
 		pointsAwarded,
 		onlock,
 		onnext
@@ -17,6 +20,11 @@
 		bindableGameInfo: BindableGameInfo;
 		gameInfo: SharedGameInfo;
 		questionType: QuestionType;
+		// Variants worth naming apart on the splash: agreement vs. NPS, word
+		// cloud vs. open ended, and a pin answer vs. an unscored drop pin.
+		scaleStyle?: ScaleStyle;
+		freeTextMode?: FreeTextMode;
+		scored?: boolean;
 		pointsAwarded: number;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
@@ -34,7 +42,7 @@
 
 <div class="exit-wrap" out:lift>
 	<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
-		<AnnouncementContent {questionType} {pointsAwarded} />
+		<AnnouncementContent {questionType} {scaleStyle} {freeTextMode} {scored} {pointsAwarded} />
 	</HostLayout>
 </div>
 

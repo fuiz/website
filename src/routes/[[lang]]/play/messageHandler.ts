@@ -1,11 +1,18 @@
 import { addIds } from '$lib/clientOnly';
 import * as m from '$lib/paraglide/messages.js';
 import type {
+	BrainstormIncomingMessage,
+	FreeTextIncomingMessage,
 	GameIncomingMessage,
+	InfoSlideIncomingMessage,
 	JoinError,
 	MultipleChoiceIncomingMessage,
 	NameError,
 	OrderSlideIncomingMessage,
+	PinIncomingMessage,
+	PollIncomingMessage,
+	ScaleIncomingMessage,
+	SliderIncomingMessage,
 	State,
 	TypeAnswerIncomingMessage
 } from './index';
@@ -528,4 +535,531 @@ export function handleOrderMessage(
 	}
 
 	return {};
+}
+
+/**
+ * Handles incoming Slider messages
+ */
+export function handleSliderMessage(
+	slider: SliderIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState &&
+		'Slide' in context.currentState &&
+		'Slider' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+
+	if ('SlideAnnouncement' in slider) {
+		const { index, count, points_awarded } = slider.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Slider: 'SlideAnnouncement', points_awarded }
+			}
+		};
+	}
+
+	if ('QuestionAnnouncement' in slider) {
+		const { index, count, question, media } = slider.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Slider: 'QuestionAnnouncement', question, media: media ?? undefined }
+			}
+		};
+	}
+
+	if ('AnswersAnnouncement' in slider) {
+		const { range, unit } = slider.AnswersAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Slider: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					range,
+					unit: unit ?? undefined
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in slider) {
+		const { index, count, question, media, range, unit, correct, tolerance, results } =
+			slider.AnswersResults;
+		return {
+			newState: {
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Slider: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					range,
+					unit: unit ?? undefined,
+					correct,
+					tolerance,
+					results,
+					answered: previous?.answered
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Scale messages (both agreement scales and NPS)
+ */
+export function handleScaleMessage(
+	scale: ScaleIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState && 'Slide' in context.currentState && 'Scale' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+
+	if ('SlideAnnouncement' in scale) {
+		const { index, count, points_awarded, style } = scale.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Scale: 'SlideAnnouncement', points_awarded, style }
+			}
+		};
+	}
+
+	if ('QuestionAnnouncement' in scale) {
+		const { index, count, question, media } = scale.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: {
+					Scale: 'QuestionAnnouncement',
+					question,
+					media: media ?? undefined,
+					style: previous?.style
+				}
+			}
+		};
+	}
+
+	if ('AnswersAnnouncement' in scale) {
+		const { points, labels, style } = scale.AnswersAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Scale: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					points,
+					labels,
+					style
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in scale) {
+		const { index, count, question, media, points, labels, style, results } = scale.AnswersResults;
+		return {
+			newState: {
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Scale: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					points,
+					labels,
+					style,
+					results,
+					answered: previous?.answered
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Poll messages
+ */
+export function handlePollMessage(
+	poll: PollIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState && 'Slide' in context.currentState && 'Poll' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+
+	if ('SlideAnnouncement' in poll) {
+		const { index, count, points_awarded } = poll.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Poll: 'SlideAnnouncement', points_awarded }
+			}
+		};
+	}
+
+	if ('QuestionAnnouncement' in poll) {
+		const { index, count, question, media } = poll.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Poll: 'QuestionAnnouncement', question, media: media ?? undefined }
+			}
+		};
+	}
+
+	if ('AnswersAnnouncement' in poll) {
+		const { answers } = poll.AnswersAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Poll: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					answers
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in poll) {
+		const { index, count, question, media, answers, results } = poll.AnswersResults;
+		return {
+			newState: {
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Poll: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					answers,
+					results,
+					answered: previous?.answered
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Pin messages (both pin answer and drop pin)
+ */
+export function handlePinMessage(
+	pin: PinIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState && 'Slide' in context.currentState && 'Pin' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+
+	if ('SlideAnnouncement' in pin) {
+		const { index, count, points_awarded, scored } = pin.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Pin: 'SlideAnnouncement', points_awarded, scored }
+			}
+		};
+	}
+
+	if ('QuestionAnnouncement' in pin) {
+		const { index, count, question, media } = pin.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: {
+					Pin: 'QuestionAnnouncement',
+					question,
+					media: media ?? undefined,
+					scored: previous?.scored
+				}
+			}
+		};
+	}
+
+	if ('AnswersAnnouncement' in pin) {
+		const { scored } = pin.AnswersAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Pin: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					scored
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in pin) {
+		const { index, count, question, media, correct_area, results } = pin.AnswersResults;
+		return {
+			newState: {
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Pin: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					correct_area: correct_area ?? undefined,
+					scored: correct_area != null,
+					results,
+					answered: previous?.answered
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming FreeText messages (both word cloud and open ended)
+ */
+export function handleFreeTextMessage(
+	freeText: FreeTextIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState &&
+		'Slide' in context.currentState &&
+		'FreeText' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+
+	if ('SlideAnnouncement' in freeText) {
+		const { index, count, points_awarded, mode } = freeText.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { FreeText: 'SlideAnnouncement', points_awarded, mode }
+			}
+		};
+	}
+
+	if ('QuestionAnnouncement' in freeText) {
+		const { index, count, question, media } = freeText.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: {
+					FreeText: 'QuestionAnnouncement',
+					question,
+					media: media ?? undefined,
+					mode: previous?.mode
+				}
+			}
+		};
+	}
+
+	if ('AnswersAnnouncement' in freeText) {
+		const { mode, max_entries, max_entry_length } = freeText.AnswersAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					FreeText: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					mode,
+					max_entries,
+					max_entry_length
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in freeText) {
+		const { index, count, question, media, mode, results } = freeText.AnswersResults;
+		return {
+			newState: {
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					FreeText: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					mode,
+					results,
+					answered: previous?.answered
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Brainstorm messages
+ */
+export function handleBrainstormMessage(
+	brainstorm: BrainstormIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState &&
+		'Slide' in context.currentState &&
+		'Brainstorm' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+
+	if ('SlideAnnouncement' in brainstorm) {
+		const { index, count, points_awarded } = brainstorm.SlideAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Brainstorm: 'SlideAnnouncement', points_awarded }
+			}
+		};
+	}
+
+	if ('QuestionAnnouncement' in brainstorm) {
+		const { index, count, question, media } = brainstorm.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				score: context.previousScore,
+				Slide: { Brainstorm: 'QuestionAnnouncement', question, media: media ?? undefined }
+			}
+		};
+	}
+
+	if ('IdeasAnnouncement' in brainstorm) {
+		const { max_ideas, max_idea_length } = brainstorm.IdeasAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Brainstorm: 'IdeasAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					max_ideas,
+					max_idea_length
+				}
+			}
+		};
+	}
+
+	if ('VotingAnnouncement' in brainstorm) {
+		const { ideas, max_votes } = brainstorm.VotingAnnouncement;
+		return {
+			newState: {
+				index: context.previousIndex,
+				count: context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Brainstorm: 'VotingAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					ideas,
+					max_votes,
+					contributed: previous?.contributed
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in brainstorm) {
+		const { index, count, question, media, results } = brainstorm.AnswersResults;
+		return {
+			newState: {
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
+				score: context.previousScore,
+				Slide: {
+					Brainstorm: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					ideas: previous?.ideas,
+					results,
+					contributed: previous?.contributed,
+					answered: previous?.answered
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming InfoSlide messages
+ */
+export function handleInfoSlideMessage(
+	infoSlide: InfoSlideIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const { index, count, title, body, media } = infoSlide.ContentAnnouncement;
+	return {
+		newState: {
+			index,
+			count,
+			score: context.previousScore,
+			Slide: {
+				InfoSlide: 'ContentAnnouncement',
+				title,
+				body: body ?? undefined,
+				media: media ?? undefined
+			}
+		}
+	};
 }

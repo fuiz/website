@@ -3,7 +3,7 @@ import { parse } from 'smol-toml';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
 import { env } from '$env/dynamic/public';
-import { assertUnreachable, stringifyToml, urlifyBase64 } from '$lib';
+import { stringifyToml, urlifyBase64 } from '$lib';
 import * as m from '$lib/paraglide/messages.js';
 import { localizeHref } from '$lib/paraglide/runtime';
 import BlueberryIcon from '~icons/custom/blueberry';
@@ -22,10 +22,13 @@ import {
 	type GenericFuizConfig,
 	type GenericIdlessFuizConfig,
 	type GenericIdlessSlide,
+	type GenericSlide,
+	getQuestionType,
 	getTitle,
 	type IdlessFuizConfig,
 	type IdlessFullFuizConfig,
-	mapIdlessSlidesMedia
+	mapIdlessSlidesMedia,
+	type QuestionType
 } from './types';
 import { bring } from './util';
 
@@ -202,6 +205,16 @@ export async function shareAndCopyURL(config: IdlessFullFuizConfig) {
 	navigator.clipboard.writeText(env.PUBLIC_PLAY_URL + localizeHref('/share') + '/' + id);
 }
 
+/**
+ * Rebuilds a slide from just its body, dropping the editor-only ids that hang
+ * off the slide and its answers. Used for the slide types whose answers carry
+ * no ids of their own.
+ */
+function bodyOnly<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): GenericIdlessSlide<T> {
+	const kind = getQuestionType(slide);
+	return { [kind]: (slide as Record<QuestionType, unknown>)[kind] } as GenericIdlessSlide<T>;
+}
+
 export function removeIds<T>(
 	config: GenericIdlessFuizConfig<T> | GenericFuizConfig<T>
 ): GenericIdlessFuizConfig<T> {
@@ -217,6 +230,13 @@ export function removeIds<T>(
 								content,
 								correct
 							}))
+						}
+					};
+				case 'Poll' in slide:
+					return {
+						Poll: {
+							...slide.Poll,
+							answers: slide.Poll.answers.map(({ content }) => ({ content }))
 						}
 					};
 				case 'TypeAnswer' in slide:
@@ -238,7 +258,9 @@ export function removeIds<T>(
 						}
 					};
 				default:
-					return assertUnreachable(slide);
+					// Slider, scale, pin, free text, brainstorm and info slides
+					// have no id-bearing answers to strip.
+					return bodyOnly(slide);
 			}
 		})
 	};
@@ -258,6 +280,14 @@ export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig
 								correct,
 								id
 							}))
+						},
+						id
+					};
+				case 'Poll' in slide:
+					return {
+						Poll: {
+							...slide.Poll,
+							answers: slide.Poll.answers.map(({ content }, id) => ({ content, id }))
 						},
 						id
 					};
@@ -284,7 +314,7 @@ export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig
 						id
 					};
 				default:
-					return assertUnreachable(slide);
+					return { ...bodyOnly(slide), id } as GenericSlide<T>;
 			}
 		})
 	};
@@ -335,38 +365,32 @@ function fixTime(time: number | null | undefined): number | null | undefined {
 	return time <= 1000 ? time * 1000 : time;
 }
 
+/**
+ * Every field across all slide types that holds a duration. A slide only ever
+ * carries a few of these; the rest are left alone.
+ */
+const DURATION_FIELDS = [
+	'introduce_question',
+	'time_limit',
+	'idea_time_limit',
+	'vote_time_limit',
+	'duration'
+] as const;
+
 export function fixTimes<T>(config: GenericIdlessFuizConfig<T>): GenericIdlessFuizConfig<T> {
 	return {
 		title: config.title,
 		slides: config.slides.map((slide) => {
-			switch (true) {
-				case 'MultipleChoice' in slide:
-					return {
-						MultipleChoice: {
-							...slide.MultipleChoice,
-							introduce_question: fixTime(slide.MultipleChoice.introduce_question),
-							time_limit: fixTime(slide.MultipleChoice.time_limit)
-						}
-					};
-				case 'TypeAnswer' in slide:
-					return {
-						TypeAnswer: {
-							...slide.TypeAnswer,
-							introduce_question: fixTime(slide.TypeAnswer.introduce_question),
-							time_limit: fixTime(slide.TypeAnswer.time_limit)
-						}
-					};
-				case 'Order' in slide:
-					return {
-						Order: {
-							...slide.Order,
-							introduce_question: fixTime(slide.Order.introduce_question),
-							time_limit: fixTime(slide.Order.time_limit)
-						}
-					};
-				default:
-					return assertUnreachable(slide);
+			const kind = getQuestionType(slide);
+			const body: Record<string, unknown> = {
+				...(slide as unknown as Record<QuestionType, Record<string, unknown>>)[kind]
+			};
+			for (const field of DURATION_FIELDS) {
+				if (field in body) {
+					body[field] = fixTime(body[field] as number | null | undefined);
+				}
 			}
+			return { [kind]: body } as GenericIdlessSlide<T>;
 		})
 	};
 }
@@ -562,6 +586,83 @@ export const limits = {
 			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
 			defaultTimeLimit: 60000,
 			maxAnswerCount: 8
+		},
+		slider: {
+			maxTitleLength: 500,
+			introduceQuestion: 5000,
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
+			pointsAwarded: 1000,
+			allowedPointsAwarded: [0, 500, 1000, 2000],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultTimeLimit: 30000,
+			maxUnitLength: 20,
+			// Mirrors the backend's `slider.max_steps`: enough stops for any
+			// sensible question, few enough that a client can render the track.
+			maxSteps: 10000
+		},
+		scale: {
+			maxTitleLength: 500,
+			introduceQuestion: 5000,
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultTimeLimit: 30000,
+			maxLabelLength: 250,
+			maxPointsCount: 11,
+			// Agreement scales run 1..N; the NPS scale is fixed at 0..10.
+			allowedAgreementMaximums: [3, 4, 5, 6, 7, 10],
+			defaultAgreementMax: 5,
+			npsMin: 0,
+			npsMax: 10
+		},
+		poll: {
+			maxTitleLength: 500,
+			introduceQuestion: 5000,
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultTimeLimit: 30000,
+			maxAnswerCount: 8
+		},
+		pin: {
+			maxTitleLength: 500,
+			introduceQuestion: 5000,
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
+			pointsAwarded: 1000,
+			allowedPointsAwarded: [0, 500, 1000, 2000],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultTimeLimit: 30000
+		},
+		freeText: {
+			maxTitleLength: 500,
+			introduceQuestion: 5000,
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultTimeLimit: 60000,
+			maxEntriesPerPlayer: 5,
+			maxEntryLength: 200,
+			allowedEntryCounts: [1, 2, 3, 4, 5],
+			wordCloudEntries: 3,
+			wordCloudEntryLength: 40,
+			openEndedEntries: 1,
+			openEndedEntryLength: 200
+		},
+		brainstorm: {
+			maxTitleLength: 500,
+			introduceQuestion: 5000,
+			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
+			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultIdeaTimeLimit: 120000,
+			defaultVoteTimeLimit: 60000,
+			maxIdeasPerPlayer: 3,
+			maxVotesPerPlayer: 3,
+			maxIdeaLength: 200,
+			allowedIdeaCounts: [1, 2, 3],
+			allowedVoteCounts: [1, 2, 3]
+		},
+		infoSlide: {
+			maxTitleLength: 500,
+			maxBodyLength: 2000,
+			allowedDurations: [10000, 20000, 30000, 60000, 120000, 240000, null],
+			defaultDuration: null
 		},
 		maxAnswerTextLength: 500
 	}

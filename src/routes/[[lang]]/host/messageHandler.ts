@@ -1,8 +1,16 @@
 import { addIds } from '$lib/clientOnly';
+import type { TruncatedList } from '$lib/question-types/host/types';
 import type {
+	BrainstormIncomingMessage,
+	FreeTextIncomingMessage,
 	GameIncomingMessage,
+	InfoSlideIncomingMessage,
 	MultipleChoiceIncomingMessage,
 	OrderSlideIncomingMessage,
+	PinIncomingMessage,
+	PollIncomingMessage,
+	ScaleIncomingMessage,
+	SliderIncomingMessage,
 	State,
 	TypeAnswerIncomingMessage
 } from './index';
@@ -19,6 +27,8 @@ export interface GameMessageContext {
 }
 
 export interface GameMessageResult {
+	/** Who answered the current slide, once the host has asked. */
+	newPlayerResponses?: TruncatedList<{ name: string; answer: string }>;
 	newState?: State;
 	newWatcherId?: string;
 	shouldCloseSocket?: boolean;
@@ -97,6 +107,10 @@ export function handleGameMessage(
 				}
 			}
 		};
+	}
+
+	if ('PlayerResponses' in game) {
+		return { newPlayerResponses: game.PlayerResponses };
 	}
 
 	if ('TeamDisplay' in game) {
@@ -442,4 +456,636 @@ export function handleOrderMessage(
 	}
 
 	return {};
+}
+
+/**
+ * The slide index and total the room is on, so a message that omits them (most
+ * mid-slide updates do) can keep the header steady.
+ */
+function surroundings(context: QuestionMessageContext): { index: number; count: number } {
+	const state = context.currentState;
+	if (state && 'Slide' in state) return { index: state.index, count: state.count };
+	return { index: 0, count: 1 };
+}
+
+/**
+ * Handles incoming Slider messages
+ */
+export function handleSliderMessage(
+	slider: SliderIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState &&
+		'Slide' in context.currentState &&
+		'Slider' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+	const { index: previousIndex, count: previousCount } = surroundings(context);
+
+	if ('SlideAnnouncement' in slider) {
+		const { index, count, points_awarded, duration } = slider.SlideAnnouncement;
+		return {
+			newState: { index, count, Slide: { Slider: 'SlideAnnouncement', points_awarded } },
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('QuestionAnnouncement' in slider) {
+		const { index, count, question, media, duration } = slider.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: { Slider: 'QuestionAnnouncement', question, media: media ?? undefined }
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersAnnouncement' in slider) {
+		const { duration, range, unit } = slider.AnswersAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					Slider: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					range,
+					unit: unit ?? undefined,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersCount' in slider) {
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					Slider: previous?.Slider ?? 'AnswersAnnouncement',
+					answered_count: slider.AnswersCount
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in slider) {
+		const { index, count, question, media, range, unit, correct, tolerance, results } =
+			slider.AnswersResults;
+		return {
+			newState: {
+				index: index ?? previousIndex,
+				count: count ?? previousCount,
+				Slide: {
+					Slider: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					range,
+					unit: unit ?? undefined,
+					correct,
+					tolerance,
+					results
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Scale messages (both agreement scales and NPS)
+ */
+export function handleScaleMessage(
+	scale: ScaleIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState && 'Slide' in context.currentState && 'Scale' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+	const { index: previousIndex, count: previousCount } = surroundings(context);
+
+	if ('SlideAnnouncement' in scale) {
+		const { index, count, points_awarded, duration, style } = scale.SlideAnnouncement;
+		return {
+			newState: { index, count, Slide: { Scale: 'SlideAnnouncement', points_awarded, style } },
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('QuestionAnnouncement' in scale) {
+		const { index, count, question, media, duration } = scale.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: {
+					Scale: 'QuestionAnnouncement',
+					question,
+					media: media ?? undefined,
+					style: previous?.style
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersAnnouncement' in scale) {
+		const { duration, points, labels, style } = scale.AnswersAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					Scale: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					points,
+					labels,
+					style,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersCount' in scale) {
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					Scale: previous?.Scale ?? 'AnswersAnnouncement',
+					answered_count: scale.AnswersCount
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in scale) {
+		const { index, count, question, media, points, labels, style, results } = scale.AnswersResults;
+		return {
+			newState: {
+				index: index ?? previousIndex,
+				count: count ?? previousCount,
+				Slide: {
+					Scale: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					points,
+					labels,
+					style,
+					results
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Poll messages
+ */
+export function handlePollMessage(
+	poll: PollIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState && 'Slide' in context.currentState && 'Poll' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+	const { index: previousIndex, count: previousCount } = surroundings(context);
+
+	if ('SlideAnnouncement' in poll) {
+		const { index, count, points_awarded, duration } = poll.SlideAnnouncement;
+		return {
+			newState: { index, count, Slide: { Poll: 'SlideAnnouncement', points_awarded } },
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('QuestionAnnouncement' in poll) {
+		const { index, count, question, media, duration } = poll.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: { Poll: 'QuestionAnnouncement', question, media: media ?? undefined }
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersAnnouncement' in poll) {
+		const { duration, answers } = poll.AnswersAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					Poll: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					answers,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersCount' in poll) {
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					Poll: previous?.Poll ?? 'AnswersAnnouncement',
+					answered_count: poll.AnswersCount
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in poll) {
+		const { index, count, question, media, answers, results } = poll.AnswersResults;
+		return {
+			newState: {
+				index: index ?? previousIndex,
+				count: count ?? previousCount,
+				Slide: {
+					Poll: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					answers,
+					results
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Pin messages (both pin answer and drop pin)
+ */
+export function handlePinMessage(
+	pin: PinIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState && 'Slide' in context.currentState && 'Pin' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+	const { index: previousIndex, count: previousCount } = surroundings(context);
+
+	if ('SlideAnnouncement' in pin) {
+		const { index, count, points_awarded, duration, scored } = pin.SlideAnnouncement;
+		return {
+			newState: { index, count, Slide: { Pin: 'SlideAnnouncement', points_awarded, scored } },
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('QuestionAnnouncement' in pin) {
+		const { index, count, question, media, duration } = pin.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: {
+					Pin: 'QuestionAnnouncement',
+					question,
+					media: media ?? undefined,
+					scored: previous?.scored
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersAnnouncement' in pin) {
+		const { duration, scored } = pin.AnswersAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					Pin: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					scored,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersCount' in pin) {
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					Pin: previous?.Pin ?? 'AnswersAnnouncement',
+					answered_count: pin.AnswersCount
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in pin) {
+		const { index, count, question, media, correct_area, results } = pin.AnswersResults;
+		return {
+			newState: {
+				index: index ?? previousIndex,
+				count: count ?? previousCount,
+				Slide: {
+					Pin: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					correct_area: correct_area ?? undefined,
+					scored: correct_area != null,
+					results
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming FreeText messages (both word cloud and open ended)
+ */
+export function handleFreeTextMessage(
+	freeText: FreeTextIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState &&
+		'Slide' in context.currentState &&
+		'FreeText' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+	const { index: previousIndex, count: previousCount } = surroundings(context);
+
+	if ('SlideAnnouncement' in freeText) {
+		const { index, count, points_awarded, duration, mode } = freeText.SlideAnnouncement;
+		return {
+			newState: { index, count, Slide: { FreeText: 'SlideAnnouncement', points_awarded, mode } },
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('QuestionAnnouncement' in freeText) {
+		const { index, count, question, media, duration } = freeText.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: {
+					FreeText: 'QuestionAnnouncement',
+					question,
+					media: media ?? undefined,
+					mode: previous?.mode
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersAnnouncement' in freeText) {
+		const { duration, mode, max_entries, max_entry_length } = freeText.AnswersAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					FreeText: 'AnswersAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					mode,
+					max_entries,
+					max_entry_length,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersCount' in freeText) {
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					FreeText: previous?.FreeText ?? 'AnswersAnnouncement',
+					answered_count: freeText.AnswersCount
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in freeText) {
+		const { index, count, question, media, mode, results } = freeText.AnswersResults;
+		return {
+			newState: {
+				index: index ?? previousIndex,
+				count: count ?? previousCount,
+				Slide: {
+					FreeText: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					mode,
+					results
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming Brainstorm messages
+ */
+export function handleBrainstormMessage(
+	brainstorm: BrainstormIncomingMessage,
+	context: QuestionMessageContext
+): QuestionMessageResult {
+	const previous =
+		context.currentState &&
+		'Slide' in context.currentState &&
+		'Brainstorm' in context.currentState.Slide
+			? context.currentState.Slide
+			: undefined;
+	const { index: previousIndex, count: previousCount } = surroundings(context);
+
+	if ('SlideAnnouncement' in brainstorm) {
+		const { index, count, points_awarded, duration } = brainstorm.SlideAnnouncement;
+		return {
+			newState: { index, count, Slide: { Brainstorm: 'SlideAnnouncement', points_awarded } },
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('QuestionAnnouncement' in brainstorm) {
+		const { index, count, question, media, duration } = brainstorm.QuestionAnnouncement;
+		return {
+			newState: {
+				index,
+				count,
+				Slide: { Brainstorm: 'QuestionAnnouncement', question, media: media ?? undefined }
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('IdeasAnnouncement' in brainstorm) {
+		const { duration, max_ideas, max_idea_length } = brainstorm.IdeasAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					Brainstorm: 'IdeasAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					ideas: [],
+					max_ideas,
+					max_idea_length,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('IdeaAdded' in brainstorm) {
+		// Ideas stream in one at a time so the host's board fills up live.
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					Brainstorm: previous?.Brainstorm ?? 'IdeasAnnouncement',
+					ideas: [...(previous?.ideas ?? []), brainstorm.IdeaAdded]
+				}
+			}
+		};
+	}
+
+	if ('VotingAnnouncement' in brainstorm) {
+		const { duration, ideas, max_votes } = brainstorm.VotingAnnouncement;
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					Brainstorm: 'VotingAnnouncement',
+					question: previous?.question,
+					media: previous?.media,
+					ideas,
+					max_votes,
+					answered_count: 0
+				}
+			},
+			timer: duration ?? null,
+			initialTimer: duration ?? null
+		};
+	}
+
+	if ('AnswersCount' in brainstorm) {
+		return {
+			newState: {
+				index: previousIndex,
+				count: previousCount,
+				Slide: {
+					...previous,
+					Brainstorm: previous?.Brainstorm ?? 'IdeasAnnouncement',
+					answered_count: brainstorm.AnswersCount
+				}
+			}
+		};
+	}
+
+	if ('AnswersResults' in brainstorm) {
+		const { index, count, question, media, results } = brainstorm.AnswersResults;
+		return {
+			newState: {
+				index: index ?? previousIndex,
+				count: count ?? previousCount,
+				Slide: {
+					Brainstorm: 'AnswersResults',
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
+					ideas: previous?.ideas,
+					results
+				}
+			}
+		};
+	}
+
+	return {};
+}
+
+/**
+ * Handles incoming InfoSlide messages
+ */
+export function handleInfoSlideMessage(
+	infoSlide: InfoSlideIncomingMessage,
+	_context: QuestionMessageContext
+): QuestionMessageResult {
+	const { index, count, title, body, media, duration } = infoSlide.ContentAnnouncement;
+	return {
+		newState: {
+			index,
+			count,
+			Slide: {
+				InfoSlide: 'ContentAnnouncement',
+				title,
+				body: body ?? undefined,
+				media: media ?? undefined
+			}
+		},
+		timer: duration ?? null,
+		initialTimer: duration ?? null
+	};
 }

@@ -62,7 +62,15 @@
 	);
 </script>
 
-<StatisticsLayout bind:bindableGameInfo {gameInfo} {questionText} {media} {onnext} {onlock}>
+<StatisticsLayout
+	bind:bindableGameInfo
+	{gameInfo}
+	{questionText}
+	{media}
+	{onnext}
+	{onlock}
+	responses={{ count: results.reduce((total, [, count]) => total + count, 0) }}
+>
 	<div class="content">
 		{#if timeLeft !== undefined && timeStarted !== undefined}
 			<TimeLeft {timeLeft} {timeStarted} />

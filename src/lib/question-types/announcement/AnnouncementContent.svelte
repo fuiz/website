@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
-	import type { AnswerMode, QuestionType } from '$lib/types';
+	import type { AnswerMode, FreeTextMode, QuestionType, ScaleStyle } from '$lib/types';
 	import Spotlight from './scenes/Spotlight.svelte';
 
 	// The `Unstarted`-phase splash: announces the upcoming question's type (and
@@ -8,35 +8,70 @@
 	let {
 		questionType,
 		answerMode,
+		scaleStyle,
+		freeTextMode,
+		scored,
 		pointsAwarded
 	}: {
 		questionType: QuestionType;
 		// For multiple choice: whether players pick one or several answers.
 		answerMode?: AnswerMode;
+		// For scales: agreement and NPS are different enough to name apart.
+		scaleStyle?: ScaleStyle;
+		// For free text: word cloud and open ended likewise.
+		freeTextMode?: FreeTextMode;
+		// For pin slides: whether there is a target to aim at.
+		scored?: boolean;
 		pointsAwarded: number;
 	} = $props();
 
 	// Same labels the create sidebar uses for each slide type.
-	const label = $derived(
-		questionType === 'MultipleChoice'
-			? m.multiple_choice()
-			: questionType === 'TypeAnswer'
-				? m.short_answer()
-				: m.puzzle()
-	);
+	const label = $derived.by(() => {
+		switch (questionType) {
+			case 'MultipleChoice':
+				return m.multiple_choice();
+			case 'TypeAnswer':
+				return m.short_answer();
+			case 'Order':
+				return m.puzzle();
+			case 'Slider':
+				return m.slider();
+			case 'Poll':
+				return m.poll();
+			case 'Scale':
+				return scaleStyle === 'Nps' ? m.nps_scale() : m.scale();
+			case 'Pin':
+				return scored === false ? m.drop_pin() : m.pin_answer();
+			case 'FreeText':
+				return freeTextMode === 'OpenEnded' ? m.open_ended() : m.word_cloud();
+			case 'Brainstorm':
+				return m.brainstorm();
+			case 'InfoSlide':
+				return m.info_slide();
+		}
+	});
 
-	// Clarify single vs. multiple selection — only meaningful for multiple choice.
-	const subtext = $derived(
-		questionType === 'MultipleChoice' && answerMode
-			? answerMode === 'MultipleAnswers'
-				? m.multiple_answers()
-				: m.single_answer()
-			: undefined
-	);
+	// A one-line clarifier under the type label, where the type has a variant
+	// worth naming or scoring worth setting expectations about.
+	const subtext = $derived.by(() => {
+		if (questionType === 'MultipleChoice' && answerMode) {
+			return answerMode === 'MultipleAnswers' ? m.multiple_answers() : m.single_answer();
+		}
+		if (
+			questionType === 'Poll' ||
+			questionType === 'Scale' ||
+			questionType === 'FreeText' ||
+			questionType === 'Brainstorm' ||
+			(questionType === 'Pin' && scored === false)
+		) {
+			return m.collect_opinions();
+		}
+		return undefined;
+	});
 </script>
 
 <div class="announcement">
-	<Spotlight {questionType} {label} {subtext} {pointsAwarded} />
+	<Spotlight {questionType} {label} {subtext} {scored} {pointsAwarded} />
 </div>
 
 <style>

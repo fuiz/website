@@ -6,10 +6,20 @@
 	import Loading from '$lib/feedback/Loading.svelte';
 	import MultipleAnswersResult from '$lib/feedback/MultipleAnswersResult.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import BrainstormIdeas from '$lib/question-types/brainstorm/player/Ideas.svelte';
+	import BrainstormVoting from '$lib/question-types/brainstorm/player/Voting.svelte';
+	import FreeTextAnswers from '$lib/question-types/free-text/player/Answers.svelte';
+	import InfoSlideContent from '$lib/question-types/info-slide/player/Content.svelte';
 	import Answers from '$lib/question-types/mcq/player/Answers.svelte';
 	import { isMcqAnswerCorrect } from '$lib/question-types/mcq/shared/correctness';
 	import OrderAnswers from '$lib/question-types/order/player/Answers.svelte';
+	import PinAnswers from '$lib/question-types/pin/player/Answers.svelte';
+	import { isPinOnTarget } from '$lib/question-types/pin/shared/correctness';
+	import PollAnswers from '$lib/question-types/poll/player/Answers.svelte';
+	import ScaleAnswers from '$lib/question-types/scale/player/Answers.svelte';
+	import SliderAnswers from '$lib/question-types/slider/player/Answers.svelte';
 	import TypeAnswerQuestion from '$lib/question-types/type-answer/player/Question.svelte';
+	import type { PinPoint } from '$lib/types';
 	import { bring, zip } from '$lib/util';
 	import type { IncomingMessage, State } from '.';
 	import ChooseName from './ChooseName.svelte';
@@ -17,12 +27,20 @@
 	import FindTeam from './FindTeam.svelte';
 	import Leaderboard from './Leaderboard.svelte';
 	import {
+		handleBrainstormMessage,
+		handleFreeTextMessage,
 		handleGameMessage,
+		handleInfoSlideMessage,
 		handleMultipleChoiceMessage,
 		handleOrderMessage,
+		handlePinMessage,
+		handlePollMessage,
+		handleScaleMessage,
+		handleSliderMessage,
 		handleTypeAnswerMessage
 	} from './messageHandler';
 	import Question from './Question.svelte';
+	import Recorded from './Recorded.svelte';
 	import Result from './Result.svelte';
 	import SlideAnnouncement from './SlideAnnouncement.svelte';
 	import Summary from './Summary.svelte';
@@ -46,6 +64,13 @@
 	let name = $derived((leaderboardName ? leaderboardName + ' - ' : '') + setName || m.you());
 
 	let sendEvent = $state<(data: string) => void>(() => {});
+
+	/** Adopts a handler's new state, if it produced one. */
+	function apply(result: { newState?: State }) {
+		if (result.newState !== undefined) {
+			currentState = result.newState;
+		}
+	}
 
 	function connectServer(code: string) {
 		let watcherId = (browser && localStorage.getItem(code + '_play')) || undefined;
@@ -121,15 +146,77 @@
 					currentState = result.newState;
 				}
 			} else if ('Order' in newMessage) {
-				const result = handleOrderMessage(newMessage.Order, {
-					currentState,
-					previousIndex,
-					previousCount,
-					previousScore
-				});
-				if (result.newState !== undefined) {
-					currentState = result.newState;
-				}
+				apply(
+					handleOrderMessage(newMessage.Order, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('Slider' in newMessage) {
+				apply(
+					handleSliderMessage(newMessage.Slider, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('Scale' in newMessage) {
+				apply(
+					handleScaleMessage(newMessage.Scale, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('Poll' in newMessage) {
+				apply(
+					handlePollMessage(newMessage.Poll, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('Pin' in newMessage) {
+				apply(
+					handlePinMessage(newMessage.Pin, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('FreeText' in newMessage) {
+				apply(
+					handleFreeTextMessage(newMessage.FreeText, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('Brainstorm' in newMessage) {
+				apply(
+					handleBrainstormMessage(newMessage.Brainstorm, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
+			} else if ('InfoSlide' in newMessage) {
+				apply(
+					handleInfoSlideMessage(newMessage.InfoSlide, {
+						currentState,
+						previousIndex,
+						previousCount,
+						previousScore
+					})
+				);
 			}
 		});
 
@@ -261,6 +348,94 @@
 		}
 
 		sendEvent(JSON.stringify({ Player: { StringArrayAnswer: texts } }));
+	}
+
+	function sendNumberAnswer(value: number) {
+		if (
+			currentState &&
+			'Slide' in currentState &&
+			('Slider' in currentState.Slide || 'Scale' in currentState.Slide)
+		) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					answered: value
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { NumberAnswer: value } }));
+	}
+
+	function sendPointAnswer(point: PinPoint) {
+		if (currentState && 'Slide' in currentState && 'Pin' in currentState.Slide) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					answered: point
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { PointAnswer: point } }));
+	}
+
+	function sendPollAnswer(index: number) {
+		if (currentState && 'Slide' in currentState && 'Poll' in currentState.Slide) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					answered: index
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { IndexAnswer: index } }));
+	}
+
+	function sendFreeTextAnswer(entries: string[]) {
+		if (currentState && 'Slide' in currentState && 'FreeText' in currentState.Slide) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					answered: entries
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { StringArrayAnswer: entries } }));
+	}
+
+	function sendBrainstormIdeas(ideas: string[]) {
+		if (currentState && 'Slide' in currentState && 'Brainstorm' in currentState.Slide) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					contributed: ideas
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { StringArrayAnswer: ideas } }));
+	}
+
+	function sendBrainstormVotes(indices: number[]) {
+		if (currentState && 'Slide' in currentState && 'Brainstorm' in currentState.Slide) {
+			currentState = {
+				...currentState,
+				Slide: {
+					...currentState.Slide,
+					answered: indices
+				}
+			};
+		}
+
+		sendEvent(JSON.stringify({ Player: { IndexArrayAnswer: indices } }));
 	}
 
 	function sendSearchTeammate(query: string) {
@@ -408,5 +583,198 @@
 					: answers.length === answered.length && zip(answers, answered).every(([a, b]) => a === b)}
 			/>
 		{/if}
+	{:else if 'Slider' in slide}
+		{@const { Slider: kind, question, media, range, unit, answered, correct, tolerance } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement {name} {score} questionType="Slider" pointsAwarded={slide.points_awarded ?? 0} />
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question {name} {score} {media} questionText={question || ''} />
+		{:else if kind === 'AnswersAnnouncement'}
+			{#if answered === undefined}
+				<SliderAnswers
+					onanswer={sendNumberAnswer}
+					questionText={question || ''}
+					{media}
+					{name}
+					{score}
+					{showAnswers}
+					range={range ?? { min: 0, max: 100, step: 1 }}
+					{unit}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'AnswersResults'}
+			<Result
+				{name}
+				{score}
+				correct={answered !== undefined &&
+					correct !== undefined &&
+					Math.abs(answered - correct) <= (tolerance ?? 0) + Number.EPSILON}
+			/>
+		{/if}
+	{:else if 'Scale' in slide}
+		{@const { Scale: kind, question, media, points, labels, style, answered } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{name}
+				{score}
+				questionType="Scale"
+				scaleStyle={style}
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question {name} {score} {media} questionText={question || ''} />
+		{:else if kind === 'AnswersAnnouncement'}
+			{#if answered === undefined}
+				<ScaleAnswers
+					onanswer={sendNumberAnswer}
+					questionText={question || ''}
+					{media}
+					{name}
+					{score}
+					{showAnswers}
+					points={points ?? []}
+					labels={labels ?? {}}
+					style={style ?? 'Agreement'}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'AnswersResults'}
+			<Recorded {name} {score} />
+		{/if}
+	{:else if 'Poll' in slide}
+		{@const { Poll: kind, question, media, answers, answered } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement {name} {score} questionType="Poll" pointsAwarded={slide.points_awarded ?? 0} />
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question {name} {score} {media} questionText={question || ''} />
+		{:else if kind === 'AnswersAnnouncement'}
+			{#if answered === undefined}
+				<PollAnswers
+					onanswer={sendPollAnswer}
+					questionText={question || ''}
+					{media}
+					{name}
+					{score}
+					{showAnswers}
+					answers={(answers ?? []).map((answer) => answer.Text)}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'AnswersResults'}
+			<Recorded {name} {score} />
+		{/if}
+	{:else if 'Pin' in slide}
+		{@const { Pin: kind, question, media, answered, scored, correct_area } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{name}
+				{score}
+				questionType="Pin"
+				{scored}
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question {name} {score} {media} questionText={question || ''} />
+		{:else if kind === 'AnswersAnnouncement'}
+			{#if answered === undefined}
+				<PinAnswers
+					onanswer={sendPointAnswer}
+					questionText={question || ''}
+					{media}
+					{name}
+					{score}
+					{showAnswers}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'AnswersResults'}
+			{#if correct_area}
+				<Result {name} {score} correct={isPinOnTarget(answered, correct_area)} />
+			{:else}
+				<Recorded {name} {score} />
+			{/if}
+		{/if}
+	{:else if 'FreeText' in slide}
+		{@const { FreeText: kind, question, media, mode, answered } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{name}
+				{score}
+				questionType="FreeText"
+				freeTextMode={mode}
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question {name} {score} {media} questionText={question || ''} />
+		{:else if kind === 'AnswersAnnouncement'}
+			{#if answered === undefined}
+				<FreeTextAnswers
+					onanswer={sendFreeTextAnswer}
+					questionText={question || ''}
+					{media}
+					{name}
+					{score}
+					{showAnswers}
+					mode={mode ?? 'WordCloud'}
+					maxEntries={slide.max_entries ?? 1}
+					maxEntryLength={slide.max_entry_length ?? 200}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'AnswersResults'}
+			<Recorded {name} {score} />
+		{/if}
+	{:else if 'Brainstorm' in slide}
+		{@const { Brainstorm: kind, question, media, ideas, answered, contributed } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement {name} {score} questionType="Brainstorm" pointsAwarded={slide.points_awarded ?? 0} />
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question {name} {score} {media} questionText={question || ''} />
+		{:else if kind === 'IdeasAnnouncement'}
+			{#if contributed === undefined}
+				<BrainstormIdeas
+					onanswer={sendBrainstormIdeas}
+					questionText={question || ''}
+					{name}
+					{score}
+					{showAnswers}
+					maxIdeas={slide.max_ideas ?? 1}
+					maxIdeaLength={slide.max_idea_length ?? 200}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'VotingAnnouncement'}
+			{#if answered === undefined}
+				<BrainstormVoting
+					onanswer={sendBrainstormVotes}
+					questionText={question || ''}
+					{name}
+					{score}
+					{showAnswers}
+					ideas={ideas ?? []}
+					maxVotes={slide.max_votes ?? 1}
+				/>
+			{:else}
+				<WaitingOthers {name} {score} />
+			{/if}
+		{:else if kind === 'AnswersResults'}
+			<Recorded {name} {score} />
+		{/if}
+	{:else if 'InfoSlide' in slide}
+		<InfoSlideContent
+			{name}
+			{score}
+			title={slide.title ?? ''}
+			body={slide.body}
+			media={slide.media}
+			{showAnswers}
+		/>
 	{/if}
 {/if}

@@ -9,14 +9,12 @@
 	import type { Slide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
-	import CheckBoxOutline from '~icons/material-symbols/check-box-outline';
 	import ChevronLeft from '~icons/material-symbols/chevron-left';
 	import ChevronRight from '~icons/material-symbols/chevron-right';
 	import FirstPage from '~icons/material-symbols/first-page';
-	import KeyboardOutline from '~icons/material-symbols/keyboard-outline';
 	import LastPage from '~icons/material-symbols/last-page';
 	import MagnifyDocked from '~icons/material-symbols/magnify-docked';
-	import SwapVert from '~icons/material-symbols/swap-vert';
+	import { slideGroups, slideTemplates } from './slideTemplates';
 	import Thumbnail from './Thumbnail.svelte';
 
 	let {
@@ -95,6 +93,14 @@
 		if (index <= selectedSlideIndex) {
 			await changeSelected(selectedSlideIndex - 1);
 		}
+	}
+
+	function addSlide(create: (id: number) => Slide) {
+		addModal?.close();
+		// `slides` is a deeply reactive prop, so pushing is enough — the old
+		// `slides = slides` nudge is a Svelte 4 habit.
+		slides.push(create(Date.now()));
+		changeSelected(slides.length - 1);
 	}
 </script>
 
@@ -181,88 +187,29 @@
 	</div>
 </div>
 
-<Modal bind:this={addModal}>
+<Modal bind:this={addModal} width="min(62ch, calc(100vw - 2em))">
 	<h2 class="modal-title">{m.add_slide()}</h2>
-	<div class="slide-types">
-		<button
-			type="button"
-			class="slide-type"
-			onclick={() => {
-				addModal?.close();
-				slides.push({
-					MultipleChoice: {
-						title: '',
-						media: undefined,
-						introduce_question: limits.fuiz.multipleChoice.introduceQuestion,
-						time_limit: limits.fuiz.multipleChoice.defaultTimeLimit,
-						points_awarded: limits.fuiz.multipleChoice.pointsAwarded,
-						answers: []
-					},
-					id: Date.now()
-				});
-				slides = slides;
-				changeSelected(slides.length - 1);
-			}}
-		>
-			<div class="slide-type-icon"><CheckBoxOutline height="1.4em" /></div>
-			<div class="slide-type-body">
-				<div class="slide-type-title">{m.multiple_choice()}</div>
-				<div class="slide-type-desc">{m.multiple_choice_desc()}</div>
+	{#each slideGroups as { group, label } (group)}
+		{@const templates = slideTemplates.filter((template) => template.group === group)}
+		<section class="group">
+			<h3 class="group-title">{label()}</h3>
+			<div class="slide-types">
+				{#each templates as template (template.key)}
+					<button
+						type="button"
+						class="slide-type"
+						onclick={() => addSlide(template.create)}
+					>
+						<div class="slide-type-icon"><template.icon height="1.4em" /></div>
+						<div class="slide-type-body">
+							<div class="slide-type-title">{template.label()}</div>
+							<div class="slide-type-desc">{template.description()}</div>
+						</div>
+					</button>
+				{/each}
 			</div>
-		</button>
-		<button
-			type="button"
-			class="slide-type"
-			onclick={() => {
-				addModal?.close();
-				slides.push({
-					TypeAnswer: {
-						title: '',
-						introduce_question: limits.fuiz.typeAnswer.introduceQuestion,
-						time_limit: limits.fuiz.typeAnswer.defaultTimeLimit,
-						points_awarded: limits.fuiz.typeAnswer.pointsAwarded,
-						case_sensitive: false,
-						answers: []
-					},
-					id: Date.now()
-				});
-				slides = slides;
-				changeSelected(slides.length - 1);
-			}}
-		>
-			<div class="slide-type-icon"><KeyboardOutline height="1.4em" /></div>
-			<div class="slide-type-body">
-				<div class="slide-type-title">{m.short_answer()}</div>
-				<div class="slide-type-desc">{m.short_answer_desc()}</div>
-			</div>
-		</button>
-		<button
-			type="button"
-			class="slide-type"
-			onclick={() => {
-				addModal?.close();
-				slides.push({
-					Order: {
-						title: '',
-						introduce_question: limits.fuiz.order.introduceQuestion,
-						time_limit: limits.fuiz.order.defaultTimeLimit,
-						points_awarded: limits.fuiz.order.pointsAwarded,
-						axis_labels: { from: '', to: '' },
-						answers: []
-					},
-					id: Date.now()
-				});
-				slides = slides;
-				changeSelected(slides.length - 1);
-			}}
-		>
-			<div class="slide-type-icon"><SwapVert height="1.4em" /></div>
-			<div class="slide-type-body">
-				<div class="slide-type-title">{m.puzzle()}</div>
-				<div class="slide-type-desc">{m.puzzle_desc()}</div>
-			</div>
-		</button>
-	</div>
+		</section>
+	{/each}
 </Modal>
 
 <ConfirmationDialog
@@ -336,7 +283,10 @@
 		}
 	}
 
-	section {
+	/* The slides list is a flex child that must not grow past its parent, so it
+	   takes its height from the flex box rather than its content. Scoped to
+	   `.slides` — the add-slide dialog has sections of its own. */
+	.slides {
 		height: 0;
 	}
 
@@ -356,9 +306,23 @@
 		font-size: 1.25em;
 	}
 
+	.group + .group {
+		margin-top: 1em;
+	}
+
+	.group-title {
+		font-family: var(--alternative-font);
+		font-size: 0.8em;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		opacity: 0.6;
+		margin: 0 0 0.4em;
+	}
+
 	.slide-types {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		/* Two across where there's room, one on a narrow phone. */
+		grid-template-columns: repeat(auto-fit, minmax(min(13em, 100%), 1fr));
 		gap: 0.4em;
 	}
 
@@ -413,7 +377,7 @@
 	}
 
 	@media only screen and (max-width: 900px) {
-		section {
+		.slides {
 			height: unset;
 		}
 

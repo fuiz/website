@@ -39,9 +39,15 @@
 	{/if}
 </svelte:head>
 
-<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
+<HostLayout
+	bind:bindableGameInfo
+	{gameInfo}
+	{onlock}
+	{onnext}
+	responses={answeredCount === undefined ? undefined : { count: answeredCount }}
+>
 	<div class="content">
-		<QuestionHeader {questionText} {timeLeft} {timeStarted} {answeredCount} />
+		<QuestionHeader {questionText} {timeLeft} {timeStarted} />
 		{#if timeStarted !== null && timeLeft === null}
 			<div class="progress" style:--duration="{timeStarted}ms">
 				<div class="progress-value"></div>

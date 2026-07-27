@@ -33,8 +33,14 @@
 </script>
 
 <Audio audioUrl={think} volumeOn={bindableGameInfo.volumeOn} />
-<HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
-	<QuestionHeader {questionText} {timeLeft} {timeStarted} {answeredCount} />
+<HostLayout
+	bind:bindableGameInfo
+	{gameInfo}
+	{onlock}
+	{onnext}
+	responses={{ count: answeredCount }}
+>
+	<QuestionHeader {questionText} {timeLeft} {timeStarted} />
 	<div class="body">
 		{#if media}
 			<div class="media-area">

@@ -1,23 +1,48 @@
 <script lang="ts">
-	import { onMount, untrack } from 'svelte';
+	import { onMount, setContext, untrack } from 'svelte';
 	import { env } from '$env/dynamic/public';
 	import { getFuizOrigin } from '$lib/clientOnly';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import type { BindableGameInfo } from '$lib/question-types/host/types';
+	import BrainstormIdeas from '$lib/question-types/brainstorm/host/Ideas.svelte';
+	import BrainstormStatistics from '$lib/question-types/brainstorm/host/Statistics.svelte';
+	import BrainstormVoting from '$lib/question-types/brainstorm/host/Voting.svelte';
+	import FreeTextAnswers from '$lib/question-types/free-text/host/Answers.svelte';
+	import FreeTextStatistics from '$lib/question-types/free-text/host/Statistics.svelte';
+	import {
+		type BindableGameInfo,
+		HOST_RESPONSES,
+		type HostResponses
+	} from '$lib/question-types/host/types';
+	import InfoSlideContent from '$lib/question-types/info-slide/host/Content.svelte';
 	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
 	import QuestionStatistics from '$lib/question-types/mcq/host/Statistics.svelte';
 	import OrderAnswers from '$lib/question-types/order/host/Answers.svelte';
 	import OrderStatistics from '$lib/question-types/order/host/Statistics.svelte';
+	import PinAnswers from '$lib/question-types/pin/host/Answers.svelte';
+	import PinStatistics from '$lib/question-types/pin/host/Statistics.svelte';
+	import PollAnswers from '$lib/question-types/poll/host/Answers.svelte';
+	import PollStatistics from '$lib/question-types/poll/host/Statistics.svelte';
+	import ScaleAnswers from '$lib/question-types/scale/host/Answers.svelte';
+	import ScaleStatistics from '$lib/question-types/scale/host/Statistics.svelte';
+	import SliderAnswers from '$lib/question-types/slider/host/Answers.svelte';
+	import SliderStatistics from '$lib/question-types/slider/host/Statistics.svelte';
 	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/Statistics.svelte';
 	import { bring, zip } from '$lib/util';
 	import { hostScreenFromState, type IncomingMessage, type State } from '.';
 	import Leaderboard from './Leaderboard.svelte';
 	import {
+		handleBrainstormMessage,
+		handleFreeTextMessage,
 		handleGameMessage,
+		handleInfoSlideMessage,
 		handleMultipleChoiceMessage,
 		handleOrderMessage,
+		handlePinMessage,
+		handlePollMessage,
+		handleScaleMessage,
+		handleSliderMessage,
 		handleTypeAnswerMessage,
 		type QuestionMessageResult
 	} from './messageHandler';
@@ -27,6 +52,13 @@
 	import Waiting from './Waiting.svelte';
 
 	let currentState = $state<State>();
+
+	// Who answered the current slide. Fetched only when the host opens the list,
+	// and dropped whenever the slide changes so it can never show stale names.
+	let playerResponses = $state<{
+		items: { name: string; answer: string }[];
+		exact_count: number;
+	}>();
 
 	let timer = $state<number | null>(0);
 	let initialTimer = $state<number | null>(0);
@@ -49,6 +81,7 @@
 	function applyQuestionResult(result: QuestionMessageResult) {
 		if (result.newState !== undefined) {
 			currentState = result.newState;
+			playerResponses = undefined;
 		}
 		if (result.timer !== undefined) {
 			timer = result.timer;
@@ -107,6 +140,20 @@
 				applyQuestionResult(handleTypeAnswerMessage(newMessage.TypeAnswer, { currentState }));
 			} else if ('Order' in newMessage) {
 				applyQuestionResult(handleOrderMessage(newMessage.Order, { currentState }));
+			} else if ('Slider' in newMessage) {
+				applyQuestionResult(handleSliderMessage(newMessage.Slider, { currentState }));
+			} else if ('Scale' in newMessage) {
+				applyQuestionResult(handleScaleMessage(newMessage.Scale, { currentState }));
+			} else if ('Poll' in newMessage) {
+				applyQuestionResult(handlePollMessage(newMessage.Poll, { currentState }));
+			} else if ('Pin' in newMessage) {
+				applyQuestionResult(handlePinMessage(newMessage.Pin, { currentState }));
+			} else if ('FreeText' in newMessage) {
+				applyQuestionResult(handleFreeTextMessage(newMessage.FreeText, { currentState }));
+			} else if ('Brainstorm' in newMessage) {
+				applyQuestionResult(handleBrainstormMessage(newMessage.Brainstorm, { currentState }));
+			} else if ('InfoSlide' in newMessage) {
+				applyQuestionResult(handleInfoSlideMessage(newMessage.InfoSlide, { currentState }));
 			}
 		});
 
@@ -186,6 +233,17 @@
 		sendEvent(JSON.stringify({ Host: { Next: currentScreen } }));
 		lastSentScreen = JSON.stringify(currentScreen);
 	}
+
+	function onrequestresponses() {
+		sendEvent(JSON.stringify({ Host: 'RequestResponses' }));
+	}
+
+	setContext<HostResponses>(HOST_RESPONSES, {
+		request: () => onrequestresponses(),
+		get list() {
+			return playerResponses;
+		}
+	});
 
 	function onlock(e: boolean) {
 		sendEvent(JSON.stringify({ Host: { Lock: e } }));
@@ -410,5 +468,321 @@
 				{media}
 			/>
 		{/if}
+	{:else if 'Slider' in slide}
+		{@const { Slider: kind, question, media, range, unit, correct, tolerance, results } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="Slider"
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{media}
+				{gameInfo}
+				timeStarted={initialTimer}
+				questionText={question || ''}
+			/>
+		{:else if kind === 'AnswersAnnouncement'}
+			<SliderAnswers
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				range={range ?? { min: 0, max: 100, step: 1 }}
+				{unit}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+				{media}
+			/>
+		{:else if kind === 'AnswersResults'}
+			<SliderStatistics
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				range={range ?? { min: 0, max: 100, step: 1 }}
+				{unit}
+				correct={correct ?? 0}
+				tolerance={tolerance ?? 0}
+				results={results ?? {
+					distribution: [],
+					average: null,
+					correct_count: 0,
+					total_count: 0
+				}}
+				{media}
+			/>
+		{/if}
+	{:else if 'Scale' in slide}
+		{@const { Scale: kind, question, media, points, labels, style, results } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="Scale"
+				scaleStyle={style}
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{media}
+				{gameInfo}
+				timeStarted={initialTimer}
+				questionText={question || ''}
+			/>
+		{:else if kind === 'AnswersAnnouncement'}
+			<ScaleAnswers
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				points={points ?? []}
+				labels={labels ?? {}}
+				style={style ?? 'Agreement'}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+				{media}
+			/>
+		{:else if kind === 'AnswersResults'}
+			<ScaleStatistics
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				points={points ?? []}
+				labels={labels ?? {}}
+				style={style ?? 'Agreement'}
+				results={results ?? { counts: [], average: null, total_count: 0, nps: null }}
+				{media}
+			/>
+		{/if}
+	{:else if 'Poll' in slide}
+		{@const { Poll: kind, question, media, answers, results } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="Poll"
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{media}
+				{gameInfo}
+				timeStarted={initialTimer}
+				questionText={question || ''}
+			/>
+		{:else if kind === 'AnswersAnnouncement'}
+			<PollAnswers
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				answers={(answers ?? []).map((answer) => answer.Text)}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+				{media}
+			/>
+		{:else if kind === 'AnswersResults'}
+			<PollStatistics
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				answers={(answers ?? []).map((answer) => answer.Text)}
+				results={results ?? { counts: [], total_count: 0 }}
+				{media}
+			/>
+		{/if}
+	{:else if 'Pin' in slide}
+		{@const { Pin: kind, question, media, correct_area, results, scored } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="Pin"
+				{scored}
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{media}
+				{gameInfo}
+				timeStarted={initialTimer}
+				questionText={question || ''}
+			/>
+		{:else if kind === 'AnswersAnnouncement'}
+			<PinAnswers
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				{media}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+			/>
+		{:else if kind === 'AnswersResults'}
+			<PinStatistics
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				{media}
+				correctShape={correct_area}
+				results={results ?? { pins: [], correct_count: null, total_count: 0 }}
+			/>
+		{/if}
+	{:else if 'FreeText' in slide}
+		{@const { FreeText: kind, question, media, mode, results } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="FreeText"
+				freeTextMode={mode}
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{media}
+				{gameInfo}
+				timeStarted={initialTimer}
+				questionText={question || ''}
+			/>
+		{:else if kind === 'AnswersAnnouncement'}
+			<FreeTextAnswers
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				mode={mode ?? 'WordCloud'}
+				maxEntries={slide.max_entries ?? 1}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+				{media}
+			/>
+		{:else if kind === 'AnswersResults'}
+			<FreeTextStatistics
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				mode={mode ?? 'WordCloud'}
+				results={results ?? { entries: [], total_entries: 0, total_count: 0 }}
+				{media}
+			/>
+		{/if}
+	{:else if 'Brainstorm' in slide}
+		{@const { Brainstorm: kind, question, media, ideas, results } = slide}
+		{#if kind === 'SlideAnnouncement'}
+			<SlideAnnouncement
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionType="Brainstorm"
+				pointsAwarded={slide.points_awarded ?? 0}
+			/>
+		{:else if kind === 'QuestionAnnouncement'}
+			<Question
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{media}
+				{gameInfo}
+				timeStarted={initialTimer}
+				questionText={question || ''}
+			/>
+		{:else if kind === 'IdeasAnnouncement'}
+			<BrainstormIdeas
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				ideas={ideas ?? []}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+				{media}
+			/>
+		{:else if kind === 'VotingAnnouncement'}
+			<BrainstormVoting
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				ideas={ideas ?? []}
+				maxVotes={slide.max_votes ?? 1}
+				timeLeft={timer}
+				timeStarted={initialTimer}
+				answeredCount={slide.answered_count ?? 0}
+			/>
+		{:else if kind === 'AnswersResults'}
+			<BrainstormStatistics
+				{onnext}
+				{onlock}
+				bind:bindableGameInfo
+				{gameInfo}
+				questionText={question || ''}
+				results={results ?? { ideas: [], voter_count: 0, contributor_count: 0 }}
+				{media}
+			/>
+		{/if}
+	{:else if 'InfoSlide' in slide}
+		<InfoSlideContent
+			{onnext}
+			{onlock}
+			bind:bindableGameInfo
+			{gameInfo}
+			title={slide.title ?? ''}
+			body={slide.body}
+			media={slide.media}
+			timeLeft={timer}
+			timeStarted={initialTimer}
+		/>
 	{/if}
 {/if}

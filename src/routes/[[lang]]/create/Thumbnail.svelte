@@ -1,7 +1,14 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages.js';
+	import BrainstormThumbnail from '$lib/question-types/brainstorm/editor/Thumbnail.svelte';
+	import FreeTextThumbnail from '$lib/question-types/free-text/editor/Thumbnail.svelte';
+	import InfoSlideThumbnail from '$lib/question-types/info-slide/editor/Thumbnail.svelte';
 	import McqThumbnail from '$lib/question-types/mcq/editor/Thumbnail.svelte';
 	import OrderThumbnail from '$lib/question-types/order/editor/Thumbnail.svelte';
+	import PinThumbnail from '$lib/question-types/pin/editor/Thumbnail.svelte';
+	import PollThumbnail from '$lib/question-types/poll/editor/Thumbnail.svelte';
+	import ScaleThumbnail from '$lib/question-types/scale/editor/Thumbnail.svelte';
+	import SliderThumbnail from '$lib/question-types/slider/editor/Thumbnail.svelte';
 	import TypeAnswerThumbnail from '$lib/question-types/type-answer/editor/Thumbnail.svelte';
 	import type { Slide } from '$lib/types';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -42,6 +49,20 @@
 			<McqThumbnail slide={slide.MultipleChoice} />
 		{:else if 'Order' in slide}
 			<OrderThumbnail slide={slide.Order} />
+		{:else if 'Slider' in slide}
+			<SliderThumbnail slide={slide.Slider} />
+		{:else if 'Scale' in slide}
+			<ScaleThumbnail slide={slide.Scale} />
+		{:else if 'Poll' in slide}
+			<PollThumbnail slide={slide.Poll} />
+		{:else if 'Pin' in slide}
+			<PinThumbnail slide={slide.Pin} />
+		{:else if 'FreeText' in slide}
+			<FreeTextThumbnail slide={slide.FreeText} />
+		{:else if 'Brainstorm' in slide}
+			<BrainstormThumbnail slide={slide.Brainstorm} />
+		{:else if 'InfoSlide' in slide}
+			<InfoSlideThumbnail slide={slide.InfoSlide} />
 		{:else}
 			<TypeAnswerThumbnail slide={slide.TypeAnswer} />
 		{/if}

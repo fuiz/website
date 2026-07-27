@@ -1,10 +1,22 @@
 import type {
 	AnswerMode,
 	AnswerResult,
+	BrainstormResults,
+	FreeTextMode,
+	FreeTextResults,
 	FuizConfig,
 	IdlessFuizConfig,
 	Media,
+	PinPoint,
+	PinResults,
+	PinShape,
+	PollResults,
+	ScaleLabels,
+	ScaleResults,
+	ScaleStyle,
 	ServerPossiblyHidden,
+	SliderRange,
+	SliderResults,
 	TextOrMedia
 } from '$lib/types';
 
@@ -86,6 +98,105 @@ type SlideState =
 			};
 			answered?: string[];
 			points_awarded?: number;
+	  }
+	| {
+			Slider:
+				| 'SlideAnnouncement'
+				| 'QuestionAnnouncement'
+				| 'AnswersAnnouncement'
+				| 'AnswersResults';
+
+			question?: string;
+			media?: Media;
+			range?: SliderRange;
+			unit?: string;
+			correct?: number;
+			tolerance?: number;
+			results?: SliderResults;
+			/** The value this player submitted, once they have. */
+			answered?: number;
+			points_awarded?: number;
+	  }
+	| {
+			Scale:
+				| 'SlideAnnouncement'
+				| 'QuestionAnnouncement'
+				| 'AnswersAnnouncement'
+				| 'AnswersResults';
+
+			question?: string;
+			media?: Media;
+			points?: number[];
+			labels?: ScaleLabels;
+			style?: ScaleStyle;
+			results?: ScaleResults;
+			answered?: number;
+			points_awarded?: number;
+	  }
+	| {
+			Poll: 'SlideAnnouncement' | 'QuestionAnnouncement' | 'AnswersAnnouncement' | 'AnswersResults';
+
+			question?: string;
+			media?: Media;
+			answers?: TextOrMedia[];
+			results?: PollResults;
+			answered?: number;
+			points_awarded?: number;
+	  }
+	| {
+			Pin: 'SlideAnnouncement' | 'QuestionAnnouncement' | 'AnswersAnnouncement' | 'AnswersResults';
+
+			question?: string;
+			media?: Media;
+			scored?: boolean;
+			correct_area?: PinShape;
+			results?: PinResults;
+			answered?: PinPoint;
+			points_awarded?: number;
+	  }
+	| {
+			FreeText:
+				| 'SlideAnnouncement'
+				| 'QuestionAnnouncement'
+				| 'AnswersAnnouncement'
+				| 'AnswersResults';
+
+			question?: string;
+			media?: Media;
+			mode?: FreeTextMode;
+			max_entries?: number;
+			max_entry_length?: number;
+			results?: FreeTextResults;
+			answered?: string[];
+			points_awarded?: number;
+	  }
+	| {
+			Brainstorm:
+				| 'SlideAnnouncement'
+				| 'QuestionAnnouncement'
+				| 'IdeasAnnouncement'
+				| 'VotingAnnouncement'
+				| 'AnswersResults';
+
+			question?: string;
+			media?: Media;
+			ideas?: string[];
+			max_ideas?: number;
+			max_idea_length?: number;
+			max_votes?: number;
+			results?: BrainstormResults;
+			/** Ideas contributed during the collection phase. */
+			contributed?: string[];
+			/** Indices voted for during the voting phase. */
+			answered?: number[];
+			points_awarded?: number;
+	  }
+	| {
+			InfoSlide: 'ContentAnnouncement';
+
+			title?: string;
+			body?: string;
+			media?: Media;
 	  }
 	| {
 			Score: {
@@ -295,6 +406,165 @@ export type OrderSlideIncomingMessage =
 			};
 	  };
 
+/** Shared by every slide type that reveals its question before its answers. */
+type QuestionAnnouncementMessage = {
+	QuestionAnnouncement: {
+		index: number;
+		count: number;
+		question: string;
+		media?: Media | null;
+		duration?: number | null;
+	};
+};
+
+export type SliderIncomingMessage =
+	| SlideAnnouncementMessage
+	| QuestionAnnouncementMessage
+	| {
+			AnswersAnnouncement: {
+				duration?: number | null;
+				range: SliderRange;
+				unit?: string | null;
+			};
+	  }
+	| {
+			AnswersResults: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				range: SliderRange;
+				unit?: string | null;
+				correct: number;
+				tolerance: number;
+				results: SliderResults;
+			};
+	  };
+
+export type ScaleIncomingMessage =
+	| (SlideAnnouncementMessage & { SlideAnnouncement: { style?: ScaleStyle } })
+	| QuestionAnnouncementMessage
+	| {
+			AnswersAnnouncement: {
+				duration?: number | null;
+				points: number[];
+				labels: ScaleLabels;
+				style: ScaleStyle;
+			};
+	  }
+	| {
+			AnswersResults: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				points: number[];
+				labels: ScaleLabels;
+				style: ScaleStyle;
+				results: ScaleResults;
+			};
+	  };
+
+export type PollIncomingMessage =
+	| SlideAnnouncementMessage
+	| QuestionAnnouncementMessage
+	| {
+			AnswersAnnouncement: {
+				duration?: number | null;
+				answers: TextOrMedia[];
+			};
+	  }
+	| {
+			AnswersResults: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				answers: TextOrMedia[];
+				results: PollResults;
+			};
+	  };
+
+export type PinIncomingMessage =
+	| (SlideAnnouncementMessage & { SlideAnnouncement: { scored?: boolean } })
+	| QuestionAnnouncementMessage
+	| {
+			AnswersAnnouncement: {
+				duration?: number | null;
+				scored: boolean;
+			};
+	  }
+	| {
+			AnswersResults: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				correct_area?: PinShape | null;
+				results: PinResults;
+			};
+	  };
+
+export type FreeTextIncomingMessage =
+	| (SlideAnnouncementMessage & { SlideAnnouncement: { mode?: FreeTextMode } })
+	| QuestionAnnouncementMessage
+	| {
+			AnswersAnnouncement: {
+				duration?: number | null;
+				mode: FreeTextMode;
+				max_entries: number;
+				max_entry_length: number;
+			};
+	  }
+	| {
+			AnswersResults: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				mode: FreeTextMode;
+				results: FreeTextResults;
+			};
+	  };
+
+export type BrainstormIncomingMessage =
+	| SlideAnnouncementMessage
+	| QuestionAnnouncementMessage
+	| {
+			IdeasAnnouncement: {
+				duration?: number | null;
+				max_ideas: number;
+				max_idea_length: number;
+			};
+	  }
+	| {
+			VotingAnnouncement: {
+				duration?: number | null;
+				ideas: string[];
+				max_votes: number;
+			};
+	  }
+	| {
+			AnswersResults: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
+				results: BrainstormResults;
+			};
+	  };
+
+export type InfoSlideIncomingMessage = {
+	ContentAnnouncement: {
+		index: number;
+		count: number;
+		title: string;
+		body?: string | null;
+		media?: Media | null;
+		duration?: number | null;
+	};
+};
+
 export type IncomingMessage =
 	| {
 			Game: GameIncomingMessage;
@@ -307,4 +577,25 @@ export type IncomingMessage =
 	  }
 	| {
 			Order: OrderSlideIncomingMessage;
+	  }
+	| {
+			Slider: SliderIncomingMessage;
+	  }
+	| {
+			Scale: ScaleIncomingMessage;
+	  }
+	| {
+			Poll: PollIncomingMessage;
+	  }
+	| {
+			Pin: PinIncomingMessage;
+	  }
+	| {
+			FreeText: FreeTextIncomingMessage;
+	  }
+	| {
+			Brainstorm: BrainstormIncomingMessage;
+	  }
+	| {
+			InfoSlide: InfoSlideIncomingMessage;
 	  };

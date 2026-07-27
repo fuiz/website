@@ -8,12 +8,15 @@
 		questionType,
 		label,
 		subtext,
+		scored = true,
 		pointsAwarded
 	}: {
 		questionType: QuestionType;
 		label: string;
 		// Optional clarifier under the type label (e.g. single vs. multiple answers).
 		subtext?: string;
+		// For pin slides: whether there is a target to aim at.
+		scored?: boolean;
 		pointsAwarded: number;
 	} = $props();
 </script>
@@ -22,7 +25,7 @@
      hero glyph handles that), the type rides in on a ribbon from the left, the
      points badge from the right. On exit each flies back out. -->
 <div class="scene">
-	<AnnouncementHero {questionType} />
+	<AnnouncementHero {questionType} {scored} />
 
 	<div class="caption">
 		<div class="exit-piece label-group" out:flyOut|global={{ x: -125, y: 30, rotate: -16 }}>

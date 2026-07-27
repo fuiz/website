@@ -1,13 +1,14 @@
 <script lang="ts">
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
-	import type { BindableGameInfo, SharedGameInfo } from './types';
+	import type { BindableGameInfo, ResponseSummary, SharedGameInfo } from './types';
 
 	let {
 		bindableGameInfo = $bindable(),
 		gameInfo,
 		onlock,
 		onnext,
+		responses = undefined,
 		extraControls,
 		children
 	}: {
@@ -15,6 +16,7 @@
 		gameInfo: SharedGameInfo;
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
+		responses?: ResponseSummary;
 		extraControls?: import('svelte').Snippet;
 		children: import('svelte').Snippet;
 	} = $props();
@@ -29,6 +31,7 @@
 		{fullscreenElement}
 		{onlock}
 		{onnext}
+		{responses}
 		{extraControls}
 	/>
 	<div class="background-area">

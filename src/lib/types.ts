@@ -123,43 +123,246 @@ export type GenericTypeAnswer<T> = Modify<
 
 export type TypeAnswer = GenericTypeAnswer<Media | undefined>;
 
+/** Fields every question-style slide carries, whatever it asks for. */
+type QuestionBase<T> = {
+	title: string;
+	media?: T;
+	introduce_question?: number | null;
+	time_limit?: number | null;
+	points_awarded: number;
+};
+
+/** The span a slider covers and the granularity players move it in. */
+export type SliderRange = {
+	min: number;
+	max: number;
+	step: number;
+};
+
+export type GenericIdlessSliderSlide<T> = QuestionBase<T> & {
+	range: SliderRange;
+	/** The value that earns points. */
+	correct: number;
+	/** How far from `correct` still counts as correct; `0` demands an exact hit. */
+	tolerance: number;
+	/** Shown next to the value, e.g. `%`, `kg`, `°C`. */
+	unit?: string | null;
+};
+
+export type IdlessSliderSlide = GenericIdlessSliderSlide<Media | undefined>;
+export type GenericSliderSlide<T> = GenericIdlessSliderSlide<T>;
+export type SliderSlide = GenericSliderSlide<Media | undefined>;
+
+/** `Agreement` is a short opinion scale; `Nps` is the 0–10 Net Promoter Score. */
+export type ScaleStyle = 'Agreement' | 'Nps';
+
+export type ScaleLabels = {
+	low?: string | null;
+	mid?: string | null;
+	high?: string | null;
+};
+
+export type GenericIdlessScaleSlide<T> = QuestionBase<T> & {
+	min: number;
+	max: number;
+	style: ScaleStyle;
+	labels: ScaleLabels;
+};
+
+export type IdlessScaleSlide = GenericIdlessScaleSlide<Media | undefined>;
+export type GenericScaleSlide<T> = GenericIdlessScaleSlide<T>;
+export type ScaleSlide = GenericScaleSlide<Media | undefined>;
+
+export type IdlessPollAnswer = {
+	content: TextOrMedia;
+};
+
+export type PollAnswer = IdlessPollAnswer & {
+	id: number;
+};
+
+export type GenericIdlessPollSlide<T> = QuestionBase<T> & {
+	answers: IdlessPollAnswer[];
+};
+
+export type IdlessPollSlide = GenericIdlessPollSlide<Media | undefined>;
+
+export type GenericPollSlide<T> = Modify<
+	GenericIdlessPollSlide<T>,
+	{
+		answers: PollAnswer[];
+	}
+>;
+
+export type PollSlide = GenericPollSlide<Media | undefined>;
+
+/** A point on the slide's image, normalised to `0..1` on both axes. */
+export type PinPoint = {
+	x: number;
+	y: number;
+};
+
+/**
+ * The region that earns points on a pin-answer slide.
+ *
+ * Every coordinate is normalised to `0..1` of the image. Widths and heights are
+ * carried independently, so there is no aspect ratio to reconcile — a circle
+ * drawn over a wide photo stays a circle when it is drawn again.
+ */
+export type PinShape =
+	| {
+			/** An axis-aligned box, anchored at its top-left corner. */
+			Rectangle: { x: number; y: number; width: number; height: number };
+	  }
+	| {
+			/** An axis-aligned ellipse. */
+			Ellipse: { center: PinPoint; radius_x: number; radius_y: number };
+	  }
+	| {
+			/** A freehand outline, implicitly closed from the last point to the first. */
+			Polygon: { points: PinPoint[] };
+	  };
+
+/** The tools the correct-area editor offers, matching the shapes above. */
+export const pinTools = ['Rectangle', 'Ellipse', 'Polygon'] as const;
+
+export type PinTool = (typeof pinTools)[number];
+
+export type GenericIdlessPinSlide<T> = QuestionBase<T> & {
+	/** `null` turns this into a drop pin: every placement is equally valid. */
+	correct_area?: PinShape | null;
+};
+
+export type IdlessPinSlide = GenericIdlessPinSlide<Media | undefined>;
+export type GenericPinSlide<T> = GenericIdlessPinSlide<T>;
+export type PinSlide = GenericPinSlide<Media | undefined>;
+
+/** `WordCloud` piles short entries together; `OpenEnded` lists responses. */
+export type FreeTextMode = 'WordCloud' | 'OpenEnded';
+
+export type GenericIdlessFreeTextSlide<T> = QuestionBase<T> & {
+	mode: FreeTextMode;
+	max_entries: number;
+	max_entry_length: number;
+};
+
+export type IdlessFreeTextSlide = GenericIdlessFreeTextSlide<Media | undefined>;
+export type GenericFreeTextSlide<T> = GenericIdlessFreeTextSlide<T>;
+export type FreeTextSlide = GenericFreeTextSlide<Media | undefined>;
+
+export type GenericIdlessBrainstormSlide<T> = {
+	title: string;
+	media?: T;
+	introduce_question?: number | null;
+	/** Time players have to contribute ideas. */
+	idea_time_limit?: number | null;
+	/** Time players have to vote on the collected board. */
+	vote_time_limit?: number | null;
+	points_awarded: number;
+	max_ideas_per_player: number;
+	max_votes_per_player: number;
+	max_idea_length: number;
+};
+
+export type IdlessBrainstormSlide = GenericIdlessBrainstormSlide<Media | undefined>;
+export type GenericBrainstormSlide<T> = GenericIdlessBrainstormSlide<T>;
+export type BrainstormSlide = GenericBrainstormSlide<Media | undefined>;
+
+export type GenericIdlessInfoSlide<T> = {
+	title: string;
+	body?: string | null;
+	media?: T;
+	/** How long the slide stays up; `null` waits for the host. */
+	duration?: number | null;
+};
+
+export type IdlessInfoSlide = GenericIdlessInfoSlide<Media | undefined>;
+export type GenericInfoSlide<T> = GenericIdlessInfoSlide<T>;
+export type InfoSlide = GenericInfoSlide<Media | undefined>;
+
+// --- Result payloads, mirroring the backend's per-slide `Results` structs. ---
+
+export type SliderValueCount = {
+	value: number;
+	count: number;
+};
+
+export type SliderResults = {
+	/** One entry per distinct submitted value, ascending. */
+	distribution: SliderValueCount[];
+	average: number | null;
+	correct_count: number;
+	total_count: number;
+};
+
+export type NpsBreakdown = {
+	promoters: number;
+	passives: number;
+	detractors: number;
+	/** `%promoters - %detractors`, in the conventional −100..100 range. */
+	score: number;
+};
+
+export type ScaleResults = {
+	/** One count per selectable point, aligned with the scale. */
+	counts: number[];
+	average: number | null;
+	total_count: number;
+	nps: NpsBreakdown | null;
+};
+
+export type PollResults = {
+	/** One count per option, aligned with the configured order. */
+	counts: number[];
+	total_count: number;
+};
+
+export type PinResults = {
+	pins: PinPoint[];
+	/** `null` on drop pins, which have nothing to be right about. */
+	correct_count: number | null;
+	total_count: number;
+};
+
+export type FreeTextEntry = {
+	text: string;
+	count: number;
+};
+
+export type FreeTextResults = {
+	/** Distinct entries, most frequent first. */
+	entries: FreeTextEntry[];
+	total_entries: number;
+	total_count: number;
+};
+
+export type BrainstormIdea = {
+	text: string;
+	votes: number;
+};
+
+export type BrainstormResults = {
+	/** The board ranked by votes, ties broken by the order ideas arrived. */
+	ideas: BrainstormIdea[];
+	voter_count: number;
+	contributor_count: number;
+};
+
 export function getTitle<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): string {
-	if ('MultipleChoice' in slide) return slide.MultipleChoice.title;
-	if ('TypeAnswer' in slide) return slide.TypeAnswer.title;
-	if ('Order' in slide) return slide.Order.title;
-	throw new Error('Unknown slide type');
+	return getBody(slide).title;
 }
 
 export function getMedia<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): T | undefined {
-	if ('MultipleChoice' in slide) return slide.MultipleChoice.media;
-	if ('TypeAnswer' in slide) return slide.TypeAnswer.media;
-	if ('Order' in slide) return slide.Order.media;
-	return undefined;
+	return getBody(slide).media;
 }
 
 async function mapIdlessMedia<T, O>(
 	slide: GenericIdlessSlide<T | undefined>,
 	map: (media: T | undefined) => Promise<O>
 ): Promise<GenericIdlessSlide<O>> {
-	if ('MultipleChoice' in slide)
-		return {
-			MultipleChoice: {
-				...slide.MultipleChoice,
-				media: await map(slide.MultipleChoice.media)
-			}
-		};
-	if ('TypeAnswer' in slide)
-		return {
-			TypeAnswer: {
-				...slide.TypeAnswer,
-				media: await map(slide.TypeAnswer.media)
-			}
-		};
-	if ('Order' in slide)
-		return {
-			Order: { ...slide.Order, media: await map(slide.Order.media) }
-		};
-	return slide;
+	const kind = getQuestionType(slide);
+	const body = getBody(slide);
+	return { [kind]: { ...body, media: await map(body.media) } } as GenericIdlessSlide<O>;
 }
 
 export async function mapIdlessSlidesMedia<T, O>(
@@ -188,25 +391,9 @@ function mapIdlessMediaSync<T, O>(
 	slide: GenericIdlessSlide<T | undefined>,
 	map: (media: T | undefined) => O
 ): GenericIdlessSlide<O> {
-	if ('MultipleChoice' in slide)
-		return {
-			MultipleChoice: {
-				...slide.MultipleChoice,
-				media: map(slide.MultipleChoice.media)
-			}
-		};
-	if ('TypeAnswer' in slide)
-		return {
-			TypeAnswer: {
-				...slide.TypeAnswer,
-				media: map(slide.TypeAnswer.media)
-			}
-		};
-	if ('Order' in slide)
-		return {
-			Order: { ...slide.Order, media: map(slide.Order.media) }
-		};
-	return slide;
+	const kind = getQuestionType(slide);
+	const body = getBody(slide);
+	return { [kind]: { ...body, media: map(body.media) } } as GenericIdlessSlide<O>;
 }
 
 export function mapIdlessSlidesMediaSync<T, O>(
@@ -228,6 +415,27 @@ export type GenericIdlessSlide<T> =
 	  }
 	| {
 			Order: GenericIdlessOrderSlide<T>;
+	  }
+	| {
+			Slider: GenericIdlessSliderSlide<T>;
+	  }
+	| {
+			Scale: GenericIdlessScaleSlide<T>;
+	  }
+	| {
+			Poll: GenericIdlessPollSlide<T>;
+	  }
+	| {
+			Pin: GenericIdlessPinSlide<T>;
+	  }
+	| {
+			FreeText: GenericIdlessFreeTextSlide<T>;
+	  }
+	| {
+			Brainstorm: GenericIdlessBrainstormSlide<T>;
+	  }
+	| {
+			InfoSlide: GenericIdlessInfoSlide<T>;
 	  };
 
 export type IdlessSlide = GenericIdlessSlide<Media | undefined>;
@@ -244,14 +452,75 @@ export type GenericSlide<T> =
 	| {
 			Order: GenericOrderSlide<T>;
 			id: number;
+	  }
+	| {
+			Slider: GenericSliderSlide<T>;
+			id: number;
+	  }
+	| {
+			Scale: GenericScaleSlide<T>;
+			id: number;
+	  }
+	| {
+			Poll: GenericPollSlide<T>;
+			id: number;
+	  }
+	| {
+			Pin: GenericPinSlide<T>;
+			id: number;
+	  }
+	| {
+			FreeText: GenericFreeTextSlide<T>;
+			id: number;
+	  }
+	| {
+			Brainstorm: GenericBrainstormSlide<T>;
+			id: number;
+	  }
+	| {
+			InfoSlide: GenericInfoSlide<T>;
+			id: number;
 	  };
 
 export type Slide = GenericSlide<Media | undefined>;
 
-// The three question slide kinds, derived from the slide union so this stays in
-// sync with the Slide definition (distributes over the union to grab each key).
+// Every slide kind, derived from the slide union so this stays in sync with the
+// Slide definition (distributes over the union to grab each key).
 type SlideKind<S> = S extends S ? keyof S : never;
-export type QuestionType = SlideKind<GenericIdlessSlide<unknown>>;
+export type QuestionType = Exclude<SlideKind<GenericSlide<unknown>>, 'id'>;
+
+/**
+ * Every slide kind, in the order the add-slide picker offers them. Iterating
+ * this is what lets the helpers below stay one branch long instead of growing a
+ * new `if` per question type.
+ */
+export const questionTypes = [
+	'MultipleChoice',
+	'TypeAnswer',
+	'Slider',
+	'Pin',
+	'Order',
+	'Poll',
+	'Scale',
+	'FreeText',
+	'Brainstorm',
+	'InfoSlide'
+] as const satisfies readonly QuestionType[];
+
+/** Which question type a slide holds. */
+export function getQuestionType<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): QuestionType {
+	for (const kind of questionTypes) {
+		if (kind in slide) return kind;
+	}
+	throw new Error('Unknown slide type');
+}
+
+/** The slide's own body, keyed off whichever question type it turned out to be. */
+type SlideBody<T> = { title: string; media?: T };
+
+function getBody<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): SlideBody<T> {
+	return (slide as Record<QuestionType, SlideBody<T>>)[getQuestionType(slide)];
+}
 
 export type GenericFuizConfig<T> = {
 	title: string;

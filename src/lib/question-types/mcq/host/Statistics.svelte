@@ -30,7 +30,15 @@
 	} = $props();
 </script>
 
-<StatisticsLayout bind:bindableGameInfo {gameInfo} {questionText} {media} {onnext} {onlock}>
+<StatisticsLayout
+	bind:bindableGameInfo
+	{gameInfo}
+	{questionText}
+	{media}
+	{onnext}
+	{onlock}
+	responses={{ count: answers.reduce((total, answer) => total + answer.count, 0) }}
+>
 	<VerticalSplit>
 		{#snippet top()}
 			{#if timeLeft !== undefined && timeStarted !== undefined}

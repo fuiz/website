@@ -12,6 +12,18 @@ export function lintIssueMessage(issue: LintIssue | undefined): string | undefin
 			return m.empty_answer();
 		case 'duplicate_answers':
 			return m.duplicate_answers();
+		case 'no_media':
+			return m.no_media();
+		case 'no_target':
+			return m.no_target();
+		case 'correct_out_of_range':
+			return m.correct_out_of_range();
+		case 'empty_range':
+			return m.empty_range();
+		case 'empty_slide':
+			return m.empty_slide();
+		case 'no_entries':
+			return m.no_entries();
 	}
 }
 
@@ -26,5 +38,17 @@ export function lintIssueTopbarMessage(issue: LintIssue | undefined): string | u
 			return m.empty_answer();
 		case 'duplicate_answers':
 			return m.duplicate_answers();
+		case 'no_media':
+			return m.no_media();
+		case 'no_target':
+			return m.no_target();
+		case 'correct_out_of_range':
+			return m.correct_out_of_range();
+		case 'empty_range':
+			return m.empty_range();
+		case 'empty_slide':
+			return m.empty_slide();
+		case 'no_entries':
+			return m.no_entries();
 	}
 }
