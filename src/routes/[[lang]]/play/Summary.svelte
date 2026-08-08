@@ -3,6 +3,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import CorrectAnswers from '$lib/question-types/preview/CorrectAnswers.svelte';
 	import { type FuizConfig, getTitle } from '$lib/types';
+	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import MilitaryTech from '~icons/material-symbols/military-tech';
 
 	type Score = { points: number; position: number } | undefined;
@@ -42,7 +43,7 @@
 				{@const title = getTitle(slide)}
 				<div class="line">
 					<div class="label">
-						<span class="num">{m.question_text()} {index + 1}</span>
+						<SectionLabel as="span">{m.question_text()} {index + 1}</SectionLabel>
 						<span class="status" class:correct class:wrong={!correct}>
 							{correct ? m.correct() : m.wrong()}
 						</span>
@@ -50,7 +51,7 @@
 					<div class="card">
 						<div class="title">{title}</div>
 						<div class="answers">
-							<div class="answers-label">{m.correct_answers()}</div>
+							<SectionLabel --section-label-margin="0 0 0.2em">{m.correct_answers()}</SectionLabel>
 							<CorrectAnswers {slide} />
 						</div>
 					</div>
@@ -135,29 +136,20 @@
 		gap: 0.2em;
 	}
 
+	/* Pure layout: the eyebrow's own typography comes from .section-label. */
 	.label {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
 		gap: 0.5em;
 		padding: 0 0.3em;
-		font-size: 0.75em;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		opacity: 0.7;
-	}
-
-	.num {
-		font-family: var(--alternative-font);
-		font-weight: 800;
 	}
 
 	.status {
+		font-size: 0.75em;
 		padding: 0.15em 0.5em;
 		border-radius: 999px;
 		font-weight: 700;
-		text-transform: none;
-		letter-spacing: 0;
 	}
 
 	.status.correct {
@@ -188,16 +180,6 @@
 	.answers {
 		border-top: 1px solid color-mix(in srgb, var(--on-surface) 12%, transparent);
 		padding-top: 0.4em;
-	}
-
-	.answers-label {
-		font-size: 0.7em;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		opacity: 0.6;
-		font-family: var(--alternative-font);
-		font-weight: 800;
-		margin-bottom: 0.2em;
 	}
 
 </style>

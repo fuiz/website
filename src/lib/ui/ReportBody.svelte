@@ -12,6 +12,7 @@
 	import type { ReportBody } from '$lib/storage';
 	import OutcomeBar from '$lib/ui/OutcomeBar.svelte';
 	import ResultsGrid from '$lib/ui/ResultsGrid.svelte';
+	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import { toSorted } from '$lib/util';
 	import Groups from '~icons/material-symbols/groups-outline';
 	import Scoreboard from '~icons/material-symbols/scoreboard-outline';
@@ -48,13 +49,15 @@
 	</div>
 </div>
 
-<h3>{m.scores()}</h3>
+<SectionLabel as="h3" --section-label-margin="1.2em 0 0.4em">{m.scores()}</SectionLabel>
 <ResultsGrid {rows} {maxima} questionTitles={titles} />
 
-<h3>
+<SectionLabel as="h3" --section-label-margin="1.2em 0 0.4em">
 	{m.questions_title()}
-	<span class="hint">{m.sorted_by_hardest()}</span>
-</h3>
+	{#snippet trailing()}
+		<span class="hint">{m.sorted_by_hardest()}</span>
+	{/snippet}
+</SectionLabel>
 <div class="questions">
 	{#each toSorted(questions, (a, b) => a.accuracy - b.accuracy) as question (question.index)}
 		<div class="question">
@@ -111,19 +114,6 @@
 		font-weight: 800;
 		font-size: 1.2em;
 		font-variant-numeric: tabular-nums;
-	}
-
-	h3 {
-		font-family: var(--alternative-font);
-		font-size: 0.8em;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		opacity: 0.7;
-		margin: 1.2em 0 0.4em;
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: 0.5em;
 	}
 
 	.hint {

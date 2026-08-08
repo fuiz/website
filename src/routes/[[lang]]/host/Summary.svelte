@@ -4,14 +4,16 @@
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { reportToCsv } from '$lib/reports';
+	import { hasResponses, pivotResponses, reportToCsv, responsesToCsv } from '$lib/reports';
 	import { addReport, loadDatabase, type ReportBody, type ReportId } from '$lib/storage';
-	import { type FuizConfig, type FuizOptions, getTitle } from '$lib/types';
+	import { type FuizConfig, type FuizOptions, getPointsAwarded, getTitle } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import Bookmark from '~icons/material-symbols/bookmark-outline';
 	import Check from '~icons/material-symbols/check-circle-outline';
 	import Download from '~icons/material-symbols/download';
 	import Repeat from '~icons/material-symbols/repeat';
+	import Warning from '~icons/material-symbols/warning-outline';
 
 	let {
 		stats,
@@ -21,6 +23,7 @@
 		results,
 		team_mapping = {},
 		code,
+		capturedResponses = {},
 		origin
 	}: {
 		stats: [number, number][];
@@ -30,6 +33,8 @@
 		results: { [k: string]: number[] };
 		team_mapping?: { [k: string]: string[] };
 		code?: string;
+		/** What each slide's responders said, gathered as the game ran. */
+		capturedResponses?: Record<number, { name: string; answer: string }[]>;
 		origin?: FuizOrigin;
 	} = $props();
 
@@ -38,6 +43,15 @@
 	// Captured once so the saved report records when the game actually ended, not when the
 	// host got around to pressing save.
 	const playedAt = Date.now();
+
+	// In team mode the scoreboard is keyed by team, but answers are always keyed
+	// by the individual who typed them, so the roster has to come from the team
+	// rosters rather than from `results` or every team would show up as a blank row.
+	let roster = $derived(
+		Object.keys(team_mapping).length > 0 ? Object.values(team_mapping).flat() : Object.keys(results)
+	);
+
+	let responses = $derived(pivotResponses(config.slides.length, capturedResponses, roster));
 
 	let report: ReportBody = $derived({
 		title: config.title,
@@ -48,15 +62,18 @@
 		playerCount: player_count,
 		questions: config.slides.map((slide, index) => {
 			const [correct, wrong] = stats.at(index) ?? [0, 0];
-			return { title: getTitle(slide), correct, wrong };
+			return { title: getTitle(slide), correct, wrong, pointsAwarded: getPointsAwarded(slide) };
 		}),
 		results: Object.entries(results),
-		teams: Object.keys(team_mapping).length > 0 ? Object.entries(team_mapping) : undefined
+		teams: Object.keys(team_mapping).length > 0 ? Object.entries(team_mapping) : undefined,
+		responses: responses.length > 0 ? responses : undefined
 	});
 
 	let saveState = $state<'unsaved' | 'saving' | 'saved'>('unsaved');
 	let savedId = $state<ReportId>();
 	let saveError = $state('');
+
+	let saved = $derived(saveState === 'saved' && savedId !== undefined);
 
 	async function save() {
 		saveState = 'saving';
@@ -75,71 +92,106 @@
 
 <TypicalPage>
 	<div id="summary">
-		{#if hasResults}
-			{#if saveState === 'saved' && savedId !== undefined}
-				<div class="banner saved">
-					<Check height="1.2em" width="1.2em" />
-					<span class="banner-text">{m.report_saved()}</span>
-					<a class="banner-link" href={resolve(localizeHref(`/reports/${savedId}`))}>
-						{m.view_report()}
-					</a>
-				</div>
-			{:else}
-				<div class="banner unsaved">
-					<div class="banner-copy">
-						<div class="banner-title">{m.report_unsaved_title()}</div>
-						<div class="banner-detail">{saveError || m.report_unsaved_detail()}</div>
+		<!--
+			The actions come first in the source so that on a phone, where the panes
+			collapse into one column, the host meets "save this" before scrolling a
+			long question list. On a wide screen they move to the right-hand pane.
+		-->
+		<aside id="actions">
+			{#if hasResults}
+				{#if saved}
+					<div class="notice">
+						<Check class="ok-icon" height="1.1em" width="1.1em" />
+						<div>
+							<div class="title">{m.report_saved()}</div>
+							<a class="link" href={resolve(localizeHref(`/reports/${savedId}`))}>
+								{m.view_report()}
+							</a>
+						</div>
 					</div>
-					<div class="banner-action">
-						<FancyButton onclick={save} disabled={saveState === 'saving'}>
-							<div class="action">
-								<Bookmark height="1.1em" width="1.1em" />
-								{m.save_report()}
-							</div>
-						</FancyButton>
+				{:else}
+					<div class="notice unsaved">
+						<Warning class="warn-icon" height="1.1em" width="1.1em" />
+						<div>
+							<div class="title">{m.report_unsaved_title()}</div>
+							<div class="detail">{saveError || m.report_unsaved_detail()}</div>
+						</div>
 					</div>
-				</div>
+					<FancyButton onclick={save} disabled={saveState === 'saving'}>
+						<div class="action">
+							<Bookmark height="1.1em" width="1.1em" />
+							{m.save_report()}
+						</div>
+					</FancyButton>
+				{/if}
 			{/if}
-		{/if}
-		<div id="actions">
-			<div class="action-container">
-				<FancyButton onclick={() => playBackendReadyIdConfig(config, options, origin)}>
+
+			<FancyButton
+				palette={hasResults && !saved ? 'secondary' : undefined}
+				onclick={() => playBackendReadyIdConfig(config, options, origin)}
+			>
+				<div class="action">
+					<Repeat height="1.1em" width="1.1em" />
+					{m.play_again()}
+				</div>
+			</FancyButton>
+
+			{#if hasResults}
+				<SectionLabel --section-label-margin="0.5em 0 0" --section-label-padding="0 0.2em">
+					{m.export_title()}
+				</SectionLabel>
+				<FancyButton
+					palette="secondary"
+					onclick={() =>
+						downloadBlob([reportToCsv(report)], `${config.title} results.csv`, {
+							type: 'text/csv;charset=utf-8'
+						})}
+				>
 					<div class="action">
-						<Repeat height="1.1em" width="1.1em" />
-						{m.play_again()}
+						<Download height="1.1em" width="1.1em" />
+						{m.download_results()}
 					</div>
 				</FancyButton>
-			</div>
-			{#if hasResults}
-				<div class="action-container">
+				{#if hasResponses(report)}
 					<FancyButton
+						palette="secondary"
 						onclick={() =>
-							downloadBlob([reportToCsv(report)], `${config.title} results.csv`, {
+							downloadBlob([responsesToCsv(report)], `${config.title} responses.csv`, {
 								type: 'text/csv;charset=utf-8'
 							})}
 					>
 						<div class="action">
 							<Download height="1.1em" width="1.1em" />
-							{m.download_results()}
+							{m.download_responses()}
 						</div>
 					</FancyButton>
-				</div>
+				{/if}
 			{/if}
-		</div>
+		</aside>
+
 		<div id="lines">
 			{#each config.slides as slide, index (slide.id)}
 				{@const [correct, wrong] = stats.at(index) || [0, 0]}
 				{@const unanswered = Math.max(0, player_count - correct - wrong)}
 				{@const title = getTitle(slide)}
+				{@const scored = getPointsAwarded(slide) > 0}
+				{@const responded = capturedResponses[index]?.length}
 				<div class="line">
 					<div class="label">
-						<span class="num">{m.question_text()} {index + 1}</span>
-						<span
-							class="score"
-							title="{correct} {m.correct()} · {wrong} {m.wrong()} · {unanswered} {m.unanswered()}"
-						>
-							{correct}/{player_count}
-						</span>
+						<SectionLabel as="span">{m.question_text()} {index + 1}</SectionLabel>
+						{#if scored}
+							<span
+								class="score"
+								title="{correct} {m.correct()} · {wrong} {m.wrong()} · {unanswered} {m.unanswered()}"
+							>
+								{correct}/{player_count}
+							</span>
+						{:else if responded !== undefined}
+							<!-- Nothing was right or wrong here, so the tally counts who spoke up. -->
+							<span class="score neutral" title={m.responses()}>
+								{responded}/{player_count}
+							</span>
+						{/if}
 					</div>
 					<div class="card">{title}</div>
 				</div>
@@ -149,10 +201,16 @@
 </TypicalPage>
 
 <style>
+	/*
+	 * One column on a phone, two panes once there is room: the question list on
+	 * the left, the actions ranged down the right. The single-column width stays
+	 * what it always was so the phone layout is unchanged.
+	 */
 	#summary {
 		flex: 1;
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		align-content: start;
 		margin: 0 auto;
 		gap: 0.8em;
 		width: 100%;
@@ -161,63 +219,82 @@
 		box-sizing: border-box;
 	}
 
-	.banner {
-		display: flex;
-		align-items: center;
-		gap: 0.6em;
-		border-radius: 0.7em;
-		padding: 0.6em 0.75em;
-	}
+	@media (width >= 52em) {
+		#summary {
+			grid-template-columns: minmax(0, 1fr) 21ch;
+			align-items: start;
+			max-width: min(78ch, 95vw);
+			gap: 1.2em;
+		}
 
-	.banner.unsaved {
-		background: var(--primary-container);
-		color: var(--on-primary-container);
-		flex-wrap: wrap;
-	}
+		#lines {
+			grid-column: 1;
+			grid-row: 1;
+		}
 
-	.banner.saved {
-		border: 1px solid var(--outline);
-		font-size: 0.85em;
-	}
-
-	.banner-copy {
-		flex: 1;
-		min-width: 12ch;
-	}
-
-	.banner-title {
-		font-weight: 700;
-		font-size: 0.9em;
-	}
-
-	.banner-detail {
-		font-size: 0.75em;
-		opacity: 0.85;
-	}
-
-	.banner-action {
-		flex: 0 0 auto;
-		font-size: 0.85em;
-	}
-
-	.banner-text {
-		flex: 1;
-		font-weight: 600;
-	}
-
-	.banner-link {
-		color: inherit;
-		font-weight: 700;
+		#actions {
+			grid-column: 2;
+			grid-row: 1;
+			/* The question list is the long thing here, so the actions follow it down. */
+			position: sticky;
+			top: 0.5em;
+		}
 	}
 
 	#actions {
 		display: flex;
-		gap: 0.3em;
-		flex-wrap: wrap;
+		flex-direction: column;
+		gap: 0.4em;
+		font-size: 0.9em;
 	}
 
-	#actions .action-container {
-		flex: 1;
+	/*
+	 * Deliberately not filled with `--primary-container`: the Save button sits
+	 * directly beneath it in its own red, and two stacked reds read as two
+	 * competing alarms rather than one message and its answer. The icon carries
+	 * the attention, the button carries the urgency.
+	 */
+	.notice {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.45em;
+		border-radius: 0.7em;
+		padding: 0.55em 0.7em;
+		background: var(--surface-variant);
+	}
+
+	.notice :global(.warn-icon),
+	.notice :global(.ok-icon) {
+		flex: 0 0 auto;
+		margin-top: 0.1em;
+	}
+
+	.notice :global(.warn-icon) {
+		color: var(--primary);
+	}
+
+	.link {
+		display: inline-block;
+	}
+
+	.title {
+		display: flex;
+		align-items: center;
+		gap: 0.35em;
+		font-weight: 700;
+		font-size: 0.9em;
+	}
+
+	.detail {
+		font-size: 0.75em;
+		opacity: 0.85;
+		line-height: 1.45;
+	}
+
+	.link {
+		font-size: 0.8em;
+		font-weight: 700;
+		color: inherit;
 	}
 
 	.action {
@@ -240,32 +317,31 @@
 		gap: 0.2em;
 	}
 
+	/* Pure layout: the eyebrow's own typography comes from .section-label. */
 	.label {
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
 		gap: 0.5em;
 		padding: 0 0.3em;
-		font-size: 0.75em;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		opacity: 0.7;
-	}
-
-	.num {
-		font-family: var(--alternative-font);
-		font-weight: 800;
 	}
 
 	.score {
+		font-size: 0.75em;
 		padding: 0.15em 0.5em;
 		border-radius: 999px;
 		background: var(--on-surface);
 		color: var(--surface);
 		font-weight: 700;
 		font-variant-numeric: tabular-nums;
-		text-transform: none;
-		letter-spacing: 0;
+	}
+
+	/* A response count isn't a score, so it doesn't get the score's solid fill. */
+	.score.neutral {
+		background: none;
+		color: inherit;
+		border: 1px solid var(--outline);
+		font-weight: 600;
 	}
 
 	.card {

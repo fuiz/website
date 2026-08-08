@@ -1,5 +1,4 @@
 import { addIds } from '$lib/clientOnly';
-import type { TruncatedList } from '$lib/question-types/host/types';
 import type {
 	BrainstormIncomingMessage,
 	FreeTextIncomingMessage,
@@ -15,6 +14,11 @@ import type {
 	TypeAnswerIncomingMessage
 } from './index';
 
+/** The lobby roster held in state, or an empty one before the first sync. */
+function rosterOf(state: State | undefined): string[] {
+	return state && 'Game' in state && 'WaitingScreen' in state.Game ? state.Game.WaitingScreen : [];
+}
+
 // Game message types
 export interface GameMessageContext {
 	code: string;
@@ -28,7 +32,7 @@ export interface GameMessageContext {
 
 export interface GameMessageResult {
 	/** Who answered the current slide, once the host has asked. */
-	newPlayerResponses?: TruncatedList<{ name: string; answer: string }>;
+	newPlayerResponses?: { name: string; answer: string }[];
 	newState?: State;
 	newWatcherId?: string;
 	shouldCloseSocket?: boolean;
@@ -65,45 +69,28 @@ export function handleGameMessage(
 	}
 
 	if ('PlayerJoined' in game) {
-		// Append to the host-side player list. Falls back to a fresh single-item
-		// list if the event arrived before the initial WaitingScreen sync.
-		const previous =
-			context.currentState &&
-			'Game' in context.currentState &&
-			'WaitingScreen' in context.currentState.Game
-				? context.currentState.Game.WaitingScreen
-				: { items: [], exact_count: 0 };
+		// Append to the host-side roster. Falls back to a fresh single-item list
+		// if the event arrived before the initial WaitingScreen sync.
+		const previous = rosterOf(context.currentState);
 		return {
 			newState: {
 				Game: {
-					WaitingScreen: {
-						items: [...previous.items, game.PlayerJoined],
-						exact_count: previous.exact_count + 1
-					}
+					WaitingScreen: [...previous, game.PlayerJoined]
 				}
 			}
 		};
 	}
 
 	if ('PlayerLeft' in game) {
-		const previous =
-			context.currentState &&
-			'Game' in context.currentState &&
-			'WaitingScreen' in context.currentState.Game
-				? context.currentState.Game.WaitingScreen
-				: { items: [], exact_count: 0 };
-		const idx = previous.items.indexOf(game.PlayerLeft);
-		const items =
-			idx >= 0
-				? [...previous.items.slice(0, idx), ...previous.items.slice(idx + 1)]
-				: previous.items;
+		// Dropping the name is the whole update: the lobby count is the roster's
+		// length, so an unknown name cannot leave the two disagreeing.
+		const previous = rosterOf(context.currentState);
+		const idx = previous.indexOf(game.PlayerLeft);
 		return {
 			newState: {
 				Game: {
-					WaitingScreen: {
-						items,
-						exact_count: Math.max(0, previous.exact_count - 1)
-					}
+					WaitingScreen:
+						idx >= 0 ? [...previous.slice(0, idx), ...previous.slice(idx + 1)] : previous
 				}
 			}
 		};
@@ -114,6 +101,7 @@ export function handleGameMessage(
 	}
 
 	if ('TeamDisplay' in game) {
+		// The team screen reuses the lobby, listing teams where it lists players.
 		return {
 			newState: {
 				Game: {

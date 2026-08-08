@@ -120,22 +120,17 @@
 	<h2 class="modal-title">{m.responses()}</h2>
 	{#if !players}
 		<div class="empty">{m.loading_responses()}</div>
-	{:else if players.items.length === 0}
+	{:else if players.length === 0}
 		<div class="empty">{m.no_responses()}</div>
 	{:else}
 		<!-- What each player actually said. -->
 		<div class="responses-list">
-			{#each players.items as player, index (index)}
+			{#each players as player, index (index)}
 				<div class="player-row">
 					<span class="player-name">{player.name}</span>
 					<span class="player-answer">{player.answer}</span>
 				</div>
 			{/each}
-			{#if players.exact_count > players.items.length}
-				<div class="empty">
-					{m.and_more({ count: players.exact_count - players.items.length })}
-				</div>
-			{/if}
 		</div>
 	{/if}
 </Modal>

@@ -3,12 +3,10 @@ import type {
 	AnswerResult,
 	BrainstormResults,
 	FreeTextMode,
-	FreeTextResults,
 	FuizConfig,
 	IdlessFuizConfig,
 	Media,
 	PinPoint,
-	PinResults,
 	PinShape,
 	PollResults,
 	ScaleLabels,
@@ -23,7 +21,7 @@ import type {
 type GameState =
 	| {
 			WaitingScreen: {
-				exact_count: number;
+				player_count: number;
 			};
 	  }
 	| {
@@ -150,7 +148,6 @@ type SlideState =
 			media?: Media;
 			scored?: boolean;
 			correct_area?: PinShape;
-			results?: PinResults;
 			answered?: PinPoint;
 			points_awarded?: number;
 	  }
@@ -166,7 +163,6 @@ type SlideState =
 			mode?: FreeTextMode;
 			max_entries?: number;
 			max_entry_length?: number;
-			results?: FreeTextResults;
 			answered?: string[];
 			points_awarded?: number;
 	  }
@@ -225,11 +221,7 @@ export type JoinError = 'MaximumPlayers' | 'Locked';
 
 export type GameIncomingMessage =
 	| { IdAssign: string }
-	| {
-			WaitingScreen: {
-				exact_count: number;
-			};
-	  }
+	| { WaitingCount: number }
 	| {
 			FindTeam: string;
 	  }
@@ -501,7 +493,6 @@ export type PinIncomingMessage =
 				question?: string | null;
 				media?: Media | null;
 				correct_area?: PinShape | null;
-				results: PinResults;
 			};
 	  };
 
@@ -523,7 +514,6 @@ export type FreeTextIncomingMessage =
 				question?: string | null;
 				media?: Media | null;
 				mode: FreeTextMode;
-				results: FreeTextResults;
 			};
 	  };
 

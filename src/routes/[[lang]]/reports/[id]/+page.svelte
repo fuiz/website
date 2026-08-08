@@ -9,7 +9,7 @@
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
-	import { reportToCsv } from '$lib/reports';
+	import { hasResponses, reportToCsv, responsesToCsv } from '$lib/reports';
 	import {
 		deleteReport,
 		findCreationByUniqueId,
@@ -85,7 +85,7 @@
 					</div>
 
 					{#if drifted}
-						<div class="drift">
+						<div class="notice">
 							<Warning height="1.1em" width="1.1em" />
 							<span>{m.report_quiz_changed()}</span>
 						</div>
@@ -105,6 +105,21 @@
 								</div>
 							</FancyButton>
 						</div>
+						{#if hasResponses(report)}
+							<div class="action-container">
+								<FancyButton
+									onclick={() =>
+										downloadBlob([responsesToCsv(report)], `${report.title} responses.csv`, {
+											type: 'text/csv;charset=utf-8'
+										})}
+								>
+									<div class="action">
+										<Download height="1.1em" width="1.1em" />
+										{m.download_responses()}
+									</div>
+								</FancyButton>
+							</div>
+						{/if}
 						{#if origin}
 							<div class="action-container">
 								<FancyButton
@@ -153,7 +168,7 @@
 		margin-bottom: 0.8em;
 	}
 
-	.drift {
+	.notice {
 		display: flex;
 		align-items: center;
 		gap: 0.4em;

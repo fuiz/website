@@ -6,11 +6,7 @@
 	import TextBar from '$lib/game/TextBar.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import HostLayout from '$lib/question-types/host/HostLayout.svelte';
-	import type {
-		BindableGameInfo,
-		SharedGameInfo,
-		TruncatedList
-	} from '$lib/question-types/host/types';
+	import type { BindableGameInfo, SharedGameInfo } from '$lib/question-types/host/types';
 
 	let {
 		bindableGameInfo = $bindable(),
@@ -24,17 +20,14 @@
 		bindableGameInfo: BindableGameInfo;
 		gameInfo: SharedGameInfo;
 		final: boolean;
-		prior: TruncatedList<[string, number]>;
-		current: TruncatedList<[string, number]>;
+		prior: [string, number][];
+		current: [string, number][];
 		onlock?: (locked: boolean) => void;
 		onnext?: () => void;
 	} = $props();
 
 	// svelte-ignore state_referenced_locally
-	let displayed = $state({
-		exact_count: current.exact_count,
-		items: prior.items
-	});
+	let displayed = $state<[string, number][]>(prior);
 
 	let displayed_final = $state(false);
 
@@ -52,18 +45,11 @@
 <HostLayout bind:bindableGameInfo {gameInfo} {onlock} {onnext}>
 	<TextBar {onnext} text={m.scores()} showNext={true} heading={true} />
 	<div class="entries">
-		{#each displayed.items as [name, score], index (name)}
+		{#each displayed as [name, score], index (name)}
 			<div animate:flip={{ duration, delay }} transition:fly={{ duration, delay, y: '200%' }}>
 				<LeaderboardRecord {name} {score} {index} final={displayed_final} {duration} {delay} />
 			</div>
 		{/each}
-		{#if displayed.exact_count > displayed.items.length}
-			<div class="more">
-				{m.more({
-					count: displayed.exact_count - displayed.items.length
-				})}
-			</div>
-		{/if}
 	</div>
 </HostLayout>
 
@@ -82,13 +68,4 @@
 		box-sizing: border-box;
 	}
 
-	.more {
-		background: var(--surface-variant);
-		padding: 0.4em 0.8em;
-		font-weight: bold;
-		border-radius: 0.6em;
-		box-sizing: border-box;
-		display: flex;
-		justify-content: center;
-	}
 </style>

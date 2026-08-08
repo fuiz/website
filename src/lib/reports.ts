@@ -27,6 +27,31 @@ export function isCorrect(score: number): boolean {
 	return score > 0;
 }
 
+/**
+ * Whether a question contributes to the scoreboard at all.
+ *
+ * Opinion slides (free text, polls, unscored pins) award nothing, so every
+ * player's score on them is `0`. Printing that `0` in a results sheet reads as
+ * "got it wrong" when the truth is "there was nothing to get right", so the
+ * exports blank those cells and leave them out of the correct-answer tally.
+ *
+ * A report that carries no `pointsAwarded` states nothing either way, so it
+ * counts as scored: the reading that leaves every cell of its sheet filled.
+ */
+export function isScored(question: ReportBody['questions'][number]): boolean {
+	return question.pointsAwarded === undefined || question.pointsAwarded > 0;
+}
+
+/** How many questions could actually earn points, the honest denominator. */
+export function scoredQuestionCount(report: ReportBody): number {
+	return report.questions.filter(isScored).length;
+}
+
+/** Whether a report carries a response log worth exporting. */
+export function hasResponses(report: ReportBody): boolean {
+	return (report.responses?.length ?? 0) > 0;
+}
+
 export function playerRows(report: ReportBody): PlayerRow[] {
 	const rows = report.results.map(([name, scores]) => ({
 		name,
@@ -91,22 +116,104 @@ function escapeCsvField(value: string): string {
 	return /[",\n\r]/.test(value) ? `"${value.replaceAll('"', '""')}"` : value;
 }
 
+function toCsv(rows: string[][]): string {
+	return rows.map((row) => row.map(escapeCsvField).join(',')).join('\n');
+}
+
+/** The `Q1: ...`, `Q2: ...` column headings both exports share, so the two line up. */
+function questionHeader(report: ReportBody): string[] {
+	return ['Name', ...report.questions.map((q, index) => `Q${index + 1}: ${q.title}`)];
+}
+
 /**
+ * The gradebook: what each player scored, ranked.
+ *
  * The old inline export emitted bare `name,scores...` with no header and no escaping, so a
- * player called `Smith, John` silently shifted every column after it.
+ * player called `Smith, John` silently shifted every column after it. Unscored questions keep
+ * their column, because dropping it would renumber the rest and break the match with the
+ * response log, but leave the cell empty rather than claim a zero.
  */
 export function reportToCsv(report: ReportBody): string {
-	const header = [
-		'Name',
-		...report.questions.map((q, index) => `Q${index + 1}: ${q.title}`),
-		'Total',
-		'Correct'
-	];
+	const header = [...questionHeader(report), 'Total', 'Correct'];
+	const scoredCount = scoredQuestionCount(report);
 	const rows = playerRows(report).map((row) => [
 		row.name,
-		...row.scores.map(String),
+		...report.questions.map((question, index) =>
+			isScored(question) ? String(row.scores.at(index) ?? 0) : ''
+		),
 		String(row.total),
-		`${row.correctCount}/${report.questions.length}`
+		`${row.correctCount}/${scoredCount}`
 	]);
-	return [header, ...rows].map((row) => row.map(escapeCsvField).join(',')).join('\n');
+	return toCsv([header, ...rows]);
+}
+
+/** Which team each player was on, for a team game's response log. */
+function teamByPlayer(report: ReportBody): Map<string, string> {
+	const lookup = new Map<string, string>();
+	for (const [team, members] of report.teams ?? []) {
+		for (const member of members) lookup.set(member, team);
+	}
+	return lookup;
+}
+
+/**
+ * The response log: what each player actually said, one row per player.
+ *
+ * Sorted by name rather than by score, because this sheet is for looking someone up,
+ * and half its questions have no score to rank by. Team games get a `Team`
+ * column, since answers are recorded per player while the scoreboard is per
+ * team, and without it there is nothing tying the two exports together.
+ */
+export function responsesToCsv(report: ReportBody): string {
+	const teams = teamByPlayer(report);
+	const header = questionHeader(report);
+	const rows = toSorted(report.responses ?? [], ([a], [b]) => a.localeCompare(b)).map(
+		([name, answers]) => [
+			name,
+			...(teams.size > 0 ? [teams.get(name) ?? ''] : []),
+			...report.questions.map((_, index) => answers.at(index) ?? '')
+		]
+	);
+	return toCsv([teams.size > 0 ? [header[0], 'Team', ...header.slice(1)] : header, ...rows]);
+}
+
+/**
+ * Turns the host's per-slide answer lists into one row per player.
+ *
+ * Keyed by name because that is all the host is handed: the watcher ids the
+ * server joins on never leave it. `players` seeds the roster so someone who sat
+ * a question out still gets a row with a gap in it, and anyone who answered and
+ * then left is added back: their answers are on file even though the final
+ * scores forgot them.
+ *
+ * Returns nothing at all when no answer was ever captured, so a game whose host
+ * skipped every results screen doesn't offer an export of blank rows.
+ */
+export function pivotResponses(
+	slideCount: number,
+	perSlide: Record<number, { name: string; answer: string }[]>,
+	players: string[]
+): [string, string[]][] {
+	const rows = new Map<string, string[]>();
+	const row = (name: string) => {
+		const existing = rows.get(name);
+		if (existing) return existing;
+		const created = Array.from({ length: slideCount }, () => '');
+		rows.set(name, created);
+		return created;
+	};
+
+	for (const player of players) row(player);
+
+	let captured = false;
+	for (const [index, responses] of Object.entries(perSlide)) {
+		const slide = Number(index);
+		if (slide < 0 || slide >= slideCount) continue;
+		for (const { name, answer } of responses) {
+			row(name)[slide] = answer;
+			captured ||= answer !== '';
+		}
+	}
+
+	return captured ? [...rows] : [];
 }

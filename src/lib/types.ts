@@ -356,6 +356,15 @@ export function getMedia<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): T |
 	return getBody(slide).media;
 }
 
+/**
+ * The most a slide can award. Info slides ask nothing and free-text slides
+ * collect opinions, so both sit at `0`, which is how a report tells a question
+ * worth no points apart from one everybody got wrong.
+ */
+export function getPointsAwarded<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): number {
+	return getBody(slide).points_awarded ?? 0;
+}
+
 async function mapIdlessMedia<T, O>(
 	slide: GenericIdlessSlide<T | undefined>,
 	map: (media: T | undefined) => Promise<O>
@@ -516,7 +525,7 @@ export function getQuestionType<T>(slide: GenericIdlessSlide<T> | GenericSlide<T
 }
 
 /** The slide's own body, keyed off whichever question type it turned out to be. */
-type SlideBody<T> = { title: string; media?: T };
+type SlideBody<T> = { title: string; media?: T; points_awarded?: number };
 
 function getBody<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): SlideBody<T> {
 	return (slide as Record<QuestionType, SlideBody<T>>)[getQuestionType(slide)];

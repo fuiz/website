@@ -9,6 +9,7 @@
 	import type { Slide } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
+	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import ChevronLeft from '~icons/material-symbols/chevron-left';
 	import ChevronRight from '~icons/material-symbols/chevron-right';
 	import FirstPage from '~icons/material-symbols/first-page';
@@ -192,7 +193,7 @@
 	{#each slideGroups as { group, label } (group)}
 		{@const templates = slideTemplates.filter((template) => template.group === group)}
 		<section class="group">
-			<h3 class="group-title">{label()}</h3>
+			<SectionLabel as="h3" --section-label-margin="0 0 0.4em">{label()}</SectionLabel>
 			<div class="slide-types">
 				{#each templates as template (template.key)}
 					<button
@@ -308,15 +309,6 @@
 
 	.group + .group {
 		margin-top: 1em;
-	}
-
-	.group-title {
-		font-family: var(--alternative-font);
-		font-size: 0.8em;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		opacity: 0.6;
-		margin: 0 0 0.4em;
 	}
 
 	.slide-types {

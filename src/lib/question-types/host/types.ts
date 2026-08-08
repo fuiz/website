@@ -12,11 +12,6 @@ export type BindableGameInfo = {
 	locked: boolean;
 };
 
-export type TruncatedList<T> = {
-	exact_count: number;
-	items: T[];
-};
-
 /** What the topbar's responses control shows. */
 export type ResponseSummary = {
 	/** How many players have answered so far. */
@@ -38,5 +33,5 @@ export type HostResponses = {
 	/** Ask the server for the current slide's answers. */
 	request: () => void;
 	/** The reply, once it arrives. */
-	readonly list: { items: { name: string; answer: string }[]; exact_count: number } | undefined;
+	readonly list: { name: string; answer: string }[] | undefined;
 };

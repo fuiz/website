@@ -26,6 +26,7 @@
 	import OutcomeBar from '$lib/ui/OutcomeBar.svelte';
 	import type { OverflowItem } from '$lib/ui/OverflowMenu.svelte';
 	import OverflowMenu from '$lib/ui/OverflowMenu.svelte';
+	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import DeleteOutline from '~icons/material-symbols/delete-outline';
 	import Download from '~icons/material-symbols/download';
 	import Edit from '~icons/material-symbols/edit-outline';
@@ -176,11 +177,11 @@
 						</aside>
 
 						<div class="history">
-							<div class="mini-head">
+							<SectionLabel --section-label-margin="0 0 0.5em">
 								{reports.length
 									? m.reports_count({ count: reports.length })
 									: m.reports()}
-							</div>
+							</SectionLabel>
 							{#if reports.length}
 								<ol class="runs">
 									{#each reports as [reportId, report] (reportId)}
@@ -312,16 +313,6 @@
 		padding: 0 0.3em;
 	}
 
-
-	.mini-head {
-		font-family: var(--alternative-font);
-		font-size: 0.75em;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		font-weight: 800;
-		opacity: 0.55;
-		margin-bottom: 0.5em;
-	}
 
 	.runs {
 		list-style: none;

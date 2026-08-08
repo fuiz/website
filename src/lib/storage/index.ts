@@ -48,9 +48,24 @@ export type ReportBody = {
 	fuizUniqueId?: string;
 	fuizVersionId?: number;
 	playerCount: number;
-	questions: { title: string; correct: number; wrong: number }[];
+	/**
+	 * `pointsAwarded` is what the question could award at most. A report that
+	 * omits it is read as scored, which fills every cell of its sheet.
+	 */
+	questions: { title: string; correct: number; wrong: number; pointsAwarded?: number }[];
 	results: [string, number[]][];
 	teams?: [string, string[]][];
+	/**
+	 * What each player actually said, one entry per question, in the slide's own
+	 * phrasing: the picked option, the typed sentence, the slider value with its
+	 * unit. Absent when no answers were captured, such as a game whose host never
+	 * reached a results screen; an empty string means that player skipped that
+	 * question.
+	 *
+	 * Kept beside `results` rather than folded into it because the two answer
+	 * different questions: `results` is the gradebook, this is the response log.
+	 */
+	responses?: [string, string[]][];
 };
 
 export type InternalReport = ReportBody & InternalFuizMetadata;

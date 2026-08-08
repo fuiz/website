@@ -17,6 +17,7 @@
 		type QuestionType
 	} from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import Stepper from '$lib/ui/Stepper.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
 	import CasinoOutline from '~icons/material-symbols/casino-outline';
@@ -178,7 +179,7 @@
 				<h2>{m.options()}</h2>
 
 				<div class="section">
-					<div class="section-label">{m.section_players()}</div>
+					<SectionLabel --section-label-padding="0 0.3em">{m.section_players()}</SectionLabel>
 					<div class="card">
 						<Switch
 							id="random"
@@ -232,7 +233,7 @@
 				</div>
 
 				<div class="section">
-					<div class="section-label">{m.section_teams()}</div>
+					<SectionLabel --section-label-padding="0 0.3em">{m.section_teams()}</SectionLabel>
 					<div class="card">
 						<Switch id="teams" bind:checked={teams}>
 							<GroupsOutline height="1.2em" width="1.2em" />
@@ -252,7 +253,7 @@
 				</div>
 
 				<div class="section">
-					<div class="section-label">{m.section_display()}</div>
+					<SectionLabel --section-label-padding="0 0.3em">{m.section_display()}</SectionLabel>
 					<div class="card">
 						<Switch
 							id="players"
@@ -274,7 +275,7 @@
 				</div>
 
 				<div class="section">
-					<div class="section-label">{m.section_randomization()}</div>
+					<SectionLabel --section-label-padding="0 0.3em">{m.section_randomization()}</SectionLabel>
 					<div class="card">
 						<Switch id="shuffle_slides" bind:checked={shuffleSlides}>
 							<Shuffle height="1.2em" width="1.2em" />
@@ -325,16 +326,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.2em;
-	}
-
-	.section-label {
-		padding: 0 0.3em;
-		font-size: 0.75em;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		opacity: 0.7;
-		font-family: var(--alternative-font);
-		font-weight: 800;
 	}
 
 	.card {

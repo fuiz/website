@@ -1,4 +1,3 @@
-import type { TruncatedList } from '$lib/question-types/host/types';
 import type {
 	AnswerMode,
 	AnswerResult,
@@ -23,7 +22,7 @@ import type {
 
 type GameState =
 	| {
-			WaitingScreen: TruncatedList<string>;
+			WaitingScreen: string[];
 	  }
 	| {
 			Summary: {
@@ -180,8 +179,8 @@ type SlideState =
 	  }
 	| {
 			Leaderboard: {
-				current: TruncatedList<[string, number]>;
-				prior: TruncatedList<[string, number]>;
+				current: [string, number][];
+				prior: [string, number][];
 			};
 	  };
 
@@ -203,10 +202,10 @@ export type GameIncomingMessage =
 			IdAssign: string;
 	  }
 	| {
-			// Sent only on host state sync: `items` is the full player list,
-			// `exact_count` is the current player count. Per-join/leave updates
-			// arrive as `PlayerJoined` / `PlayerLeft` events instead.
-			WaitingScreen: TruncatedList<string>;
+			// Sent only on host state sync, holding every player's name.
+			// Per-join/leave updates arrive as `PlayerJoined` / `PlayerLeft`
+			// events instead.
+			WaitingScreen: string[];
 	  }
 	| {
 			PlayerJoined: string;
@@ -215,19 +214,19 @@ export type GameIncomingMessage =
 			PlayerLeft: string;
 	  }
 	| {
-			TeamDisplay: TruncatedList<string>;
+			TeamDisplay: string[];
 	  }
 	| {
 			/** Who answered the current slide, in reply to a `RequestResponses`. */
-			PlayerResponses: TruncatedList<{ name: string; answer: string }>;
+			PlayerResponses: { name: string; answer: string }[];
 	  }
 	| {
 			Leaderboard: {
 				index?: number | null;
 				count?: number | null;
 				leaderboard: {
-					current: TruncatedList<[string, number]>;
-					prior: TruncatedList<[string, number]>;
+					current: [string, number][];
+					prior: [string, number][];
 				};
 			};
 	  }
@@ -624,6 +623,35 @@ function phaseFromKind(
 	if (kind === 'AnswersResults') return 'AnswersResults';
 	if (kind === 'AnswersAnnouncement') return 'Answers';
 	return 'Question';
+}
+
+/** Every slide kind whose value names the phase that slide is showing. */
+const ANSWERABLE_SLIDE_KINDS = [
+	'MultipleChoice',
+	'TypeAnswer',
+	'Order',
+	'Slider',
+	'Scale',
+	'Poll',
+	'Pin',
+	'FreeText',
+	'Brainstorm'
+] as const;
+
+/**
+ * The slide index while the room is on a slide's results screen, `undefined`
+ * everywhere else.
+ *
+ * This is the one moment worth asking who answered what: every submission is in
+ * and the slide's state is still live, so the server can still join names to
+ * answers. Info slides never qualify, since they ask nothing.
+ */
+export function resultsSlideIndex(state: State | undefined): number | undefined {
+	if (state === undefined || 'Error' in state || 'Game' in state) return undefined;
+	const slide: Record<string, unknown> = state.Slide;
+	return ANSWERABLE_SLIDE_KINDS.some((kind) => slide[kind] === 'AnswersResults')
+		? state.index
+		: undefined;
 }
 
 /**

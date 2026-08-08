@@ -30,7 +30,7 @@
 	import SliderStatistics from '$lib/question-types/slider/host/Statistics.svelte';
 	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/Statistics.svelte';
 	import { bring, zip } from '$lib/util';
-	import { hostScreenFromState, type IncomingMessage, type State } from '.';
+	import { hostScreenFromState, type IncomingMessage, resultsSlideIndex, type State } from '.';
 	import Leaderboard from './Leaderboard.svelte';
 	import {
 		handleBrainstormMessage,
@@ -53,12 +53,18 @@
 
 	let currentState = $state<State>();
 
-	// Who answered the current slide. Fetched only when the host opens the list,
-	// and dropped whenever the slide changes so it can never show stale names.
-	let playerResponses = $state<{
-		items: { name: string; answer: string }[];
-		exact_count: number;
-	}>();
+	// Who answered the current slide. Dropped whenever the slide changes so it
+	// can never show stale names.
+	let playerResponses = $state<{ name: string; answer: string }[]>();
+
+	// Every slide's answers, kept by slide index for the end-of-game response
+	// log. The live list above can't serve this: it is cleared on each advance,
+	// and the server only joins names to answers while the slide is still up.
+	let capturedResponses = $state<Record<number, { name: string; answer: string }[]>>({});
+
+	// The slide we last asked about, so a reply that lands after the host has
+	// advanced is filed against the right question, or dropped.
+	let requestedIndex: number | undefined;
 
 	let timer = $state<number | null>(0);
 	let initialTimer = $state<number | null>(0);
@@ -131,6 +137,13 @@
 				}
 				if (result.shouldCloseSocket) {
 					socket.close();
+				}
+				if (result.newPlayerResponses !== undefined) {
+					playerResponses = result.newPlayerResponses;
+					// Only file it if the room is still on the slide we asked about.
+					if (requestedIndex !== undefined && resultsSlideIndex(currentState) === requestedIndex) {
+						capturedResponses[requestedIndex] = result.newPlayerResponses;
+					}
 				}
 			} else if ('MultipleChoice' in newMessage) {
 				applyQuestionResult(
@@ -235,8 +248,18 @@
 	}
 
 	function onrequestresponses() {
+		requestedIndex = resultsSlideIndex(currentState);
 		sendEvent(JSON.stringify({ Host: 'RequestResponses' }));
 	}
+
+	// Pull each slide's answers as its results screen comes up, whether or not
+	// the host opens the list. Waiting for a click would lose the answers of
+	// every slide they clicked past, and this is the last chance to ask.
+	$effect(() => {
+		const index = resultsSlideIndex(currentState);
+		if (index === undefined || capturedResponses[index] !== undefined) return;
+		untrack(() => onrequestresponses());
+	});
 
 	setContext<HostResponses>(HOST_RESPONSES, {
 		request: () => onrequestresponses(),
@@ -281,8 +304,7 @@
 			{onkick}
 			{code}
 			{nextDisabled}
-			players={currentState.Game.WaitingScreen.items}
-			exact_count={currentState.Game.WaitingScreen.exact_count}
+			players={currentState.Game.WaitingScreen}
 			bind:bindableGameInfo
 		/>
 	{:else if 'Summary' in currentState.Game}
@@ -296,6 +318,7 @@
 			{results}
 			{team_mapping}
 			{code}
+			{capturedResponses}
 			origin={getFuizOrigin(code)}
 		/>
 	{/if}

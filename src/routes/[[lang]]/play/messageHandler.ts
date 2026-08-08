@@ -156,13 +156,13 @@ export function handleGameMessage(
 		};
 	}
 
-	if ('WaitingScreen' in game) {
-		const { exact_count } = game.WaitingScreen;
+	if ('WaitingCount' in game) {
+		// Players are told the size of the lobby, never who is in it.
 		return {
 			newState: {
 				Game: {
 					WaitingScreen: {
-						exact_count
+						player_count: game.WaitingCount
 					}
 				}
 			}
@@ -837,7 +837,7 @@ export function handlePinMessage(
 	}
 
 	if ('AnswersResults' in pin) {
-		const { index, count, question, media, correct_area, results } = pin.AnswersResults;
+		const { index, count, question, media, correct_area } = pin.AnswersResults;
 		return {
 			newState: {
 				index: index ?? context.previousIndex,
@@ -849,7 +849,6 @@ export function handlePinMessage(
 					media: media ?? previous?.media,
 					correct_area: correct_area ?? undefined,
 					scored: correct_area != null,
-					results,
 					answered: previous?.answered
 				}
 			}
@@ -922,7 +921,7 @@ export function handleFreeTextMessage(
 	}
 
 	if ('AnswersResults' in freeText) {
-		const { index, count, question, media, mode, results } = freeText.AnswersResults;
+		const { index, count, question, media, mode } = freeText.AnswersResults;
 		return {
 			newState: {
 				index: index ?? context.previousIndex,
@@ -933,7 +932,6 @@ export function handleFreeTextMessage(
 					question: question ?? previous?.question,
 					media: media ?? previous?.media,
 					mode,
-					results,
 					answered: previous?.answered
 				}
 			}

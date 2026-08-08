@@ -20,7 +20,6 @@
 	let {
 		code,
 		players,
-		exact_count,
 		bindableGameInfo = $bindable(),
 		nextDisabled = false,
 		onnext,
@@ -29,7 +28,6 @@
 	}: {
 		code: string;
 		players: string[];
-		exact_count: number;
 		bindableGameInfo: BindableGameInfo;
 		nextDisabled?: boolean;
 		onnext?: () => void;
@@ -103,7 +101,7 @@
 				<div class="controls">
 					<div class="player-count">
 						<PersonOutline title={m.number_of_players()} />
-						{exact_count}
+						{players.length}
 					</div>
 					<StatedIconButton
 						icons={[
@@ -126,7 +124,7 @@
 					<div class="players">
 						<PlayersList
 							players={players.map((n) => [n, false])}
-							exactCount={exact_count}
+							exactCount={players.length}
 							{onkick}
 						/>
 					</div>
