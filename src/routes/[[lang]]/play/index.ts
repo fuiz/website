@@ -414,6 +414,10 @@ export type SliderIncomingMessage =
 	| QuestionAnnouncementMessage
 	| {
 			AnswersAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				range: SliderRange;
 				unit?: string | null;
@@ -438,6 +442,10 @@ export type ScaleIncomingMessage =
 	| QuestionAnnouncementMessage
 	| {
 			AnswersAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				points: number[];
 				labels: ScaleLabels;
@@ -462,6 +470,10 @@ export type PollIncomingMessage =
 	| QuestionAnnouncementMessage
 	| {
 			AnswersAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				answers: TextOrMedia[];
 			};
@@ -482,6 +494,10 @@ export type PinIncomingMessage =
 	| QuestionAnnouncementMessage
 	| {
 			AnswersAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				scored: boolean;
 			};
@@ -501,6 +517,10 @@ export type FreeTextIncomingMessage =
 	| QuestionAnnouncementMessage
 	| {
 			AnswersAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				mode: FreeTextMode;
 				max_entries: number;
@@ -522,6 +542,10 @@ export type BrainstormIncomingMessage =
 	| QuestionAnnouncementMessage
 	| {
 			IdeasAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				max_ideas: number;
 				max_idea_length: number;
@@ -529,6 +553,10 @@ export type BrainstormIncomingMessage =
 	  }
 	| {
 			VotingAnnouncement: {
+				index?: number | null;
+				count?: number | null;
+				question?: string | null;
+				media?: Media | null;
 				duration?: number | null;
 				ideas: string[];
 				max_votes: number;

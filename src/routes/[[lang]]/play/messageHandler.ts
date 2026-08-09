@@ -576,16 +576,16 @@ export function handleSliderMessage(
 	}
 
 	if ('AnswersAnnouncement' in slider) {
-		const { range, unit } = slider.AnswersAnnouncement;
+		const { index, count, question, media, range, unit } = slider.AnswersAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Slider: 'AnswersAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					range,
 					unit: unit ?? undefined
 				}
@@ -661,16 +661,16 @@ export function handleScaleMessage(
 	}
 
 	if ('AnswersAnnouncement' in scale) {
-		const { points, labels, style } = scale.AnswersAnnouncement;
+		const { index, count, question, media, points, labels, style } = scale.AnswersAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Scale: 'AnswersAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					points,
 					labels,
 					style
@@ -740,16 +740,16 @@ export function handlePollMessage(
 	}
 
 	if ('AnswersAnnouncement' in poll) {
-		const { answers } = poll.AnswersAnnouncement;
+		const { index, count, question, media, answers } = poll.AnswersAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Poll: 'AnswersAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					answers
 				}
 			}
@@ -820,16 +820,16 @@ export function handlePinMessage(
 	}
 
 	if ('AnswersAnnouncement' in pin) {
-		const { scored } = pin.AnswersAnnouncement;
+		const { index, count, question, media, scored } = pin.AnswersAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Pin: 'AnswersAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					scored
 				}
 			}
@@ -902,16 +902,17 @@ export function handleFreeTextMessage(
 	}
 
 	if ('AnswersAnnouncement' in freeText) {
-		const { mode, max_entries, max_entry_length } = freeText.AnswersAnnouncement;
+		const { index, count, question, media, mode, max_entries, max_entry_length } =
+			freeText.AnswersAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					FreeText: 'AnswersAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					mode,
 					max_entries,
 					max_entry_length
@@ -980,16 +981,17 @@ export function handleBrainstormMessage(
 	}
 
 	if ('IdeasAnnouncement' in brainstorm) {
-		const { max_ideas, max_idea_length } = brainstorm.IdeasAnnouncement;
+		const { index, count, question, media, max_ideas, max_idea_length } =
+			brainstorm.IdeasAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Brainstorm: 'IdeasAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					max_ideas,
 					max_idea_length
 				}
@@ -998,16 +1000,16 @@ export function handleBrainstormMessage(
 	}
 
 	if ('VotingAnnouncement' in brainstorm) {
-		const { ideas, max_votes } = brainstorm.VotingAnnouncement;
+		const { index, count, question, media, ideas, max_votes } = brainstorm.VotingAnnouncement;
 		return {
 			newState: {
-				index: context.previousIndex,
-				count: context.previousCount,
+				index: index ?? context.previousIndex,
+				count: count ?? context.previousCount,
 				score: context.previousScore,
 				Slide: {
 					Brainstorm: 'VotingAnnouncement',
-					question: previous?.question,
-					media: previous?.media,
+					question: question ?? previous?.question,
+					media: media ?? previous?.media,
 					ideas,
 					max_votes,
 					contributed: previous?.contributed
