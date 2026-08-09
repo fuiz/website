@@ -210,7 +210,7 @@ export const slideTemplates: SlideTemplate[] = [
 		icon: SentimentSatisfiedOutline,
 		label: m.nps_scale,
 		description: m.nps_scale_desc,
-		// NPS is a scale with a fixed 0–10 range and its own reporting.
+		// NPS is a scale with a fixed 0-10 range and its own reporting.
 		create: (id) => ({
 			Scale: {
 				title: '',

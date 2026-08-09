@@ -98,8 +98,8 @@ function uniqueFileName(base: string, extension: string, used: Set<string>): str
 
 /**
  * One archive holding every given fuiz. Each entry keeps the shape `downloadFuiz` would
- * have produced on its own — a `.zip` when the fuiz carries images, a bare `.toml` when it
- * doesn't — so unzipping once leaves files that import directly.
+ * have produced on its own: a `.zip` when the fuiz carries images, a bare `.toml` when it
+ * doesn't, so unzipping once leaves files that import directly.
  */
 export async function downloadFuizzes(configs: IdlessFullFuizConfig[], name = 'fuizzes') {
 	if (configs.length === 0) return;
@@ -322,7 +322,7 @@ export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig
 
 /**
  * Which local creation a game was launched from. The backend is never told, so this is
- * stashed alongside the watcher id and read back when the game ends — it's what lets a
+ * stashed alongside the watcher id and read back when the game ends, and it's what lets a
  * saved report link to the quiz that produced it, and it survives a mid-game reload.
  */
 export type FuizOrigin = { uniqueId: string; versionId: number };

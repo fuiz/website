@@ -81,7 +81,7 @@
 		position: relative;
 		overflow: hidden;
 		color: var(--on-surface);
-		/* Size container the scene scales against — full-screen on host/play,
+		/* Size container the scene scales against: full-screen on host/play,
 		   thumbnail-sized in the demo grid. */
 		container-type: size;
 		container-name: announce;

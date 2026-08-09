@@ -85,7 +85,7 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 9ch), 1fr));
 		gap: 0.4em;
-		/* Top margin so the component does not sit flush against whatever precedes it —
+		/* Top margin so the component does not sit flush against whatever precedes it,
 		   the report page puts its action buttons directly above. Adjacent-sibling margins
 		   collapse, so a caller adding its own spacing will not double this. */
 		margin-top: 0.8em;

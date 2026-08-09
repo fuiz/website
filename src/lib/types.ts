@@ -145,7 +145,7 @@ export type GenericIdlessSliderSlide<T> = QuestionBase<T> & {
 	correct: number;
 	/** How far from `correct` still counts as correct; `0` demands an exact hit. */
 	tolerance: number;
-	/** Shown next to the value, e.g. `%`, `kg`, `°C`. */
+	/** Shown next to the value, e.g. `%`, `kg`, `deg C`. */
 	unit?: string | null;
 };
 
@@ -153,7 +153,7 @@ export type IdlessSliderSlide = GenericIdlessSliderSlide<Media | undefined>;
 export type GenericSliderSlide<T> = GenericIdlessSliderSlide<T>;
 export type SliderSlide = GenericSliderSlide<Media | undefined>;
 
-/** `Agreement` is a short opinion scale; `Nps` is the 0–10 Net Promoter Score. */
+/** `Agreement` is a short opinion scale; `Nps` is the 0-10 Net Promoter Score. */
 export type ScaleStyle = 'Agreement' | 'Nps';
 
 export type ScaleLabels = {
@@ -206,7 +206,7 @@ export type PinPoint = {
  * The region that earns points on a pin-answer slide.
  *
  * Every coordinate is normalised to `0..1` of the image. Widths and heights are
- * carried independently, so there is no aspect ratio to reconcile — a circle
+ * carried independently, so there is no aspect ratio to reconcile: a circle
  * drawn over a wide photo stays a circle when it is drawn again.
  */
 export type PinShape =
@@ -299,7 +299,7 @@ export type NpsBreakdown = {
 	promoters: number;
 	passives: number;
 	detractors: number;
-	/** `%promoters - %detractors`, in the conventional −100..100 range. */
+	/** `%promoters - %detractors`, in the conventional -100..100 range. */
 	score: number;
 };
 
@@ -551,7 +551,7 @@ export type IdlessLocalReferenceFuizConfig = GenericIdlessFuizConfig<UrlMedia | 
 
 export type Creation = {
 	id: number;
-	/** Stable across devices, unlike `id` — this is what reports link back to. */
+	/** Stable across devices, unlike `id`; this is what reports link back to. */
 	uniqueId: string;
 	title: string;
 	lastEdited: number;

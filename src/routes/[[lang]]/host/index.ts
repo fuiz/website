@@ -606,7 +606,7 @@ type SlidePosition =
 /**
  * Identifies the screen a host "Next" command is issued from. Echoed back to
  * the server (as `{ Host: { Next: <HostScreen> } }`) so a stale duplicate
- * click — sent before the new screen rendered — is ignored instead of
+ * click, sent before the new screen rendered, is ignored instead of
  * advancing the slide twice.
  */
 export type HostScreen =

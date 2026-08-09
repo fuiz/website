@@ -13,7 +13,7 @@
 	 * Everything is positioned in the image's own normalised `0..1` space, so the
 	 * same coordinates render identically on a phone and a projector. The target
 	 * is drawn into an SVG overlay with `viewBox="0 0 1 1"`, which maps that space
-	 * onto the picture exactly — no aspect-ratio bookkeeping anywhere.
+	 * onto the picture exactly, with no aspect-ratio bookkeeping anywhere.
 	 */
 	let {
 		media,
@@ -81,7 +81,7 @@
 
 	$effect(() => {
 		// A data URL decodes synchronously, so the element is often `complete`
-		// before `load` could ever fire — read it directly, and let the event
+		// before `load` could ever fire, so read it directly and let the event
 		// handler cover pictures that are still downloading.
 		const source = info?.src;
 		const image = imageEl;
@@ -344,7 +344,7 @@
 	}
 
 	/* Once both boxes are known the frame *is* the picture, at the size that
-	   fits — so the overlay lines up and nothing is cropped. */
+	   fits, so the overlay lines up and nothing is cropped. */
 	.frame.measured {
 		display: block;
 	}
@@ -383,7 +383,7 @@
 		width: 100%;
 		height: 100%;
 		pointer-events: none;
-		/* A soft white halo, so the outline stays legible wherever it lands —
+		/* A soft white halo, so the outline stays legible wherever it lands;
 		   a bare coloured line disappears against a photo of a similar hue.
 		   Applied to the whole overlay rather than per-shape so it survives the
 		   viewBox's non-uniform scale. */
@@ -402,9 +402,9 @@
 
 	/* A marker, not a dot: a spot on a picture is something you point at, and the
 	   teardrop says which exact pixel was meant. Same construction as the pin
-	   slide's announcement glyph — a square with one square corner, turned so
+	   slide's announcement glyph: a square with one square corner, turned so
 	   that corner points down.
-	   `translate`/`rotate` rather than `transform`, so the 0.5 + √2/2 lift that
+	   `translate`/`rotate` rather than `transform`, so the 0.5 + sqrt(2)/2 lift that
 	   lands the point on the spot survives anything animating `transform`. */
 	.dot {
 		position: absolute;

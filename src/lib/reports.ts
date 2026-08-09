@@ -14,12 +14,12 @@ export type QuestionRow = {
 	correct: number;
 	wrong: number;
 	unanswered: number;
-	/** Share of players who got it right, 0–1. */
+	/** Share of players who got it right, 0-1. */
 	accuracy: number;
 };
 
 /**
- * There is no per-player correctness flag on the wire — a player's score for a question is
+ * There is no per-player correctness flag on the wire; a player's score for a question is
  * all we get, and points are only awarded for a correct answer. So a positive score means
  * correct, and zero covers both wrong and unanswered (which the aggregate stats separate).
  */
@@ -80,7 +80,7 @@ export function questionMaxima(report: ReportBody): number[] {
 	);
 }
 
-/** 0 for no points, then 1–3 by how close the score was to the best on that question. */
+/** 0 for no points, then 1-3 by how close the score was to the best on that question. */
 export function scoreLevel(score: number, max: number): 0 | 1 | 2 | 3 {
 	if (!isCorrect(score)) return 0;
 	if (max <= 0) return 3;
@@ -128,10 +128,10 @@ function questionHeader(report: ReportBody): string[] {
 /**
  * The gradebook: what each player scored, ranked.
  *
- * The old inline export emitted bare `name,scores...` with no header and no escaping, so a
- * player called `Smith, John` silently shifted every column after it. Unscored questions keep
- * their column, because dropping it would renumber the rest and break the match with the
- * response log, but leave the cell empty rather than claim a zero.
+ * Every field is escaped, because a player called `Smith, John` would otherwise shift every
+ * column after it. Unscored questions keep their column, because dropping it would renumber
+ * the rest and break the match with the response log, but leave the cell empty rather than
+ * claim a zero.
  */
 export function reportToCsv(report: ReportBody): string {
 	const header = [...questionHeader(report), 'Total', 'Correct'];

@@ -29,8 +29,8 @@ export async function resolveMediaFromGit(
 		return undefined;
 	}
 
-	// Images are now stored as just the filename (e.g., "abc123.png")
-	// We need to construct the full path: fuizId/filename
+	// Images are stored as just the filename (e.g., "abc123.png"), so the full
+	// path has to be rebuilt as fuizId/filename
 	const fullPath = `${fuizId}/${media.Image.Url.url}`;
 	const imageData = await client.getFileContent(fullPath, ref);
 	if (imageData === null) {

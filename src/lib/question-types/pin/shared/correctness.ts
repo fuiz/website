@@ -27,7 +27,7 @@ function insidePolygon(points: PinPoint[], probe: PinPoint): boolean {
  * Whether a pin landed inside the target, mirroring the server's test in
  * `game/logic/src/fuiz/pin.rs`.
  *
- * A degenerate shape contains nothing — the safe reading is that nobody scores
+ * A degenerate shape contains nothing, and the safe reading is that nobody scores
  * rather than everybody.
  */
 export function isPinOnTarget(pin: PinPoint | undefined, shape: PinShape | undefined): boolean {

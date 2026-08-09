@@ -4,7 +4,7 @@
 
 	export type Response = {
 		text: string;
-		/** Shown as a badge — a repeat count, a vote tally, whatever fits. */
+		/** Shown as a badge: a repeat count, a vote tally, whatever fits. */
 		badge?: number;
 	};
 

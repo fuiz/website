@@ -25,7 +25,7 @@
 	let minCount = $derived(Math.min(...entries.map((entry) => entry.count), 1));
 
 	/**
-	 * Maps a frequency onto a font size. The range is deliberately gentle — a
+	 * Maps a frequency onto a font size. The range is deliberately gentle, since a
 	 * word said twice as often should look bigger, not ten times bigger.
 	 */
 	function scale(count: number): number {

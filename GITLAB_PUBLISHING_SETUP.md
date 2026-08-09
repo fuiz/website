@@ -103,7 +103,7 @@ The schema uses one table. Run the SQL from `src/schema.sql` to create:
 1. **User Authentication**
    - User navigates to `/publish?id={creation_id}`
    - If not authenticated with GitLab, they see a login prompt with a styled button
-   - Click "Connect GitLab Account" → OAuth flow → redirect back to publish page
+   - Click "Connect GitLab Account" -> OAuth flow -> redirect back to publish page
 
 2. **Submission** (Two-Step Process)
 
@@ -152,7 +152,7 @@ The schema uses one table. Run the SQL from `src/schema.sql` to create:
      - Only processes `push` events
      - Only processes pushes to default branch (`refs/heads/main`)
    - Extracts all modified files from all commits in the push
-   - Identifies unique fuiz directories (e.g., files like `abc-123/config.toml` → directory `abc-123`)
+   - Identifies unique fuiz directories (e.g., files like `abc-123/config.toml` -> directory `abc-123`)
    - For each modified fuiz directory:
      - Determines first and last commit dates that touched the directory
      - Gets the last commit SHA

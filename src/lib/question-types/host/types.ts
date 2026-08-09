@@ -26,7 +26,7 @@ export const HOST_RESPONSES = Symbol('host-responses');
  *
  * Passed by context rather than through props: the topbar sits under a dozen
  * screen components that have no interest in this, and threading it through all
- * of them would be noise. Absent — as on the component gallery — the topbar
+ * of them would be noise. When absent, as on the component gallery, the topbar
  * falls back to the aggregate it was given.
  */
 export type HostResponses = {

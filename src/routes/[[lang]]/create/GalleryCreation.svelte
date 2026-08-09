@@ -176,8 +176,8 @@
 	 * Only the top corners, and the inner radius rather than the outer one: `.entry` is
 	 * 0.6em with a 1px border, so its content is clipped at 0.6em - 1px. Matching it means
 	 * the artwork paints its own antialiased curve exactly where the border's inner edge
-	 * sits, instead of being hard-clipped a pixel away — which left a seam of card
-	 * background blended into the image.
+	 * sits, instead of being hard-clipped a pixel away, which would leave a seam of
+	 * card background blended into the image.
 	 */
 	.main {
 		flex: 1;

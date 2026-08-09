@@ -98,8 +98,8 @@
 
 	function addSlide(create: (id: number) => Slide) {
 		addModal?.close();
-		// `slides` is a deeply reactive prop, so pushing is enough — the old
-		// `slides = slides` nudge is a Svelte 4 habit.
+		// `slides` is a deeply reactive prop, so pushing is enough; no
+		// `slides = slides` reassignment is needed to trigger an update.
 		slides.push(create(Date.now()));
 		changeSelected(slides.length - 1);
 	}
@@ -286,7 +286,7 @@
 
 	/* The slides list is a flex child that must not grow past its parent, so it
 	   takes its height from the flex box rather than its content. Scoped to
-	   `.slides` — the add-slide dialog has sections of its own. */
+	   `.slides`, since the add-slide dialog has sections of its own. */
 	.slides {
 		height: 0;
 	}

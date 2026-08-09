@@ -13,7 +13,7 @@ const DEFAULT_DURATION_MS = 500;
 /**
  * Fires `onlongpress` when a finger is held still on the node.
  *
- * Touch only — a long mouse press is not a gesture anyone expects, and on desktop the
+ * Touch only, because a long mouse press is not a gesture anyone expects, and on desktop the
  * checkbox is already visible on hover. The press ends in a `click`, and on a link that
  * would navigate away from the selection the user just made, so the click is swallowed in
  * the capture phase; the platform's own long-press menu is suppressed for the same reason.

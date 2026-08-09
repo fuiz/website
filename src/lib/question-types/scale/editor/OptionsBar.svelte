@@ -14,7 +14,7 @@
 		activeSlide: ScaleSlide;
 	} = $props();
 
-	// NPS is defined as 0–10, so its range isn't the author's to choose.
+	// NPS is defined as 0-10, so its range isn't the author's to choose.
 	let isNps = $derived(activeSlide.style === 'Nps');
 </script>
 

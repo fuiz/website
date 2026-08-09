@@ -5,7 +5,7 @@
 	import Orange from '~icons/custom/orange';
 	import Strawberry from '~icons/custom/strawberry';
 
-	// The announcement glyph for Multiple Choice: the 2×2 answer grid. Sized in
+	// The announcement glyph for Multiple Choice: the 2x2 answer grid. Sized in
 	// `em` so the parent scene controls the scale.
 	const icons = [Strawberry, Blueberry, Kiwi, Orange];
 

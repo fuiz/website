@@ -85,7 +85,7 @@ export function lintScale<T>(slide: GenericScaleSlide<T>): LintIssue | undefined
 }
 
 export function lintPin<T>(slide: GenericPinSlide<T>): LintIssue | undefined {
-	// There is nothing to aim at — or even to look at — without an image.
+	// There is nothing to aim at, or even to look at, without an image.
 	if (!slide.media) return 'no_media';
 	// A target that encloses no area means nobody can ever be right.
 	if (slide.correct_area && isDegenerateShape(slide.correct_area)) return 'no_target';
@@ -104,9 +104,9 @@ export function lintBrainstorm<T>(slide: GenericBrainstormSlide<T>): LintIssue |
 }
 
 export function lintInfoSlide<T>(slide: GenericInfoSlide<T>): LintIssue | undefined {
-	// An info slide has no answers to be missing — what it can lack is anything
-	// to show. Reusing `no_answers` here told the author to "Add answers" on a
-	// slide that asks nothing.
+	// An info slide has no answers to be missing; what it can lack is anything
+	// to show. Reusing `no_answers` here would tell the author to "Add answers"
+	// on a slide that asks nothing.
 	if (!slide.title.length && !slide.body?.length && !slide.media) return 'empty_slide';
 	return undefined;
 }

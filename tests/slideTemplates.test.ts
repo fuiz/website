@@ -65,7 +65,7 @@ describe('add-slide templates', () => {
 				const value = body[field];
 				if (typeof value === 'number' && value !== 0) {
 					// Anything under a second would be a seconds value that never
-					// got scaled up — the bug `fixTimes` exists to prevent.
+					// got scaled up, which is what `fixTimes` exists to prevent.
 					expect(value).toBeGreaterThanOrEqual(1000);
 				}
 			}
@@ -124,7 +124,7 @@ describe('add-slide templates', () => {
 		expect(lintSlide(slide)).toBeUndefined();
 	});
 
-	it('fixes the NPS range at 0–10 and leaves agreement scales short', () => {
+	it('fixes the NPS range at 0-10 and leaves agreement scales short', () => {
 		const nps = slideTemplates.find((t) => t.key === 'nps')?.create(0);
 		const agreement = slideTemplates.find((t) => t.key === 'scale')?.create(0);
 		if (!nps || !('Scale' in nps) || !agreement || !('Scale' in agreement)) {

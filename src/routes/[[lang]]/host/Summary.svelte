@@ -203,8 +203,8 @@
 <style>
 	/*
 	 * One column on a phone, two panes once there is room: the question list on
-	 * the left, the actions ranged down the right. The single-column width stays
-	 * what it always was so the phone layout is unchanged.
+	 * the left, the actions ranged down the right. The second pane only appears
+	 * above the breakpoint, so the phone layout stays a single full-width column.
 	 */
 	#summary {
 		flex: 1;

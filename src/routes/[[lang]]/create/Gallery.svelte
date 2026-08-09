@@ -410,9 +410,9 @@
 <style>
 	/*
 	 * `interpolate-size` lets `height: auto` interpolate, so the browser animates the
-	 * layout itself rather than us stepping height from JS every frame. Without support
-	 * the height snaps, which is exactly the un-animated behaviour — so it degrades to
-	 * where we were.
+	 * layout itself rather than stepping height from JS every frame. Without support
+	 * the height snaps, which is exactly the un-animated behaviour, so it degrades
+	 * cleanly.
 	 *
 	 * The wrapper carries `position: sticky`, not `.selbar`: sticky does not work inside
 	 * an `overflow: hidden` ancestor, and the clipping is what hides the collapsed bar.

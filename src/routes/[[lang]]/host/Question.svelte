@@ -68,7 +68,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		/* Hold hidden while the slide announcement flies out, then enter — so the
+		/* Hold hidden while the slide announcement flies out, then enter, so the
 		   question reveals with motion instead of appearing already-settled. */
 		animation: question-reveal 0.45s cubic-bezier(0.2, 1.1, 0.3, 1) 0.56s backwards;
 	}

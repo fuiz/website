@@ -45,7 +45,7 @@
 	 * The three bands a Net Promoter Score is read in.
 	 *
 	 * Deliberately not the conventional red/amber/green: this codebase avoids
-	 * red-green pairs (see `--correct`), so the ramp runs red → orange → teal,
+	 * red-green pairs (see `--correct`), so the ramp runs red to orange to teal,
 	 * which orders the same way without asking anyone to tell red from green.
 	 */
 	const NPS_BANDS = [
@@ -161,8 +161,8 @@
 		--chip: 3.2em;
 		width: 100%;
 		/* The layout answers to the room it is given, not to the device: the
-		   player's card is narrow on a wide screen, and a viewport query left the
-		   end labels inline there, squeezing the numbers down to dots. */
+		   player's card is narrow on a wide screen, where a viewport query would
+		   keep the end labels inline and squeeze the numbers down to dots. */
 		container-type: inline-size;
 		display: flex;
 		flex-direction: column;
@@ -278,15 +278,15 @@
 
 	/* A share of the room reads better than a raw count, and the pill keeps it
 	   legible where a bare number would sit on top of the bar.
-	   Sized to the column, not to its text: content-width pills made "0%"
-	   narrower than "21%" and the stack stopped looking like one column. */
+	   Sized to the column, not to its text: content-width pills would make "0%"
+	   narrower than "21%", so the stack would stop reading as one column. */
 	.tally {
 		width: 100%;
 		box-sizing: border-box;
 		text-align: center;
 		/* Eleven columns on a laptop leave a chip narrower than "13%" at the
-		   nominal size. Shrinking the text keeps the pill the chip's width —
-		   letting the pill grow instead just made neighbours collide. */
+		   nominal size. Shrinking the text keeps the pill the chip's width;
+		   letting the pill grow instead makes neighbours collide. */
 		font-size: min(0.75em, 45cqw);
 		font-family: var(--alternative-font);
 		font-weight: 700;
@@ -369,7 +369,7 @@
 	}
 
 	/* In px, not em: inside a container query `em` resolves against the
-	   container's own font-size, and the host sets a larger one — so an em
+	   container's own font-size, and the host sets a larger one, so an em
 	   threshold quietly demanded *more* width on the very screen that has the
 	   most, and stacked the labels there too. */
 	@container (max-width: 560px) {
@@ -407,7 +407,7 @@
 			grid-area: high;
 		}
 
-		/* Eleven buttons across a phone leaves ~25px each — too tight to read and
+		/* Eleven buttons across a phone leaves ~25px each, too tight to read and
 		   too small to hit. Without a bar chart to stay aligned to, a long scale
 		   wraps into two comfortable rows instead. */
 		.dense:not(.has-counts) .points {

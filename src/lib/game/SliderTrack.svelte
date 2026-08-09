@@ -41,7 +41,7 @@
 	} = $props();
 
 	/**
-	 * Ticks are capped so a 0–10000 range doesn't try to draw ten thousand of
+	 * Ticks are capped so a 0-10000 range doesn't try to draw ten thousand of
 	 * them; past the cap each tick stands for a bucket of values.
 	 */
 	const MAX_TICKS = 44;
@@ -221,7 +221,7 @@
 		position: relative;
 	}
 
-	/* Given a tall container the ticks take the slack — the spread of guesses is
+	/* Given a tall container the ticks take the slack, since the spread of guesses is
 	   the content of the screen, so it should be what grows. */
 	.track.fill {
 		height: 100%;

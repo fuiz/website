@@ -66,7 +66,7 @@
 
 	/*
 	 * No opaque backdrop, so the page's own background shows through instead of a cream
-	 * patch sitting on it — and therefore no `position: sticky` either: pinning this column
+	 * patch sitting on it, and therefore no `position: sticky` either: pinning this column
 	 * only works if something hides the cells sliding underneath it.
 	 */
 	.who {

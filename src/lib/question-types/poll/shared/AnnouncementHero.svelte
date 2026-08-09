@@ -4,8 +4,8 @@
 	// The announcement glyph for Poll: the vote split into bars, which is exactly
 	// what the results screen puts on the projector a moment later.
 	//
-	// The bar is the same object `ResultBars` draws — a palette fill inside a
-	// thicker border of its own deeper shade — so the splash and the results
+	// The bar is the same object `ResultBars` draws, a palette fill inside a
+	// thicker border of its own deeper shade, so the splash and the results
 	// agree. Palette slots run 0, 1, 2 because that is what a three-option poll
 	// actually colours its answers.
 	//

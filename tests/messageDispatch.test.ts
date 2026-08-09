@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 /**
  * Guards the seam between the protocol and the screens that render it.
  *
- * A slide type can be fully built — types, handler, components, i18n — and still
+ * A slide type can be fully built (types, handler, components, i18n) and still
  * be dead on arrival because its branch is missing from the socket's `if/else`
  * chain. Nothing else catches that: the handler still compiles, the components
  * still type-check, and every test still passes, but the screen never updates

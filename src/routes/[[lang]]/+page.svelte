@@ -347,8 +347,8 @@
 		position: relative;
 		overflow: hidden;
 		/* Container query below resolves `ch` against this font, so match the
-		   answer area's font (1.5em of the slide font) — that way our threshold
-		   lines up with the answers' own 2×2 → 1×4 flip. */
+		   answer area's font (1.5em of the slide font) so that our threshold
+		   lines up with the answers' own 2x2 to 1x4 flip. */
 		container-type: inline-size;
 		font-size: calc(1.5 * min(1rem, 3vw));
 	}

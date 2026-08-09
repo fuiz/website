@@ -31,7 +31,7 @@
 	} = $props();
 
 	// Lift the leaving slide to a fixed overlay so it doesn't stack below the
-	// incoming question in flow — no visible change here, so the topbar stays put
+	// incoming question in flow, with no visible change here, so the topbar stays put
 	// while the announcement's pieces fly out within it (see Spotlight). Stays
 	// fixed long enough to cover the pieces' flight.
 	function lift(_node: HTMLElement, { duration = 580 } = {}) {

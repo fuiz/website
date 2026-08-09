@@ -14,7 +14,7 @@
 	// markers in four colours and no target at all.
 	//
 	// They fan out rather than huddling in the middle, and the lower ones are
-	// drawn larger — low in a picture reads as near the viewer, which stops a
+	// drawn larger, since low in a picture reads as near the viewer, which stops a
 	// flat scatter from looking like a row.
 	const scatter = [
 		{ x: '25%', y: '38%', size: '1.3em', palette: 1, delay: 200 },
@@ -116,11 +116,11 @@
 	}
 
 	/* Rings rippling out from where the point lands, rather than a disc sitting
-	   behind the marker. The old version was wider than the marker and filled,
-	   so the two merged into one pink smudge and the marker read as floating
-	   above the target instead of planted on it. No fill here, and both rings
-	   tuned inside the marker's own width, so the map still shows through and
-	   the eye goes to the spot. */
+	   behind the marker. A filled disc wider than the marker would merge with it
+	   into one pink smudge, leaving the marker reading as floating above the
+	   target instead of planted on it. No fill here, and both rings tuned inside
+	   the marker's own width, so the map still shows through and the eye goes to
+	   the spot. */
 	.target {
 		position: absolute;
 		left: 50%;
@@ -162,7 +162,7 @@
 		background: rgba(0, 0, 0, 0.22);
 	}
 
-	/* The classic teardrop: a circle with one corner squared off, turned 45°, so
+	/* The classic teardrop: a circle with one corner squared off, turned 45deg, so
 	   its point lands on the spot. */
 	.marker {
 		position: absolute;
@@ -171,8 +171,8 @@
 		width: var(--size);
 		height: var(--size);
 		/* Land the point, not the box, on the spot. The box starts with its
-		   top-left at the spot, so its centre is half a marker down; rotating 45°
-		   then puts the sharp corner a further √2/2 below that. Lifting by the
+		   top-left at the spot, so its centre is half a marker down; rotating 45deg
+		   then puts the sharp corner a further sqrt(2)/2 below that. Lifting by the
 		   sum (0.5 + 0.707) is what makes the tip meet its own shadow. */
 		translate: -50% -120.7%;
 		rotate: -45deg;

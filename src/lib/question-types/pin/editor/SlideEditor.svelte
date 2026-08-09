@@ -98,7 +98,7 @@
 								</button>
 							{/each}
 						</div>
-						<!-- Reset isn't a fourth way to draw, it's an action — so it sits
+						<!-- Reset isn't a fourth way to draw, it's an action, so it sits
 						     outside the radio group and is styled as one. -->
 						<div class="actions">
 							<button

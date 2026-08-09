@@ -357,8 +357,8 @@ export async function getReport(
 
 /**
  * Svelte 5 wraps reactive values in a Proxy, and IndexedDB's structured clone throws
- * `DataCloneError` on one. Creations only avoid this by accident — `internalizeFuiz`
- * rebuilds the config into fresh objects on the way in — but a report is stored exactly as
+ * `DataCloneError` on one. Creations only avoid this by accident, because `internalizeFuiz`
+ * rebuilds the config into fresh objects on the way in, but a report is stored exactly as
  * handed over, so it needs an explicit plain copy. A report is pure JSON data (strings,
  * numbers, arrays), so a round-trip is lossless apart from dropping `undefined` optionals,
  * which is what we want stored anyway.
@@ -381,7 +381,7 @@ export async function addReport(body: ReportBody, database: Database): Promise<R
 
 /**
  * Returns the stored report so callers editing repeatedly keep a fresh `versionId` to build
- * on — reconcile() uses it as the sole conflict tiebreaker, so re-sending the same base
+ * on: reconcile() uses it as the sole conflict tiebreaker, so re-sending the same base
  * version would leave every edit after the first invisible to sync.
  */
 export async function updateReport(

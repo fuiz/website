@@ -52,7 +52,7 @@
 	let players = $derived(hostResponses?.list);
 
 	// Only a live game can name who answered. Everywhere else the count is worth
-	// showing but there is nothing to open — and opening it on the aggregate
+	// showing but there is nothing to open, and opening it on the aggregate
 	// would only repeat the chart already on the slide behind it.
 	let openable = $derived(hostResponses !== undefined);
 
