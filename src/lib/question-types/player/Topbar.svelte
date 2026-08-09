@@ -10,6 +10,7 @@
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
+	import { theme } from '$lib/ui/theme.svelte';
 	import SettingsOutline from '~icons/material-symbols/settings-outline';
 	import SportsScore from '~icons/material-symbols/sports-score';
 
@@ -26,7 +27,6 @@
 
 	let modal = $state<Modal>();
 	let exitDialog = $state<ConfirmationDialog>();
-	let dark = $state<boolean>();
 
 	function confirmExit() {
 		modal?.close();
@@ -64,8 +64,8 @@
 			<LanguageSwitcher id="topbar-settings-lang" up={true} />
 		</div>
 		<div class="row">
-			<div class="label">{dark ? m.switch_light() : m.switch_dark()}</div>
-			<DarkModeSwitcher bind:dark />
+			<div class="label">{theme.current === 'dark' ? m.switch_light() : m.switch_dark()}</div>
+			<DarkModeSwitcher />
 		</div>
 		<FancyButton onclick={confirmExit}>
 			<div class="leave-label">{m.exit()}</div>
