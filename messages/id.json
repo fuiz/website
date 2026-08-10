@@ -400,5 +400,12 @@
 	"target_note": "Pin di dalam area ini mendapat poin.",
 	"loading_responses": "Memuat jawaban…",
 	"empty_slide": "Tambahkan judul, teks, atau gambar",
-	"no_entries": "Izinkan setidaknya satu masukan"
+	"no_entries": "Izinkan setidaknya satu masukan",
+	"team_rosters": "Tim",
+	"view_teams": "Lihat tim",
+	"loading_teams": "Memuat tim…",
+	"no_teams": "Belum ada tim yang terbentuk",
+	"member_online": "Terhubung",
+	"member_offline": "Terputus",
+	"team_connected_count": "{online} dari {total} terhubung"
 }

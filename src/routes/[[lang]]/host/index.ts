@@ -1,3 +1,4 @@
+import type { TeamRoster } from '$lib/question-types/host/types';
 import type {
 	AnswerMode,
 	AnswerResult,
@@ -19,6 +20,8 @@ import type {
 	SliderResults,
 	TextOrMedia
 } from '$lib/types';
+
+export type { TeamRoster };
 
 type GameState =
 	| {
@@ -221,6 +224,10 @@ export type GameIncomingMessage =
 			PlayerResponses: { name: string; answer: string }[];
 	  }
 	| {
+			/** Who is on each team, in reply to a `RequestTeamRosters`. */
+			TeamRosters: TeamRoster[];
+	  }
+	| {
 			Leaderboard: {
 				index?: number | null;
 				count?: number | null;
@@ -234,6 +241,12 @@ export type GameIncomingMessage =
 			Metainfo: {
 				Host: {
 					locked: boolean;
+					/**
+					 * Whether this game plays in teams. Carried on every host sync
+					 * rather than inferred from `TeamDisplay`, which a host who
+					 * reloads mid-slide never receives.
+					 */
+					teams: boolean;
 				};
 			};
 	  }

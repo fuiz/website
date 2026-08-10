@@ -11,6 +11,7 @@ import type {
 	ScaleIncomingMessage,
 	SliderIncomingMessage,
 	State,
+	TeamRoster,
 	TypeAnswerIncomingMessage
 } from './index';
 
@@ -33,6 +34,12 @@ export interface GameMessageContext {
 export interface GameMessageResult {
 	/** Who answered the current slide, once the host has asked. */
 	newPlayerResponses?: { name: string; answer: string }[];
+	/** Who is on each team, once the host has asked. */
+	newTeamRosters?: TeamRoster[];
+	/** Whether this game plays in teams. */
+	newTeamMode?: boolean;
+	/** Set once the team display arrives, i.e. teams now exist. */
+	teamsFormed?: boolean;
 	newState?: State;
 	newWatcherId?: string;
 	shouldCloseSocket?: boolean;
@@ -100,9 +107,14 @@ export function handleGameMessage(
 		return { newPlayerResponses: game.PlayerResponses };
 	}
 
+	if ('TeamRosters' in game) {
+		return { newTeamRosters: game.TeamRosters };
+	}
+
 	if ('TeamDisplay' in game) {
 		// The team screen reuses the lobby, listing teams where it lists players.
 		return {
+			teamsFormed: true,
 			newState: {
 				Game: {
 					WaitingScreen: game.TeamDisplay
@@ -134,7 +146,8 @@ export function handleGameMessage(
 
 	if ('Metainfo' in game) {
 		return {
-			newLockStatus: game.Metainfo.Host.locked
+			newLockStatus: game.Metainfo.Host.locked,
+			newTeamMode: game.Metainfo.Host.teams
 		};
 	}
 

@@ -1,16 +1,23 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
 	import { env } from '$env/dynamic/public';
 	import bee3 from '$lib/assets/music/bee3.mp3';
 	import PlayersList from '$lib/game/PlayersList.svelte';
 	import QrCode from '$lib/game/QRCode.svelte';
+	import TeamsList from '$lib/game/TeamsList.svelte';
 	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Audio from '$lib/media/Audio.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import type { BindableGameInfo } from '$lib/question-types/host/types';
+	import {
+		type BindableGameInfo,
+		HOST_TEAM_ROSTERS,
+		type HostTeamRosters
+	} from '$lib/question-types/host/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
+	import Groups3Outline from '~icons/material-symbols/groups-3-outline';
 	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
 	import LockOutline from '~icons/material-symbols/lock-outline';
 	import PersonOutline from '~icons/material-symbols/person-outline';
@@ -42,6 +49,28 @@
 	}
 
 	let fullscreenElement = $state<HTMLElement>();
+
+	// Undefined outside a live game (the component gallery), where there is no
+	// socket to ask and the control simply does not appear. Gated on `formed`
+	// as well, because this same screen serves the lobby, before any team exists.
+	const teamRosters = getContext<HostTeamRosters | undefined>(HOST_TEAM_ROSTERS);
+	const showingTeams = $derived(teamRosters?.enabled === true && teamRosters.formed);
+
+	// `players` holds team names once teams form. The rosters carry the same
+	// teams with their members, so prefer them and fall back to bare names for
+	// the moment before the first reply lands.
+	const displayedTeams = $derived(
+		teamRosters?.list?.length ? teamRosters.list : players.map((name) => ({ name, members: [] }))
+	);
+
+	// Kept current while the screen is up: a member dropping raises no event, so
+	// without this the roster silently rots in front of the room.
+	$effect(() => {
+		if (!showingTeams) return;
+		teamRosters?.request();
+		const id = setInterval(() => teamRosters?.request(), 4000);
+		return () => clearInterval(id);
+	});
 
 	let copiedPopover = $state<HTMLDivElement>();
 	let copyButton = $state<HTMLButtonElement>();
@@ -100,7 +129,11 @@
 			<div class="content-inner">
 				<div class="controls">
 					<div class="player-count">
-						<PersonOutline title={m.number_of_players()} />
+						{#if showingTeams}
+							<Groups3Outline title={m.team_rosters()} />
+						{:else}
+							<PersonOutline title={m.number_of_players()} />
+						{/if}
 						{players.length}
 					</div>
 					<StatedIconButton
@@ -122,11 +155,15 @@
 				</div>
 				<div class="players-area">
 					<div class="players">
-						<PlayersList
-							players={players.map((n) => [n, false])}
-							exactCount={players.length}
-							{onkick}
-						/>
+						{#if showingTeams}
+							<TeamsList teams={displayedTeams} />
+						{:else}
+							<PlayersList
+								players={players.map((n) => [n, false])}
+								exactCount={players.length}
+								{onkick}
+							/>
+						{/if}
 					</div>
 				</div>
 			</div>

@@ -400,5 +400,12 @@
 	"target_note": "A pin inside this area scores.",
 	"loading_responses": "Loading responses…",
 	"empty_slide": "Add a heading, body or image",
-	"no_entries": "Allow at least one entry"
+	"no_entries": "Allow at least one entry",
+	"team_rosters": "Teams",
+	"view_teams": "View teams",
+	"loading_teams": "Loading teams…",
+	"no_teams": "No teams formed yet",
+	"member_online": "Connected",
+	"member_offline": "Disconnected",
+	"team_connected_count": "{online} of {total} connected"
 }

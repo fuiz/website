@@ -13,7 +13,10 @@
 	import {
 		type BindableGameInfo,
 		HOST_RESPONSES,
-		type HostResponses
+		HOST_TEAM_ROSTERS,
+		type HostResponses,
+		type HostTeamRosters,
+		type TeamRoster
 	} from '$lib/question-types/host/types';
 	import InfoSlideContent from '$lib/question-types/info-slide/host/Content.svelte';
 	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
@@ -56,6 +59,13 @@
 	// Who answered the current slide. Dropped whenever the slide changes so it
 	// can never show stale names.
 	let playerResponses = $state<{ name: string; answer: string }[]>();
+
+	// Who is on each team. Unlike the responses above this is not slide-scoped,
+	// so it survives an advance; it is re-fetched rather than patched, because
+	// a member dropping raises no event the host could key an update off.
+	let teamRosters = $state<TeamRoster[]>();
+	let teamMode = $state(false);
+	let teamsFormed = $state(false);
 
 	// Every slide's answers, kept by slide index for the end-of-game response
 	// log. The live list above can't serve this: it is cleared on each advance,
@@ -131,6 +141,20 @@
 				}
 				if (result.newLockStatus !== undefined) {
 					bindableGameInfo.locked = result.newLockStatus;
+				}
+				if (result.newTeamMode !== undefined) {
+					teamMode = result.newTeamMode;
+				}
+				if (result.teamsFormed) {
+					teamsFormed = true;
+					// The lobby and the team display are the same `HostScreen`, so
+					// advancing from one to the other leaves `currentScreen`
+					// untouched and the duplicate-click guard below latched on. The
+					// screen did move; let the next advance through.
+					lastSentScreen = null;
+				}
+				if (result.newTeamRosters !== undefined) {
+					teamRosters = result.newTeamRosters;
 				}
 				if (result.shouldMarkFinished) {
 					finished = true;
@@ -265,6 +289,23 @@
 		request: () => onrequestresponses(),
 		get list() {
 			return playerResponses;
+		}
+	});
+
+	function onrequestteamrosters() {
+		sendEvent(JSON.stringify({ Host: 'RequestTeamRosters' }));
+	}
+
+	setContext<HostTeamRosters>(HOST_TEAM_ROSTERS, {
+		request: () => onrequestteamrosters(),
+		get list() {
+			return teamRosters;
+		},
+		get enabled() {
+			return teamMode;
+		},
+		get formed() {
+			return teamsFormed;
 		}
 	});
 

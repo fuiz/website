@@ -400,5 +400,12 @@
 	"target_note": "الدبوس داخل هذه المنطقة يحرز نقاطًا.",
 	"loading_responses": "جارٍ تحميل الردود…",
 	"empty_slide": "أضف عنوانًا أو نصًا أو صورة",
-	"no_entries": "اسمح بإدخال واحد على الأقل"
+	"no_entries": "اسمح بإدخال واحد على الأقل",
+	"team_rosters": "الفرق",
+	"view_teams": "عرض الفرق",
+	"loading_teams": "جارٍ تحميل الفرق…",
+	"no_teams": "لم تتشكل أي فرق بعد",
+	"member_online": "متصل",
+	"member_offline": "غير متصل",
+	"team_connected_count": "{online} من {total} متصلون"
 }

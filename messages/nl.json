@@ -400,5 +400,12 @@
 	"target_note": "Een speld binnen dit gebied telt.",
 	"loading_responses": "Antwoorden laden…",
 	"empty_slide": "Voeg een kop, tekst of afbeelding toe",
-	"no_entries": "Sta minstens één inzending toe"
+	"no_entries": "Sta minstens één inzending toe",
+	"team_rosters": "Teams",
+	"view_teams": "Teams bekijken",
+	"loading_teams": "Teams laden…",
+	"no_teams": "Nog geen teams gevormd",
+	"member_online": "Verbonden",
+	"member_offline": "Niet verbonden",
+	"team_connected_count": "{online} van {total} verbonden"
 }

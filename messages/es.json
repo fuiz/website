@@ -400,5 +400,12 @@
 	"target_note": "Un pin dentro de esta área puntúa.",
 	"loading_responses": "Cargando respuestas…",
 	"empty_slide": "Añade un título, texto o imagen",
-	"no_entries": "Permite al menos una entrada"
+	"no_entries": "Permite al menos una entrada",
+	"team_rosters": "Equipos",
+	"view_teams": "Ver equipos",
+	"loading_teams": "Cargando equipos…",
+	"no_teams": "Todavía no hay equipos formados",
+	"member_online": "Conectado",
+	"member_offline": "Desconectado",
+	"team_connected_count": "{online} de {total} conectados"
 }

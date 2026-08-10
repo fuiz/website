@@ -400,5 +400,12 @@
 	"target_note": "Eremu honen barruko orratzak puntuak ematen ditu.",
 	"loading_responses": "Erantzunak kargatzen…",
 	"empty_slide": "Gehitu izenburua, testua edo irudia",
-	"no_entries": "Baimendu gutxienez sarrera bat"
+	"no_entries": "Baimendu gutxienez sarrera bat",
+	"team_rosters": "Taldeak",
+	"view_teams": "Ikusi taldeak",
+	"loading_teams": "Taldeak kargatzen…",
+	"no_teams": "Oraindik ez da talderik osatu",
+	"member_online": "Konektatuta",
+	"member_offline": "Deskonektatuta",
+	"team_connected_count": "{total}(e)tik {online} konektatuta"
 }

@@ -400,5 +400,12 @@
 	"target_note": "Pinezka w tym obszarze daje punkty.",
 	"loading_responses": "Wczytywanie odpowiedzi…",
 	"empty_slide": "Dodaj nagłówek, tekst lub obraz",
-	"no_entries": "Zezwól na co najmniej jeden wpis"
+	"no_entries": "Zezwól na co najmniej jeden wpis",
+	"team_rosters": "Drużyny",
+	"view_teams": "Pokaż drużyny",
+	"loading_teams": "Wczytywanie drużyn…",
+	"no_teams": "Nie utworzono jeszcze drużyn",
+	"member_online": "Połączony",
+	"member_offline": "Rozłączony",
+	"team_connected_count": "Połączeni: {online} z {total}"
 }

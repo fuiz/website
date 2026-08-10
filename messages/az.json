@@ -400,5 +400,12 @@
 	"target_note": "Bu sahənin içindəki sancaq xal qazandırır.",
 	"loading_responses": "Cavablar yüklənir…",
 	"empty_slide": "Başlıq, mətn və ya şəkil əlavə edin",
-	"no_entries": "Ən azı bir cavaba icazə verin"
+	"no_entries": "Ən azı bir cavaba icazə verin",
+	"team_rosters": "Komandalar",
+	"view_teams": "Komandalara bax",
+	"loading_teams": "Komandalar yüklənir…",
+	"no_teams": "Hələ komanda yaradılmayıb",
+	"member_online": "Qoşulub",
+	"member_offline": "Qoşulmayıb",
+	"team_connected_count": "{total} nəfərdən {online} qoşulub"
 }

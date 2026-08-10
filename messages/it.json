@@ -400,5 +400,12 @@
 	"target_note": "Un segnaposto dentro quest'area vale punti.",
 	"loading_responses": "Caricamento delle risposte…",
 	"empty_slide": "Aggiungi un titolo, un testo o un’immagine",
-	"no_entries": "Consenti almeno una voce"
+	"no_entries": "Consenti almeno una voce",
+	"team_rosters": "Squadre",
+	"view_teams": "Mostra le squadre",
+	"loading_teams": "Caricamento delle squadre…",
+	"no_teams": "Ancora nessuna squadra formata",
+	"member_online": "Connesso",
+	"member_offline": "Disconnesso",
+	"team_connected_count": "{online} di {total} connessi"
 }

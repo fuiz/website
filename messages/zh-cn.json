@@ -400,5 +400,12 @@
 	"target_note": "落在该区域内的图钉可得分。",
 	"loading_responses": "正在加载回答…",
 	"empty_slide": "添加标题、正文或图片",
-	"no_entries": "至少允许一条内容"
+	"no_entries": "至少允许一条内容",
+	"team_rosters": "队伍",
+	"view_teams": "查看队伍",
+	"loading_teams": "正在加载队伍…",
+	"no_teams": "还没有组建队伍",
+	"member_online": "已连接",
+	"member_offline": "已断开",
+	"team_connected_count": "{total} 人中 {online} 人在线"
 }

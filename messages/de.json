@@ -400,5 +400,12 @@
 	"target_note": "Ein Pin in diesem Bereich zählt.",
 	"loading_responses": "Antworten werden geladen…",
 	"empty_slide": "Überschrift, Text oder Bild hinzufügen",
-	"no_entries": "Mindestens einen Beitrag zulassen"
+	"no_entries": "Mindestens einen Beitrag zulassen",
+	"team_rosters": "Teams",
+	"view_teams": "Teams anzeigen",
+	"loading_teams": "Teams werden geladen…",
+	"no_teams": "Noch keine Teams gebildet",
+	"member_online": "Verbunden",
+	"member_offline": "Getrennt",
+	"team_connected_count": "{online} von {total} verbunden"
 }

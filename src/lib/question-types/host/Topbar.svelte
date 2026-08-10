@@ -7,6 +7,7 @@
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
+	import Groups3Outline from '~icons/material-symbols/groups-3-outline';
 	import GroupsOutline from '~icons/material-symbols/groups-outline';
 	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
 	import LockOutline from '~icons/material-symbols/lock-outline';
@@ -14,10 +15,13 @@
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
 	import ExitFuiz from './ExitFuiz.svelte';
+	import TeamRosters from './TeamRosters.svelte';
 	import {
 		type BindableGameInfo,
 		HOST_RESPONSES,
+		HOST_TEAM_ROSTERS,
 		type HostResponses,
+		type HostTeamRosters,
 		type ResponseSummary,
 		type SharedGameInfo
 	} from './types';
@@ -43,6 +47,11 @@
 	} = $props();
 
 	let responsesModal = $state<Modal>();
+	let teamRostersModal = $state<TeamRosters>();
+
+	// Absent outside a live game, and false in a game without teams. Any screen
+	// with a topbar is past team formation, so `enabled` is the whole check.
+	const teamRosters = getContext<HostTeamRosters | undefined>(HOST_TEAM_ROSTERS);
 
 	// Absent outside a live game (the component gallery), where the aggregate is
 	// all there is.
@@ -91,6 +100,11 @@
 				</div>
 			{/if}
 		{/if}
+		{#if teamRosters?.enabled}
+			<IconButton alt={m.view_teams()} onclick={() => teamRostersModal?.open()}>
+				<Groups3Outline />
+			</IconButton>
+		{/if}
 		<IconButton alt={m.skip()} onclick={onnext} disabled={gameInfo.nextDisabled}><SkipNext/></IconButton>
 		{#if extraControls}
 			{@render extraControls()}
@@ -115,6 +129,8 @@
 		<Fullscreen {fullscreenElement} />
 	</div>
 </div>
+
+<TeamRosters bind:this={teamRostersModal} />
 
 <Modal bind:this={responsesModal} width="min(46ch, calc(100vw - 2em))">
 	<h2 class="modal-title">{m.responses()}</h2>

@@ -400,5 +400,12 @@
 	"target_note": "Une épingle dans cette zone rapporte des points.",
 	"loading_responses": "Chargement des réponses…",
 	"empty_slide": "Ajoute un titre, un texte ou une image",
-	"no_entries": "Autorise au moins une réponse"
+	"no_entries": "Autorise au moins une réponse",
+	"team_rosters": "Équipes",
+	"view_teams": "Voir les équipes",
+	"loading_teams": "Chargement des équipes…",
+	"no_teams": "Aucune équipe formée pour l'instant",
+	"member_online": "Connecté",
+	"member_offline": "Déconnecté",
+	"team_connected_count": "{online} sur {total} connectés"
 }
