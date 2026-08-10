@@ -29,6 +29,13 @@ export class CloudflareAI extends BaseAI {
 			}
 		});
 
-		return response.output_text || null;
+		// `output_text` is declared on the response type but the binding never
+		// fills it in, so read the reply out of `output` instead. The model
+		// reasons before it answers, which is why the message is not simply the
+		// first item, and a refusal sits in the same content list as the text.
+		const message = response.output?.find((item) => item.type === 'message');
+		const answer = message?.content.find((content) => content.type === 'output_text');
+
+		return answer?.text || null;
 	}
 }
