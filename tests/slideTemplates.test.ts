@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { fixTimes, limits, removeIds } from '../src/lib/clientOnly';
+import { fixTimes } from '../src/lib/canonicalize';
+import { removeIds } from '../src/lib/clientOnly';
+import { limits } from '../src/lib/limits';
 import { type LintIssue, lintSlide } from '../src/lib/question-types/lint';
 import { isDegenerateShape, isPinOnTarget } from '../src/lib/question-types/pin/shared/correctness';
 import { getQuestionType, type PinShape, questionTypes, type Slide } from '../src/lib/types';
