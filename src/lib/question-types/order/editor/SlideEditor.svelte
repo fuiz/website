@@ -18,8 +18,6 @@
 	}: {
 		slide: OrderSlide;
 	} = $props();
-
-	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
 </script>
 
 <SlideEditorLayout>

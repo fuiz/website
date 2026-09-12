@@ -173,16 +173,14 @@ export type IdlessScaleSlide = GenericIdlessScaleSlide<Media | undefined>;
 export type GenericScaleSlide<T> = GenericIdlessScaleSlide<T>;
 export type ScaleSlide = GenericScaleSlide<Media | undefined>;
 
-export type IdlessPollAnswer = {
+/** An option with an editor id. The idless form is the bare content. */
+export type PollAnswer = {
 	content: TextOrMedia;
-};
-
-export type PollAnswer = IdlessPollAnswer & {
 	id: number;
 };
 
 export type GenericIdlessPollSlide<T> = QuestionBase<T> & {
-	answers: IdlessPollAnswer[];
+	answers: TextOrMedia[];
 };
 
 export type IdlessPollSlide = GenericIdlessPollSlide<Media | undefined>;

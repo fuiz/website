@@ -11,8 +11,6 @@
 	}: {
 		slide: InfoSlide;
 	} = $props();
-
-	if (slide.duration != null && slide.duration < 1000) slide.duration *= 1000;
 </script>
 
 <SlideEditorLayout>

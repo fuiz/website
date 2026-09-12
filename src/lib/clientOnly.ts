@@ -32,6 +32,8 @@ import {
 } from './types';
 import { bring } from './util';
 
+export { limits } from './limits';
+
 export function downloadBlob(blobs: BlobPart[], name: string, options?: FilePropertyBag) {
 	const file = new File(blobs, name, options);
 	const url = URL.createObjectURL(file);
@@ -215,9 +217,7 @@ function bodyOnly<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): GenericIdl
 	return { [kind]: (slide as Record<QuestionType, unknown>)[kind] } as GenericIdlessSlide<T>;
 }
 
-export function removeIds<T>(
-	config: GenericIdlessFuizConfig<T> | GenericFuizConfig<T>
-): GenericIdlessFuizConfig<T> {
+export function removeIds<T>(config: GenericFuizConfig<T>): GenericIdlessFuizConfig<T> {
 	return {
 		title: config.title,
 		slides: config.slides.map((slide) => {
@@ -236,25 +236,21 @@ export function removeIds<T>(
 					return {
 						Poll: {
 							...slide.Poll,
-							answers: slide.Poll.answers.map(({ content }) => ({ content }))
+							answers: slide.Poll.answers.map(({ content }) => content)
 						}
 					};
 				case 'TypeAnswer' in slide:
 					return {
 						TypeAnswer: {
 							...slide.TypeAnswer,
-							answers: slide.TypeAnswer.answers.map((text) =>
-								typeof text === 'string' ? text : text.text
-							)
+							answers: slide.TypeAnswer.answers.map(({ text }) => text)
 						}
 					};
 				case 'Order' in slide:
 					return {
 						Order: {
 							...slide.Order,
-							answers: slide.Order.answers.map((text) =>
-								typeof text === 'string' ? text : text.text
-							)
+							answers: slide.Order.answers.map(({ text }) => text)
 						}
 					};
 				default:
@@ -287,7 +283,7 @@ export function addIds<T>(config: GenericIdlessFuizConfig<T>): GenericFuizConfig
 					return {
 						Poll: {
 							...slide.Poll,
-							answers: slide.Poll.answers.map(({ content }, id) => ({ content, id }))
+							answers: slide.Poll.answers.map((content, id) => ({ content, id }))
 						},
 						id
 					};
@@ -358,41 +354,6 @@ async function playJsonString(config: string, origin?: FuizOrigin): Promise<unde
 	}
 
 	await goto(resolve(localizeHref('/host/' + game_id)));
-}
-
-function fixTime(time: number | null | undefined): number | null | undefined {
-	if (time == null) return time;
-	return time <= 1000 ? time * 1000 : time;
-}
-
-/**
- * Every field across all slide types that holds a duration. A slide only ever
- * carries a few of these; the rest are left alone.
- */
-const DURATION_FIELDS = [
-	'introduce_question',
-	'time_limit',
-	'idea_time_limit',
-	'vote_time_limit',
-	'duration'
-] as const;
-
-export function fixTimes<T>(config: GenericIdlessFuizConfig<T>): GenericIdlessFuizConfig<T> {
-	return {
-		title: config.title,
-		slides: config.slides.map((slide) => {
-			const kind = getQuestionType(slide);
-			const body: Record<string, unknown> = {
-				...(slide as unknown as Record<QuestionType, Record<string, unknown>>)[kind]
-			};
-			for (const field of DURATION_FIELDS) {
-				if (field in body) {
-					body[field] = fixTime(body[field] as number | null | undefined);
-				}
-			}
-			return { [kind]: body } as GenericIdlessSlide<T>;
-		})
-	};
 }
 
 class ImageUploadError extends Error {
@@ -475,7 +436,7 @@ export async function playIdlessConfig(
 	try {
 		return await playJsonString(
 			JSON.stringify({
-				config: fixTimes(backendReadyConfig),
+				config: backendReadyConfig,
 				options
 			}),
 			origin
@@ -550,120 +511,3 @@ export const buttonSymbols = [
 		label: m.watermelon()
 	}
 ] as const;
-
-// must be a subset of https://gitlab.com/fuiz/game-backend/-/raw/main/game/logic/src/settings.rs
-export const limits = {
-	fuiz: {
-		maxSlidesCount: 500,
-		maxTitleLength: 500,
-		maxPlayerCount: 1000,
-		multipleChoice: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			pointsAwarded: 1000,
-			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 30000,
-			maxAnswerCount: 8
-		},
-		typeAnswer: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			pointsAwarded: 1000,
-			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 60000,
-			maxAnswerCount: 16
-		},
-		order: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			pointsAwarded: 1000,
-			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 60000,
-			maxAnswerCount: 8
-		},
-		slider: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			pointsAwarded: 1000,
-			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 30000,
-			maxUnitLength: 20,
-			// Mirrors the backend's `slider.max_steps`: enough stops for any
-			// sensible question, few enough that a client can render the track.
-			maxSteps: 10000
-		},
-		scale: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 30000,
-			maxLabelLength: 250,
-			maxPointsCount: 11,
-			// Agreement scales run 1..N; the NPS scale is fixed at 0..10.
-			allowedAgreementMaximums: [3, 4, 5, 6, 7, 10],
-			defaultAgreementMax: 5,
-			npsMin: 0,
-			npsMax: 10
-		},
-		poll: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 30000,
-			maxAnswerCount: 8
-		},
-		pin: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			pointsAwarded: 1000,
-			allowedPointsAwarded: [0, 500, 1000, 2000],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 30000
-		},
-		freeText: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultTimeLimit: 60000,
-			maxEntriesPerPlayer: 5,
-			maxEntryLength: 200,
-			allowedEntryCounts: [1, 2, 3, 4, 5],
-			wordCloudEntries: 3,
-			wordCloudEntryLength: 40,
-			openEndedEntries: 1,
-			openEndedEntryLength: 200
-		},
-		brainstorm: {
-			maxTitleLength: 500,
-			introduceQuestion: 5000,
-			allowedIntroduceQuestion: [0, 3000, 5000, 7000, 10000, 15000, null],
-			allowedTimeLimits: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultIdeaTimeLimit: 120000,
-			defaultVoteTimeLimit: 60000,
-			maxIdeasPerPlayer: 3,
-			maxVotesPerPlayer: 3,
-			maxIdeaLength: 200,
-			allowedIdeaCounts: [1, 2, 3],
-			allowedVoteCounts: [1, 2, 3]
-		},
-		infoSlide: {
-			maxTitleLength: 500,
-			maxBodyLength: 2000,
-			allowedDurations: [10000, 20000, 30000, 60000, 120000, 240000, null],
-			defaultDuration: null
-		},
-		maxAnswerTextLength: 500
-	}
-} as const;

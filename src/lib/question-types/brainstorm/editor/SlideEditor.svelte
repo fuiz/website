@@ -11,9 +11,6 @@
 	}: {
 		slide: BrainstormSlide;
 	} = $props();
-
-	if (slide.idea_time_limit != null && slide.idea_time_limit < 1000) slide.idea_time_limit *= 1000;
-	if (slide.vote_time_limit != null && slide.vote_time_limit < 1000) slide.vote_time_limit *= 1000;
 </script>
 
 <SlideEditorLayout>

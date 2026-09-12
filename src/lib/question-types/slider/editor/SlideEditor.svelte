@@ -15,8 +15,6 @@
 		slide: SliderSlide;
 	} = $props();
 
-	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
-
 	/**
 	 * Numbers are edited as text so a half-typed value like "-" or "1." doesn't
 	 * get coerced to something surprising mid-keystroke; the slide only takes the

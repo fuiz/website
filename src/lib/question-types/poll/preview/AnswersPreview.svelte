@@ -15,7 +15,7 @@
 	{#each slide.answers as answer, index (index)}
 		<div class={['bar', paletteClass(index)]}>
 			{#if showAnswers}
-				{answer.content.Text}
+				{answer.Text}
 			{/if}
 		</div>
 	{/each}

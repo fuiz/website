@@ -2,12 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import {
-		addIds,
 		downloadFuiz,
 		downloadFuizzes,
 		loadSingleToml,
 		loadZip,
-		removeIds,
 		shareAndCopyURL
 	} from '$lib/clientOnly';
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
@@ -199,24 +197,14 @@
 
 		await Promise.all(
 			exportedFuizzesWithFailures.filter(isNotUndefined).map(async (config) => {
-				const idedConfig = addIds(config);
-
 				const fuiz = {
-					config: idedConfig,
+					config,
 					uniqueId: generateUuid(),
 					versionId: 0,
 					lastEdited: Date.now()
 				};
 
-				const id = await addCreation(
-					{
-						config: removeIds(fuiz.config),
-						uniqueId: fuiz.uniqueId,
-						versionId: fuiz.versionId,
-						lastEdited: fuiz.lastEdited
-					},
-					db
-				);
+				const id = await addCreation(fuiz, db);
 
 				creations = [
 					...creations,
@@ -224,12 +212,9 @@
 						id,
 						uniqueId: fuiz.uniqueId,
 						lastEdited: fuiz.lastEdited,
-						title: idedConfig.title,
-						slidesCount: idedConfig.slides.length,
-						media: idedConfig.slides.reduce<Media | undefined>(
-							(p, c) => p || getMedia(c),
-							undefined
-						)
+						title: config.title,
+						slidesCount: config.slides.length,
+						media: config.slides.reduce<Media | undefined>((p, c) => p || getMedia(c), undefined)
 					}
 				];
 			})

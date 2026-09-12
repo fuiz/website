@@ -19,8 +19,6 @@
 		slide: PinSlide;
 	} = $props();
 
-	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
-
 	const TOOL_ICONS = {
 		Rectangle: SquareOutline,
 		Ellipse: RadioButtonUnchecked,

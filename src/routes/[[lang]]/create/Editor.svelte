@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
 
-	import { fixTimes, removeIds, shareAndCopyURL } from '$lib/clientOnly';
+	import { removeIds, shareAndCopyURL } from '$lib/clientOnly';
 	import { lintConfig } from '$lib/question-types/lint';
 	import { lintIssueTopbarMessage } from '$lib/question-types/lintMessages';
 	import { type Database, type ExportedFuiz, updateCreation } from '$lib/storage';
@@ -35,7 +35,7 @@
 			id,
 			{
 				...$state.snapshot(exportedFuiz),
-				config: fixTimes(removeIds($state.snapshot(config))),
+				config: removeIds($state.snapshot(config)),
 				lastEdited: Date.now()
 			},
 			db

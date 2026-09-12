@@ -1,4 +1,5 @@
 import objectHash from 'object-hash';
+import { canonicalize } from '../canonicalize';
 import {
 	type Base64Media,
 	type Creation,
@@ -171,7 +172,7 @@ async function internalizeFuiz(fuiz: ExportedFuiz, database: Database): Promise<
 		await internalizeMedia(media, database);
 	return {
 		...fuiz,
-		config: await mapIdlessSlidesMedia(fuiz.config, internalizeMediaClosure)
+		config: await mapIdlessSlidesMedia(canonicalize(fuiz.config), internalizeMediaClosure)
 	};
 }
 
@@ -293,7 +294,9 @@ export async function getCreation(
 	database: Database
 ): Promise<ExportedFuiz | undefined> {
 	const internal = await getCreationLocal(id, database.local);
-	return internal ? await collectFuiz(internal, database.local) : undefined;
+	if (!internal) return undefined;
+	const fuiz = await collectFuiz(internal, database.local);
+	return { ...fuiz, config: canonicalize(fuiz.config) };
 }
 
 export async function deleteCreation(id: CreationId, database: Database): Promise<void> {

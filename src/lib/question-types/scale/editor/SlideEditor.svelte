@@ -14,8 +14,6 @@
 		slide: ScaleSlide;
 	} = $props();
 
-	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
-
 	let isNps = $derived(slide.style === 'Nps');
 
 	let points = $derived(

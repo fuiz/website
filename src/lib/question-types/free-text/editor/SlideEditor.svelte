@@ -12,8 +12,6 @@
 		slide: FreeTextSlide;
 	} = $props();
 
-	if (slide.time_limit != null && slide.time_limit < 1000) slide.time_limit *= 1000;
-
 	let isCloud = $derived(slide.mode === 'WordCloud');
 </script>
 
