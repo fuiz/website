@@ -73,9 +73,12 @@
 
 	textarea:where(:global(:not(:placeholder-shown), :focus, :active)) + label {
 		top: 0;
-		scale: 0.75;
-		background: var(--surface);
-		transform: translateY(-50%);
+		/* Covers the border behind the label, so it has to match what the field sits on.
+		   A parent on a different surface sets `--label-bg`. */
+		background: var(--label-bg, var(--surface));
+		/* One transform rather than `scale` plus `transform`: the production CSS minifier
+		   drops a separate `scale` next to a `transform`. */
+		transform: scale(0.75) translateY(-50%);
 	}
 
 	textarea:focus + label {

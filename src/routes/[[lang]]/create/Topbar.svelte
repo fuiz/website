@@ -142,6 +142,7 @@
 	}
 
 	.title-wrap {
+		--label-bg: var(--surface-container-low);
 		flex: 1;
 		max-width: 28ch;
 		min-width: 12ch;
