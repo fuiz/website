@@ -66,6 +66,9 @@
 	}
 
 	.card-wrap {
+		/* The medal color mixed toward the text color: darker in light mode, lighter in
+		   dark mode, so silver stays readable on its own tinted card. */
+		--medal-ink: color-mix(in srgb, var(--medal-color) 70%, var(--on-surface));
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -79,11 +82,11 @@
 	}
 
 	.medal-icon {
-		color: var(--medal-color);
+		color: var(--medal-ink);
 	}
 
 	.medal-label {
-		color: var(--medal-color);
+		color: var(--medal-ink);
 		font-weight: 800;
 		font-size: 1.1em;
 	}
