@@ -95,92 +95,97 @@
 
 <Audio audioUrl={bee3} volumeOn={bindableGameInfo.volumeOn} />
 <div class="container" bind:this={fullscreenElement}>
-	<div class="info-bar">
-		<div class="info-left">
-			<div class="join-info">
-				{m.join_at()}
-				<span class="join-url">
-					{env.PUBLIC_DISPLAY_PLAY_URL}{localizeHref('/play')}
-				</span>
-			</div>
-		</div>
-		<div class="code-block">
-			<button
-				class="code-button"
-				bind:this={copyButton}
-				onclick={() => { copy_url_to_clipboard(); showCopied(); }}
-				interestfor="hover-popover"
-			>
-				<div class="code-label">{m.game_code()}</div>
-				<div class="code-value">{code}</div>
-			</button>
-			<div id="hover-popover" popover="hint" class="fuiz-popover">{m.copy_clipboard()}</div>
-			<div bind:this={copiedPopover} popover="manual" class="fuiz-popover">{m.copied()}</div>
-			<QrCode url={actualUrl} smallSize="min(9em, 25vw)" />
-		</div>
-		<div class="start-button">
-			<FancyButton onclick={onnext} disabled={nextDisabled}>
-				<div class="start-label">{m.start()}</div>
-			</FancyButton>
-		</div>
-	</div>
-	<div class="content">
-		<NiceBackground>
-			<div class="content-inner">
-				<div class="controls">
-					<div class="player-count">
-						{#if showingTeams}
-							<Groups3Outline title={m.team_rosters()} />
-						{:else}
-							<PersonOutline title={m.number_of_players()} />
-						{/if}
-						{players.length}
-					</div>
-					<StatedIconButton
-						icons={[
-							{ component: LockOpenRightOutline, alt: m.lock_game() },
-							{ component: LockOutline, alt: m.unlock_game() }
-						]}
-						bind:state={bindableGameInfo.locked}
-						onchange={onlock}
-					/>
-					<StatedIconButton
-						icons={[
-							{ component: VolumeOffOutline, alt: m.turn_on_music() },
-							{ component: VolumeUpOutline, alt: m.mute_music() }
-						]}
-						bind:state={bindableGameInfo.volumeOn}
-					/>
-					<Fullscreen {fullscreenElement} />
-				</div>
-				<div class="players-area">
-					<div class="players">
-						{#if showingTeams}
-							<TeamsList teams={displayedTeams} />
-						{:else}
-							<PlayersList
-								players={players.map((n) => [n, false])}
-								exactCount={players.length}
-								{onkick}
-							/>
-						{/if}
+	<!-- The background sits behind the header too, so the waiting room reads as one surface. -->
+	<NiceBackground>
+		<div class="column">
+			<div class="info-bar">
+				<div class="info-left">
+					<div class="join-info">
+						{m.join_at()}
+						<span class="join-url">
+							{env.PUBLIC_DISPLAY_PLAY_URL}{localizeHref('/play')}
+						</span>
 					</div>
 				</div>
+				<div class="code-block">
+					<button
+						class="code-button"
+						bind:this={copyButton}
+						onclick={() => { copy_url_to_clipboard(); showCopied(); }}
+						interestfor="hover-popover"
+					>
+						<div class="code-label">{m.game_code()}</div>
+						<div class="code-value">{code}</div>
+					</button>
+					<div id="hover-popover" popover="hint" class="fuiz-popover">{m.copy_clipboard()}</div>
+					<div bind:this={copiedPopover} popover="manual" class="fuiz-popover">{m.copied()}</div>
+					<QrCode url={actualUrl} smallSize="min(9em, 25vw)" />
+				</div>
+				<div class="start-button">
+					<FancyButton onclick={onnext} disabled={nextDisabled}>
+						<div class="start-label">{m.start()}</div>
+					</FancyButton>
+				</div>
 			</div>
-		</NiceBackground>
-	</div>
+			<div class="content">
+				<div class="content-inner">
+					<div class="controls">
+						<div class="player-count">
+							{#if showingTeams}
+								<Groups3Outline title={m.team_rosters()} />
+							{:else}
+								<PersonOutline title={m.number_of_players()} />
+							{/if}
+							{players.length}
+						</div>
+						<StatedIconButton
+							icons={[
+								{ component: LockOpenRightOutline, alt: m.lock_game() },
+								{ component: LockOutline, alt: m.unlock_game() }
+							]}
+							bind:state={bindableGameInfo.locked}
+							onchange={onlock}
+						/>
+						<StatedIconButton
+							icons={[
+								{ component: VolumeOffOutline, alt: m.turn_on_music() },
+								{ component: VolumeUpOutline, alt: m.mute_music() }
+							]}
+							bind:state={bindableGameInfo.volumeOn}
+						/>
+						<Fullscreen {fullscreenElement} />
+					</div>
+					<div class="players-area">
+						<div class="players">
+							{#if showingTeams}
+								<TeamsList teams={displayedTeams} />
+							{:else}
+								<PlayersList
+									players={players.map((n) => [n, false])}
+									exactCount={players.length}
+									{onkick}
+								/>
+							{/if}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</NiceBackground>
 </div>
 
 <style>
 	.container {
+		height: 100%;
+	}
+
+	.column {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 	}
 
 	.info-bar {
-		background: var(--surface);
-		box-shadow: 0 2px 2px #00000040;
 		display: flex;
 		align-items: center;
 		gap: 1em;
