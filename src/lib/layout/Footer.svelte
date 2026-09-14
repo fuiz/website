@@ -42,7 +42,6 @@
 
 <style>
 	.footer {
-		border-top: 1px solid #00000080;
 		text-align: center;
 		width: 100%;
 		box-sizing: border-box;
