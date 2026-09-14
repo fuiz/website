@@ -118,7 +118,9 @@
 	.member {
 		padding: 0.2em 0.6em;
 		border-radius: 0.4em;
-		border: 1px solid var(--outline);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
+		background: var(--surface-container-high);
 		font-family: var(--alternative-font);
 	}
 
@@ -127,6 +129,5 @@
 	.member.offline {
 		opacity: 0.55;
 		text-decoration: line-through;
-		border-style: dashed;
 	}
 </style>

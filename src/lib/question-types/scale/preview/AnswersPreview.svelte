@@ -47,7 +47,9 @@
 		padding: 0.1em 0.2em;
 		text-align: center;
 		border-radius: 0.3em;
-		border: 1px solid color-mix(in srgb, var(--on-surface) 25%, transparent);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
+		background: var(--surface-container-high);
 		font-family: var(--alternative-font);
 		font-size: 0.8em;
 	}

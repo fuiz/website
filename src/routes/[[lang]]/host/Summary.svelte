@@ -337,11 +337,11 @@
 		font-variant-numeric: tabular-nums;
 	}
 
-	/* A response count isn't a score, so it doesn't get the score's solid fill. */
+	/* A response count isn't a score, so it gets a light fill instead of the score's
+	   solid one. */
 	.score.neutral {
-		background: none;
+		background: var(--surface-container-high);
 		color: inherit;
-		border: 1px solid var(--outline);
 		font-weight: 600;
 	}
 

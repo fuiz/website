@@ -105,10 +105,10 @@
 				<Groups3Outline />
 			</IconButton>
 		{/if}
-		<IconButton alt={m.skip()} onclick={onnext} disabled={gameInfo.nextDisabled}><SkipNext/></IconButton>
 		{#if extraControls}
 			{@render extraControls()}
 		{/if}
+		<IconButton alt={m.skip()} onclick={onnext} disabled={gameInfo.nextDisabled}><SkipNext/></IconButton>
 		<StatedIconButton
 			icons={[
 				{ component: LockOpenRightOutline, alt: m.lock_game() },
@@ -193,14 +193,15 @@
 		appearance: none;
 		font: inherit;
 		font-family: var(--alternative-font);
-		font-weight: 800;
+		font-weight: 600;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25em;
 		padding: 0.25em 0.5em;
 		border-radius: 0.4em;
-		border: 1px solid var(--outline);
-		background: var(--surface);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
+		background: var(--hover);
 		color: inherit;
 		white-space: nowrap;
 	}
@@ -209,10 +210,13 @@
 		cursor: pointer;
 	}
 
-	button.responses:where(:hover, :focus-visible) {
-		border-color: var(--primary);
-		color: var(--primary);
-		outline: none;
+	button.responses:hover {
+		background-image: linear-gradient(var(--hover), var(--hover));
+	}
+
+	button.responses:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
 	}
 
 	.modal-title {
