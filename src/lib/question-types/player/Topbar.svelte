@@ -84,8 +84,7 @@
 <style>
 	.topbar {
 		display: flex;
-		background: var(--surface);
-		box-shadow: 0 2px 2px #00000040;
+		background: var(--surface-container-low);
 		padding: 0.2em 0.4em;
 		align-items: center;
 		gap: 0.4em;
