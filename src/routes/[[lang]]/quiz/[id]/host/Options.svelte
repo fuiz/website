@@ -16,6 +16,7 @@
 		type NameStyle,
 		type QuestionType
 	} from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import Stepper from '$lib/ui/Stepper.svelte';
@@ -180,7 +181,7 @@
 
 				<div class="section">
 					<SectionLabel --section-label-padding="0 0.3em">{m.section_players()}</SectionLabel>
-					<div class="card">
+					<Card gap="0.6em" padding="0.6em 0.7em">
 						<Switch
 							id="random"
 							checked={false}
@@ -200,16 +201,16 @@
 							{@const currentKind: StyleKey = 'Roman' in nameStyle ? 'Roman' : 'Pet'}
 							<div class="style-grid">
 								{#each styleKinds as k (k)}
-									<button
-										type="button"
-										class="style-card"
-										class:selected={currentKind === k}
+									<Card
+										level="high"
+										padding="0.6em 0.7em"
+										selected={currentKind === k}
 										onclick={() =>
 											(nameStyle = k === 'Roman' ? { Roman: len } : { Petname: len })}
 									>
 										<div class="style-title">{styleLabel(k)}</div>
 										<div class="style-hint">{exampleFor(k, len)}</div>
-									</button>
+									</Card>
 								{/each}
 							</div>
 							<Stepper
@@ -229,12 +230,12 @@
 							<Gavel height="1.2em" width="1.2em" />
 							{m.censor_names()}
 						</Switch>
-					</div>
+					</Card>
 				</div>
 
 				<div class="section">
 					<SectionLabel --section-label-padding="0 0.3em">{m.section_teams()}</SectionLabel>
-					<div class="card">
+					<Card gap="0.6em" padding="0.6em 0.7em">
 						<Switch id="teams" bind:checked={teams}>
 							<GroupsOutline height="1.2em" width="1.2em" />
 							{m.teams()}
@@ -249,12 +250,12 @@
 								{m.assign_random()}
 							</Switch>
 						{/if}
-					</div>
+					</Card>
 				</div>
 
 				<div class="section">
 					<SectionLabel --section-label-padding="0 0.3em">{m.section_display()}</SectionLabel>
-					<div class="card">
+					<Card gap="0.6em" padding="0.6em 0.7em">
 						<Switch
 							id="players"
 							bind:checked={questionsOnPlayersDevices}
@@ -271,12 +272,12 @@
 							<TimerOffOutline height="1.2em" width="1.2em" />
 							{m.unlimited_time()}
 						</Switch>
-					</div>
+					</Card>
 				</div>
 
 				<div class="section">
 					<SectionLabel --section-label-padding="0 0.3em">{m.section_randomization()}</SectionLabel>
-					<div class="card">
+					<Card gap="0.6em" padding="0.6em 0.7em">
 						<Switch id="shuffle_slides" bind:checked={shuffleSlides}>
 							<Shuffle height="1.2em" width="1.2em" />
 							{m.shuffle_slides()}
@@ -285,7 +286,7 @@
 							<SwapVert height="1.2em" width="1.2em" />
 							{m.shuffle_answers()}
 						</Switch>
-					</div>
+					</Card>
 				</div>
 
 				<ErrorMessage errorMessage={lintMessage ?? errorMessage} />
@@ -328,16 +329,6 @@
 		gap: 0.2em;
 	}
 
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.6em;
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		background: var(--surface);
-		padding: 0.6em 0.7em;
-	}
-
 	.start-row {
 		display: flex;
 		justify-content: center;
@@ -361,24 +352,6 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 0.5em;
-	}
-
-	.style-card {
-		appearance: none;
-		font: inherit;
-		color: inherit;
-		text-align: start;
-		cursor: pointer;
-		padding: 0.6em 0.7em;
-		border: 1px solid var(--outline);
-		border-radius: 0.6em;
-		background: var(--surface);
-		transition: border-color 150ms, background 150ms;
-	}
-
-	.style-card.selected {
-		border-color: var(--primary);
-		background: color-mix(in srgb, var(--primary) 8%, var(--surface));
 	}
 
 	.style-title {

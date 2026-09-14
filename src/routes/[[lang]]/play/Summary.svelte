@@ -3,6 +3,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import CorrectAnswers from '$lib/question-types/preview/CorrectAnswers.svelte';
 	import { type FuizConfig, getTitle } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import MilitaryTech from '~icons/material-symbols/military-tech';
 
@@ -21,11 +22,17 @@
 
 <TypicalPage>
 	<div id="summary">
-		<div
-			class="placement"
-			class:placement-gold={score?.position === 0}
-			class:placement-silver={score?.position === 1}
-			class:placement-bronze={score?.position === 2}
+		<Card
+			padding="0.7em 1em"
+			gap="0.7em"
+			class={[
+				'placement',
+				{
+					'placement-gold': score?.position === 0,
+					'placement-silver': score?.position === 1,
+					'placement-bronze': score?.position === 2
+				}
+			]}
 		>
 			{#if score}
 				{#if score.position < 3}
@@ -36,7 +43,7 @@
 			{:else}
 				<div class="placement-not-ranked">{m.not_on_leaderboard()}</div>
 			{/if}
-		</div>
+		</Card>
 		<div id="lines">
 			{#each config.slides as slide, index (slide.id)}
 				{@const correct = (points.at(index) ?? 0) > 0}
@@ -48,13 +55,13 @@
 							{correct ? m.correct() : m.wrong()}
 						</span>
 					</div>
-					<div class="card">
+					<Card gap="0.5em" padding="0.5em 0.7em">
 						<div class="title">{title}</div>
 						<div class="answers">
 							<SectionLabel --section-label-margin="0 0 0.2em">{m.correct_answers()}</SectionLabel>
 							<CorrectAnswers {slide} />
 						</div>
-					</div>
+					</Card>
 				</div>
 			{/each}
 		</div>
@@ -74,33 +81,25 @@
 		box-sizing: border-box;
 	}
 
-	.placement {
-		display: flex;
+	#summary :global(.placement) {
+		flex-direction: row;
 		align-items: center;
-		gap: 0.7em;
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		background: var(--surface);
-		padding: 0.7em 1em;
 		font-family: var(--alternative-font);
 		color: var(--on-surface);
 	}
 
-	.placement-gold {
-		border-color: color-mix(in srgb, #d4af37 55%, transparent);
-		background: color-mix(in srgb, #d4af37 12%, var(--surface));
+	#summary :global(.placement-gold) {
+		--card-bg: color-mix(in srgb, #d4af37 20%, var(--surface-container));
 		color: #8a6b00;
 	}
 
-	.placement-silver {
-		border-color: color-mix(in srgb, #a8a8a8 55%, transparent);
-		background: color-mix(in srgb, #a8a8a8 12%, var(--surface));
+	#summary :global(.placement-silver) {
+		--card-bg: color-mix(in srgb, #a8a8a8 20%, var(--surface-container));
 		color: #5e5e5e;
 	}
 
-	.placement-bronze {
-		border-color: color-mix(in srgb, #cd7f32 45%, transparent);
-		background: color-mix(in srgb, #cd7f32 10%, var(--surface));
+	#summary :global(.placement-bronze) {
+		--card-bg: color-mix(in srgb, #cd7f32 18%, var(--surface-container));
 		color: #8b4513;
 	}
 
@@ -160,16 +159,6 @@
 	.status.wrong {
 		background: var(--primary);
 		color: var(--on-primary);
-	}
-
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5em;
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		background: var(--surface);
-		padding: 0.5em 0.7em;
 	}
 
 	.title {

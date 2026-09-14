@@ -4,6 +4,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime.js';
 	import type { Creation } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import { toSorted } from '$lib/util';
 	import NoteAddOutline from '~icons/material-symbols/note-add-outline';
 
@@ -36,8 +37,7 @@
 {#if sorted.length > 0}
 	<div class="grid">
 		{#each sorted as { id, title, lastEdited, slidesCount, media } (id)}
-			<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-			<a class="tile" href={href(id)}>
+			<Card href={href(id)} padding="0" class="tile">
 				<div class="media">
 					<MediaContainer {media} fit="cover" />
 				</div>
@@ -47,7 +47,7 @@
 						{dateToString(new Date(lastEdited))} · {m.slides_count({ count: slidesCount })}
 					</div>
 				</div>
-			</a>
+			</Card>
 		{/each}
 	</div>
 {:else}
@@ -66,25 +66,8 @@
 		width: 100%;
 	}
 
-	.tile {
-		--border-color: color-mix(in srgb, currentColor 25%, transparent);
-		display: flex;
-		flex-direction: column;
-		background: var(--surface);
-		border: 1px solid var(--border-color);
-		border-radius: 0.6em;
-		overflow: hidden;
-		color: inherit;
-		text-decoration: inherit;
+	.grid :global(.tile) {
 		aspect-ratio: 6 / 5;
-		transition:
-			border-color 150ms ease-out,
-			background 150ms ease-out;
-	}
-
-	.tile:where(:hover, :focus-visible) {
-		--border-color: var(--primary);
-		outline: none;
 	}
 
 	.media {

@@ -97,7 +97,7 @@
 		aspect-ratio: 4 / 3;
 		padding: 0;
 		appearance: none;
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		font: inherit;
 		color: inherit;
 		border: none;

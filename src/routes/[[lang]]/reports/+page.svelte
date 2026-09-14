@@ -72,4 +72,9 @@
 		grid-template-columns: repeat(auto-fill, minmax(min(100%, 22ch), 1fr));
 		gap: 0.5em;
 	}
+
+	/* A grid item stretches, so each card fills the height of its row. */
+	.list li {
+		display: grid;
+	}
 </style>

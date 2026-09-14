@@ -37,7 +37,10 @@
 			scale 0.15s ease,
 			overlay 0.15s allow-discrete,
 			display 0.15s allow-discrete;
-		border: 1px solid var(--outline);
+		/* The fill and shadow set the dialog apart. The transparent border only shows up
+		   in forced-colors mode, which drops backgrounds and would otherwise leave the
+		   dialog without an edge. */
+		border: 1px solid transparent;
 		border-radius: 0.7em;
 		padding: 1em;
 		margin: auto;
@@ -47,11 +50,11 @@
 		   spilling past it. */
 		overflow-y: auto;
 		box-sizing: border-box;
-		background: var(--surface);
+		background: var(--surface-container);
 		color: inherit;
 		box-shadow:
-			0 1px 2px color-mix(in srgb, var(--on-surface) 8%, transparent),
-			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
+			0 1px 3px color-mix(in srgb, var(--shadow-color) 12%, transparent),
+			0 8px 24px color-mix(in srgb, var(--shadow-color) 24%, transparent);
 	}
 
 	dialog[open] {

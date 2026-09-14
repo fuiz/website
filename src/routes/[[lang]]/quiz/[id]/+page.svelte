@@ -22,6 +22,7 @@
 	} from '$lib/storage';
 	import type { IdlessFullFuizConfig } from '$lib/types';
 	import { getMedia, type Media } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import OutcomeBar from '$lib/ui/OutcomeBar.svelte';
 	import type { OverflowItem } from '$lib/ui/OverflowMenu.svelte';
@@ -187,7 +188,11 @@
 									{#each reports as [reportId, report] (reportId)}
 										{@const t = totals(report)}
 										<li>
-											<a class="run" href={resolve(localizeHref(`/reports/${reportId}`))}>
+											<Card
+												href={resolve(localizeHref(`/reports/${reportId}`))}
+												padding="0.5em 0.6em"
+												class="run"
+											>
 												<span class="run-when">{timeFormat.format(report.playedAt)}</span>
 												<span class="run-players">
 													<Groups height="0.9em" width="0.9em" />
@@ -201,7 +206,7 @@
 													/>
 												</span>
 												<span class="run-acc">{Math.round(overallAccuracy(report) * 100)}%</span>
-											</a>
+											</Card>
 										</li>
 									{/each}
 								</ol>
@@ -323,21 +328,11 @@
 		gap: 0.3em;
 	}
 
-	.run {
-		display: flex;
+	.runs :global(.run) {
+		flex-direction: row;
 		align-items: center;
 		gap: 0.7em;
-		background: var(--surface);
-		border: 1px solid var(--outline);
-		border-radius: 0.5em;
-		padding: 0.5em 0.6em;
 		font-size: 0.8em;
-		color: inherit;
-		text-decoration: none;
-	}
-
-	.run:hover {
-		background: var(--surface-variant);
 	}
 
 	.run-when {

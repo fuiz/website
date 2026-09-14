@@ -294,10 +294,12 @@
 		top: 0.5em;
 	}
 
+	/* Styled like a Card rather than built from one, since `<details>` carries its own
+	   open state. The transparent border only shows in forced-colors mode. */
 	.filter-group {
-		border: 1px solid var(--outline);
-		border-radius: 0.6em;
-		background: var(--surface);
+		border: 1px solid transparent;
+		border-radius: 0.7em;
+		background: var(--surface-container);
 		overflow: hidden;
 	}
 

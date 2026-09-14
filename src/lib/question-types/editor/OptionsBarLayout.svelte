@@ -22,7 +22,7 @@
 		flex-direction: column;
 		gap: 0.4em;
 		padding: 0.4em;
-		border-inline-start: 1px solid var(--outline);
+		background: var(--surface-container-low);
 		height: 100%;
 		box-sizing: border-box;
 	}
@@ -32,8 +32,6 @@
 			overflow-x: auto;
 			width: auto;
 			flex-direction: row;
-			border-block-end: 1px solid var(--outline);
-			border-inline-start: none;
 		}
 
 		.options > :global(*) {

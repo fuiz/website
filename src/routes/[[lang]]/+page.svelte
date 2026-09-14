@@ -9,6 +9,7 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
 	import QuestionStatistics from '$lib/question-types/mcq/host/Statistics.svelte';
+	import Card from '$lib/ui/Card.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
 	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
 	import Diversity1 from '~icons/material-symbols/diversity-1';
@@ -87,7 +88,7 @@
 				</FancyAnchorButton>
 			</div>
 			<div class="slide-container hero-enter" style:--hero-delay="480ms">
-				<div class="slide">
+				<Card padding="0" class="slide">
 					{#if answered !== undefined}
 						<QuestionStatistics
 							questionText={m.which_feature()}
@@ -155,7 +156,7 @@
 							}}
 						/>
 					{/if}
-				</div>
+				</Card>
 			</div>
 		</div>
 	</section>
@@ -342,10 +343,8 @@
 	}
 
 	.slide-container {
-		border: 1px solid var(--outline);
-		border-radius: 1rem 1rem 1.25rem 1.25rem;
+		--card-radius: 1rem 1rem 1.25rem 1.25rem;
 		position: relative;
-		overflow: hidden;
 		/* Container query below resolves `ch` against this font, so match the
 		   answer area's font (1.5em of the slide font) so that our threshold
 		   lines up with the answers' own 2x2 to 1x4 flip. */
@@ -353,7 +352,8 @@
 		font-size: calc(1.5 * min(1rem, 3vw));
 	}
 
-	.slide {
+	.slide-container :global(.slide) {
+		display: block;
 		position: relative;
 		font-size: min(1rem, 3vw);
 		aspect-ratio: 90 / 72;
@@ -364,7 +364,7 @@
 	   (game/Answers.svelte: @container (width <= 40ch)). When that happens the
 	   host screen is taller, so switch to a taller, portrait box at the same point. */
 	@container (width <= 40ch) {
-		.slide {
+		.slide-container :global(.slide) {
 			aspect-ratio: 4 / 5;
 		}
 	}

@@ -4,6 +4,7 @@
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 	import { overallAccuracy } from '$lib/reports';
 	import type { InternalReport, ReportId } from '$lib/storage';
+	import Card from '$lib/ui/Card.svelte';
 	import Groups from '~icons/material-symbols/groups-outline';
 	import HelpCenter from '~icons/material-symbols/help-center-outline';
 	import Target from '~icons/material-symbols/target';
@@ -16,7 +17,7 @@
 	});
 </script>
 
-<a class="card" href={resolve(localizeHref(`/reports/${id}`))}>
+<Card href={resolve(localizeHref(`/reports/${id}`))} gap="0.15em">
 	<span class="title">{report.title}</span>
 	<span class="when">{m.played_on({ date: dateFormat.format(report.playedAt) })}</span>
 	<span class="stats">
@@ -33,27 +34,9 @@
 			{Math.round(overallAccuracy(report) * 100)}%
 		</span>
 	</span>
-</a>
+</Card>
 
 <style>
-	.card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.15em;
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		background: var(--surface);
-		padding: 0.7em 0.8em;
-		color: inherit;
-		text-decoration: none;
-		height: 100%;
-		box-sizing: border-box;
-	}
-
-	.card:hover {
-		background: var(--surface-variant);
-	}
-
 	.title {
 		font-weight: 700;
 		overflow-wrap: anywhere;

@@ -7,6 +7,7 @@
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
+	import Card from '$lib/ui/Card.svelte';
 	import AlbumOutline from '~icons/material-symbols/album-outline';
 	import BrushOutline from '~icons/material-symbols/brush-outline';
 	import ComputerOutline from '~icons/material-symbols/computer-outline';
@@ -36,48 +37,44 @@
 			<h2 class="section-title">{m.core_team()}</h2>
 			<ul class="people">
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="https://adhami.me" class="person">
+					<Card href="https://adhami.me" padding="1em 0.7em" gap="0.4em" class="person">
 						<img src={khaleel} alt={m.person_avatar({ name: 'Khaleel Al-Adhami' })} />
 						<div class="name"><!-- i18n-ignore -->Khaleel Al-Adhami</div>
 						<div class="role">
 							<ComputerOutline height="0.9em" width="0.9em" />
 							<span>{m.developer()}</span>
 						</div>
-					</a>
+					</Card>
 				</li>
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="https://www.linkedin.com/in/yichen-gao/" class="person">
+					<Card href="https://www.linkedin.com/in/yichen-gao/" padding="1em 0.7em" gap="0.4em" class="person">
 						<img src={yichen} alt={m.person_avatar({ name: 'Yichen Gao' })} />
 						<div class="name"><!-- i18n-ignore -->Yichen Gao</div>
 						<div class="role">
 							<MailOutline height="0.9em" width="0.9em" />
 							<span>{m.community_lead()}</span>
 						</div>
-					</a>
+					</Card>
 				</li>
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="https://barish.me/" class="person">
+					<Card href="https://barish.me/" padding="1em 0.7em" gap="0.4em" class="person">
 						<img src={barish} alt={m.person_avatar({ name: 'Abutalib (Barish) Namazov' })} />
 						<div class="name"><!-- i18n-ignore -->Abutalib (Barish) Namazov</div>
 						<div class="role">
 							<ComputerOutline height="0.9em" width="0.9em" />
 							<span>{m.developer()}</span>
 						</div>
-					</a>
+					</Card>
 				</li>
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="mailto:sebastian@wichematik.education" class="person">
+					<Card href="mailto:sebastian@wichematik.education" padding="1em 0.7em" gap="0.4em" class="person">
 						<img src={sebastian} alt={m.person_avatar({ name: 'Sebastian Wich' })} />
 						<div class="name"><!-- i18n-ignore -->Sebastian Wich</div>
 						<div class="role">
 							<MailOutline height="0.9em" width="0.9em" />
 							<span>{m.community_lead()}</span>
 						</div>
-					</a>
+					</Card>
 				</li>
 			</ul>
 		</section>
@@ -86,24 +83,22 @@
 			<h2 class="section-title">{m.contributors()}</h2>
 			<ul class="contributors">
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="https://bragefuglseth.dev/" class="contrib">
+					<Card href="https://bragefuglseth.dev/" padding="0.6em 0.8em" gap="0.7em" class="contrib">
 						<span class="contrib-icon"><BrushOutline height="1em" width="1em" /></span>
 						<span class="contrib-body">
 							<span class="contrib-name"><!-- i18n-ignore -->Brage Fuglseth</span>
 							<span class="contrib-role">{m.designer()}</span>
 						</span>
-					</a>
+					</Card>
 				</li>
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="https://www.linkedin.com/in/zhironwu/" class="contrib">
+					<Card href="https://www.linkedin.com/in/zhironwu/" padding="0.6em 0.8em" gap="0.7em" class="contrib">
 						<span class="contrib-icon"><Language height="1em" width="1em" /></span>
 						<span class="contrib-body">
 							<span class="contrib-name"><!-- i18n-ignore -->Zhiron Wu</span>
 							<span class="contrib-role">{m.translator()}</span>
 						</span>
-					</a>
+					</Card>
 				</li>
 			</ul>
 		</section>
@@ -112,8 +107,7 @@
 			<h2 class="section-title">{m.music()}</h2>
 			<ul class="contributors">
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a href="https://incompetech.com/wordpress/" class="contrib">
+					<Card href="https://incompetech.com/wordpress/" padding="0.6em 0.8em" gap="0.7em" class="contrib">
 						<span class="contrib-icon"><AlbumOutline height="1em" width="1em" /></span>
 						<span class="contrib-body">
 							<span class="contrib-name"><!-- i18n-ignore -->Kevin MacLeod</span>
@@ -122,12 +116,13 @@
 								"Thinking Music" · Licensed under Creative Commons BY 4.0
 							</span>
 						</span>
-					</a>
+					</Card>
 				</li>
 				<li>
-					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					<a
+					<Card
 						href="https://www.youtube.com/watch?v=_h47TNIKJYo&pp=ygUHIGJlZS4gMw%3D%3D"
+						padding="0.6em 0.8em"
+						gap="0.7em"
 						class="contrib"
 					>
 						<span class="contrib-icon"><AlbumOutline height="1em" width="1em" /></span>
@@ -135,7 +130,7 @@
 							<span class="contrib-name"><!-- i18n-ignore -->GroovyDominoes52</span>
 							<span class="contrib-role"><!-- i18n-ignore -->"bee. 3"</span>
 						</span>
-					</a>
+					</Card>
 				</li>
 			</ul>
 		</section>
@@ -194,30 +189,17 @@
 		gap: 0.8em;
 	}
 
-	.person {
-		height: 100%;
-		box-sizing: border-box;
-		display: flex;
-		flex-direction: column;
+	/* A grid item stretches, so each card fills the height of its row. */
+	.people li {
+		display: grid;
+	}
+
+	.people :global(.person) {
 		align-items: center;
-		gap: 0.4em;
-		padding: 1em 0.7em;
-		text-decoration: none;
-		color: inherit;
 		text-align: center;
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		background: var(--surface);
-		transition: border-color 150ms ease-out, background 150ms ease-out;
 	}
 
-
-	.person:where(:hover, :focus-visible) {
-		border-color: var(--primary);
-		outline: none;
-	}
-
-	.person img {
+	.people img {
 		width: 4.5em;
 		height: 4.5em;
 		object-fit: contain;
@@ -254,22 +236,9 @@
 		margin-inline: auto;
 	}
 
-	.contrib {
-		display: flex;
+	.contributors :global(.contrib) {
+		flex-direction: row;
 		align-items: flex-start;
-		gap: 0.7em;
-		padding: 0.6em 0.8em;
-		text-decoration: none;
-		color: inherit;
-		border: 1px solid var(--outline);
-		border-radius: 0.6em;
-		background: var(--surface);
-		transition: border-color 150ms ease-out;
-	}
-
-	.contrib:where(:hover, :focus-visible) {
-		border-color: var(--primary);
-		outline: none;
 	}
 
 	.contrib-icon {

@@ -130,8 +130,7 @@
 		align-items: center;
 		gap: 0.7em;
 		padding: 0.4em 0.7em;
-		background: var(--surface);
-		border-bottom: 1px solid var(--outline);
+		background: var(--surface-container-low);
 		z-index: 1;
 	}
 

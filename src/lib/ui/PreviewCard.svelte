@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MediaContainer from '$lib/media/MediaContainer.svelte';
 	import type { Media } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 
 	let {
 		media,
@@ -15,7 +16,7 @@
 	} = $props();
 </script>
 
-<div class="card">
+<Card padding="0">
 	<div class="media" style:--aspect={aspectRatio}>
 		<MediaContainer {media} fit="cover" />
 	</div>
@@ -25,18 +26,9 @@
 			<div class="subtitle">{subtitle}</div>
 		{/if}
 	</div>
-</div>
+</Card>
 
 <style>
-	.card {
-		display: flex;
-		flex-direction: column;
-		background: var(--surface);
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		overflow: hidden;
-	}
-
 	.media {
 		position: relative;
 		width: 100%;
@@ -45,7 +37,6 @@
 
 	.info {
 		padding: 0.4em 0.6em;
-		border-top: 1px solid var(--outline);
 	}
 
 	.title {

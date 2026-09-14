@@ -9,6 +9,7 @@
 	import AnswersPreview from '$lib/question-types/preview/AnswersPreview.svelte';
 	import { addCreation, generateUuid, loadDatabase } from '$lib/storage';
 	import { getMedia, getTitle } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import ImageOutline from '~icons/material-symbols/image-outline';
 	import VisibilityOff from '~icons/material-symbols/visibility-off-outline';
@@ -51,7 +52,7 @@
 <TypicalPage>
 	<div id="page">
 		<div id="start-pane">
-			<div id="summary">
+			<Card padding="0">
 				<div class="image-container">
 					{#if fuiz.thumbnail}
 						<img src={fuiz.thumbnail} alt={fuiz.thumbnail_alt} />
@@ -74,7 +75,7 @@
 						}).of(fuiz.language)}
 					</div>
 				</div>
-			</div>
+			</Card>
 			<FancyButton onclick={onImport}>
 				<div class="cta-label">{m.import_fuiz()}</div>
 			</FancyButton>
@@ -101,7 +102,7 @@
 				{#each config.slides as slide, index (index)}
 					{@const title = getTitle(slide)}
 					{@const media = getMedia(slide)}
-					<div class="slide-card">
+					<Card padding="0" class="slide-card">
 						<div class="slide-title">
 							<TextBar text={title} />
 						</div>
@@ -115,7 +116,7 @@
 						</div>
 
 						<AnswersPreview {slide} {showAnswers} />
-					</div>
+					</Card>
 				{/each}
 			</div>
 		</div>
@@ -148,19 +149,6 @@
 		max-width: 30ch;
 		flex: 1;
 		gap: 0.5em;
-		min-width: fit-content;
-		height: fit-content;
-	}
-
-	#summary {
-		display: flex;
-		flex-direction: column;
-		max-width: 30ch;
-		flex: 1;
-		background: var(--surface);
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		overflow: hidden;
 		min-width: fit-content;
 		height: fit-content;
 	}
@@ -212,13 +200,7 @@
 		gap: 0.5em;
 	}
 
-	.slide-card {
-		display: flex;
-		flex-direction: column;
-		background: var(--surface);
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		overflow: hidden;
+	.slides-grid :global(.slide-card) {
 		min-height: 16em;
 	}
 

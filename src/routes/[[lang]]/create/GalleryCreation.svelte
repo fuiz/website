@@ -5,6 +5,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { getLocale, localizeHref } from '$lib/paraglide/runtime.js';
 	import type { Media } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import type { OverflowItem } from '$lib/ui/OverflowMenu.svelte';
 	import OverflowMenu from '$lib/ui/OverflowMenu.svelte';
 	import RegularCheckbox from '$lib/ui/regular-checkbox.svelte';
@@ -93,54 +94,54 @@
 	]);
 </script>
 
-<div class="entry" class:selected>
-	{#if reportCount > 0}
-		<span class="report-chip" title={m.reports_count({ count: reportCount })}>
-			<BarChart height="0.9em" width="0.9em" />
-			{reportCount}
-		</span>
-	{/if}
-
-	<!-- Both controls sit outside `.main`, which is itself an anchor. -->
-	<button
-		class="select"
-		class:shown={selecting || selected}
-		onclick={ontoggle}
-		aria-pressed={selected}
-		aria-label={m.select_item({ title })}
-	>
-		<RegularCheckbox checked={selected} />
-	</button>
-
-	<a class="main" href={quizHref} use:longPress={{ onlongpress: ontoggle }}>
-		<MediaContainer {media} fit="cover" />
-	</a>
-
-	<!--
-		The footer is a row rather than part of the anchor so the menu can sit at its top
-		right; a button cannot live inside `<a>`. The text keeps its own link to the same
-		place, out of the tab order so the card is still one stop.
-	-->
-	<div class="foot">
-		<a class="foot-text" href={quizHref} tabindex="-1" use:longPress={{ onlongpress: ontoggle }}>
-			{title}
-			<span class="desc">
-				{dateToString(new Date(lastEdited))} • {m.slides_count({ count: slidesCount })}
+<Card padding="0" {selected}>
+	<div class="entry">
+		{#if reportCount > 0}
+			<span class="report-chip" title={m.reports_count({ count: reportCount })}>
+				<BarChart height="0.9em" width="0.9em" />
+				{reportCount}
 			</span>
+		{/if}
+
+		<!-- Both controls sit outside `.main`, which is itself an anchor. -->
+		<button
+			class="select"
+			class:shown={selecting || selected}
+			onclick={ontoggle}
+			aria-pressed={selected}
+			aria-label={m.select_item({ title })}
+		>
+			<RegularCheckbox checked={selected} />
+		</button>
+
+		<a class="main" href={quizHref} use:longPress={{ onlongpress: ontoggle }}>
+			<MediaContainer {media} fit="cover" />
 		</a>
-		<div class="menu-slot" bind:this={menuWrap}>
-			<OverflowMenu id="quiz-menu-{id}" label={m.options()} {items} />
-			<div bind:this={copiedPopover} popover="manual" class="fuiz-popover copied-popover">
-				{m.copied()}
+
+		<!--
+			The footer is a row rather than part of the anchor so the menu can sit at its top
+			right; a button cannot live inside `<a>`. The text keeps its own link to the same
+			place, out of the tab order so the card is still one stop.
+		-->
+		<div class="foot">
+			<a class="foot-text" href={quizHref} tabindex="-1" use:longPress={{ onlongpress: ontoggle }}>
+				{title}
+				<span class="desc">
+					{dateToString(new Date(lastEdited))} • {m.slides_count({ count: slidesCount })}
+				</span>
+			</a>
+			<div class="menu-slot" bind:this={menuWrap}>
+				<OverflowMenu id="quiz-menu-{id}" label={m.options()} {items} />
+				<div bind:this={copiedPopover} popover="manual" class="fuiz-popover copied-popover">
+					{m.copied()}
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</Card>
 
 <style>
 	.entry {
-		--border-color: color-mix(in srgb, currentColor 25%, transparent);
-		background: var(--surface);
 		display: flex;
 		flex-direction: column;
 		max-height: 22ch;
@@ -151,31 +152,25 @@
 		-webkit-touch-callout: none;
 		touch-action: manipulation;
 		aspect-ratio: 6 / 5;
-		border: 1px solid var(--border-color);
-		border-radius: 0.6em;
 		position: relative;
-		overflow: hidden;
-		box-sizing: border-box;
-		transition:
-			border-color 150ms ease-out,
-			box-shadow 150ms ease-out;
+		transition: background 120ms ease-out;
 	}
 
+	/* The card is a plain box, since its links and menu live inside it, so the entry
+	   gives the hover feedback a link card would. */
 	.entry:where(:global(:focus-within, :hover)) {
-		--border-color: var(--primary);
+		background: color-mix(in srgb, var(--on-surface) 7%, transparent);
 	}
 
-	/* Hover is already a 1px --primary border, so selection leans on the ring to stay
-	   distinguishable: 3px of red total versus 1px. */
-	.entry.selected {
-		--border-color: var(--primary);
-		box-shadow: 0 0 0 2px var(--primary);
+	.entry:has(.main:focus-visible) {
+		outline: 2px solid var(--primary);
+		outline-offset: -2px;
 	}
 
 	/*
-	 * Only the top corners, and the inner radius rather than the outer one: `.entry` is
-	 * 0.6em with a 1px border, so its content is clipped at 0.6em - 1px. Matching it means
-	 * the artwork paints its own antialiased curve exactly where the border's inner edge
+	 * Only the top corners, and the inner radius rather than the outer one: the card
+	 * clips its content at its radius minus its 1px border. Matching that means the
+	 * artwork paints its own antialiased curve exactly where the border's inner edge
 	 * sits, instead of being hard-clipped a pixel away, which would leave a seam of
 	 * card background blended into the image.
 	 */
@@ -184,7 +179,7 @@
 		min-height: 0;
 		position: relative;
 		display: block;
-		border-radius: calc(0.6em - 1px) calc(0.6em - 1px) 0 0;
+		border-radius: calc(var(--card-radius, 0.7em) - 1px) calc(var(--card-radius, 0.7em) - 1px) 0 0;
 		overflow: hidden;
 		outline: none;
 	}

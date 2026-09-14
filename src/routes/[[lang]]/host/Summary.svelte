@@ -7,6 +7,7 @@
 	import { hasResponses, pivotResponses, reportToCsv, responsesToCsv } from '$lib/reports';
 	import { addReport, loadDatabase, type ReportBody, type ReportId } from '$lib/storage';
 	import { type FuizConfig, type FuizOptions, getPointsAwarded, getTitle } from '$lib/types';
+	import Card from '$lib/ui/Card.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import Bookmark from '~icons/material-symbols/bookmark-outline';
@@ -193,7 +194,7 @@
 							</span>
 						{/if}
 					</div>
-					<div class="card">{title}</div>
+					<Card padding="0.5em 0.7em"><span class="question-title">{title}</span></Card>
 				</div>
 			{/each}
 		</div>
@@ -344,11 +345,7 @@
 		font-weight: 600;
 	}
 
-	.card {
-		border: 1px solid var(--outline);
-		border-radius: 0.7em;
-		background: var(--surface);
-		padding: 0.5em 0.7em;
+	.question-title {
 		font-weight: 600;
 		overflow-wrap: anywhere;
 	}

@@ -2,6 +2,7 @@
 	import { medalColors } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
+	import Card from '$lib/ui/Card.svelte';
 	import WorkspacePremiumOutline from '~icons/material-symbols/workspace-premium-outline';
 
 	let {
@@ -25,7 +26,7 @@
 				style:--medal-color={position < 3 ? medalColors[position] : 'var(--on-surface)'}
 			>
 				{#if position < 3}
-					<div class="medal">
+					<Card padding="0.8em 1.2em" gap="0.2em" class="medal">
 						<div class="medal-icon">
 							<WorkspacePremiumOutline height="200px" width="200px" title={m.medal()} />
 						</div>
@@ -38,9 +39,9 @@
 								{m.third()}
 							{/if}
 						</div>
-					</div>
+					</Card>
 				{:else}
-					<div class="rank">#{position + 1}</div>
+					<Card padding="0.4em 0.8em" class="rank">#{position + 1}</Card>
 				{/if}
 				<div class="sticker">
 					{#if position < 3}
@@ -71,17 +72,10 @@
 		align-items: center;
 	}
 
-	.medal {
-		display: flex;
-		flex-direction: column;
+	.card-wrap :global(.medal) {
+		--card-bg: color-mix(in srgb, var(--medal-color) 20%, var(--surface-container));
 		align-items: center;
 		justify-content: center;
-		gap: 0.2em;
-		border: 1px solid color-mix(in srgb, var(--medal-color) 55%, transparent);
-		background: color-mix(in srgb, var(--medal-color) 12%, var(--surface));
-		border-radius: 0.7em;
-		padding: 0.8em 1.2em;
-		box-sizing: border-box;
 	}
 
 	.medal-icon {
@@ -94,17 +88,11 @@
 		font-size: 1.1em;
 	}
 
-	.rank {
-		display: flex;
-		flex-direction: column;
+	.card-wrap :global(.rank) {
 		align-items: center;
 		justify-content: center;
 		font-size: 3em;
 		font-weight: 800;
-		border: 1px solid var(--outline);
-		background: var(--surface);
-		border-radius: 0.7em;
-		padding: 0.4em 0.8em;
 		line-height: 1;
 	}
 

@@ -2,44 +2,32 @@
 	import { resolve } from '$app/paths';
 	import MediaFallback from '$lib/media/MediaFallback.svelte';
 	import { localizeHref } from '$lib/paraglide/runtime.js';
+	import Card from '$lib/ui/Card.svelte';
 
 	let { data } = $props();
 </script>
 
-<a class="tile" href={resolve(localizeHref(`/library/public/${data.storage_id}`))}>
-	<div class="media">
-		{#if data.thumbnail}
-			<img src={data.thumbnail} alt={data.thumbnail_alt} />
-		{:else}
-			<MediaFallback />
-		{/if}
+<Card href={resolve(localizeHref(`/library/public/${data.storage_id}`))} padding="0">
+	<div class="tile">
+		<div class="media">
+			{#if data.thumbnail}
+				<img src={data.thumbnail} alt={data.thumbnail_alt} />
+			{:else}
+				<MediaFallback />
+			{/if}
+		</div>
+		<div class="info" title={data.title}>
+			<div class="title">{data.title}</div>
+			<div class="author">{data.author}</div>
+		</div>
 	</div>
-	<div class="info" title={data.title}>
-		<div class="title">{data.title}</div>
-		<div class="author">{data.author}</div>
-	</div>
-</a>
+</Card>
 
 <style>
 	.tile {
-		--border-color: color-mix(in srgb, currentColor 20%, transparent);
 		display: flex;
 		flex-direction: column;
-		background: var(--surface);
-		border: 1px solid var(--border-color);
-		border-radius: 0.7em;
-		overflow: hidden;
-		color: inherit;
-		text-decoration: none;
 		aspect-ratio: 6 / 5;
-		transition:
-			border-color 150ms ease-out,
-			background 150ms ease-out;
-	}
-
-	.tile:where(:hover, :focus-visible) {
-		--border-color: var(--primary);
-		outline: none;
 	}
 
 	.media {

@@ -224,7 +224,7 @@
 <style>
 	#sidebar {
 		width: 12em;
-		border-inline-end: 1px solid var(--outline);
+		background: var(--surface-container-low);
 		display: flex;
 		flex-direction: column;
 	}
@@ -271,7 +271,6 @@
 
 	#add-button {
 		padding: 0.4em;
-		border-top: 1px solid var(--outline);
 	}
 
 	#controls {
@@ -323,8 +322,9 @@
 		font: inherit;
 		color: inherit;
 		text-align: start;
-		background: var(--surface);
-		border: 1px solid var(--outline);
+		background: var(--surface-container-high);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
 		border-radius: 0.5em;
 		padding: 0.6em 0.7em;
 		cursor: pointer;
@@ -332,23 +332,27 @@
 		grid-template-columns: 1.8em 1fr;
 		gap: 0.6em;
 		align-items: center;
-		transition:
-			border-color 100ms ease-out,
-			background 100ms ease-out,
-			color 100ms ease-out;
+		transition: background 100ms ease-out;
 	}
 
-	.slide-type:where(:hover, :focus-visible) {
-		border-color: var(--primary);
-		background: color-mix(in srgb, var(--primary) 6%, transparent);
-		color: var(--primary);
-		outline: none;
+	.slide-type:hover {
+		background: color-mix(in srgb, var(--primary) 14%, var(--surface-container-high));
+	}
+
+	.slide-type:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 1px;
 	}
 
 	.slide-type-icon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		transition: color 100ms ease-out;
+	}
+
+	.slide-type:where(:hover, :focus-visible) .slide-type-icon {
+		color: var(--primary);
 	}
 
 	.slide-type-title {
@@ -373,13 +377,7 @@
 			height: unset;
 		}
 
-		#add-button {
-			border-inline-start: 1px solid var(--outline);
-			border-top: none;
-		}
-
 		#controls {
-			border-top: 1px solid var(--outline);
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -389,8 +387,6 @@
 		#sidebar {
 			width: unset;
 			height: unset;
-			border-top: 1px solid var(--outline);
-			border-inline-end: none;
 		}
 
 		.switched {

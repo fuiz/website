@@ -72,6 +72,14 @@
 		--on-surface-variant: #4d4843;
 		--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
 
+		/* Tonal steps between surface and surface-variant, for regions that separate by
+		   fill instead of an outline: low for side panels, the plain container for dialogs
+		   and cards, high for items that sit on a container. */
+		--surface-container-low: #f6f0e8;
+		--surface-container: #efe9e1;
+		--surface-container-high: #e7e0d7;
+		--shadow-color: rgb(36 31 49);
+
 		/* primary (brand red) */
 		--primary: #d4131b;
 		--on-primary: #ffffff;
@@ -125,6 +133,10 @@
 			--surface-variant: #3d3849;
 			--on-surface-variant: #c9c4bf;
 			--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
+			--surface-container-low: #2b2639;
+			--surface-container: #332e41;
+			--surface-container-high: #3d384b;
+			--shadow-color: #000;
 
 			--primary: #d4131b;
 			--on-primary: #ffffff;
@@ -149,6 +161,10 @@
 		--surface-variant: #ede7df;
 		--on-surface-variant: #4d4843;
 		--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
+		--surface-container-low: #f6f0e8;
+		--surface-container: #efe9e1;
+		--surface-container-high: #e7e0d7;
+		--shadow-color: rgb(36 31 49);
 
 		--primary: #d4131b;
 		--on-primary: #ffffff;
@@ -174,6 +190,10 @@
 		--surface-variant: #3d3849;
 		--on-surface-variant: #c9c4bf;
 		--outline: color-mix(in srgb, var(--on-surface) 25%, transparent);
+		--surface-container-low: #2b2639;
+		--surface-container: #332e41;
+		--surface-container-high: #3d384b;
+		--shadow-color: #000;
 
 		--primary: #d4131b;
 		--on-primary: #ffffff;
