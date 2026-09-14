@@ -58,8 +58,12 @@
 		opacity: 0.7;
 	}
 
-	button:where(:global(:hover, :focus)) {
-		background: #00000040;
-		outline: 2px solid #ffffff40;
+	button:where(:global(:hover)) {
+		background: var(--hover);
+	}
+
+	button:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 2px;
 	}
 </style>
