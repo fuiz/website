@@ -90,17 +90,17 @@
 
 	#summary :global(.placement-gold) {
 		--card-bg: color-mix(in srgb, #d4af37 20%, var(--surface-container));
-		color: #8a6b00;
+		color: color-mix(in srgb, #d4af37 70%, var(--on-surface));
 	}
 
 	#summary :global(.placement-silver) {
 		--card-bg: color-mix(in srgb, #a8a8a8 20%, var(--surface-container));
-		color: #5e5e5e;
+		color: color-mix(in srgb, #a8a8a8 70%, var(--on-surface));
 	}
 
 	#summary :global(.placement-bronze) {
 		--card-bg: color-mix(in srgb, #cd7f32 18%, var(--surface-container));
-		color: #8b4513;
+		color: color-mix(in srgb, #cd7f32 70%, var(--on-surface));
 	}
 
 	.placement-position {
@@ -165,10 +165,4 @@
 		font-weight: 600;
 		overflow-wrap: anywhere;
 	}
-
-	.answers {
-		border-top: 1px solid color-mix(in srgb, var(--on-surface) 12%, transparent);
-		padding-top: 0.4em;
-	}
-
 </style>
