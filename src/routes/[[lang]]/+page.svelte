@@ -163,41 +163,41 @@
 	{#if !data.selfHosted}
 		<section>
 			<div class="features">
-				<div class="feature-card">
+				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
 					<div class="feature-icon">
 						<MoneyOff height="2em" width="2em" title={m.free_of_charge()} />
 					</div>
 					<h3>{m.free_of_charge()}</h3>
 					<p>{m.free_of_charge_desc()}</p>
-				</div>
-				<div class="feature-card">
+				</Card>
+				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
 					<div class="feature-icon">
 						<Language height="2em" width="2em" title={m.language()} />
 					</div>
 					<h3>{m.well_translated()}</h3>
 					<p>{m.well_translated_desc()}</p>
-				</div>
-				<div class="feature-card">
+				</Card>
+				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
 					<div class="feature-icon">
 						<Diversity2Outline height="2em" width="2em" title={m.collab_over_comp()} />
 					</div>
 					<h3>{m.collab_over_comp()}</h3>
 					<p>{m.collab_over_comp_desc()}</p>
-				</div>
-				<div class="feature-card">
+				</Card>
+				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
 					<div class="feature-icon">
 						<Diversity1 height="2em" width="2em" title={m.community_made()} />
 					</div>
 					<h3>{m.community_made()}</h3>
 					<p>{m.community_made_desc()}</p>
-				</div>
-				<div class="feature-card">
+				</Card>
+				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
 					<div class="feature-icon">
 						<CodeBlocksOutline height="2em" width="2em" title={m.always_open()} />
 					</div>
 					<h3>{m.always_open()}</h3>
 					<p>{m.always_open_desc()}</p>
-				</div>
+				</Card>
 			</div>
 		</section>
 		<section>
@@ -378,38 +378,32 @@
 		margin: auto;
 	}
 
-	.feature-card {
-		display: flex;
-		flex-direction: column;
+	.features :global(.feature-card) {
+		--card-radius: 1em;
 		align-items: center;
 		text-align: center;
-		gap: 0.5em;
-		padding: 1.5em 1.2em;
-		border-radius: 1em;
-		background: var(--surface);
-		border: 1px solid color-mix(in srgb, var(--on-surface) 12%, transparent);
 		flex: 1 1 12em;
 		max-width: 20em;
-		transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+		transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
-	.feature-card:hover {
-		border-color: color-mix(in srgb, var(--card-color) 40%, transparent);
+	.features :global(.feature-card:hover) {
+		--card-bg: color-mix(in srgb, var(--card-color) 12%, var(--surface-container));
 	}
 
-	.feature-card:nth-child(1) {
+	.features :global(.feature-card:nth-child(1)) {
 		--card-color: hsl(358, 84%, 45%);
 	}
-	.feature-card:nth-child(2) {
+	.features :global(.feature-card:nth-child(2)) {
 		--card-color: hsl(205, 84%, 30%);
 	}
-	.feature-card:nth-child(3) {
+	.features :global(.feature-card:nth-child(3)) {
 		--card-color: hsl(120, 83%, 25%);
 	}
-	.feature-card:nth-child(4) {
+	.features :global(.feature-card:nth-child(4)) {
 		--card-color: hsl(25, 84%, 48%);
 	}
-	.feature-card:nth-child(5) {
+	.features :global(.feature-card:nth-child(5)) {
 		--card-color: hsl(318, 84%, 35%);
 	}
 
@@ -418,14 +412,14 @@
 		line-height: 0;
 	}
 
-	.feature-card h3 {
+	.features h3 {
 		margin: 0;
 		font-family: var(--alternative-font);
 		font-size: 1.15em;
 		font-weight: 700;
 	}
 
-	.feature-card p {
+	.features p {
 		margin: 0.2em 0;
 		opacity: 0.8;
 		font-size: 0.95em;
