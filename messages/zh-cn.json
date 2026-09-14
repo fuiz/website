@@ -2,7 +2,7 @@
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"main_title": "协习 | 自由主持线上小组问答",
 	"main_desc": "一个免费的在线平台，用于主持和玩现场问答",
-	"play": "主持问答",
+	"play": "加入问答",
 	"greeting": "有趣、互动、引人入胜。",
 	"create_with": "使用协习创建。",
 	"open_source": "开源",
