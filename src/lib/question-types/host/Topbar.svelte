@@ -152,11 +152,23 @@
 </Modal>
 
 <style>
+	/* A floating pill over the slide, inset from the edges. */
 	.topbar {
 		display: flex;
-		background: var(--surface);
-		box-shadow: 0 2px 2px #00000040;
-		padding: 0.2em;
+		box-sizing: border-box;
+		margin: 0.5em;
+		background: var(--surface-container);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
+		border-radius: 999px;
+		box-shadow:
+			0 1px 3px color-mix(in srgb, var(--shadow-color) 12%, transparent),
+			0 8px 24px color-mix(in srgb, var(--shadow-color) 24%, transparent);
+		/* The start side matches the top and bottom, so the pill-shaped exit button sits
+		   concentric with the bar's rounded end. The end side leaves room for the square
+		   icon buttons to clear the curve. */
+		padding-block: 0.2em;
+		padding-inline: 0.2em 0.6em;
 		line-height: 1em;
 		align-items: center;
 		gap: 10px;
@@ -165,6 +177,22 @@
 		flex-wrap: wrap;
 		position: relative;
 		z-index: 1;
+	}
+
+	/* On a narrow screen the bar wraps onto two rows, which a pill can't hold. */
+	@media only screen and (max-width: 900px) {
+		.topbar {
+			margin: 0;
+			border-radius: 0;
+			box-shadow: none;
+			background: var(--surface-container-low);
+		}
+	}
+
+	/* Fills the bar's height, so its gap to the rounded end matches the padding whatever
+	   else in the bar sets that height. */
+	.topbar > :global(.exit-fuiz) {
+		align-self: stretch;
 	}
 
 	.slide-index {
@@ -197,7 +225,10 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25em;
-		padding: 0.25em 0.5em;
+		/* Same height as the icon buttons beside it, so the bar keeps its height. */
+		box-sizing: border-box;
+		height: 24px;
+		padding: 0 0.5em;
 		border-radius: 0.4em;
 		/* Only visible in forced-colors mode, where the fill is dropped. */
 		border: 1px solid transparent;

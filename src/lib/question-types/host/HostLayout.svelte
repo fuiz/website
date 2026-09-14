@@ -25,38 +25,39 @@
 </script>
 
 <div bind:this={fullscreenElement} class="root">
-	<Topbar
-		bind:bindableGameInfo
-		{gameInfo}
-		{fullscreenElement}
-		{onlock}
-		{onnext}
-		{responses}
-		{extraControls}
-	/>
-	<div class="background-area">
-		<NiceBackground>
+	<!-- The background sits behind the top bar too, so it shows around the floating pill. -->
+	<NiceBackground>
+		<div class="column">
+			<Topbar
+				bind:bindableGameInfo
+				{gameInfo}
+				{fullscreenElement}
+				{onlock}
+				{onnext}
+				{responses}
+				{extraControls}
+			/>
 			<div class="layout">
 				{@render children()}
 			</div>
-		</NiceBackground>
-	</div>
+		</div>
+	</NiceBackground>
 </div>
 
 <style>
 	.root {
 		height: 100%;
+	}
+
+	.column {
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 	}
 
-	.background-area {
+	.layout {
 		flex: 1;
 		min-height: 0;
-	}
-
-	.layout {
-		height: 100%;
 		display: flex;
 		flex-direction: column;
 	}
