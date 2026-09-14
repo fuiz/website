@@ -188,7 +188,7 @@
 	}
 
 	button:hover {
-		background: color-mix(in srgb, var(--on-surface) 8%, transparent);
+		background: var(--hover);
 	}
 
 	button.current {

@@ -103,7 +103,7 @@
 	}
 
 	.interactive:hover {
-		background: color-mix(in srgb, var(--on-surface) 7%, var(--card-bg, var(--card-base)));
+		background-image: linear-gradient(var(--hover), var(--hover));
 	}
 
 	.interactive:focus-visible {

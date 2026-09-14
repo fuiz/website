@@ -159,7 +159,7 @@
 	/* The card is a plain box, since its links and menu live inside it, so the entry
 	   gives the hover feedback a link card would. */
 	.entry:where(:global(:focus-within, :hover)) {
-		background: color-mix(in srgb, var(--on-surface) 7%, transparent);
+		background: var(--hover);
 	}
 
 	.entry:has(.main:focus-visible) {

@@ -321,7 +321,7 @@
 	}
 
 	.filter-group summary:hover {
-		background: color-mix(in srgb, var(--on-surface) 5%, transparent);
+		background: var(--hover);
 	}
 
 	.filter-name {

@@ -56,7 +56,7 @@
 	}
 
 	.trigger:hover:not(:disabled) {
-		background: color-mix(in srgb, var(--on-surface) 6%, transparent);
+		background: var(--hover);
 	}
 
 	.trigger:disabled {

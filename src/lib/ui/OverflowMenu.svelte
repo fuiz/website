@@ -79,7 +79,7 @@
 
 	.trigger:where(:hover, :focus-visible) {
 		opacity: 1;
-		background: color-mix(in srgb, var(--on-surface) 10%, transparent);
+		background: var(--hover);
 	}
 
 	.dropdown {
@@ -127,7 +127,7 @@
 	}
 
 	.item:where(:hover, :focus-visible) {
-		background: color-mix(in srgb, var(--on-surface) 8%, transparent);
+		background: var(--hover);
 	}
 
 	.item.danger {

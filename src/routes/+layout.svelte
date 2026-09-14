@@ -83,7 +83,10 @@
 		/* Text for destructive actions, like Delete. --primary is tuned for fills and is
 		   hard to read as text on the container surfaces. */
 		--danger: #b3101a;
-		/* Background of the chosen item in a list, like the current language. */
+		/* Washes laid over an item's own background: hover, press, and the chosen item in
+		   a list, like the current language. */
+		--hover: color-mix(in srgb, var(--on-surface) 8%, transparent);
+		--pressed: color-mix(in srgb, var(--on-surface) 12%, transparent);
 		--selected: color-mix(in srgb, var(--on-surface) 14%, transparent);
 
 		/* primary (brand red) */

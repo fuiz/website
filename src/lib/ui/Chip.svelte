@@ -121,11 +121,11 @@
 	}
 
 	.chip:hover::after {
-		background: color-mix(in srgb, var(--on-surface) 8%, transparent);
+		background: var(--hover);
 	}
 
 	.chip:active::after {
-		background: color-mix(in srgb, var(--on-surface) 12%, transparent);
+		background: var(--pressed);
 	}
 
 	.chip.selected:hover::after {

@@ -70,7 +70,7 @@
 	}
 
 	.trigger:hover {
-		background: color-mix(in srgb, var(--on-surface) 7%, var(--surface-container-high));
+		background-image: linear-gradient(var(--hover), var(--hover));
 	}
 
 	.label {
@@ -133,7 +133,7 @@
 	}
 
 	.opt:hover {
-		background: color-mix(in srgb, var(--on-surface) 8%, transparent);
+		background: var(--hover);
 	}
 
 	.opt.selected {
