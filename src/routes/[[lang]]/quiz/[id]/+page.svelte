@@ -242,27 +242,13 @@
 	.split {
 		display: grid;
 		grid-template-columns: 15em minmax(0, 1fr);
-		gap: 1.2em;
+		gap: 2.4em;
 	}
 
 	@media (max-width: 700px) {
 		.split {
 			grid-template-columns: minmax(0, 1fr);
-			gap: 0.9em;
-		}
-	}
-
-	.panel {
-		border-right: 1px solid var(--outline);
-		padding-right: 1.2em;
-	}
-
-	@media (max-width: 700px) {
-		.panel {
-			border-right: none;
-			border-bottom: 1px solid var(--outline);
-			padding-right: 0;
-			padding-bottom: 1em;
+			gap: 2em;
 		}
 	}
 
