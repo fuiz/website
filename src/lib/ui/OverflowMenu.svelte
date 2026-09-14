@@ -89,14 +89,15 @@
 		inset: unset;
 		margin: 0.3em 0;
 		padding: 0.3em;
-		background: var(--surface);
-		border: 1px solid var(--outline);
+		background: var(--surface-container-high);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
 		border-radius: 0.5em;
 		color: inherit;
 		min-width: 9em;
 		box-shadow:
-			0 1px 2px color-mix(in srgb, var(--on-surface) 8%, transparent),
-			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
+			0 1px 3px color-mix(in srgb, var(--shadow-color) 12%, transparent),
+			0 8px 24px color-mix(in srgb, var(--shadow-color) 24%, transparent);
 	}
 
 	.dropdown:popover-open {

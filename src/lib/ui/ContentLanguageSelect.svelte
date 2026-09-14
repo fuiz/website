@@ -103,8 +103,9 @@
 	.popover {
 		position: fixed;
 		position-area: bottom span-left;
-		background: var(--surface);
-		border: 1px solid var(--outline);
+		background: var(--surface-container-high);
+		/* Only visible in forced-colors mode, where the fill is dropped. */
+		border: 1px solid transparent;
 		border-radius: 0.7em;
 		padding: 0;
 		margin: 0.3em;
@@ -113,8 +114,8 @@
 		position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 		min-width: 18em;
 		box-shadow:
-			0 1px 2px color-mix(in srgb, var(--on-surface) 8%, transparent),
-			0 4px 12px color-mix(in srgb, var(--on-surface) 12%, transparent);
+			0 1px 3px color-mix(in srgb, var(--shadow-color) 12%, transparent),
+			0 8px 24px color-mix(in srgb, var(--shadow-color) 24%, transparent);
 	}
 
 	.popover:dir(rtl) {
