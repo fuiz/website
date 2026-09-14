@@ -131,7 +131,7 @@
 	}
 
 	.item.danger {
-		color: var(--primary);
+		color: var(--danger);
 	}
 
 	hr {

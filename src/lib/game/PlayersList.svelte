@@ -76,7 +76,8 @@
 		cursor: pointer;
 	}
 	.player.selected {
-		color: var(--primary);
+		background: var(--on-surface);
+		color: var(--surface);
 	}
 	.kickable:hover,
 	.kickable:focus-visible {

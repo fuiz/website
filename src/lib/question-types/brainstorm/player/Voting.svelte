@@ -124,7 +124,6 @@
 	.idea.chosen {
 		border-color: var(--primary);
 		background: color-mix(in srgb, var(--primary) 15%, var(--surface-variant));
-		color: var(--primary);
 	}
 
 	.text {

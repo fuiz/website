@@ -80,6 +80,12 @@
 		--surface-container-high: #e7e0d7;
 		--shadow-color: rgb(36 31 49);
 
+		/* Text for destructive actions, like Delete. --primary is tuned for fills and is
+		   hard to read as text on the container surfaces. */
+		--danger: #b3101a;
+		/* Background of the chosen item in a list, like the current language. */
+		--selected: color-mix(in srgb, var(--on-surface) 14%, transparent);
+
 		/* primary (brand red) */
 		--primary: #d4131b;
 		--on-primary: #ffffff;
@@ -137,6 +143,7 @@
 			--surface-container: #332e41;
 			--surface-container-high: #3d384b;
 			--shadow-color: #000;
+			--danger: #ff8a80;
 
 			--primary: #d4131b;
 			--on-primary: #ffffff;
@@ -165,6 +172,7 @@
 		--surface-container: #efe9e1;
 		--surface-container-high: #e7e0d7;
 		--shadow-color: rgb(36 31 49);
+		--danger: #b3101a;
 
 		--primary: #d4131b;
 		--on-primary: #ffffff;
@@ -194,6 +202,7 @@
 		--surface-container: #332e41;
 		--surface-container-high: #3d384b;
 		--shadow-color: #000;
+		--danger: #ff8a80;
 
 		--primary: #d4131b;
 		--on-primary: #ffffff;

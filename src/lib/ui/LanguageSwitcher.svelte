@@ -113,7 +113,7 @@
 	}
 
 	button.current {
-		border-color: color-mix(in srgb, var(--primary) 60%, transparent);
-		color: var(--primary);
+		background: var(--selected);
+		font-weight: 700;
 	}
 </style>
