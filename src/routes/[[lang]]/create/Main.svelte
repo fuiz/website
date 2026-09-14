@@ -60,18 +60,24 @@
 		flex: 1;
 		flex-direction: row;
 		align-items: stretch;
-		background: var(--surface);
+		background: var(--surface-container-low);
 	}
 
 	.editor-main {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		background: var(--surface);
+		border-radius: 0.7em 0.7em 0 0;
 	}
 
 	@media only screen and (max-width: 900px) {
 		#editor {
 			flex-direction: column-reverse;
+		}
+
+		.editor-main {
+			border-radius: 0;
 		}
 	}
 </style>
