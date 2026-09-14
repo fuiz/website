@@ -76,7 +76,7 @@
 
 	.none {
 		--pill-edge: color-mix(in srgb, var(--on-surface) 22%, var(--surface-variant));
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		color: var(--on-surface-variant);
 	}
 </style>

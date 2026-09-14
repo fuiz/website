@@ -292,7 +292,7 @@
 		font-weight: 700;
 		padding: 0.15em 0.1em;
 		border-radius: 0.35em;
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		border: 0.1em solid var(--outline);
 		white-space: nowrap;
 	}
@@ -315,7 +315,7 @@
 		place-items: center;
 		border-radius: 0.5em;
 		border: 0.12em solid var(--outline);
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		color: inherit;
 		transition:
 			transform 120ms ease-out,

@@ -76,7 +76,7 @@
 	}
 
 	.entry {
-		background: var(--surface-variant);
+		background: var(--surface-container);
 		padding: 0.4em 0.8em;
 		font-weight: bold;
 		overflow: hidden;

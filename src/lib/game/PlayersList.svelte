@@ -58,7 +58,7 @@
 
 <style>
 	.player {
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		border: none;
 		padding: 0.3em 0.6em;
 		border-radius: 0.6em;
@@ -81,7 +81,7 @@
 	}
 	.kickable:hover,
 	.kickable:focus-visible {
-		background: color-mix(in srgb, var(--surface-variant) 80%, red);
+		background: color-mix(in srgb, var(--surface-container-high) 80%, red);
 		text-decoration: line-through;
 	}
 </style>

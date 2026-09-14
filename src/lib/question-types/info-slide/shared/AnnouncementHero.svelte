@@ -28,7 +28,7 @@
 		width: 100%;
 		aspect-ratio: 4 / 3;
 		border-radius: 0.7em;
-		background: var(--surface-variant);
+		background: var(--surface-container);
 		border: 0.12em solid color-mix(in srgb, var(--on-surface) 16%, transparent);
 		display: flex;
 		flex-direction: column;

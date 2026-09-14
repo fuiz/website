@@ -94,7 +94,7 @@
 		position: relative;
 		height: 1em;
 		border-radius: 1em;
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		border: 0.12em solid color-mix(in srgb, var(--on-surface) 14%, transparent);
 	}
 

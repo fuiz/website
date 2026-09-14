@@ -261,7 +261,7 @@
 		gap: 0.45em;
 		border-radius: 0.7em;
 		padding: 0.55em 0.7em;
-		background: var(--surface-variant);
+		background: var(--surface-container);
 	}
 
 	.notice :global(.warn-icon),

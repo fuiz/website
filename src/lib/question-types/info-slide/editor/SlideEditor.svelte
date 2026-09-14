@@ -72,7 +72,7 @@
 	textarea {
 		font: inherit;
 		color: inherit;
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		border: 1px solid var(--outline);
 		border-radius: 0.4em;
 		padding: 0.5em;

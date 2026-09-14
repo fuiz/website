@@ -210,7 +210,7 @@
 		padding: 0.4em 0.6em;
 		gap: 0.6em;
 		border-radius: 0.6em;
-		background: var(--surface-variant);
+		background: var(--surface-container);
 	}
 
 	.code-button {

@@ -50,7 +50,7 @@
 		height: 2.5em;
 		padding: 0 0.75em;
 		border-radius: 0.7em;
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		border: 0.12em solid color-mix(in srgb, var(--on-surface) 16%, transparent);
 		overflow: hidden;
 	}

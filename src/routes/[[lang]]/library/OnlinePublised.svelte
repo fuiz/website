@@ -34,7 +34,7 @@
 		flex: 1;
 		display: flex;
 		overflow: hidden;
-		background: color-mix(in srgb, currentColor 5%, transparent);
+		background: var(--surface-container-high);
 	}
 
 	img {

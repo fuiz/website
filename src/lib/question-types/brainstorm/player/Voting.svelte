@@ -111,7 +111,7 @@
 		padding: 0.7em 0.8em;
 		border-radius: 0.6em;
 		border: 0.14em solid var(--outline);
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		cursor: pointer;
 		overflow-wrap: anywhere;
 	}
@@ -123,7 +123,7 @@
 
 	.idea.chosen {
 		border-color: var(--primary);
-		background: color-mix(in srgb, var(--primary) 15%, var(--surface-variant));
+		background: color-mix(in srgb, var(--primary) 15%, var(--surface-container-high));
 	}
 
 	.text {

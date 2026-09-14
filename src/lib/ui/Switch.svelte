@@ -91,7 +91,7 @@
 		height: 1.4em;
 		border: 0.1em solid var(--outline);
 		border-radius: 999px;
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		box-sizing: border-box;
 		transition: background-color 67ms linear;
 	}

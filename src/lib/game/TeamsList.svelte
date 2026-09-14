@@ -48,7 +48,7 @@
 	/* Grouping only: a tint rather than an outline, so the members stay the
 	   thing you look at, the way they are on the lobby screen. */
 	.team {
-		background: color-mix(in srgb, var(--surface-variant) 35%, transparent);
+		background: var(--surface-container-low);
 		border-radius: 0.8em;
 		padding: 0.5em 0.6em;
 	}
@@ -70,7 +70,7 @@
 
 	/* Same pill as a player on the lobby screen: filled, unbordered, bold. */
 	.member {
-		background: var(--surface-variant);
+		background: var(--surface-container-high);
 		padding: 0.3em 0.6em;
 		border-radius: 0.6em;
 		font-weight: bold;

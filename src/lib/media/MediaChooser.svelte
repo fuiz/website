@@ -163,7 +163,7 @@
 		width: 100%;
 		max-width: 40ch;
 		margin: 0 auto;
-		background: color-mix(in srgb, var(--on-surface) 4%, transparent);
+		background: var(--surface-container-low);
 		border: 1px dashed var(--outline);
 		border-radius: 0.5em;
 		box-sizing: border-box;
@@ -211,7 +211,7 @@
 		max-width: 100%;
 		min-width: 6em;
 		min-height: 6em;
-		background: color-mix(in srgb, var(--on-surface) 10%, transparent);
+		background: var(--surface-container);
 		border-radius: 0.5em;
 		overflow: hidden;
 	}
@@ -288,7 +288,7 @@
 		font-size: 0.85em;
 		font-style: italic;
 		color: inherit;
-		background: color-mix(in srgb, var(--on-surface) 4%, transparent);
+		background: var(--surface-container-low);
 		border: 1px solid var(--primary);
 		border-radius: 0.35em;
 		padding: 0.3em 0.5em;

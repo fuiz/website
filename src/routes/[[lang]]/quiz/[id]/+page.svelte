@@ -259,7 +259,7 @@
 		aspect-ratio: 16 / 10;
 		border-radius: 0.5em;
 		overflow: hidden;
-		background: color-mix(in srgb, var(--on-surface) 10%, var(--surface));
+		background: var(--surface-container);
 		margin-bottom: 0.6em;
 	}
 

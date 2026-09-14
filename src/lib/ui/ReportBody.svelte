@@ -95,7 +95,7 @@
 	.metric {
 		display: flex;
 		flex-direction: column;
-		background: var(--surface-variant);
+		background: var(--surface-container);
 		color: var(--on-surface-variant);
 		border-radius: 0.7em;
 		padding: 0.5em 0.7em;
