@@ -204,7 +204,7 @@ export async function shareAndCopyURL(config: IdlessFullFuizConfig) {
 			body: JSON.stringify(config)
 		})
 	).json();
-	navigator.clipboard.writeText(env.PUBLIC_PLAY_URL + localizeHref('/share') + '/' + id);
+	navigator.clipboard.writeText(env.PUBLIC_PLAY_URL + '/share/' + id);
 }
 
 /**

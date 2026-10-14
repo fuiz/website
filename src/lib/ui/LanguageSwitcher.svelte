@@ -1,6 +1,13 @@
 <script lang="ts">
+	import { chosenLocaleCookie } from '$lib/localeStrategies';
 	import * as m from '$lib/paraglide/messages.js';
-	import { getLocale, type Locale, locales, setLocale } from '$lib/paraglide/runtime.js';
+	import {
+		cookieMaxAge,
+		getLocale,
+		type Locale,
+		locales,
+		setLocale
+	} from '$lib/paraglide/runtime.js';
 	import Language from '~icons/material-symbols/language';
 	import IconButton from './IconButton.svelte';
 
@@ -9,6 +16,8 @@
 	let { up = false, id }: { up?: boolean; id: string } = $props();
 
 	function handleLanguageSelect(lang: Locale) {
+		// biome-ignore lint/suspicious/noDocumentCookie: written synchronously so it is set before setLocale navigates
+		document.cookie = `${chosenLocaleCookie}=${lang}; path=/; max-age=${cookieMaxAge}; samesite=lax`;
 		setLocale(lang);
 		popoverElement?.hidePopover();
 	}

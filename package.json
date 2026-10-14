@@ -27,7 +27,7 @@
 		"@biomejs/biome": "2.3.14",
 		"@eslint/compat": "^2.1.0",
 		"@iconify-json/material-symbols": "^1.2.87",
-		"@inlang/paraglide-js": "^2.22.0",
+		"@inlang/paraglide-js": "^2.28.0",
 		"@sveltejs/adapter-cloudflare": "^7.2.9",
 		"@sveltejs/adapter-node": "^5.5.7",
 		"@sveltejs/kit": "^2.70.1",

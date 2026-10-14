@@ -3,8 +3,11 @@ import { createAI } from '$lib/ai/factory';
 import { createBlobStorage } from '$lib/blob/factory';
 import { createDatabase } from '$lib/db';
 import { createKVStore } from '$lib/kv/factory';
+import { defineServerLocaleStrategies, hasLocalePrefix } from '$lib/localeStrategies';
 import { deLocalizeUrl } from '$lib/paraglide/runtime';
 import { paraglideMiddleware } from '$lib/paraglide/server';
+
+defineServerLocaleStrategies();
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.database = await createDatabase(event.platform?.env?.DATABASE);
@@ -27,6 +30,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 			});
 		}
 	}
+
+	// Without a locale prefix, the language comes from the visitor's choice and Accept-Language
+	const varies =
+		event.route.id?.startsWith('/[[lang]]') && !hasLocalePrefix(new URL(event.request.url));
 
 	return paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
 		event.request = localizedRequest;
@@ -51,5 +58,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 				);
 			}
 		});
+	}).then((response) => {
+		if (varies) {
+			response.headers.append('Vary', 'Cookie, Accept-Language');
+		}
+		return response;
 	});
 };
