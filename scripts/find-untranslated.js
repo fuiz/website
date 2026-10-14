@@ -10,9 +10,9 @@ const USER_FACING_ATTRS = new Set(['title', 'alt', 'placeholder', 'aria-label'])
 
 // Paths (relative to project root) to skip entirely.
 const IGNORED_PATHS = [
-	'src/routes/[[lang]]/privacy',
-	'src/routes/[[lang]]/terms',
-	'src/routes/[[lang]]/demo',
+	'src/routes/[[locale]]/privacy',
+	'src/routes/[[locale]]/terms',
+	'src/routes/[[locale]]/demo',
 	'src/lib/paraglide',
 	'src/paraglide'
 ];

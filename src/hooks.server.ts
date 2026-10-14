@@ -18,7 +18,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.platform?.env?.PUBLISH_JOBS,
 		'kv_publish_jobs'
 	);
-	if (!event.route.id?.startsWith('/[[lang]]')) {
+	if (!event.route.id?.startsWith('/[[locale]]')) {
 		// If the route is not localized
 		const delocalizedUrl = deLocalizeUrl(event.request.url).pathname;
 		const originalUrl = new URL(event.request.url).pathname;
@@ -33,7 +33,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	// Without a locale prefix, the language comes from the visitor's choice and Accept-Language
 	const varies =
-		event.route.id?.startsWith('/[[lang]]') && !hasLocalePrefix(new URL(event.request.url));
+		event.route.id?.startsWith('/[[locale]]') && !hasLocalePrefix(new URL(event.request.url));
 
 	return paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
 		event.request = localizedRequest;

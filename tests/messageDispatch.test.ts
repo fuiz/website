@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
  * sides have to answer for every member of it.
  */
 
-const ROOT = new URL('../src/routes/[[lang]]/', import.meta.url);
+const ROOT = new URL('../src/routes/[[locale]]/', import.meta.url);
 
 function read(path: string): string {
 	return readFileSync(new URL(path, ROOT), 'utf8');

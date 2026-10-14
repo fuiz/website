@@ -18,7 +18,7 @@ export default defineConfig({
 			project: './project.inlang',
 			outdir: './src/lib/paraglide',
 			strategy: ['custom-prefix', 'custom-choice', 'custom-acceptLanguage', 'url', 'baseLocale'],
-			// Routes outside src/routes/[[lang]] are never localized
+			// Routes outside src/routes/[[locale]] are never localized
 			routeStrategies: [
 				{ match: '/api/:path(.*)?', exclude: true },
 				{ match: '/robots.txt', exclude: true },

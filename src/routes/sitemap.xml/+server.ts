@@ -11,7 +11,8 @@ export const GET: RequestHandler = async ({ url }) => {
 				default: 'en',
 				alternates: ['ar', 'az', 'de', 'es', 'eu', 'fr', 'it', 'id', 'nl', 'pl', 'zh-cn']
 			},
-			excludeRoutePatterns: [/.*\[id\].*/]
+			// Every route param other than the locale
+			excludeRoutePatterns: [/\/\[(?!\[locale\]\])/]
 		})
 	).text();
 
