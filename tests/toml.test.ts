@@ -35,11 +35,13 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Test Quiz"',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.MultipleChoice]',
-			'answers = [{ correct = true, content = { Text = "2" } }, { correct = false, content = { Text = "3" } }]',
 			'title = "What is 1+1?"',
 			'points_awarded = 100',
+			'answers = [',
+			'\t{ correct = true, content = { Text = "2" } },',
+			'\t{ correct = false, content = { Text = "3" } },',
+			']',
 			''
 		].join('\n')
 	],
@@ -61,7 +63,6 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Test Quiz"',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.TypeAnswer]',
 			'title = "Spell \\"cat\\""',
 			'points_awarded = 50',
@@ -88,7 +89,6 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Test Quiz"',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.Order]',
 			'title = "Order these"',
 			'points_awarded = 75',
@@ -117,7 +117,6 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Test Quiz"',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.MultipleChoice]',
 			'title = "With image"',
 			'points_awarded = 100',
@@ -146,7 +145,6 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Test Quiz"',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.MultipleChoice]',
 			'title = "Timed"',
 			'points_awarded = 200',
@@ -182,14 +180,12 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Test Quiz"',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.MultipleChoice]',
 			'title = "Q1"',
 			'points_awarded = 10',
 			'answers = []',
 			'',
 			'[[slides]]',
-			'',
 			'[slides.TypeAnswer]',
 			'title = "Q2"',
 			'points_awarded = 20',
@@ -281,15 +277,16 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'title = "Full Online"',
 			'',
 			'[[config.slides]]',
-			'',
 			'[config.slides.MultipleChoice]',
-			'answers = [{ correct = true, content = { Text = "A" } }, { correct = false, content = { Text = "B" } }]',
 			'title = "Pick one"',
 			'points_awarded = 50',
 			'media = { Image = { Url = { url = "banner.webp", alt = "banner" } } }',
+			'answers = [',
+			'\t{ correct = true, content = { Text = "A" } },',
+			'\t{ correct = false, content = { Text = "B" } },',
+			']',
 			'',
 			'[[config.slides]]',
-			'',
 			'[config.slides.Order]',
 			'title = "Sort them"',
 			'points_awarded = 75',
@@ -317,6 +314,65 @@ const cases: [string, IdlessLocalReferenceFuizConfig | ReferencingOnlineFuiz, st
 			'',
 			'[config]',
 			'title = "Bare"',
+			'slides = []',
+			''
+		].join('\n')
+	],
+	[
+		'title comes first whatever the key order',
+		makeConfig({
+			slides: [
+				{
+					TypeAnswer: {
+						points_awarded: 10,
+						case_sensitive: false,
+						answers: ['yes'],
+						title: 'Asked last'
+					}
+				}
+			]
+		}),
+		[
+			'title = "Test Quiz"',
+			'',
+			'[[slides]]',
+			'[slides.TypeAnswer]',
+			'title = "Asked last"',
+			'points_awarded = 10',
+			'case_sensitive = false',
+			'answers = ["yes"]',
+			''
+		].join('\n')
+	],
+	[
+		'ReferencingOnlineFuiz: long arrays wrap one item per line',
+		{
+			config: { title: 'Wrapped', slides: [] },
+			author: 'erin',
+			language: 'en',
+			keywords: [
+				'photosynthesis',
+				'chlorophyll',
+				'light reactions',
+				'Calvin cycle',
+				'stomata',
+				'glucose'
+			]
+		},
+		[
+			'author = "erin"',
+			'language = "en"',
+			'keywords = [',
+			'\t"photosynthesis",',
+			'\t"chlorophyll",',
+			'\t"light reactions",',
+			'\t"Calvin cycle",',
+			'\t"stomata",',
+			'\t"glucose",',
+			']',
+			'',
+			'[config]',
+			'title = "Wrapped"',
 			'slides = []',
 			''
 		].join('\n')
