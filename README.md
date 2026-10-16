@@ -30,15 +30,17 @@ See [fuiz/self-hosted](https://gitlab.com/fuiz/self-hosted) for a ready-to-use D
 
 ## Developing
 
-After installing dependencies with `bun install`, start a development server:
+After installing dependencies with `bun install`, start a development server with the Node adapter:
 
 ```bash
-bun run dev
+ADAPTER=node bun run dev
 ```
+
+With the default Cloudflare adapter, development runs against Cloudflare's bindings, and the Workers AI binding always runs remotely, so it needs a Cloudflare login. The Node adapter uses the local fallbacks listed above instead.
 
 While we use `bun` ourselves, `npm` should work just as fine.
 
-You might need the following environment variables (`.env.local`):
+You might need the following environment variables (`.env.local`). The backend URLs match `cargo run -p fuiz-server` and `cargo run -p corkboard-server` from [fuiz/game-backend](https://gitlab.com/fuiz/game-backend):
 
 ```bash
 # the link to the current hosted version, production: fuiz.org
@@ -46,11 +48,11 @@ PUBLIC_DISPLAY_PLAY_URL="localhost:5173"
 # same as above but with the actual protocol, production: https://fuiz.org
 PUBLIC_PLAY_URL="http://localhost:5173"
 # the game backend, production: https://api.fuiz.org
-PUBLIC_BACKEND_URL="http://localhost:8787"
+PUBLIC_BACKEND_URL="http://localhost:8080"
 # same as above but a websocket url, production: wss://api.fuiz.org
-PUBLIC_WS_URL="ws://localhost:8787"
+PUBLIC_WS_URL="ws://localhost:8080"
 # image server url, production: https://corkboard.fuiz.org
-PUBLIC_CORKBOARD_URL="http://localhost:43907"
+PUBLIC_CORKBOARD_URL="http://localhost:5040"
 ```
 
 If you would like to setup backing up to gDrive then you need to create a Google application and set:
