@@ -1,17 +1,27 @@
 import {
+	cookieMaxAge,
 	defineCustomServerStrategy,
 	deLocalizeUrl,
 	extractLocaleFromHeader,
 	extractLocaleFromUrl,
 	type Locale,
+	setLocale,
 	toLocale
 } from '$lib/paraglide/runtime';
 
 /**
- * Holds the language a visitor picked in the language switcher. Only the
- * switcher writes it, so opening a localized link never changes it.
+ * Holds the language a visitor picked, in the language switcher or on the
+ * landing page. Only `chooseLocale` writes it, so opening a localized link never
+ * changes it.
  */
 export const chosenLocaleCookie = 'FUIZ_LOCALE';
+
+/** Switches the interface to `locale` and remembers it as the visitor's choice. */
+export function chooseLocale(locale: Locale) {
+	// biome-ignore lint/suspicious/noDocumentCookie: written synchronously so it is set before setLocale navigates
+	document.cookie = `${chosenLocaleCookie}=${locale}; path=/; max-age=${cookieMaxAge}; samesite=lax`;
+	setLocale(locale);
+}
 
 export function hasLocalePrefix(url: URL): boolean {
 	return deLocalizeUrl(url).pathname !== url.pathname;

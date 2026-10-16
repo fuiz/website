@@ -3,20 +3,22 @@
 	import { resolve } from '$app/paths';
 	import { env } from '$env/dynamic/public';
 	import logo from '$lib/assets/same_color_logo_padded.svg';
+	import CommunityLibrary from '$lib/landing/CommunityLibrary.svelte';
+	import FreeZero from '$lib/landing/FreeZero.svelte';
+	import JoinConversation from '$lib/landing/JoinConversation.svelte';
+	import OpenSourceCommand from '$lib/landing/OpenSourceCommand.svelte';
+	import PlayersGrid from '$lib/landing/PlayersGrid.svelte';
+	import TeamworkDivide from '$lib/landing/TeamworkDivide.svelte';
+	import TranslationWords from '$lib/landing/TranslationWords.svelte';
 	import Footer from '$lib/layout/Footer.svelte';
 	import MainHeader from '$lib/layout/MainHeader.svelte';
+	import { limits } from '$lib/limits';
 	import * as m from '$lib/paraglide/messages.js';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
 	import QuestionStatistics from '$lib/question-types/mcq/host/Statistics.svelte';
 	import Card from '$lib/ui/Card.svelte';
 	import FancyAnchorButton from '$lib/ui/FancyAnchorButton.svelte';
-	import CodeBlocksOutline from '~icons/material-symbols/code-blocks-outline';
-	import Diversity1 from '~icons/material-symbols/diversity-1';
-	import Diversity2Outline from '~icons/material-symbols/diversity-2-outline';
-	import Forum from '~icons/material-symbols/forum-outline';
-	import Language from '~icons/material-symbols/language';
-	import MoneyOff from '~icons/material-symbols/money-off';
 	import Palette from '~icons/material-symbols/palette';
 
 	let { data = $bindable() } = $props();
@@ -161,62 +163,16 @@
 		</div>
 	</section>
 	{#if !data.selfHosted}
-		<section>
-			<div class="features">
-				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
-					<div class="feature-icon">
-						<MoneyOff height="2em" width="2em" title={m.free_of_charge()} />
-					</div>
-					<h3>{m.free_of_charge()}</h3>
-					<p>{m.free_of_charge_desc()}</p>
-				</Card>
-				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
-					<div class="feature-icon">
-						<Language height="2em" width="2em" title={m.language()} />
-					</div>
-					<h3>{m.well_translated()}</h3>
-					<p>{m.well_translated_desc()}</p>
-				</Card>
-				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
-					<div class="feature-icon">
-						<Diversity2Outline height="2em" width="2em" title={m.collab_over_comp()} />
-					</div>
-					<h3>{m.collab_over_comp()}</h3>
-					<p>{m.collab_over_comp_desc()}</p>
-				</Card>
-				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
-					<div class="feature-icon">
-						<Diversity1 height="2em" width="2em" title={m.community_made()} />
-					</div>
-					<h3>{m.community_made()}</h3>
-					<p>{m.community_made_desc()}</p>
-				</Card>
-				<Card padding="1.5em 1.2em" gap="0.5em" class="feature-card">
-					<div class="feature-icon">
-						<CodeBlocksOutline height="2em" width="2em" title={m.always_open()} />
-					</div>
-					<h3>{m.always_open()}</h3>
-					<p>{m.always_open_desc()}</p>
-				</Card>
-			</div>
-		</section>
-		<section>
-			<div class="cta">
-				<Forum height="2em" width="2em" title={m.join_community()} />
-				<h2>{m.join_community()}</h2>
-				<p>{m.join_community_subtitle()}</p>
-				<div class="cta-buttons">
-					<div class="cta-button">
-						<FancyAnchorButton
-							href="https://join.slack.com/t/fuiz/shared_invite/zt-2enihgtpy-C1KxJ96pEQN707msi~vNRg"
-							palette="slack"
-						>
-							{m.join_slack()}
-						</FancyAnchorButton>
-					</div>
-				</div>
-			</div>
-		</section>
+		<!-- Side-by-side sections, alternating which side the words are on, take
+		     turns with centred ones, and the last leads into joining the
+		     community. -->
+		<PlayersGrid count={limits.fuiz.maxPlayerCount} />
+		<TeamworkDivide />
+		<FreeZero />
+		<TranslationWords />
+		<OpenSourceCommand />
+		<CommunityLibrary showLibrary={data.showLibrary} />
+		<JoinConversation />
 	{/if}
 	<footer>
 		<Footer />
@@ -266,11 +222,6 @@
 		.hero-enter {
 			animation: none;
 		}
-	}
-
-	h2 {
-		margin: 0 0 0.5em;
-		font-family: var(--alternative-font);
 	}
 
 	p {
@@ -367,86 +318,6 @@
 		.slide-container :global(.slide) {
 			aspect-ratio: 4 / 5;
 		}
-	}
-
-	.features {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 1em;
-		max-width: 70ch;
-		margin: auto;
-	}
-
-	.features :global(.feature-card) {
-		--card-radius: 1em;
-		align-items: center;
-		text-align: center;
-		flex: 1 1 12em;
-		max-width: 20em;
-		transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
-	}
-
-	.features :global(.feature-card:hover) {
-		--card-bg: color-mix(in srgb, var(--card-color) 12%, var(--surface-container));
-	}
-
-	.features :global(.feature-card:nth-child(1)) {
-		--card-color: hsl(358, 84%, 45%);
-	}
-	.features :global(.feature-card:nth-child(2)) {
-		--card-color: hsl(205, 84%, 30%);
-	}
-	.features :global(.feature-card:nth-child(3)) {
-		--card-color: hsl(120, 83%, 25%);
-	}
-	.features :global(.feature-card:nth-child(4)) {
-		--card-color: hsl(25, 84%, 48%);
-	}
-	.features :global(.feature-card:nth-child(5)) {
-		--card-color: hsl(318, 84%, 35%);
-	}
-
-	.feature-icon {
-		font-size: 1.5em;
-		line-height: 0;
-	}
-
-	.features h3 {
-		margin: 0;
-		font-family: var(--alternative-font);
-		font-size: 1.15em;
-		font-weight: 700;
-	}
-
-	.features p {
-		margin: 0.2em 0;
-		opacity: 0.8;
-		font-size: 0.95em;
-	}
-
-	.cta {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.3em;
-		padding: 4em 1.5em;
-	}
-
-	.cta p {
-		opacity: 0.8;
-		margin: 0 0 0.5em;
-	}
-
-	.cta-buttons {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 0.8em;
-	}
-
-	.cta-button {
-		width: 12em;
 	}
 
 	:global(a.styled) {
