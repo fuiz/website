@@ -12,7 +12,6 @@
 	import type { PublishingState } from '../../api/library/publish-stream/types';
 	import PublishForm from './PublishForm.svelte';
 	import PublishLoginRequired from './PublishLoginRequired.svelte';
-	import PublishProgress from './PublishProgress.svelte';
 	import PublishSubmitted from './PublishSubmitted.svelte';
 
 	let {
@@ -48,6 +47,28 @@
 
 	let publishingState = $state<PublishingState | null>(null);
 
+	/** True from the moment the checklist is confirmed until the publish ends either way. */
+	let publishing = $state(false);
+
+	const steps: { state: PublishingState; label: () => string }[] = [
+		{ state: 'generating-keywords', label: m.publishing_keywords },
+		{ state: 'forking', label: m.publishing_fork },
+		{ state: 'creating-branch', label: m.publishing_branch },
+		{ state: 'uploading', label: m.publishing_files },
+		{ state: 'creating-pr', label: m.publishing_merge_request }
+	];
+
+	/**
+	 * What the publish button shows while it works: how many steps are behind
+	 * it, or nothing to count yet while the quiz is still being sent.
+	 */
+	let progress = $derived.by(() => {
+		if (!publishing) return undefined;
+		const index = steps.findIndex((step) => step.state === publishingState);
+		if (index === -1) return { label: m.request_publish(), value: undefined };
+		return { label: steps[index].label(), value: index / steps.length };
+	});
+
 	let warningDialog: ConfirmationDialog | undefined = $state();
 
 	$effect(() => {
@@ -73,6 +94,7 @@
 
 	async function publish() {
 		publishError = undefined;
+		publishing = true;
 
 		const fuiz: FullOnlineFuiz = {
 			author,
@@ -91,6 +113,7 @@
 
 			if (!initResponse.ok) {
 				const error = await initResponse.json();
+				publishing = false;
 				publishError = error.error || 'Failed to start publish';
 				return;
 			}
@@ -108,6 +131,7 @@
 
 			eventSource.addEventListener('complete', async (e) => {
 				const data = JSON.parse(e.data);
+				publishing = false;
 				publishingState = null;
 				prUrl = data.pr_url;
 				eventSource.close();
@@ -116,6 +140,7 @@
 			eventSource.addEventListener('error', (e) => {
 				// @ts-expect-error SSE error event may have data property
 				const data = e.data ? JSON.parse(e.data) : {};
+				publishing = false;
 				publishingState = null;
 				publishError = data.message || 'Failed to publish';
 				eventSource.close();
@@ -124,12 +149,14 @@
 			eventSource.onerror = () => {
 				if (eventSource.readyState === EventSource.CLOSED) {
 					if (publishingState !== null) {
+						publishing = false;
 						publishingState = null;
 						publishError = 'Connection closed unexpectedly';
 					}
 				}
 			};
 		} catch (err) {
+			publishing = false;
 			publishingState = null;
 			publishError = 'An unexpected error occurred';
 			console.error('Publish error:', err);
@@ -141,8 +168,6 @@
 	<section class="page">
 		{#if prUrl}
 			<PublishSubmitted {prUrl} />
-		{:else if publishingState}
-			<PublishProgress state={publishingState} />
 		{:else if gitAuthStatus && !gitAuthStatus.authenticated}
 			<PublishLoginRequired
 				gitLoginUrl={resolve(`/api/git/login?provider=gitlab&return=/publish?id=${id}`)}
@@ -153,6 +178,7 @@
 				{media}
 				disabled={!gitAuthStatus?.authenticated || lintMessage !== undefined}
 				publishError={lintMessage ?? publishError}
+				{progress}
 				bind:author
 				bind:lang
 				bind:subjects

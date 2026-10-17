@@ -6,6 +6,7 @@
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import PreviewCard from '$lib/ui/PreviewCard.svelte';
 	import Textfield from '$lib/ui/Textfield.svelte';
+	import WavyCircular from '$lib/ui/WavyCircular.svelte';
 	import Language from '~icons/material-symbols/language';
 	import Grade from './Grade.svelte';
 	import Subject from './Subject.svelte';
@@ -15,6 +16,7 @@
 		media,
 		disabled = false,
 		publishError,
+		progress = undefined,
 		author = $bindable(''),
 		lang = $bindable(''),
 		subjects = $bindable<string[]>([]),
@@ -25,6 +27,8 @@
 		media: Media | undefined;
 		disabled?: boolean;
 		publishError?: string;
+		/** Set while publishing: what to say, and how far along it is when that can be counted. */
+		progress?: { label: string; value: number | undefined };
 		author?: string;
 		lang?: string;
 		subjects?: string[];
@@ -65,8 +69,19 @@
 	<Subject bind:tags={subjects} />
 	<Grade bind:tags={grades} />
 	<div>
-		<FancyButton {disabled}>
-			<div class="btn-label">{m.request_publish()}</div>
+		<FancyButton disabled={disabled || progress !== undefined}>
+			<div class="btn-label">
+				{#if progress}
+					<!-- Sending the quiz and counting the steps are separate indicators,
+					     so the switch between them starts the second one fresh. -->
+					{#key progress.value === undefined}
+						<WavyCircular value={progress.value} size={26} thick label={progress.label} />
+					{/key}
+					<span aria-live="polite">{progress.label}</span>
+				{:else}
+					{m.request_publish()}
+				{/if}
+			</div>
 		</FancyButton>
 	</div>
 </form>
@@ -81,6 +96,14 @@
 	}
 
 	.btn-label {
+		/* The indicator in the button's own white, on the disabled grey. */
+		--wavy-active: currentColor;
+		--wavy-track: color-mix(in srgb, currentColor 30%, transparent);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5em;
+		min-height: 1.3em;
 		font-family: var(--alternative-font);
 	}
 

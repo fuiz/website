@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { addIds, playIdlessConfig } from '$lib/clientOnly';
+	import { addIds, playIdlessConfig, type StartProgress } from '$lib/clientOnly';
 	import ErrorMessage from '$lib/feedback/ErrorMessage.svelte';
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
-	import LoadingCircle from '$lib/feedback/LoadingCircle.svelte';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { lintConfig } from '$lib/question-types/lint';
@@ -21,6 +20,7 @@
 	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import Stepper from '$lib/ui/Stepper.svelte';
 	import Switch from '$lib/ui/Switch.svelte';
+	import WavyCircular from '$lib/ui/WavyCircular.svelte';
 	import CasinoOutline from '~icons/material-symbols/casino-outline';
 	import Gavel from '~icons/material-symbols/gavel';
 	import GroupsOutline from '~icons/material-symbols/groups-outline';
@@ -36,6 +36,7 @@
 	let { id }: { id: CreationId } = $props();
 
 	let loading = $state(false);
+	let progress = $state<StartProgress | undefined>(undefined);
 
 	let errorMessage = $state('');
 
@@ -159,6 +160,7 @@
 					if (lintMessage) return;
 					errorMessage = '';
 					loading = true;
+					progress = undefined;
 					playIdlessConfig(
 						hostPace(shuffle(config, shuffleSlides, shuffleAnswers), hostPaced),
 						{
@@ -168,9 +170,11 @@
 							profanity: censorNames ? 'Censor' : 'Allow',
 							...(teams && { teams: { size: teamSize, assign_random: assignRandom } })
 						},
-						{ uniqueId, versionId }
+						{ uniqueId, versionId },
+						(p) => (progress = p)
 					).then((err) => {
 						loading = false;
+						progress = undefined;
 						if (err) {
 							errorMessage = err;
 						}
@@ -294,11 +298,26 @@
 					<FancyButton disabled={loading || lintMessage !== undefined}>
 						<div id="button">
 							{#if loading}
-								<div class="spinner">
-									<LoadingCircle borderWidth={3} />
-								</div>
+								{@const uploading = progress?.phase === 'uploading' ? progress : undefined}
+								{@const label = uploading
+									? m.uploading_images({ done: uploading.done, total: uploading.total })
+									: progress
+										? m.creating_game()
+										: m.start()}
+								<!-- Counting images and making the game are separate indicators,
+								     so the switch between them starts the second one fresh. -->
+								{#key uploading !== undefined}
+									<WavyCircular
+										value={uploading ? uploading.done / uploading.total : undefined}
+										size={26}
+										thick
+										{label}
+									/>
+								{/key}
+								<span aria-live="polite">{label}</span>
+							{:else}
+								{m.start()}
 							{/if}
-							{m.start()}
 						</div>
 					</FancyButton>
 				</div>
@@ -335,17 +354,17 @@
 	}
 
 	#button {
+		/* The indicator in the button's own white, on the disabled grey. */
+		--wavy-active: currentColor;
+		--wavy-track: color-mix(in srgb, currentColor 30%, transparent);
 		padding: 0.1em 0.5em;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 0.5em;
+		min-height: 1.3em;
 		font-family: var(--alternative-font);
-	}
-
-	.spinner {
-		height: 1em;
-		width: 1em;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.style-grid {

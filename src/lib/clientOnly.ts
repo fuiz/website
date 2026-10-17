@@ -23,6 +23,7 @@ import {
 	type GenericIdlessFuizConfig,
 	type GenericIdlessSlide,
 	type GenericSlide,
+	getBody,
 	getQuestionType,
 	getTitle,
 	type IdlessFuizConfig,
@@ -408,18 +409,34 @@ async function getBackendMedia(
 	};
 }
 
-async function getBackendConfig(config: IdlessFullFuizConfig): Promise<IdlessFuizConfig> {
-	return await mapIdlessSlidesMedia(config, getBackendMedia);
+/** Where `playIdlessConfig` is in starting a game, for showing progress to the host. */
+export type StartProgress =
+	| { phase: 'uploading'; done: number; total: number }
+	| { phase: 'creating' };
+
+async function getBackendConfig(
+	config: IdlessFullFuizConfig,
+	onProgress: (progress: StartProgress) => void
+): Promise<IdlessFuizConfig> {
+	const total = config.slides.filter((slide) => getBody(slide).media !== undefined).length;
+	let done = 0;
+	if (total > 0) onProgress({ phase: 'uploading', done, total });
+	return await mapIdlessSlidesMedia(config, async (media) => {
+		const backendMedia = await getBackendMedia(media);
+		if (media) onProgress({ phase: 'uploading', done: ++done, total });
+		return backendMedia;
+	});
 }
 
 export async function playIdlessConfig(
 	config: IdlessFullFuizConfig,
 	options: FuizOptions,
-	origin?: FuizOrigin
+	origin?: FuizOrigin,
+	onProgress: (progress: StartProgress) => void = () => {}
 ): Promise<undefined | string> {
 	let backendReadyConfig: IdlessFuizConfig;
 	try {
-		backendReadyConfig = await getBackendConfig(config);
+		backendReadyConfig = await getBackendConfig(config, onProgress);
 	} catch (error) {
 		if (error instanceof ImageUploadError) {
 			let imageIdentifier = 'image';
@@ -433,6 +450,7 @@ export async function playIdlessConfig(
 		}
 		return 'Failed to upload images: ' + (error as Error).message;
 	}
+	onProgress({ phase: 'creating' });
 	try {
 		return await playJsonString(
 			JSON.stringify({

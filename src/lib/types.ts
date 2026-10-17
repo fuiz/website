@@ -525,7 +525,7 @@ export function getQuestionType<T>(slide: GenericIdlessSlide<T> | GenericSlide<T
 /** The slide's own body, keyed off whichever question type it turned out to be. */
 type SlideBody<T> = { title: string; media?: T; points_awarded?: number };
 
-function getBody<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): SlideBody<T> {
+export function getBody<T>(slide: GenericIdlessSlide<T> | GenericSlide<T>): SlideBody<T> {
 	return (slide as Record<QuestionType, SlideBody<T>>)[getQuestionType(slide)];
 }
 
