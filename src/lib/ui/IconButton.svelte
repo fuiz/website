@@ -25,6 +25,7 @@
 </script>
 
 <button
+	type="button"
 	style:--pad={padding}
 	{popovertarget}
 	{disabled}

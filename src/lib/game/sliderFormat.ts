@@ -12,6 +12,19 @@ function decimalsFor(step: number): number {
 	return Math.min(6, text.length - dot - 1);
 }
 
+/**
+ * Snaps a value onto `range`'s step grid, the way a native range input would,
+ * without the float noise that stepping by tenths leaves behind.
+ */
+export function snapSliderValue(value: number, range: SliderRange): number {
+	const clamped = Math.max(range.min, Math.min(range.max, value));
+	if (range.step <= 0) return clamped;
+	let snapped = range.min + Math.round((clamped - range.min) / range.step) * range.step;
+	// A max that isn't on the grid can't be reached; stop on the last step before it.
+	if (snapped > range.max) snapped -= range.step;
+	return Number(snapped.toFixed(decimalsFor(range.step)));
+}
+
 /** Formats a value on `range`, appending the slide's unit when it has one. */
 export function formatSliderValue(
 	value: number,

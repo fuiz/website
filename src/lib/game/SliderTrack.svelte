@@ -2,7 +2,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import type { SliderRange, SliderValueCount } from '$lib/types';
 	import Check from '~icons/custom/check';
-	import { formatSliderValue } from './sliderFormat';
+	import { formatSliderValue, snapSliderValue } from './sliderFormat';
 
 	/**
 	 * The slider, shared by the player (choosing a value) and the host (showing
@@ -95,10 +95,52 @@
 	let bubbleIndex = $derived(targetIndex ?? pickedIndex);
 	let bubbleValue = $derived(correct ?? effectiveValue);
 	let showBubble = $derived(bubbleValue !== undefined && bubbleIndex !== undefined);
+
+	let rail = $state<HTMLDivElement>();
+	let control = $state<HTMLInputElement>();
+
+	/**
+	 * Moves the value to the tick under the pointer. The native input can't do
+	 * this for us: iOS Safari ignores taps on a range track and only drags from
+	 * the thumb, which here is invisible and doesn't line up with the ticks.
+	 */
+	function pick(event: PointerEvent) {
+		if (!rail) return;
+		const box = rail.getBoundingClientRect();
+		let fraction = (event.clientX - box.left) / box.width;
+		if (getComputedStyle(rail).direction === 'rtl') fraction = 1 - fraction;
+		// Ticks sit at the centres of their columns, so the ends of the range are
+		// half a column in from the edges.
+		const ratio = Math.max(0, Math.min(1, (fraction * tickCount - 0.5) / (tickCount - 1)));
+		const next = snapSliderValue(range.min + ratio * span, range);
+		if (next === value) return;
+		value = next;
+		onchange?.(next);
+	}
+
+	function grab(event: PointerEvent) {
+		if (!rail || event.button !== 0) return;
+		rail.setPointerCapture(event.pointerId);
+		// So the arrow keys carry on from wherever the pointer left it.
+		control?.focus({ preventScroll: true });
+		pick(event);
+	}
+
+	function drag(event: PointerEvent) {
+		if (rail?.hasPointerCapture(event.pointerId)) pick(event);
+	}
 </script>
 
 <div class="track" class:has-results={hasResults} class:fill>
-	<div class="rail">
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<!-- The input inside is the accessible control; this only handles pointers. -->
+	<div
+		class="rail"
+		class:interactive
+		bind:this={rail}
+		onpointerdown={interactive ? grab : undefined}
+		onpointermove={interactive ? drag : undefined}
+	>
 		<div class="ticks" style:--n={tickCount}>
 			{#each { length: tickCount } as _, index (index)}
 				<span
@@ -135,11 +177,12 @@
 		{/if}
 
 		{#if interactive}
-			<!-- The real control sits invisibly over the ticks, so dragging, the
-			     keyboard and screen readers all keep working while the ticks do the
-			     drawing. -->
+			<!-- The real control sits invisibly over the ticks, so the keyboard and
+			     screen readers keep working while the ticks do the drawing. Pointers
+			     are handled by the rail. -->
 			<input
 				class="control"
+				bind:this={control}
 				type="range"
 				min={range.min}
 				max={range.max}
@@ -298,31 +341,24 @@
 		pointer-events: none;
 	}
 
+	/* Claims the gesture outright, so a drag along the ticks moves the value
+	   instead of scrolling or zooming the page, or selecting the bubble's text
+	   on a long press. */
+	.rail.interactive {
+		touch-action: none;
+		-webkit-user-select: none;
+		user-select: none;
+		cursor: pointer;
+	}
+
 	.control {
 		position: absolute;
 		inset: 0;
 		width: 100%;
 		height: 100%;
 		margin: 0;
-		appearance: none;
-		background: transparent;
-		cursor: pointer;
-	}
-
-	.control::-webkit-slider-thumb {
-		appearance: none;
-		width: 1.6em;
-		height: 100%;
-		background: transparent;
-		cursor: grab;
-	}
-
-	.control::-moz-range-thumb {
-		width: 1.6em;
-		height: 100%;
-		border: none;
-		background: transparent;
-		cursor: grab;
+		opacity: 0;
+		pointer-events: none;
 	}
 
 	/* The input is invisible, so the focus ring has to go on what is drawn. */
