@@ -5,6 +5,8 @@
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import MultipleAnswersResult from '$lib/feedback/MultipleAnswersResult.svelte';
+	import PinBoard from '$lib/game/PinBoard.svelte';
+	import { formatSliderValue } from '$lib/game/sliderFormat';
 	import * as m from '$lib/paraglide/messages.js';
 	import BrainstormIdeas from '$lib/question-types/brainstorm/player/Ideas.svelte';
 	import BrainstormVoting from '$lib/question-types/brainstorm/player/Voting.svelte';
@@ -502,12 +504,28 @@
 					<MultipleAnswersResult
 						{name}
 						{score}
+						questionText={question || ''}
 						answers={answers || []}
 						results={results || []}
 						{answered}
 					/>
 				{:else}
-					<Result {name} {score} correct={isMcqAnswerCorrect(answered, results, answer_mode)} />
+					<Result
+						{name}
+						{score}
+						questionText={question || ''}
+						answered={answered !== undefined}
+						correct={isMcqAnswerCorrect(answered, results, answer_mode)}
+					>
+						{#if typeof answered === 'number'}{answers?.[answered]?.Text}{/if}
+						{#snippet correctAnswer()}
+							{#each answers ?? [] as answer, i (i)}
+								{#if results?.[i]?.correct}
+									<div>{answer?.Text}</div>
+								{/if}
+							{/each}
+						{/snippet}
+					</Result>
 				{/if}
 		{/if}
 	{:else if 'Score' in slide}
@@ -545,13 +563,22 @@
 			<Result
 				{name}
 				{score}
+				questionText={question || ''}
+				answered={answered !== undefined}
 				correct={answered === undefined
 					? false
 					: (answers
 							?.map((a) => a.trim())
 							.map((a) => (case_sensitive ? a : a.toLowerCase()))
 							.includes(case_sensitive ? answered.trim() : answered.trim().toLowerCase()) ?? false)}
-			/>
+			>
+				{answered}
+				{#snippet correctAnswer()}
+					{#each answers ?? [] as answer, i (i)}
+						<div>{answer}</div>
+					{/each}
+				{/snippet}
+			</Result>
 		{/if}
 	{:else if 'Order' in slide}
 		{@const { Order: kind, question, answers, media, answered, axis_labels } = slide}
@@ -578,10 +605,25 @@
 			<Result
 				{name}
 				{score}
+				questionText={question || ''}
+				answered={answered !== undefined}
 				correct={answered === undefined || answers === undefined
 					? false
 					: answers.length === answered.length && zip(answers, answered).every(([a, b]) => a === b)}
-			/>
+			>
+				<ol>
+					{#each answered ?? [] as item, i (i)}
+						<li>{item}</li>
+					{/each}
+				</ol>
+				{#snippet correctAnswer()}
+					<ol>
+						{#each answers ?? [] as item, i (i)}
+							<li>{item}</li>
+						{/each}
+					</ol>
+				{/snippet}
+			</Result>
 		{/if}
 	{:else if 'Slider' in slide}
 		{@const { Slider: kind, question, media, range, unit, answered, correct, tolerance } = slide}
@@ -608,10 +650,24 @@
 			<Result
 				{name}
 				{score}
+				questionText={question || ''}
+				answered={answered !== undefined}
 				correct={answered !== undefined &&
 					correct !== undefined &&
 					Math.abs(answered - correct) <= (tolerance ?? 0) + Number.EPSILON}
-			/>
+			>
+				{#if answered !== undefined}
+					{formatSliderValue(answered, range ?? { min: 0, max: 100, step: 1 }, unit)}
+				{/if}
+				{#snippet correctAnswer()}
+					{#if correct !== undefined}
+						{formatSliderValue(correct, range ?? { min: 0, max: 100, step: 1 }, unit)}
+						{#if tolerance}
+							± {formatSliderValue(tolerance, range ?? { min: 0, max: 100, step: 1 }, unit)}
+						{/if}
+					{/if}
+				{/snippet}
+			</Result>
 		{/if}
 	{:else if 'Scale' in slide}
 		{@const { Scale: kind, question, media, points, labels, style, answered } = slide}
@@ -694,7 +750,30 @@
 			{/if}
 		{:else if kind === 'AnswersResults'}
 			{#if correct_area}
-				<Result {name} {score} correct={isPinOnTarget(answered, correct_area)} />
+				<!-- A wrong pin is shown against the target, so the target only gets
+				     a board of its own when there is no pin. -->
+				{#snippet pinTarget()}
+					<div class="pin-answer">
+						<PinBoard {media} shape={correct_area} showShape />
+					</div>
+				{/snippet}
+				<Result
+					{name}
+					{score}
+					questionText={question || ''}
+					answered={answered !== undefined}
+					correct={isPinOnTarget(answered, correct_area)}
+					correctAnswer={answered === undefined ? pinTarget : undefined}
+				>
+					<div class="pin-answer">
+						<PinBoard
+							{media}
+							myPin={answered}
+							shape={correct_area}
+							showShape={!isPinOnTarget(answered, correct_area)}
+						/>
+					</div>
+				</Result>
 			{:else}
 				<Recorded {name} {score} />
 			{/if}
@@ -778,3 +857,9 @@
 		/>
 	{/if}
 {/if}
+
+<style>
+	.pin-answer {
+		height: 30dvh;
+	}
+</style>

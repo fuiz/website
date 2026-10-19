@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Confetti } from 'svelte-confetti';
+	import AnswerRecap from '$lib/feedback/AnswerRecap.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import {
 		getMultipleAnswersReview,
@@ -13,12 +14,14 @@
 	let {
 		name,
 		score,
+		questionText,
 		answers,
 		results,
 		answered
 	}: {
 		name: string;
 		score: number;
+		questionText: string;
 		answers: (TextOrMedia | undefined)[];
 		results: AnswerResult[];
 		answered: number | number[] | undefined;
@@ -61,26 +64,30 @@
 	);
 </script>
 
-<PlayerLayout {name} {score} centered>
+<PlayerLayout {name} {score}>
 	<div class="review">
+		<AnswerRecap {questionText}>
+			{#snippet answer()}
+				<ul class="list">
+					{#each rows as row, index (index)}
+						<li class="row" class:dim={row.status === 'avoided'} style:--c={statusColor[row.status]}>
+							<div class="badge">
+								{#if row.correct}<Check />{:else}<Close />{/if}
+							</div>
+							<span class="text">{row.text}</span>
+							<span class="tag">{statusTag[row.status]}</span>
+						</li>
+					{/each}
+				</ul>
+			{/snippet}
+		</AnswerRecap>
+
 		<header>
 			<div class="placard" style:--c={placardColor}>
 				{#if review.foundCount > 0}<Check />{:else}<Close />{/if}
 			</div>
 			<div class="lead">{headline}</div>
 		</header>
-
-		<ul class="list">
-			{#each rows as row, index (index)}
-				<li class="row" class:dim={row.status === 'avoided'} style:--c={statusColor[row.status]}>
-					<div class="badge">
-						{#if row.correct}<Check />{:else}<Close />{/if}
-					</div>
-					<span class="text">{row.text}</span>
-					<span class="tag">{statusTag[row.status]}</span>
-				</li>
-			{/each}
-		</ul>
 	</div>
 
 	{#if review.isPerfect}
@@ -102,17 +109,23 @@
 
 <style>
 	.review {
-		width: min(34em, 90vw);
+		height: 100%;
+		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		gap: 1.25em;
+		padding: 1em;
+		overflow-y: auto;
 	}
 
 	header {
+		flex: 1;
 		text-align: center;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: safe center;
 		gap: 0.6em;
 	}
 
@@ -170,7 +183,8 @@
 		font-size: 0.75em;
 		font-weight: 600;
 		color: var(--c);
-		white-space: nowrap;
+		max-width: 6em;
+		text-align: end;
 	}
 
 	.badge {
