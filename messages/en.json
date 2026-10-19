@@ -258,6 +258,8 @@
 	"decrease": "Decrease",
 	"increase": "Increase",
 	"select_all_that_apply": "Pick all that apply",
+	"enlarge_image": "Enlarge image",
+	"close": "Close",
 	"reports": "Reports",
 	"report_unsaved_title": "These results aren't saved",
 	"report_unsaved_detail": "Leaving this page discards them.",

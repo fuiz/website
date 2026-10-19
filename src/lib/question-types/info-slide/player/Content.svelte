@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
 
@@ -25,7 +25,7 @@
 	<div class="slide">
 		{#if media && showAnswers}
 			<div class="media">
-				<MediaContainer {media} fit="contain" showFallback={false} />
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<div class="text">
@@ -43,18 +43,20 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		/* Safe, so a long body scrolls instead of running off the top. */
+		justify-content: safe center;
+		overflow-y: auto;
 		gap: 0.8em;
 		padding: 1.2em;
 		box-sizing: border-box;
 		text-align: center;
 	}
 
+	/* Up to 35dvh; gives up height before the text is squeezed, down to 20dvh. */
 	.media {
-		position: relative;
 		width: 100%;
-		height: 35dvh;
-		flex: none;
+		flex: 0 1 35dvh;
+		min-height: 20dvh;
 	}
 
 	h1 {

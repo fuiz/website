@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { FreeTextMode, Media } from '$lib/types';
@@ -51,7 +51,7 @@
 	<div class="stack">
 		{#if media && showAnswers}
 			<div class="media">
-				<MediaContainer {media} fit="contain" showFallback={false} />
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<form
@@ -103,9 +103,10 @@
 		flex-direction: column;
 	}
 
+	/* Up to 30dvh; gives up height before the answers are squeezed, down to 20dvh. */
 	.media {
-		height: 30dvh;
-		position: relative;
+		flex: 0 1 30dvh;
+		min-height: 20dvh;
 	}
 
 	.content {

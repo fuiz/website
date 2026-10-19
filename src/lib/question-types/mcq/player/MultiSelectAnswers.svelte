@@ -5,6 +5,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import type { TextOrMedia } from '$lib/types';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import FitText, { fitMetrics } from '$lib/ui/FitText.svelte';
 	import Check from '~icons/custom/check';
 
 	let {
@@ -19,6 +20,7 @@
 
 	let selectedIndices = new SvelteSet<number>();
 	let count = $derived(selectedIndices.size);
+	let fit = $derived(fitMetrics(answers.map((a) => a?.Text ?? '')));
 
 	function toggleIndex(index: number) {
 		if (selectedIndices.has(index)) selectedIndices.delete(index);
@@ -43,7 +45,7 @@
 									<Check height="1em" width="1em" />
 								{/if}
 							</div>
-							<div class="text">{answer?.Text}</div>
+							<div class="text"><FitText text={answer?.Text ?? ''} metrics={fit} /></div>
 							<div class="icon">
 								<symbol.icon title={symbol.label} height="1em" width="1em" />
 							</div>
@@ -82,26 +84,26 @@
 <style>
 	.root {
 		flex: 1;
-		min-height: 0;
 		display: flex;
 		flex-direction: column;
 	}
 
 	.grid-wrap {
 		flex: 1;
-		min-height: 0;
 		container-type: inline-size;
 		font-size: 1.1em;
 	}
 
+	/* Rows share the height equally; when the longest answer needs more than its share,
+	   all rows grow to match and the grid runs past its box rather than squeezing it. */
 	.grid {
 		grid-template-columns: 1fr 1fr;
-		height: 100%;
+		min-height: 100%;
 		display: grid;
 		gap: 0.2em;
 		padding: 0.2em;
 		box-sizing: border-box;
-		align-content: end;
+		grid-auto-rows: minmax(2.5em, 1fr);
 	}
 
 	@container (width <= 40ch) {
@@ -115,10 +117,8 @@
 	}
 
 	.grid.icon-grid {
-		grid-auto-rows: 1fr;
 		gap: 0.8em;
 		padding: 0.8em;
-		align-content: stretch;
 	}
 
 	.row {

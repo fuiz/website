@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
 
@@ -33,7 +33,7 @@
 	<div class="stack">
 		{#if media && showAnswers}
 			<div class="media">
-				<MediaContainer {media} fit="contain" showFallback={false} />
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<div class="answers">
@@ -50,20 +50,22 @@
 </PlayerLayout>
 
 <style>
+	/* Scrolls only when the image at its smallest and the answers can't both fit. */
 	.stack {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		overflow-y: auto;
 	}
 
+	/* Up to 30dvh; gives up height before the answers are squeezed, down to 20dvh. */
 	.media {
-		height: 30dvh;
-		position: relative;
+		flex: 0 1 30dvh;
+		min-height: 20dvh;
 	}
 
 	.answers {
 		flex: 1;
-		min-height: 0;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		grid-auto-rows: 1fr;

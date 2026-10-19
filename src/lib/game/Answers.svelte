@@ -1,12 +1,16 @@
 <script lang="ts">
+	import { fitMetrics } from '$lib/ui/FitText.svelte';
 	import EmptyAnswerButton from './EmptyAnswerButton.svelte';
 	import TextAnswerButton from './TextAnswerButton.svelte';
 
 	let {
 		answers,
+		fill = false,
 		onanswer
 	}: {
 		answers: { text: string | undefined; correct: boolean | undefined }[];
+		/** Stretch equal-sized tiles over the available height and fit the text to them. */
+		fill?: boolean;
 		onanswer?: (index: number) => void;
 	} = $props();
 
@@ -48,15 +52,19 @@
 	}
 
 	let answersFiltered = $derived(filterAnswers(answers));
+	let fit = $derived(
+		fill ? fitMetrics(answersFiltered.knownAnswers.map(({ text }) => text)) : undefined
+	);
 </script>
 
 <div id="container">
-	<div id="inner">
+	<div id="inner" class:fill>
 		{#each answersFiltered.knownAnswers as answer (answer.index)}
 			<TextAnswerButton
 				index={answer.index}
 				answerText={answer.text}
 				correct={answer.correct}
+				{fit}
 				onclick={() => {
 					if (onanswer) onanswer(answer.index);
 				}}
@@ -87,6 +95,14 @@
 		padding: 0.2em;
 		box-sizing: border-box;
 		align-content: end;
+	}
+
+	/* Rows share the height equally; when the longest answer needs more than its share,
+	   all rows grow to match and the grid runs past its box rather than squeezing it. */
+	#inner.fill {
+		height: auto;
+		min-height: 100%;
+		grid-auto-rows: minmax(2.5em, 1fr);
 	}
 
 	@container (width <= 40ch) {

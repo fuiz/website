@@ -162,8 +162,10 @@
 		width: 100%;
 		/* The layout answers to the room it is given, not to the device: the
 		   player's card is narrow on a wide screen, where a viewport query would
-		   keep the end labels inline and squeeze the numbers down to dots. */
-		container-type: inline-size;
+		   keep the end labels inline and squeeze the numbers down to dots. Named,
+		   because .points and .column are containers too and would otherwise
+		   answer the query below for their own descendants. */
+		container: scale / inline-size;
 		display: flex;
 		flex-direction: column;
 		gap: 0.35em;
@@ -241,6 +243,13 @@
 		margin-inline: auto;
 	}
 
+	/* The chips size their labels off this; see .point. */
+	.points {
+		container-type: inline-size;
+		--cols: var(--n);
+		--point-gap: 0.4em;
+	}
+
 	.columns > *,
 	.points > *,
 	.bands > * {
@@ -302,7 +311,13 @@
 		font: inherit;
 		font-family: var(--alternative-font);
 		font-weight: 800;
-		font-size: 1.25em;
+		/* The label's size, capped at half the chip's width so it can't outgrow a chip
+		   squeezed narrow by the end labels beside the scale. */
+		--point-size: 1.25em;
+		font-size: min(
+			var(--point-size),
+			(100cqw - (var(--cols) - 1) * var(--point-gap)) / var(--cols) * 0.5
+		);
 		aspect-ratio: 1;
 		width: 100%;
 		min-width: 0;
@@ -364,7 +379,7 @@
 	}
 
 	.dense .point {
-		font-size: 1em;
+		--point-size: 1em;
 		border-radius: 0.4em;
 	}
 
@@ -372,9 +387,9 @@
 	   container's own font-size, and the host sets a larger one, so an em
 	   threshold quietly demanded *more* width on the very screen that has the
 	   most, and stacked the labels there too. */
-	@container (max-width: 560px) {
+	@container scale (max-width: 560px) {
 		.point {
-			font-size: 1em;
+			--point-size: 1em;
 		}
 
 		.columns {
@@ -412,6 +427,7 @@
 		   wraps into two comfortable rows instead. */
 		.dense:not(.has-counts) .points {
 			grid-template-columns: repeat(6, minmax(0, 1fr));
+			--cols: 6;
 		}
 
 		.dense:not(.has-counts) .point {
@@ -425,10 +441,11 @@
 		.dense.has-counts .columns,
 		.dense.has-counts .bands {
 			gap: 0.15em;
+			--point-gap: 0.15em;
 		}
 
 		.dense.has-counts .point {
-			font-size: 0.75em;
+			--point-size: 0.75em;
 		}
 
 		.dense.has-counts .tally {

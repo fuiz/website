@@ -2,6 +2,7 @@
 	import { buttonSymbols } from '$lib/clientOnly';
 	import * as m from '$lib/paraglide/messages.js';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
+	import FitText, { type FitMetrics } from '$lib/ui/FitText.svelte';
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
 
@@ -9,11 +10,13 @@
 		index,
 		answerText,
 		correct,
+		fit = undefined,
 		onclick
 	}: {
 		index: number;
 		answerText: string;
 		correct: boolean | undefined;
+		fit?: FitMetrics;
 		onclick?: () => void;
 	} = $props();
 
@@ -28,7 +31,11 @@
 				<buttonSymbol.icon title={buttonSymbol.label} height="1em" width="1em" />
 			</div>
 			<div id="text" class="text">
-				{answerText}
+				{#if fit}
+					<FitText text={answerText} metrics={fit} />
+				{:else}
+					{answerText}
+				{/if}
 			</div>
 			{#if correct === false}
 				<div class="icon">

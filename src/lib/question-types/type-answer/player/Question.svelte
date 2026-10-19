@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
@@ -39,9 +39,7 @@
 	<div class="content">
 		{#if media}
 			<div class="media">
-				<div class="media-inner">
-					<MediaContainer {media} fit="contain" />
-				</div>
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<TextBar text={questionText} />
@@ -64,17 +62,15 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		overflow-y: auto;
 	}
 
+	/* Up to 40vh; gives up height before the rest is squeezed, down to 20dvh. */
 	.media {
-		height: 40vh;
+		flex: 0 1 40vh;
+		min-height: 20dvh;
 		padding: 0.5em;
 		box-sizing: border-box;
-	}
-
-	.media-inner {
-		position: relative;
-		height: 100%;
 	}
 
 	form {

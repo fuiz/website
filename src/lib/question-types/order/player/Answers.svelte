@@ -3,7 +3,7 @@
 	import { flip } from 'svelte/animate';
 	import TextAnswerButton from '$lib/game/TextAnswerButton.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaDisplay from '$lib/media/MediaDisplay.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
@@ -78,7 +78,7 @@
 	<div class="stack">
 		{#if media && showAnswers}
 			<div class="media">
-				<MediaDisplay {media} fit="contain" />
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<div class="content">
@@ -143,19 +143,22 @@
 </PlayerLayout>
 
 <style>
+	/* Scrolls only when the image at its smallest and the answers can't both fit. */
 	.stack {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		overflow-y: auto;
 	}
 
+	/* Up to 40dvh; gives up height before the answers are squeezed, down to 20dvh. */
 	.media {
-		height: 40dvh;
+		flex: 0 1 40dvh;
+		min-height: 20dvh;
 	}
 
 	.content {
 		flex: 1;
-		min-height: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: end;

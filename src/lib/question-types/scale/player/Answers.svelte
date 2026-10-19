@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ScalePicker from '$lib/game/ScalePicker.svelte';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media, ScaleLabels, ScaleStyle } from '$lib/types';
 
@@ -39,7 +39,7 @@
 	<div class="stack">
 		{#if media && showAnswers}
 			<div class="media">
-				<MediaContainer {media} fit="contain" showFallback={false} />
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<div class="content" class:dense={style === 'Nps'}>
@@ -59,20 +59,22 @@
 </PlayerLayout>
 
 <style>
+	/* Scrolls only when the image at its smallest and the answers can't both fit. */
 	.stack {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		overflow-y: auto;
 	}
 
+	/* Up to 35dvh; gives up height before the answers are squeezed, down to 20dvh. */
 	.media {
-		height: 35dvh;
-		position: relative;
+		flex: 0 1 35dvh;
+		min-height: 20dvh;
 	}
 
 	.content {
 		flex: 1;
-		min-height: 0;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

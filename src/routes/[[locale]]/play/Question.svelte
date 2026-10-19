@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { env } from '$env/dynamic/public';
 	import TextBar from '$lib/game/TextBar.svelte';
-	import MediaContainer from '$lib/media/MediaContainer.svelte';
+	import ZoomableImage from '$lib/media/ZoomableImage.svelte';
 	import PlayerLayout from '$lib/question-types/player/PlayerLayout.svelte';
 	import type { Media } from '$lib/types';
 
@@ -32,9 +32,7 @@
 	<div class="content" class:has-media={media !== undefined}>
 		{#if media}
 			<div class="media">
-				<div class="media-inner">
-					<MediaContainer {media} fit="contain" />
-				</div>
+				<ZoomableImage {media} />
 			</div>
 		{/if}
 		<TextBar text={questionText} />
@@ -46,7 +44,9 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		overflow-y: auto;
+		/* Safe, so a long question scrolls instead of running off the top. */
+		justify-content: safe center;
 		/* Enters after the slide announcement has flown out. */
 		animation: question-reveal 0.45s cubic-bezier(0.2, 1.1, 0.3, 1) 0.56s backwards;
 	}
@@ -73,14 +73,11 @@
 		justify-content: start;
 	}
 
+	/* Up to 40vh; gives up height before the rest is squeezed, down to 20dvh. */
 	.media {
-		height: 40vh;
+		flex: 0 1 40vh;
+		min-height: 20dvh;
 		padding: 0.5em;
 		box-sizing: border-box;
-	}
-
-	.media-inner {
-		position: relative;
-		height: 100%;
 	}
 </style>
