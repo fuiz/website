@@ -196,7 +196,7 @@
 
 	.slides-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(min(22ch, 100%), 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(min(22ch, 100%), 1fr));
 		gap: 0.5em;
 	}
 

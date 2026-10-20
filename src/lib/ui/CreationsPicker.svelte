@@ -60,7 +60,7 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(18ch, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(18ch, 1fr));
 		grid-auto-rows: 1fr;
 		gap: 0.5em;
 		width: 100%;
