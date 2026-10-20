@@ -418,5 +418,8 @@
 	"no_teams": "Nie utworzono jeszcze drużyn",
 	"member_online": "Połączony",
 	"member_offline": "Rozłączony",
-	"team_connected_count": "Połączeni: {online} z {total}"
+	"team_connected_count": "Połączeni: {online} z {total}",
+	"auto_advance": "Automatyczne przechodzenie",
+	"auto_advance_on": "Automatyczne przechodzenie włączone",
+	"auto_advance_off": "Automatyczne przechodzenie wyłączone"
 }

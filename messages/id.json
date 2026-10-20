@@ -418,5 +418,8 @@
 	"no_teams": "Belum ada tim yang terbentuk",
 	"member_online": "Terhubung",
 	"member_offline": "Terputus",
-	"team_connected_count": "{online} dari {total} terhubung"
+	"team_connected_count": "{online} dari {total} terhubung",
+	"auto_advance": "Lanjut otomatis",
+	"auto_advance_on": "Lanjut otomatis aktif",
+	"auto_advance_off": "Lanjut otomatis nonaktif"
 }

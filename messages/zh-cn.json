@@ -418,5 +418,8 @@
 	"no_teams": "还没有组建队伍",
 	"member_online": "已连接",
 	"member_offline": "已断开",
-	"team_connected_count": "{total} 人中 {online} 人在线"
+	"team_connected_count": "{total} 人中 {online} 人在线",
+	"auto_advance": "自动前进",
+	"auto_advance_on": "自动前进已开启",
+	"auto_advance_off": "自动前进已关闭"
 }

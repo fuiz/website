@@ -12,8 +12,10 @@
 	import FreeTextStatistics from '$lib/question-types/free-text/host/Statistics.svelte';
 	import {
 		type BindableGameInfo,
+		HOST_AUTO_ADVANCE,
 		HOST_RESPONSES,
 		HOST_TEAM_ROSTERS,
+		type HostAutoAdvance,
 		type HostResponses,
 		type HostTeamRosters,
 		type TeamRoster
@@ -33,7 +35,13 @@
 	import SliderStatistics from '$lib/question-types/slider/host/Statistics.svelte';
 	import TypeAnswerStatistics from '$lib/question-types/type-answer/host/Statistics.svelte';
 	import { bring, zip } from '$lib/util';
-	import { hostScreenFromState, type IncomingMessage, resultsSlideIndex, type State } from '.';
+	import {
+		type AutoAdvanceStatus,
+		hostScreenFromState,
+		type IncomingMessage,
+		resultsSlideIndex,
+		type State
+	} from '.';
 	import Leaderboard from './Leaderboard.svelte';
 	import {
 		handleBrainstormMessage,
@@ -66,6 +74,10 @@
 	let teamRosters = $state<TeamRoster[]>();
 	let teamMode = $state(false);
 	let teamsFormed = $state(false);
+	let autoAdvance = $state<AutoAdvanceStatus>({ running: false, next: null });
+	// When the latest countdown runs out, on the `performance.now()` clock. Taken
+	// on arrival, so a topbar that mounts later still shows the time left.
+	let autoAdvanceEndsAt = 0;
 
 	// Every slide's answers, kept by slide index for the end-of-game response
 	// log. The live list above can't serve this: it is cleared on each advance,
@@ -144,6 +156,10 @@
 				}
 				if (result.newTeamMode !== undefined) {
 					teamMode = result.newTeamMode;
+				}
+				if (result.newAutoAdvance !== undefined) {
+					autoAdvance = result.newAutoAdvance;
+					autoAdvanceEndsAt = performance.now() + (autoAdvance.next?.remaining ?? 0);
 				}
 				if (result.teamsFormed) {
 					teamsFormed = true;
@@ -306,6 +322,24 @@
 		},
 		get formed() {
 			return teamsFormed;
+		}
+	});
+
+	setContext<HostAutoAdvance>(HOST_AUTO_ADVANCE, {
+		get running() {
+			return autoAdvance.running;
+		},
+		set running(running: boolean) {
+			// The countdown stops at once; switching back on waits for the
+			// server to say when the next advance is.
+			autoAdvance = { running, next: null };
+			sendEvent(JSON.stringify({ Host: { AutoAdvance: running } }));
+		},
+		get countdown() {
+			const next = autoAdvance.next;
+			if (!autoAdvance.running || !next) return undefined;
+			if (JSON.stringify(next.screen) !== JSON.stringify(currentScreen)) return undefined;
+			return { delay: next.delay, endsAt: autoAdvanceEndsAt };
 		}
 	});
 

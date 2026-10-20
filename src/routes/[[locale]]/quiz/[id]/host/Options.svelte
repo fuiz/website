@@ -25,6 +25,7 @@
 	import Gavel from '~icons/material-symbols/gavel';
 	import GroupsOutline from '~icons/material-symbols/groups-outline';
 	import LeaderboardOutline from '~icons/material-symbols/leaderboard-outline';
+	import MotionPlayOutline from '~icons/material-symbols/motion-play-outline';
 	import PersonAddOutline from '~icons/material-symbols/person-add-outline';
 	import PhoneAndroidOutline from '~icons/material-symbols/phone-android-outline';
 	import ShortText from '~icons/material-symbols/short-text';
@@ -49,7 +50,8 @@
 		teamSize = $state(4),
 		assignRandom = $state(false),
 		censorNames = $state(true),
-		hostPaced = $state(false);
+		hostPaced = $state(false),
+		autoAdvance = $state(false);
 
 	type StyleKey = 'Pet' | 'Roman';
 	const styleKinds: StyleKey[] = ['Pet', 'Roman'];
@@ -168,7 +170,9 @@
 							show_answers: questionsOnPlayersDevices || teams,
 							no_leaderboard: !leaderboard,
 							profanity: censorNames ? 'Censor' : 'Allow',
-							...(teams && { teams: { size: teamSize, assign_random: assignRandom } })
+							...(teams && { teams: { size: teamSize, assign_random: assignRandom } }),
+							// The server picks the delays; the host can switch it during the game.
+							auto_advance: { enabled: autoAdvance }
 						},
 						{ uniqueId, versionId },
 						(p) => (progress = p)
@@ -275,6 +279,10 @@
 						<Switch id="unlimited_time" bind:checked={hostPaced}>
 							<TimerOffOutline height="1.2em" width="1.2em" />
 							{m.unlimited_time()}
+						</Switch>
+						<Switch id="auto_advance" bind:checked={autoAdvance}>
+							<MotionPlayOutline height="1.2em" width="1.2em" />
+							{m.auto_advance()}
 						</Switch>
 					</Card>
 				</div>

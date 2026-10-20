@@ -36,6 +36,30 @@ export type HostResponses = {
 	readonly list: { name: string; answer: string }[] | undefined;
 };
 
+/** Context key for pausing and resuming auto-advance. */
+export const HOST_AUTO_ADVANCE = Symbol('host-auto-advance');
+
+/**
+ * Whether the game moves past host-paced screens on its own, the switch for
+ * it, and how long until the screen on show is advanced.
+ *
+ * By context for the same reason as {@link HostResponses}. Absent on the
+ * component gallery, where the control simply does not appear.
+ */
+export type HostAutoAdvance = {
+	/** Whether auto-advance is on. Setting it switches it on or off. */
+	running: boolean;
+	/** The countdown to advancing the screen on show, if one is running. */
+	readonly countdown:
+		| {
+				/** Milliseconds the whole countdown runs. */
+				delay: number;
+				/** When it runs out, on the `performance.now()` clock. */
+				endsAt: number;
+		  }
+		| undefined;
+};
+
 /** One team and who is on it, as the host's roster list shows it. */
 export type TeamRoster = {
 	/** The team's name, as the team display screen shows it. */

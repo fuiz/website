@@ -418,5 +418,8 @@
 	"no_teams": "Hələ komanda yaradılmayıb",
 	"member_online": "Qoşulub",
 	"member_offline": "Qoşulmayıb",
-	"team_connected_count": "{total} nəfərdən {online} qoşulub"
+	"team_connected_count": "{total} nəfərdən {online} qoşulub",
+	"auto_advance": "Avtomatik keçid",
+	"auto_advance_on": "Avtomatik keçid aktivdir",
+	"auto_advance_off": "Avtomatik keçid deaktivdir"
 }

@@ -574,6 +574,20 @@ export type FuizOptions = {
 		size: number;
 		assign_random: boolean;
 	};
+	/**
+	 * Whether the game moves past host-paced screens on its own, and the
+	 * milliseconds each stays up first. A missing field takes the server's
+	 * default; a null delay leaves that screen waiting for the host.
+	 */
+	auto_advance?: {
+		/** Whether it starts on. The host can switch it during the game. */
+		enabled?: boolean;
+		team_display?: number | null;
+		results?: number | null;
+		leaderboard?: number | null;
+		/** Only info slides without a duration of their own. */
+		info_slide?: number | null;
+	};
 };
 
 export type ServerPossiblyHidden<T> =

@@ -418,5 +418,8 @@
 	"no_teams": "Noch keine Teams gebildet",
 	"member_online": "Verbunden",
 	"member_offline": "Getrennt",
-	"team_connected_count": "{online} von {total} verbunden"
+	"team_connected_count": "{online} von {total} verbunden",
+	"auto_advance": "Automatisch weiter",
+	"auto_advance_on": "Automatisch weiter ist an",
+	"auto_advance_off": "Automatisch weiter ist aus"
 }

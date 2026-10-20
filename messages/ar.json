@@ -418,5 +418,8 @@
 	"no_teams": "لم تتشكل أي فرق بعد",
 	"member_online": "متصل",
 	"member_offline": "غير متصل",
-	"team_connected_count": "{online} من {total} متصلون"
+	"team_connected_count": "{online} من {total} متصلون",
+	"auto_advance": "التقدم التلقائي",
+	"auto_advance_on": "التقدم التلقائي مُفعّل",
+	"auto_advance_off": "التقدم التلقائي متوقف"
 }

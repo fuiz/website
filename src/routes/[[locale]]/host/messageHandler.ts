@@ -1,5 +1,6 @@
 import { addIds } from '$lib/clientOnly';
 import type {
+	AutoAdvanceStatus,
 	BrainstormIncomingMessage,
 	FreeTextIncomingMessage,
 	GameIncomingMessage,
@@ -45,6 +46,8 @@ export interface GameMessageResult {
 	shouldCloseSocket?: boolean;
 	shouldMarkFinished?: boolean;
 	newLockStatus?: boolean;
+	/** Whether auto-advance is on, and the countdown it is running. */
+	newAutoAdvance?: AutoAdvanceStatus;
 }
 
 // Question message types
@@ -111,6 +114,10 @@ export function handleGameMessage(
 		return { newTeamRosters: game.TeamRosters };
 	}
 
+	if ('AutoAdvance' in game) {
+		return { newAutoAdvance: game.AutoAdvance };
+	}
+
 	if ('TeamDisplay' in game) {
 		// The team screen reuses the lobby, listing teams where it lists players.
 		return {
@@ -147,7 +154,8 @@ export function handleGameMessage(
 	if ('Metainfo' in game) {
 		return {
 			newLockStatus: game.Metainfo.Host.locked,
-			newTeamMode: game.Metainfo.Host.teams
+			newTeamMode: game.Metainfo.Host.teams,
+			newAutoAdvance: game.Metainfo.Host.auto_advance
 		};
 	}
 

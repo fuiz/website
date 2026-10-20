@@ -418,5 +418,8 @@
 	"no_teams": "Nog geen teams gevormd",
 	"member_online": "Verbonden",
 	"member_offline": "Niet verbonden",
-	"team_connected_count": "{online} van {total} verbonden"
+	"team_connected_count": "{online} van {total} verbonden",
+	"auto_advance": "Automatisch doorgaan",
+	"auto_advance_on": "Automatisch doorgaan staat aan",
+	"auto_advance_off": "Automatisch doorgaan staat uit"
 }

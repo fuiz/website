@@ -7,10 +7,13 @@
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
 	import StatedIconButton from '$lib/ui/StatedIconButton.svelte';
+	import SwitchTrack from '$lib/ui/SwitchTrack.svelte';
 	import Groups3Outline from '~icons/material-symbols/groups-3-outline';
 	import GroupsOutline from '~icons/material-symbols/groups-outline';
 	import LockOpenRightOutline from '~icons/material-symbols/lock-open-right-outline';
 	import LockOutline from '~icons/material-symbols/lock-outline';
+	import Pause from '~icons/material-symbols/pause';
+	import PlayArrow from '~icons/material-symbols/play-arrow';
 	import SkipNext from '~icons/material-symbols/skip-next';
 	import VolumeOffOutline from '~icons/material-symbols/volume-off-outline';
 	import VolumeUpOutline from '~icons/material-symbols/volume-up-outline';
@@ -18,8 +21,10 @@
 	import TeamRosters from './TeamRosters.svelte';
 	import {
 		type BindableGameInfo,
+		HOST_AUTO_ADVANCE,
 		HOST_RESPONSES,
 		HOST_TEAM_ROSTERS,
+		type HostAutoAdvance,
 		type HostResponses,
 		type HostTeamRosters,
 		type ResponseSummary,
@@ -52,6 +57,18 @@
 	// Absent outside a live game, and false in a game without teams. Any screen
 	// with a topbar is past team formation, so `enabled` is the whole check.
 	const teamRosters = getContext<HostTeamRosters | undefined>(HOST_TEAM_ROSTERS);
+
+	// Absent outside a live game (the component gallery), where there is no
+	// server to advance anything.
+	const autoAdvance = getContext<HostAutoAdvance | undefined>(HOST_AUTO_ADVANCE);
+
+	/** The running countdown, as a CSS animation already part-way through. */
+	let countdown = $derived.by(() => {
+		const countdown = autoAdvance?.countdown;
+		if (!countdown) return undefined;
+		const elapsed = countdown.delay - Math.max(0, countdown.endsAt - performance.now());
+		return { ...countdown, elapsed };
+	});
 
 	// Absent outside a live game (the component gallery), where the aggregate is
 	// all there is.
@@ -108,7 +125,31 @@
 		{#if extraControls}
 			{@render extraControls()}
 		{/if}
-		<IconButton alt={m.skip()} onclick={onnext} disabled={gameInfo.nextDisabled}><SkipNext/></IconButton>
+		{#if autoAdvance}
+			<SwitchTrack
+				bind:checked={autoAdvance.running}
+				label={autoAdvance.running ? m.auto_advance_on() : m.auto_advance_off()}
+				onIcon={PlayArrow}
+				offIcon={Pause}
+			/>
+		{/if}
+		<span class="skip">
+			<IconButton alt={m.skip()} onclick={onnext} disabled={gameInfo.nextDisabled}><SkipNext/></IconButton>
+			{#if countdown}
+				{#key countdown}
+					<svg class="countdown" viewBox="0 0 24 24" aria-hidden="true">
+						<circle
+							cx="12"
+							cy="12"
+							r="6"
+							pathLength="1"
+							style:animation-duration="{countdown.delay}ms"
+							style:animation-delay="-{countdown.elapsed}ms"
+						/>
+					</svg>
+				{/key}
+			{/if}
+		</span>
 		<StatedIconButton
 			icons={[
 				{ component: LockOpenRightOutline, alt: m.lock_game() },
@@ -152,6 +193,41 @@
 </Modal>
 
 <style>
+	.skip {
+		position: relative;
+		display: flex;
+		/* Keeps the pie's negative z-index behind the button, not the page. */
+		isolation: isolate;
+	}
+
+	/* A pie behind "Skip" that fills in as the automatic advance approaches. */
+	.countdown {
+		position: absolute;
+		inset: -0.15em;
+		z-index: -1;
+		pointer-events: none;
+		rotate: -90deg;
+	}
+
+	/* A stroke as wide as the circle's diameter paints a pie slice. */
+	.countdown circle {
+		fill: none;
+		stroke: currentColor;
+		stroke-opacity: 0.25;
+		stroke-width: 12;
+		stroke-dasharray: 1;
+		stroke-dashoffset: 1;
+		animation-name: countdown;
+		animation-timing-function: linear;
+		animation-fill-mode: forwards;
+	}
+
+	@keyframes countdown {
+		to {
+			stroke-dashoffset: 0;
+		}
+	}
+
 	/* A floating pill over the slide, inset from the edges. */
 	.topbar {
 		display: flex;

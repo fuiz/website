@@ -418,5 +418,8 @@
 	"no_teams": "Oraindik ez da talderik osatu",
 	"member_online": "Konektatuta",
 	"member_offline": "Deskonektatuta",
-	"team_connected_count": "{total}(e)tik {online} konektatuta"
+	"team_connected_count": "{total}(e)tik {online} konektatuta",
+	"auto_advance": "Aurrerapen automatikoa",
+	"auto_advance_on": "Aurrerapen automatikoa aktibatuta dago",
+	"auto_advance_off": "Aurrerapen automatikoa desaktibatuta dago"
 }

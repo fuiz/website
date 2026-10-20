@@ -200,6 +200,20 @@ export type State =
 			Error: string;
 	  };
 
+/** Auto-advance as the server reports it to the host. */
+export type AutoAdvanceStatus = {
+	running: boolean;
+	/** The advance counting down, if any. */
+	next: {
+		/** The screen it will advance past. Only shown while that screen is up. */
+		screen: HostScreen;
+		/** Milliseconds left when the server sent this. */
+		remaining: number;
+		/** Milliseconds the whole countdown runs. */
+		delay: number;
+	} | null;
+};
+
 export type GameIncomingMessage =
 	| {
 			IdAssign: string;
@@ -228,6 +242,10 @@ export type GameIncomingMessage =
 			TeamRosters: TeamRoster[];
 	  }
 	| {
+			/** Auto-advance was switched, or a countdown started. */
+			AutoAdvance: AutoAdvanceStatus;
+	  }
+	| {
 			Leaderboard: {
 				index?: number | null;
 				count?: number | null;
@@ -247,6 +265,8 @@ export type GameIncomingMessage =
 					 * reloads mid-slide never receives.
 					 */
 					teams: boolean;
+					/** Whether auto-advance is on, and the countdown on this screen. */
+					auto_advance: AutoAdvanceStatus;
 				};
 			};
 	  }

@@ -418,5 +418,8 @@
 	"no_teams": "Aucune équipe formée pour l'instant",
 	"member_online": "Connecté",
 	"member_offline": "Déconnecté",
-	"team_connected_count": "{online} sur {total} connectés"
+	"team_connected_count": "{online} sur {total} connectés",
+	"auto_advance": "Avance automatique",
+	"auto_advance_on": "L'avance automatique est activée",
+	"auto_advance_off": "L'avance automatique est désactivée"
 }
