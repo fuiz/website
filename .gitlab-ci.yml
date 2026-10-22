@@ -14,6 +14,14 @@ check:
     - bun run lint || status=1
     - bun run test || status=1
     - exit $status
+  cache:
+    key:
+      files:
+        - bun.lock
+        - eslint.config.js
+    paths:
+      - .eslintcache
+    when: always
 
 build-image:
   stage: build

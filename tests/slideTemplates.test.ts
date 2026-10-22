@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { fixTimes } from '../src/lib/canonicalize';
 import { removeIds } from '../src/lib/clientOnly';
 import { limits } from '../src/lib/limits';

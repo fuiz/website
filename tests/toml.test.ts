@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'bun:test';
 import { parse } from 'smol-toml';
-import { describe, expect, it } from 'vitest';
 import { stringifyToml } from '../src/lib';
 import type { IdlessLocalReferenceFuizConfig, ReferencingOnlineFuiz } from '../src/lib/types';
 
@@ -385,6 +385,8 @@ describe('stringifyToml', () => {
 	});
 
 	it.each(cases)('%s: roundtrips through smol-toml parse', (_, input) => {
-		expect(parse(stringifyToml(input))).toEqual(input);
+		// bun:test types `toEqual` by the received value; a parsed table and a
+		// fuiz config only compare as plain data.
+		expect<unknown>(parse(stringifyToml(input))).toEqual(input);
 	});
 });

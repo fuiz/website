@@ -4,6 +4,7 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vite';
 import { SvelteTitleCompiler } from './icon-compiler.js';
+import { paraglideOptions } from './paraglide.config.js';
 
 export default defineConfig({
 	plugins: [
@@ -14,18 +15,7 @@ export default defineConfig({
 				custom: FileSystemIconLoader('./src/lib/assets/icons')
 			}
 		}),
-		paraglideVitePlugin({
-			project: './project.inlang',
-			outdir: './src/lib/paraglide',
-			strategy: ['custom-prefix', 'custom-choice', 'custom-acceptLanguage', 'url', 'baseLocale'],
-			// Routes outside src/routes/[[locale]] are never localized
-			routeStrategies: [
-				{ match: '/api/:path(.*)?', exclude: true },
-				{ match: '/robots.txt', exclude: true },
-				{ match: '/sitemap.xml', exclude: true }
-			],
-			trailingSlash: 'never'
-		})
+		paraglideVitePlugin(paraglideOptions)
 	],
 	ssr: {
 		noExternal: ['@thisux/sveltednd']

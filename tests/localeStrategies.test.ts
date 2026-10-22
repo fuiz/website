@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { defineServerLocaleStrategies } from '../src/lib/localeStrategies';
 import { paraglideMiddleware } from '../src/lib/paraglide/server';
 

@@ -13,11 +13,11 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "biome format && biome check && eslint .",
-		"lint:fix": "biome format --write && biome check --write && eslint . --fix",
+		"lint": "biome check && eslint --cache --cache-strategy content .",
+		"lint:fix": "biome check --write && eslint --cache --cache-strategy content --fix .",
 		"format": "biome format --write",
-		"test": "vitest run",
-		"test:watch": "vitest",
+		"test": "bun test",
+		"test:watch": "bun test --watch",
 		"lang": "bun run lang:check && bun run lang:untranslated && bun run lang:unused",
 		"lang:check": "node scripts/check-messages.js",
 		"lang:untranslated": "node scripts/find-untranslated.js",
@@ -45,7 +45,6 @@
 		"typescript-eslint": "^8.65.0",
 		"unplugin-icons": "^23.0.1",
 		"vite": "^8.1.5",
-		"vitest": "^4.1.10",
 		"wrangler": "^4.114.0"
 	},
 	"dependencies": {

@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
 
 /**
  * Guards the seam between the protocol and the screens that render it.
