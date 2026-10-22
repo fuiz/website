@@ -39,7 +39,7 @@
 				answers
 					.filter(
 						(possibleAnswer) =>
-							!results.some(([correctAnswerText]) => correctAnswerText === possibleAnswer)
+							!results.some(([givenText]) => matches(givenText, possibleAnswer, caseSensitive))
 					)
 					.map((wrongAnswer) => [wrongAnswer, 0])
 			),

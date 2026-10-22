@@ -1,3 +1,4 @@
+import type { RecapEntry } from '$lib/feedback/recap/context';
 import type {
 	AnswerMode,
 	AnswerResult,
@@ -274,6 +275,12 @@ export type GameIncomingMessage =
 					show_answers: boolean;
 				};
 			};
+	  }
+	| {
+			RecapEntry: RecapEntry;
+	  }
+	| {
+			Recap: RecapEntry[];
 	  }
 	| {
 			Summary: {

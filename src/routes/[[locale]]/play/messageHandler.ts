@@ -1,4 +1,5 @@
 import { addIds } from '$lib/clientOnly';
+import type { RecapEntry } from '$lib/feedback/recap/context';
 import * as m from '$lib/paraglide/messages.js';
 import type {
 	BrainstormIncomingMessage,
@@ -36,6 +37,10 @@ export interface GameMessageResult {
 	newLeaderboardName?: string;
 	newPoints?: number;
 	newShowAnswers?: boolean;
+	/** The whole recap, replacing what the player had. */
+	newRecap?: RecapEntry[];
+	/** One more finished slide for the recap. */
+	recapEntry?: RecapEntry;
 }
 
 // Question message types
@@ -180,6 +185,18 @@ export function handleGameMessage(
 		return {
 			newPoints: score,
 			newShowAnswers: show_answers
+		};
+	}
+
+	if ('Recap' in game) {
+		return {
+			newRecap: game.Recap
+		};
+	}
+
+	if ('RecapEntry' in game) {
+		return {
+			recapEntry: game.RecapEntry
 		};
 	}
 

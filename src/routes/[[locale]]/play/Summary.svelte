@@ -1,23 +1,80 @@
 <script lang="ts">
+	import type { RecapEntry } from '$lib/feedback/recap/context';
+	import RecapCard from '$lib/feedback/recap/RecapCard.svelte';
+	import RecapDot from '$lib/feedback/recap/RecapDot.svelte';
+	import { verdictLabel } from '$lib/feedback/recap/verdict';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import CorrectAnswers from '$lib/question-types/preview/CorrectAnswers.svelte';
-	import { type FuizConfig, getTitle } from '$lib/types';
+	import { type FuizConfig, getPointsAwarded, getTitle } from '$lib/types';
 	import Card from '$lib/ui/Card.svelte';
 	import SectionLabel from '$lib/ui/SectionLabel.svelte';
 	import MilitaryTech from '~icons/material-symbols/military-tech';
 
 	type Score = { points: number; position: number } | undefined;
 
+	/**
+	 * The end of the game: the player's placing, then the recap strip grown into
+	 * a grid, with the tapped slide's card beneath it.
+	 */
 	let {
 		score,
+		recap,
 		points,
 		config
 	}: {
 		score: Score;
+		recap: RecapEntry[];
+		/** Points earned on each slide, from the summary itself. */
 		points: number[];
 		config: FuizConfig;
 	} = $props();
+
+	/**
+	 * The recap as the summary alone can tell it, for a player whose recap never
+	 * arrived: points say which questions scored, though not what was answered.
+	 */
+	function fromPoints(): RecapEntry[] {
+		let number = 0;
+		return config.slides.flatMap((slide, index) => {
+			if ('InfoSlide' in slide) return [];
+			number += 1;
+			const graded = getPointsAwarded(slide) > 0;
+			const earned = points.at(index) ?? 0;
+			return [
+				{
+					index,
+					number,
+					question: getTitle(slide),
+					graded,
+					verdict: graded ? (earned > 0 ? 'Correct' : 'Incorrect') : 'Recorded',
+					// A game without a leaderboard sends 0 or 1, not points.
+					points: score ? earned : undefined
+				} satisfies RecapEntry
+			];
+		});
+	}
+
+	let entries = $derived(recap.length > 0 ? recap : fromPoints());
+
+	// Open on the first miss, the slide most worth a second look. A skipped
+	// poll is not a miss.
+	let chosen = $state<number>();
+	let selected = $derived(
+		entries.find((entry) => entry.index === chosen) ??
+			entries.find(
+				(entry) => entry.graded && (entry.verdict === 'Incorrect' || entry.verdict === 'Unanswered')
+			) ??
+			entries[0]
+	);
+
+	// Where the recap has no words for the right answer, like a pin's target or
+	// a recap that never arrived, the quiz itself can show it.
+	let selectedSlide = $derived(selected && config.slides.at(selected.index));
+
+	// Opinion slides have nothing to get right, so they sit outside the count.
+	let graded = $derived(entries.filter((entry) => entry.graded));
+	let correctCount = $derived(graded.filter((entry) => entry.verdict === 'Correct').length);
 </script>
 
 <TypicalPage>
@@ -44,27 +101,48 @@
 				<div class="placement-not-ranked">{m.not_on_leaderboard()}</div>
 			{/if}
 		</Card>
-		<div id="lines">
-			{#each config.slides as slide, index (slide.id)}
-				{@const correct = (points.at(index) ?? 0) > 0}
-				{@const title = getTitle(slide)}
-				<div class="line">
-					<div class="label">
-						<SectionLabel as="span">{m.question_text()} {index + 1}</SectionLabel>
-						<span class="status" class:correct class:wrong={!correct}>
-							{correct ? m.correct() : m.wrong()}
+		{#if entries.length > 0}
+			<SectionLabel --section-label-padding="0 0.3em">
+				{m.your_answers()}
+				{#snippet trailing()}
+					{#if graded.length > 0}
+						<span class="score-line">
+							{m.recap_score({ correct: correctCount, total: graded.length })}
 						</span>
-					</div>
-					<Card gap="0.5em" padding="0.5em 0.7em">
-						<div class="title">{title}</div>
-						<div class="answers">
-							<SectionLabel --section-label-margin="0 0 0.2em">{m.correct_answers()}</SectionLabel>
-							<CorrectAnswers {slide} />
-						</div>
-					</Card>
+					{/if}
+				{/snippet}
+			</SectionLabel>
+			<div class="grid">
+				{#each entries as entry (entry.index)}
+					<RecapDot
+						verdict={entry.verdict}
+						number={entry.number}
+						label={`${m.question_text()} ${entry.number}: ${verdictLabel(entry.verdict)}`}
+						selected={selected?.index === entry.index}
+						onclick={() => (chosen = entry.index)}
+					/>
+				{/each}
+			</div>
+			{#if selected}
+				<div class="chosen">
+					{#snippet fullCorrectAnswer()}
+						{#if selectedSlide}
+							<CorrectAnswers slide={selectedSlide} />
+						{/if}
+					{/snippet}
+					<RecapCard
+						verdict={selected.verdict}
+						eyebrow={`${m.question_text()} ${selected.number}`}
+						question={selected.question}
+						answer={selected.answer}
+						correctAnswer={selected.correct_answer ??
+							(selected.graded && selectedSlide ? fullCorrectAnswer : undefined)}
+						points={selected.points}
+						footer
+					/>
 				</div>
-			{/each}
-		</div>
+			{/if}
+		{/if}
 	</div>
 </TypicalPage>
 
@@ -123,46 +201,32 @@
 		opacity: 0.7;
 	}
 
-	#lines {
-		display: flex;
-		flex-direction: column;
-		gap: 0.8em;
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(2.6em, 1fr));
+		gap: 0.45em;
+		padding: 0.2em;
+		--dot-size: 100%;
+		--dot-height: 2.6em;
+		--dot-radius: 0.5em;
+		--dot-reach: 0;
 	}
 
-	.line {
-		display: flex;
-		flex-direction: column;
-		gap: 0.2em;
-	}
-
-	/* Pure layout: the eyebrow's own typography comes from .section-label. */
-	.label {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: 0.5em;
-		padding: 0 0.3em;
-	}
-
-	.status {
-		font-size: 0.75em;
-		padding: 0.15em 0.5em;
-		border-radius: 999px;
+	/* Sits in the label's line, so it borrows the label's case and spacing but
+	   not its faintness. */
+	.score-line {
+		text-transform: none;
+		letter-spacing: normal;
 		font-weight: 700;
 	}
 
-	.status.correct {
-		background: var(--on-surface);
-		color: var(--surface);
+	.chosen {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3em;
 	}
 
-	.status.wrong {
-		background: var(--primary);
-		color: var(--on-primary);
-	}
-
-	.title {
-		font-weight: 600;
-		overflow-wrap: anywhere;
+	.chosen :global(.recap-card) {
+		width: 100%;
 	}
 </style>

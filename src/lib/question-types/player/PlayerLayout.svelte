@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { getRecap, type RecapVerdict } from '$lib/feedback/recap/context';
+	import RecapStrip from '$lib/feedback/recap/RecapStrip.svelte';
+	import RecapView from '$lib/feedback/recap/RecapView.svelte';
 	import NiceBackground from '$lib/layout/NiceBackground.svelte';
 	import Topbar from './Topbar.svelte';
 
@@ -6,23 +9,48 @@
 		name,
 		score = undefined,
 		centered = false,
+		pendingVerdict,
 		belowTopbar,
 		children
 	}: {
 		name: string;
 		score?: number;
 		centered?: boolean;
+		/** The verdict on the slide being shown, for the recap strip until the slide is over. */
+		pendingVerdict?: RecapVerdict;
 		belowTopbar?: import('svelte').Snippet;
 		children: import('svelte').Snippet;
 	} = $props();
+
+	const recap = getRecap();
+
+	let viewingAt = $derived(
+		recap?.viewing === undefined
+			? -1
+			: recap.entries.findIndex((entry) => entry.index === recap.viewing)
+	);
+	let viewing = $derived(viewingAt === -1 ? undefined : recap?.entries[viewingAt]);
 </script>
 
 <div class="page">
 	<Topbar {name} {score} />
-	{@render belowTopbar?.()}
+	{#if recap}
+		<RecapStrip {recap} pending={pendingVerdict} />
+	{/if}
+	{#if !viewing}
+		{@render belowTopbar?.()}
+	{/if}
 	<div class="body">
 		<NiceBackground>
-			{#if centered}
+			{#if viewing}
+				<RecapView
+					entry={viewing}
+					previous={recap?.entries[viewingAt - 1]}
+					next={recap?.entries[viewingAt + 1]}
+					onview={(index) => recap?.view(index)}
+					onback={() => recap?.view(undefined)}
+				/>
+			{:else if centered}
 				<div class="center">
 					{@render children()}
 				</div>

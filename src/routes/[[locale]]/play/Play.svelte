@@ -5,6 +5,7 @@
 	import ErrorPage from '$lib/feedback/ErrorPage.svelte';
 	import Loading from '$lib/feedback/Loading.svelte';
 	import MultipleAnswersResult from '$lib/feedback/MultipleAnswersResult.svelte';
+	import { type RecapEntry, setRecap } from '$lib/feedback/recap/context';
 	import PinBoard from '$lib/game/PinBoard.svelte';
 	import { formatSliderValue } from '$lib/game/sliderFormat';
 	import * as m from '$lib/paraglide/messages.js';
@@ -58,6 +59,76 @@
 	let { code }: { code: string } = $props();
 
 	setContext('gameCode', () => code);
+
+	let recapEntries = $state<RecapEntry[]>([]);
+	let recapViewing = $state<number>();
+
+	setRecap({
+		get entries() {
+			return recapEntries;
+		},
+		get viewing() {
+			return recapViewing;
+		},
+		get locked() {
+			return owesAnswer(currentState);
+		},
+		view(index) {
+			recapViewing = owesAnswer(currentState) ? undefined : index;
+		}
+	});
+
+	/**
+	 * Whether the screen is waiting on this player's answer. Each slide type
+	 * names its answering phase differently, and the type-answer question takes
+	 * answers on the same screen that first shows it.
+	 */
+	function owesAnswer(state: State | undefined): boolean {
+		if (state === undefined || !('Slide' in state)) return false;
+		const slide = state.Slide as Record<string, unknown>;
+		const phase = Object.values(slide)[0];
+		const unanswered = slide.answered === undefined;
+		if ('TypeAnswer' in slide) {
+			return phase === 'QuestionAnnouncement' && slide.accept_answers === true && unanswered;
+		}
+		if ('Brainstorm' in slide) {
+			return (
+				(phase === 'IdeasAnnouncement' && slide.contributed === undefined) ||
+				(phase === 'VotingAnnouncement' && unanswered)
+			);
+		}
+		return phase === 'AnswersAnnouncement' && unanswered;
+	}
+
+	/** Names the screen the game is on, so a new one can be told from an update to this one. */
+	function screenKey(state: State | undefined): string {
+		if (state === undefined) return '';
+		if ('Slide' in state) {
+			const [kind, phase] = Object.entries(state.Slide)[0] ?? [];
+			return `${state.index}:${kind}:${typeof phase === 'string' ? phase : ''}`;
+		}
+		if ('Game' in state) return Object.keys(state.Game)[0] ?? '';
+		return 'Error';
+	}
+
+	let screen = $derived(screenKey(currentState));
+
+	// A slide open from the recap gives way to the game's next screen, and to
+	// any screen still waiting on an answer, so nobody looking back misses a
+	// question.
+	$effect(() => {
+		void screen;
+		untrack(() => {
+			recapViewing = undefined;
+		});
+	});
+	$effect(() => {
+		if (owesAnswer(currentState)) {
+			untrack(() => {
+				recapViewing = undefined;
+			});
+		}
+	});
 
 	let leaderboardName = $state('');
 
@@ -120,6 +191,16 @@
 				}
 				if (result.newShowAnswers !== undefined) {
 					showAnswers = result.newShowAnswers;
+				}
+				if (result.newRecap !== undefined) {
+					recapEntries = result.newRecap;
+				}
+				const entry = result.recapEntry;
+				if (entry !== undefined) {
+					recapEntries = [
+						...recapEntries.filter((existing) => existing.index !== entry.index),
+						entry
+					].sort((a, b) => a.index - b.index);
 				}
 				if (result.shouldMarkFinished) {
 					finished = true;
@@ -462,7 +543,7 @@
 		<WaitingMobile {name} />
 	{:else if 'Summary' in game}
 		{@const { score, points, config } = game.Summary}
-		<Summary {score} {points} {config} />
+		<Summary {score} recap={recapEntries} {points} {config} />
 	{:else if 'FindTeam' in game}
 		<FindTeam {name} teamName={game.FindTeam} />
 	{:else if 'TeammatePicker' in game}

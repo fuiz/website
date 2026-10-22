@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Check from '~icons/custom/check';
 	import Close from '~icons/custom/close';
+	import HourglassBottom from '~icons/material-symbols/hourglass-bottom';
 	import HourglassTop from '~icons/material-symbols/hourglass-top';
 	import MoreHoriz from '~icons/material-symbols/more-horiz';
 
-	type Variant = 'correct' | 'wrong' | 'waiting-others' | 'waiting-host';
+	type Variant = 'correct' | 'wrong' | 'time-up' | 'waiting-others' | 'waiting-host';
 
 	let {
 		variant,
@@ -17,8 +18,10 @@
 	} = $props();
 
 	const signs: Record<Variant, { color: string }> = {
-		correct: { color: '#1e8053' },
-		wrong: { color: 'var(--primary)' },
+		correct: { color: 'var(--correct)' },
+		wrong: { color: 'var(--incorrect)' },
+		// Not a wrong answer, so not the wrong colour: the time simply ran out.
+		'time-up': { color: 'var(--tertiary)' },
 		'waiting-others': { color: 'var(--tertiary)' },
 		'waiting-host': { color: 'var(--secondary)' }
 	};
@@ -30,6 +33,8 @@
 			<Check />
 		{:else if variant === 'wrong'}
 			<Close />
+		{:else if variant === 'time-up'}
+			<HourglassBottom />
 		{:else if variant === 'waiting-others'}
 			<MoreHoriz />
 		{:else}
@@ -53,16 +58,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 8em;
-		height: 8em;
+		/* Full size on a phone of ordinary height, smaller on a short one so the
+		   card below it stays on screen. */
+		--sign-size: min(8em, 18dvh);
+		width: var(--sign-size);
+		height: var(--sign-size);
 		background: var(--sign-color);
 		border-radius: 1.5rem;
 		color: #fff;
 	}
 
 	.placard :global(svg) {
-		width: 4.85em;
-		height: 4.85em;
+		width: calc(var(--sign-size) * 0.6);
+		height: calc(var(--sign-size) * 0.6);
 	}
 
 	.caption {

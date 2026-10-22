@@ -15,7 +15,7 @@
 	} = $props();
 </script>
 
-<PlayerLayout {name} {score} centered>
+<PlayerLayout {name} {score} centered pendingVerdict="Recorded">
 	<FeedbackSign variant="waiting-host" captionMaxWidth="16ch">
 		{m.answer_recorded()}
 	</FeedbackSign>
