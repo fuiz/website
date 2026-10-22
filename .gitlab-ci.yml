@@ -1,61 +1,19 @@
 stages:
-  - test
-  - lint
+  - check
   - build
 
-test:
-  stage: test
+check:
+  stage: check
   image: oven/bun:alpine
   script:
     - bun install --frozen-lockfile
-    - bun run test
-  rules:
-    - changes:
-        - src/**/*.{ts,js}
-        - bun.lock
-
-check-messages:
-  stage: lint
-  image: oven/bun:alpine
-  script:
-    - bun scripts/check-messages.js
-  rules:
-    - changes:
-        - messages/*.json
-
-find-unused-messages:
-  stage: lint
-  image: oven/bun:alpine
-  script:
-    - bun scripts/find-unused-messages.js
-  rules:
-    - changes:
-        - messages/*.json
-        - src/**/*.{svelte,ts,js}
-        - scripts/find-unused-messages.js
-
-find-untranslated:
-  stage: lint
-  image: oven/bun:alpine
-  script:
-    - bun install --frozen-lockfile
-    - bun scripts/find-untranslated.js
-  rules:
-    - changes:
-        - messages/en.json
-        - src/**/*.svelte
-        - scripts/find-untranslated.js
-
-lint:
-  stage: lint
-  image: oven/bun:alpine
-  script:
-    - bun install --frozen-lockfile
-    - bun run lint
-  rules:
-    - changes:
-        - src/**/*.{svelte,ts,js}
-        - bun.lock
+    - status=0
+    - bun scripts/check-messages.js || status=1
+    - bun scripts/find-untranslated.js || status=1
+    - bun scripts/find-unused-messages.js || status=1
+    - bun run lint || status=1
+    - bun run test || status=1
+    - exit $status
 
 build-image:
   stage: build
