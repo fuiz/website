@@ -14,7 +14,7 @@
 	import MainHeader from '$lib/layout/MainHeader.svelte';
 	import { limits } from '$lib/limits';
 	import * as m from '$lib/paraglide/messages.js';
-	import { localizeHref } from '$lib/paraglide/runtime';
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 	import QuestionAnswers from '$lib/question-types/mcq/host/Answers.svelte';
 	import QuestionStatistics from '$lib/question-types/mcq/host/Statistics.svelte';
 	import Card from '$lib/ui/Card.svelte';
@@ -71,12 +71,12 @@
 			{#if data.gamesPlayed !== undefined && data.playersJoined !== undefined}
 				<div class="hero-stats hero-enter" style:--hero-delay="240ms">
 					<div class="hero-stat">
-						<span class="hero-stat-number">{data.gamesPlayed}</span>
+						<span class="hero-stat-number">{data.gamesPlayed.toLocaleString(getLocale())}</span>
 						<span class="hero-stat-label">{m.total_games()}</span>
 					</div>
 					<div class="hero-stat-divider" aria-hidden="true"></div>
 					<div class="hero-stat">
-						<span class="hero-stat-number">{data.playersJoined}</span>
+						<span class="hero-stat-number">{data.playersJoined.toLocaleString(getLocale())}</span>
 						<span class="hero-stat-label">{m.total_players()}</span>
 					</div>
 				</div>

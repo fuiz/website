@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { getLocale } from '$lib/paraglide/runtime';
+
 	// Points are almost always the site default (1000), so a number on every
 	// splash is noise. We only surface a pill when the value is actually notable,
 	// and style it like a game reward chip (Duolingo XP / Jackbox).
@@ -13,7 +15,7 @@
 		if (pointsAwarded === 0) return { kind: 'none', text: 'No points' };
 		if (pointsAwarded === 2 * STANDARD) return { kind: 'double', text: 'Double points' };
 		if (pointsAwarded === STANDARD / 2) return { kind: 'half', text: 'Half points' };
-		return { kind: 'custom', text: `${pointsAwarded} pts` };
+		return { kind: 'custom', text: `${pointsAwarded.toLocaleString(getLocale())} pts` };
 	});
 </script>
 

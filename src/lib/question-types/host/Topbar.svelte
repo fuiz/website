@@ -3,6 +3,7 @@
 	import Modal from '$lib/feedback/Modal.svelte';
 	import Fullscreen from '$lib/layout/Fullscreen.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import { getLocale } from '$lib/paraglide/runtime';
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
 	import LanguageSwitcher from '$lib/ui/LanguageSwitcher.svelte';
@@ -108,12 +109,12 @@
 			{#if openable}
 				<button class="responses" onclick={openResponses} title={m.answered_count()}>
 					<GroupsOutline height="1em" />
-					<span>{responses.count}</span>
+					<span>{responses.count.toLocaleString(getLocale())}</span>
 				</button>
 			{:else}
 				<div class="responses static" title={m.answered_count()}>
 					<GroupsOutline height="1em" />
-					<span>{responses.count}</span>
+					<span>{responses.count.toLocaleString(getLocale())}</span>
 				</div>
 			{/if}
 		{/if}

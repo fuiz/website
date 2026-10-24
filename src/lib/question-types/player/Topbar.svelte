@@ -5,7 +5,7 @@
 	import ConfirmationDialog from '$lib/feedback/ConfirmationDialog.svelte';
 	import Modal from '$lib/feedback/Modal.svelte';
 	import * as m from '$lib/paraglide/messages.js';
-	import { localizeHref } from '$lib/paraglide/runtime';
+	import { getLocale, localizeHref } from '$lib/paraglide/runtime';
 	import DarkModeSwitcher from '$lib/ui/DarkModeSwitcher.svelte';
 	import FancyButton from '$lib/ui/FancyButton.svelte';
 	import IconButton from '$lib/ui/IconButton.svelte';
@@ -41,7 +41,7 @@
 	{#if score !== undefined}
 		<div class="score">
 			<div class="score-value">
-				{score}
+				{score.toLocaleString(getLocale())}
 			</div>
 			<SportsScore height="1.25em" title={m.points()} />
 		</div>

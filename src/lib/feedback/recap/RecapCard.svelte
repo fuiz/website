@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import { getLocale } from '$lib/paraglide/runtime';
 	import Card from '$lib/ui/Card.svelte';
 	import type { RecapVerdict } from './context';
 	import RecapDot from './RecapDot.svelte';
@@ -90,7 +91,7 @@
 		<div class={['footer', verdict.toLowerCase()]}>
 			<span class="verdict">{verdictLabel(verdict)}</span>
 			{#if shownPoints !== undefined}
-				<span class="points">{m.points_earned({ count: shownPoints })}</span>
+				<span class="points">{m.points_earned({ count: shownPoints.toLocaleString(getLocale()) })}</span>
 			{/if}
 		</div>
 	{/if}

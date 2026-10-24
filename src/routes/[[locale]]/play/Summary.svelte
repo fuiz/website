@@ -5,6 +5,7 @@
 	import { verdictLabel } from '$lib/feedback/recap/verdict';
 	import TypicalPage from '$lib/layout/TypicalPage.svelte';
 	import * as m from '$lib/paraglide/messages.js';
+	import { getLocale } from '$lib/paraglide/runtime';
 	import CorrectAnswers from '$lib/question-types/preview/CorrectAnswers.svelte';
 	import { type FuizConfig, getPointsAwarded, getTitle } from '$lib/types';
 	import Card from '$lib/ui/Card.svelte';
@@ -96,7 +97,7 @@
 					<MilitaryTech height="1.7em" width="1.7em" />
 				{/if}
 				<div class="placement-position">#{score.position + 1}</div>
-				<div class="placement-points">{score.points} {m.points()}</div>
+				<div class="placement-points">{score.points.toLocaleString(getLocale())} {m.points()}</div>
 			{:else}
 				<div class="placement-not-ranked">{m.not_on_leaderboard()}</div>
 			{/if}
